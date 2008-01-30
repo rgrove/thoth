@@ -1,0 +1,5 @@
+# robots.txt file for http://wonko.com/
+
+User-agent: *
+Disallow: /post/comment
+Disallow: /search

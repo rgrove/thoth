@@ -1,0 +1,11 @@
+<% @posts.each do |post| %>
+  <%= render_template('post/compact.rhtml', :post => post) %>
+<% end %>
+
+<% if @posts.page_count > 1 %>
+  <%= 
+  render_template(:pager, :prev_url => @prev_url, :next_url => @next_url,
+      :prev_text => '&laquo; Newer stuff',
+      :next_text => 'Older stuff &raquo;')
+  %>
+<% end %>

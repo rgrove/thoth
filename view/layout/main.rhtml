@@ -1,0 +1,145 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title><%= h(@title) %></title>
+
+    <link rel="stylesheet" type="text/css" href="/css/prettify.css" media="screen,print,projection" />
+    <link rel="stylesheet" type="text/css" href="/css/wonko.css" media="screen,print,projection" />
+
+    <meta name="geo.position" content="37.250691;-121.78952" />
+    <meta name="geo.region" content="US-CA" />
+    <meta name="geo.placename" content="San Jose, California" />
+
+    <link rel="openid.server" href="http://www.myopenid.com/server" />
+    <link rel="openid.delegate" href="http://wonko.myopenid.com/" />
+    <meta http-equiv="X-XRDS-Location" content="http://wonko.myopenid.com/xrds" />
+
+    <link rel="alternate" type="application/atom+xml" href="http://feeds.feedburner.com/wonko" title="Articles (Atom and RSS)" />
+
+    <link rel="icon" href="/images/favicon.png" />
+    <link rel="shortcut icon" href="/images/favicon.png" />
+    
+    <style type="text/css" media="screen,projection">
+      #randomphoto { background: url(/images/header-backgrounds/<%= rand(126) %>.jpg) no-repeat; }
+    </style>
+  </head>
+  <body>
+    <div id="doc">
+      <div id="hd" class="robots-nocontent">
+        <div id="randomphoto">
+          <a id="logo" href="/"><span><%= h(SITE_NAME) %></span></a>
+        </div>
+
+        <div id="toolbar">
+          <div class="subtitle"><%= h(SITE_DESCRIPTION) %></div>
+          
+          <ul>
+            <li><%= A('Home',     :href => R(MainController)) %></li>
+            <li><%= A('About',    :href => R(PageController, :about)) %></li>
+            <li><%= A('Archives', :href => R(MainController, :archive, 2)) %></li>
+            <li><%= A('Comments', :href => R(MainController, :comments)) %></li>
+          </ul>
+
+          <div class="bl"></div>
+          <div class="br"></div>
+        </div>
+        
+        <div id="adminToolbar" class="toolbar hidden robots-nocontent">
+          <form id="login" action="<%= R(AdminController, :login) %>"
+              method="post">
+            <div>
+              <label for="username">Username:</label>
+              <input type="text" id="username" name="username" maxlength="64"
+                  title="Enter your username" />
+              
+              <label for="password">Password:</label>
+              <input type="password" id="password" name="password"
+                  maxlength="64" title="Enter your password" />
+              
+              <input type="hidden" name="origin"
+                  value="<%= h(request.REQUEST_URI) %>" />
+              <input type="submit" value="Login" />
+            </div>
+          </form>
+        </div>
+      </div>
+      
+      <div id="bd">
+        <div id="main">
+          <%= @content %>
+        </div>
+        
+        <div id="sidebar" class="robots-nocontent">
+          <dl>
+            <dt>Other Stuff</dt>
+            <dd><a href="http://flickr.com/photos/wonko/" title="Photos I've taken">Photos</a></dd>
+            <dd><%= A('Videos',   :href => R(PageController, :videos),   :title => "Videos I've made") %></dd>
+            <dd><%= A('Software', :href => R(PageController, :software), :title => "Software I've written") %></dd>
+
+            <dt>Search</dt>
+            <dd>
+              <form id="search" action="<%= R(MainController, :search) %>" method="get">
+                <p>
+                  <input type="text" name="q" maxlength="255" value="<%= request[:q] ? h(request[:q]) : '' %>" />
+                </p>
+              </form>
+            </dd>
+
+            <dt id="flickrbadge-title" title="My latest Flickr photos">Flickr</dt>
+            <dd id="flickrbadge"></dd>
+
+            <dt id="quickies-title">Quickies</dt>
+            <dd id="quickies">
+              <script src="http://del.icio.us/feeds/js/bitwise_platypus?count=5;bullet=%E2%80%A2"></script>
+              <noscript><p><a href="http://del.icio.us/bitwise_platypus">my del.icio.us</a></p></noscript>
+            </dd>
+
+            <dt>Feeds</dt>
+            <dd>
+              <a href="http://feeds.feedburner.com/wonko">
+                <span class="icon feed"></span>
+                Articles
+              </a>
+            </dd>
+          </dl>
+
+          <div id="copyright">
+            <p>
+              Copyright &copy; 2002-<%= Time.now.strftime('%Y') %>
+              <a href="mailto:<%= h(AUTHOR_EMAIL) %>"><%= h(AUTHOR_NAME) %></a>.
+              All rights reserved.
+            </p>
+          </div>
+
+          <p style="margin-top: 20px; text-align: center;">
+            <a class="icon treeoctopus" href="http://zapatopi.net/treeoctopus/"
+                title="Save the noble Pacific Northwest Tree Octopus"></a>
+          </p>
+        </div>
+      </div>
+      
+      <div id="ft"></div>
+    </div>
+
+    <script src="http://yui.yahooapis.com/2.4.1/build/yahoo-dom-event/yahoo-dom-event.js"></script>
+    <script src="/js/prettify.js"></script>
+    <script src="/js/pants.js"></script>
+
+    <script>
+      //var gaJsHost = "https:" == document.location.protocol ? "https://ssl." : "http://www.";
+      //document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js'%3E%3C/script%3E"));
+    </script>
+    
+    <script>
+      //var pageTracker = _gat._getTracker("UA-1804438-1");
+      //pageTracker._initData();
+      //pageTracker._trackPageview();
+    </script>
+
+    <div id="fakeflickrbadge" style="display: none;">
+      <script src="http://www.flickr.com/badge_code_v2.gne?count=4&amp;display=latest&amp;size=s&amp;layout=x&amp;source=user&amp;user=24453935%40N00"></script>
+    </div>
+
+    <script>Pants.flickrBadge();</script>
+  </body>
+</html>

@@ -1,0 +1,34 @@
+<div id="post-<%= post.id %>" class="post">
+  <div class="hd">
+    <h2>
+      <a href="<%= post.relative_url %>" rel="bookmark" title="Permalink for this article">
+        <%= h(post.title) %>
+      </a>
+    </h2>
+    
+    <span class="date robots-nocontent"><%= post.created_at(TIMESTAMP_LONG) %></span>
+  </div>
+  
+  <div class="bd">
+    <%= post.body_rendered %>
+  </div>
+  
+  <div class="ft">
+    <div class="tags">
+      <span class="icon tag"></span>
+      <ul>
+        <% post.tags.each do |tag| %>
+          <li><a href="<%= tag.relative_url %>" rel="tag"><%= h(tag.name) %></a></li>
+        <% end %>
+      </ul>
+    </div>
+    
+    <div class="meta robots-nocontent">
+      <span class="icon comments"></span>
+      <% comment_count = post.comments.count %>
+      <a href="<%= post.relative_url %>#comments">
+        <%= comment_count %> comment<%= comment_count == 1 ? '' : 's' %>
+      </a>
+    </div>
+  </div>
+</div>
