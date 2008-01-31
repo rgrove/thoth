@@ -391,14 +391,7 @@ div.comment:hover {
 #post-comment p.tip { font-size: 93%; }
 #post-comment textarea { width: 100%; }
 
-#post-comment .error {
-  background: #ffb7b7;
-  border: 1px solid #ff4747;
-  color: #000;
-  font-size: 85%;
-  margin-bottom: 0.2em;
-  padding: 3px;
-}
+#post-comment .error { font-size: 85%; }
 
 /* -- Pagination ------------------------------------------------------------ */
 .pg {
@@ -527,6 +520,14 @@ pre {
 .alignLeft { text-align: left; }
 .alignCenter { text-align: center; }
 .alignRight { text-align: right; }
+
+.error {
+  background: #ffb7b7;
+  border: 1px solid #ff4747;
+  color: #000;
+  margin: 1em 0;
+  padding: 3px;
+}
 
 ul.slick {
   list-style: none;

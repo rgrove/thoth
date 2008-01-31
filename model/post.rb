@@ -15,10 +15,14 @@ class Post < Sequel::Model
   end
   
   validates do
-    presence_of :title, :name, :body
+    presence_of :title, :message => 'Please enter a title for this post.'
+    presence_of :body,  :message => "What's the matter? Cat got your tongue?"
     
-    length_of :title, :maximum => 255
-    length_of :name,  :maximum => 64
+    length_of :title, :maximum => 255, :message => 'Please enter a title under 255 characters.'
+    length_of :name,  :maximum => 64,  :message => 'Please enter a name under 64 characters.'
+    
+    # TODO: This should work according to the Sequel docs, but it doesn't.
+    #true_for :title, :logic => lambda { !Post[:title => title] }, :message => 'This title was already used for another post.'
 
     # format_of :name, :with => //
   end
@@ -115,8 +119,8 @@ class Post < Sequel::Model
   
   def title=(title)
     # Set the post's name if it isn't already set.
-    if self[:name].nil?
-      index = 0
+    if self[:name].nil? || self[:name].empty?
+      index = 1
 
       # Remove HTML entities and non-alphanumeric characters, replace spaces
       # with underscores, and truncate the name at 64 characters.
@@ -126,12 +130,20 @@ class Post < Sequel::Model
       # Ensure that the name doesn't conflict with any methods on the Post
       # controller.
       while PostController.methods.include?(name)
-        name[-1] = index += 1
+        if name[-1] == index
+          name[-1] = (index += 1).to_s
+        else
+          name += (index += 1).to_s
+        end
       end
     
       # Ensure that no two posts have the same name.
       while Post[:name => name]
-        name[-1] = index += 1
+        if name[-1] == index
+          name[-1] = (index += 1).to_s
+        else
+          name += (index += 1).to_s
+        end
       end
 
       self[:name] = name

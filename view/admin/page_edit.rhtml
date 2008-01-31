@@ -1,0 +1,11 @@
+<h2>Edit Page</h2>
+
+<% if @page_error %>
+  <div class="error"><%= @page_error %></div>
+<% end %>
+
+<%= render_template('form/page', :page => @page) %>
+
+<% if @page %>
+  <%= render_template('../page/index') %>
+<% end %>
