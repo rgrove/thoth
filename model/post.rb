@@ -48,7 +48,11 @@ class Post < Sequel::Model
   end
   
   def created_at(format = nil)
-    format ? self[:created_at].strftime(format) : self[:created_at]
+    if exists?
+      format ? self[:created_at].strftime(format) : self[:created_at]
+    else
+      format ? Time.now.strftime(format) : Time.now
+    end
   end
 
   # Relative URL for this Post (e.g., +/post/foo+).
@@ -56,27 +60,57 @@ class Post < Sequel::Model
     R(PostController, name)
   end
   
-  # Sets tags on this Post.
-  def set_tags(*tag_names)
-    # First delete any existing tags attached to this post.
-    TagsPostsMap.filter(:post_id => id).delete
-    
-    # Create new tags.
-    tag_names.each do |name|
-      name = name.strip.downcase
-      
-      unless tag = Tag[:name => name]
-        tag = Tag.create(:name => name)
-      end
-      
-      TagsPostsMap.create(:post_id => id, :tag_id => tag.id)
-    end
-  end
-
   # Tags attached to this Post, ordered by name.
   def tags
-    Tag.filter(:id => TagsPostsMap.filter(:post_id => id).select(:tag_id)).
-        order(:name)
+    if exists?
+      Tag.filter(:id => TagsPostsMap.filter(:post_id => id).select(:tag_id)).
+          order(:name).all
+    else
+      return @fake_tags || []
+    end
+  end
+  
+  def tags=(tag_names)
+    if tag_names.is_a?(String)
+      tag_names = tag_names.split(',', 64)
+    elsif !tag_names.is_a?(Array)
+      raise ArgumentError, "Expected String or Array, got #{tag_names.class}"
+    end
+    
+    if exists?
+      real_tags = []
+      
+      # First delete any existing tag mappings for this post.
+      TagsPostsMap.filter(:post_id => id).delete
+      
+      # Create new tags and new mappings.
+      tag_names.each do |name|
+        name = name.strip.downcase
+
+        unless tag = Tag[:name => name]
+          tag = Tag.create(:name => name)
+        end
+        
+        real_tags << tag
+
+        TagsPostsMap.create(:post_id => id, :tag_id => tag.id)
+      end
+      
+      return real_tags
+    else
+      # This Post hasn't been saved yet, so instead of attaching actual tags to
+      # it, we'll create a bunch of fake tags just for the preview. We won't
+      # create the real ones until the Post is saved.
+      @fake_tags = []
+
+      tag_names.each do |name|
+        @fake_tags << Tag.new(:name => name.strip.downcase)
+      end
+      
+      @fake_tags.sort! {|a, b| a.name <=> b.name }
+
+      return @fake_tags
+    end
   end
   
   def title=(title)
@@ -85,7 +119,7 @@ class Post < Sequel::Model
       index = 0
 
       # Remove HTML entities and non-alphanumeric characters, replace spaces
-      # with underscores, and truncate the name at 63 characters.
+      # with underscores, and truncate the name at 64 characters.
       name = title.strip.downcase.gsub(/&[^\s;]+;/, '_').
           gsub(/[^\s0-9a-z-]/, '').gsub(/\s+/, '_')[0..63]
 
@@ -107,7 +141,11 @@ class Post < Sequel::Model
   end
   
   def updated_at(format = nil)
-    format ? self[:updated_at].strftime(format) : self[:updated_at]
+    if exists?
+      format ? self[:updated_at].strftime(format) : self[:updated_at]
+    else
+      format ? Time.now.strftime(format) : Time.now
+    end
   end
   
   # Absolute URL for this Post (e.g., +http://example.com/post/foo+).

@@ -1,9 +1,14 @@
 class CommentsController < Ramaze::Controller
   engine :Erubis
+  
+  helper :admin
   helper :cache
+  
   layout '/layout/main'
 
-  cache :index, :ttl => 30 if ENABLE_CACHE
+  if ENABLE_CACHE
+    cache :index, :ttl => 30, :key => lambda { check_auth }
+  end
 
   def index
     now = Time.now.strftime('%Y%j')

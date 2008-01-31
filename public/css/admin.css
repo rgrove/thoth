@@ -1,0 +1,61 @@
+div.toolbar ul {
+  float: left;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+div.toolbar ul li {
+  float: left;
+  margin-left: 1px;
+}
+
+div.toolbar ul li:first-child { margin-left: 0; }
+
+div.toolbar a {
+  border: 1px solid transparent;
+  cursor: pointer;
+  display: block;
+  padding: 3px 3px 0 3px;
+}
+
+div.toolbar a:hover {
+  background: #dfebff;
+  border: 1px solid #0A46AF;
+}
+
+div.toolbar a img {
+  border: 0;
+  height: 16px;
+  width: 16px;
+}
+
+#adminToolbar form {
+  float: right;
+  margin: 0;
+}
+
+#adminToolbar form div { display: inline; }
+
+form table th {
+  padding-right: 0.5em;
+  text-align: right;
+}
+
+form table tr{ vertical-align: top; }
+
+form table tr.tip {
+  font-size: 0.9em;
+  font-style: italic;
+}
+
+form table tfoot td {
+  padding-top: 1em;
+  text-align: right;
+}
+
+#title,
+#body,
+#tags { width:100%; }
+
+#name{ width: 20em; }

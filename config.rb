@@ -13,6 +13,12 @@ AUTHOR_NAME = 'Ryan Grove'
 # Your email address.
 AUTHOR_EMAIL = 'ryan@wonko.com'
 
+# Admin username.
+USERNAME = 'riposte'
+
+# Admin password.
+PASSWORD = 'riposte'
+
 # Date-only timestamp format.
 # See http://www.ruby-doc.org/core/classes/Time.html#M000297
 TIMESTAMP_DATE = '%A %B %d, %Y'
@@ -39,3 +45,6 @@ DEVEL_MODE = true
 
 # Whether or not to log all SQL queries.
 LOG_SQL = false
+
+# String of random characters to add uniqueness to the auth cookie.
+AUTH_SEED = '43c55@051a19a/4f88a3ff+355cd1418'

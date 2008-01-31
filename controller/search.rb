@@ -1,6 +1,7 @@
 class SearchController < Ramaze::Controller
   engine :Erubis
 
+  helper :admin
   helper :cache
   helper :partial
   helper :redirect
@@ -10,7 +11,8 @@ class SearchController < Ramaze::Controller
   
   if ENABLE_CACHE
     cache :index, :ttl => 300, :key => lambda {
-      request[:q] + (request[:start] || '') + (request[:count] || '')
+      check_auth.to_s + request[:q] + (request[:start] || '') +
+          (request[:count] || '')
     }
   end
   

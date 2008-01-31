@@ -1,12 +1,15 @@
 class ArchiveController < Ramaze::Controller
   engine :Erubis
 
+  helper :admin
   helper :cache
   helper :partial
 
   layout '/layout/main'
 
-  cache :index, :ttl => 120 if ENABLE_CACHE
+  if ENABLE_CACHE
+    cache :index, :ttl => 120, :key => lambda { check_auth }
+  end
 
   def index(page = 1)
     page = page.to_i

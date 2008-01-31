@@ -1,0 +1,55 @@
+<div id="adminToolbar" class="toolbar robots-nocontent<%= check_auth ? '' : ' hidden' %>">
+  <% if check_auth %>
+    <ul>
+      <li>
+        <a href="<%= R(AdminController, :post_new) %>"
+            title="Create a new blog post">
+          <img src="/images/toolbar/post_new.png" alt="New Post" />
+        </a>
+      </li>
+      <% if @post && !@post.new? %>
+        <li>
+          <a href="<%= R(AdminController, :post_edit, @post.id) %>"
+              title="Edit this blog post">
+            <img src="/images/toolbar/post_edit.png" alt="Edit Post" />
+          </a>
+        </li>
+      <% end %>
+      
+      <li>
+        <a href="<%= R(AdminController, :page_new) %>"
+            title="Create a new page">
+          <img src="/images/toolbar/page_new.png" alt="New Page" />
+        </a>
+      </li>
+
+      <% if @page && !@page.new? %>
+        <li>
+          <a href="<%= R(AdminController, :page_edit, @page.id) %>"
+              title="Edit this page">
+            <img src="/images/toolbar/page_edit.png" alt="Edit Page" />
+          </a>
+        </li>
+      <% end %>
+    </ul>
+    
+    <form action="<%= R(AdminController, :logout) %>" method="post">
+      <div><input type="submit" value="Log out" /></div>
+    </form>
+  <% else %>
+    <form id="login" action="<%= R(AdminController, :login) %>"
+        method="post">
+      <div>
+        <label for="username">Username:</label>
+        <input type="text" id="username" name="username" maxlength="64"
+            title="Enter your username" />
+      
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password"
+            maxlength="64" title="Enter your password" />
+      
+        <input type="submit" value="Login" />
+      </div>
+    </form>
+  <% end %>
+</div>

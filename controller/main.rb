@@ -1,6 +1,7 @@
 class MainController < Ramaze::Controller
   engine :Erubis
 
+  helper :admin
   helper :cache
   helper :error
   helper :partial
@@ -9,7 +10,9 @@ class MainController < Ramaze::Controller
 
   layout '/layout/main'
   
-  cache :index, :atom, :rss, :ttl => 60 if ENABLE_CACHE
+  if ENABLE_CACHE
+    cache :index, :atom, :rss, :ttl => 60, :key => lambda { check_auth }
+  end
 
   def index
     @title    = SITE_NAME

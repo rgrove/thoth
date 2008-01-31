@@ -1,0 +1,61 @@
+<form class="post" action="<%= Rs(:post_new) %>" method="post">
+  <table>
+    <thead></thead>
+    <tfoot>
+      <tr>
+        <td></td>
+        <td>
+          <input type="submit" name="action" value="Preview" />
+          <input type="submit" name="action" value="Post" />
+        </td>
+      </tr>
+    </tfoot>
+    <tbody>
+      <tr>
+        <th scope="row">
+          <label for="name">Name</label>
+        </th>
+        <td>
+          <input type="text" name="name" id="name" maxlength="64"
+              value="<%= post ? h(post.name) : '' %>" />
+        </td>
+      </tr>
+      <tr>
+        <th scope="row">
+          <label for="title">Title</label>
+        </th>
+        <td>
+          <input type="text" name="title" id="title" maxlength="255"
+              value="<%= post ? h(post.title) : '' %>" />
+        </td>
+      </tr>
+      
+      <tr>
+        <th scope="row">
+          <label for="body">Body</label>
+        </th>
+        <td>
+          <textarea name="body" id="body" rows="20" cols="60"><%= post ? h(post.body) : '' %></textarea>
+        </td>
+      </tr>
+      
+      <tr>
+        <th scope="row">
+          <label for="tags">Tags</label>
+        </th>
+        <td>
+          <input type="text" name="tags" id="tags" maxlength="255"
+              value="<%= post ? h(post.tags.collect{|i| i.name }.join(', ')) : '' %>" />
+        </td>
+      </tr>
+      
+      <tr class="tip">
+        <td></td>
+        <td>
+          Separate multiple tags with commas (e.g., "monkeys, pirates,
+          pirate monkeys, ninjas")
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</form>

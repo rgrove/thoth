@@ -1,0 +1,11 @@
+<h2>New Blog Post</h2>
+
+<% if flash[:post_error] %>
+  <div class="error"><%= flash[:post_error] %></div>
+<% end %>
+
+<%= render_template('form/post', :post => @post) %>
+
+<% if @post %>
+  <%= render_template('../post/compact', :post => @post) %>
+<% end %>

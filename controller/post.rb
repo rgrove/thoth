@@ -1,6 +1,7 @@
 class PostController < Ramaze::Controller
   engine :Erubis
   
+  helper :admin
   helper :error
   helper :partial
 

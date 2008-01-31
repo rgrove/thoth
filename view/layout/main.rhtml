@@ -5,6 +5,9 @@
 
     <link rel="stylesheet" type="text/css" href="/css/prettify.css" media="screen,print,projection" />
     <link rel="stylesheet" type="text/css" href="/css/wonko.css" media="screen,print,projection" />
+    <% if check_auth %>
+      <link rel="stylesheet" type="text/css" href="/css/admin.css" media="screen,print,projection" />
+    <% end %>
 
     <meta name="geo.position" content="37.250691;-121.78952" />
     <meta name="geo.region" content="US-CA" />
@@ -43,25 +46,7 @@
           <div class="bl"></div>
           <div class="br"></div>
         </div>
-        
-        <div id="adminToolbar" class="toolbar hidden robots-nocontent">
-          <form id="login" action="<%= R(AdminController, :login) %>"
-              method="post">
-            <div>
-              <label for="username">Username:</label>
-              <input type="text" id="username" name="username" maxlength="64"
-                  title="Enter your username" />
-              
-              <label for="password">Password:</label>
-              <input type="password" id="password" name="password"
-                  maxlength="64" title="Enter your password" />
-              
-              <input type="hidden" name="origin"
-                  value="<%= h(request.REQUEST_URI) %>" />
-              <input type="submit" value="Login" />
-            </div>
-          </form>
-        </div>
+        <%= render_template 'admin/toolbar' %>
       </div>
       
       <div id="bd">
