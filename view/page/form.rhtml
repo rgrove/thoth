@@ -1,0 +1,86 @@
+<form class="page" action="<%= form_action %>" method="post">
+  <table>
+    <thead></thead>
+    <tfoot>
+      <tr>
+        <td></td>
+        <td>
+          <input type="submit" name="action" value="Preview" />
+          <input type="submit" name="action" value="Post" />
+        </td>
+      </tr>
+    </tfoot>
+    <tbody>
+      <tr>
+        <th scope="row">
+          <label for="name">Name</label>
+        </th>
+        <td>
+          <input type="text" name="name" id="name" maxlength="64"
+              value="<%= page ? h(page.name) : '' %>" />
+        </td>
+      </tr>
+      
+      <% if page; page.errors.on(:name).each do |error| %>
+        <tr>
+          <td></td>
+          <td class="error">
+            <%= h(error) %>
+          </td>
+        </tr>
+      <% end; end %>
+      
+      <tr>
+        <th scope="row">
+          <label for="title">Title</label>
+        </th>
+        <td>
+          <input type="text" name="title" id="title" maxlength="255"
+              value="<%= page ? h(page.title) : '' %>" />
+        </td>
+      </tr>
+      
+      <% if page; page.errors.on(:title).each do |error| %>
+        <tr>
+          <td></td>
+          <td class="error">
+            <%= h(error) %>
+          </td>
+        </tr>
+      <% end; end %>
+      
+      <tr>
+        <th scope="row">
+          <label for="body">Body</label>
+        </th>
+        <td>
+          <textarea name="body" id="body" rows="20" cols="60"><%= page ? h(page.body) : '' %></textarea>
+        </td>
+      </tr>
+      
+      <% if page; page.errors.on(:body).each do |error| %>
+        <tr>
+          <td></td>
+          <td class="error">
+            <%= h(error) %>
+          </td>
+        </tr>
+      <% end; end %>
+      
+      <tr class="tip">
+        <td></td>
+        <td>
+          <p>
+            To link to another page on this site, use wiki-style links like
+            [[pagename]] or [[pagename|link text]].
+          </p>
+          
+          <p>
+            To link to a blog post, use a link like [[@post_name_or_id]] or
+            [[@post_name_or_id|link text]].
+          </p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</form>

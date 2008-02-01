@@ -4,8 +4,8 @@
   <div class="error"><%= @post_error %></div>
 <% end %>
 
-<%= render_template('form/post', :post => @post) %>
+<%= render_template(:form, :form_action => @form_action, :post => @post) %>
 
 <% if @post %>
-  <%= render_template('../post/compact', :post => @post) %>
+  <%= render_template(:compact, :post => @post) %>
 <% end %>

@@ -11,10 +11,16 @@ class MainController < Ramaze::Controller
   layout '/layout/main'
   
   if ENABLE_CACHE
-    cache :index, :atom, :rss, :ttl => 60, :key => lambda { check_auth }
+    cache :index, :ttl => 60, :key => lambda { check_auth }
+    cache :atom, :rss, :ttl => 60
   end
 
   def index
+    # Check for legacy feed requests and redirect if necessary.
+    if type = request[:type]
+      redirect Rs(type), :status => 301      
+    end
+    
     @title    = SITE_NAME
     @posts    = Post.recent
     @next_url = @posts.next_page ? Rs(:archive, @posts.next_page) : nil
@@ -41,14 +47,12 @@ class MainController < Ramaze::Controller
       }
       
       Post.recent.each do |post|
-        post_url = SITE_URL.chomp('/') + post.url
-        
         x.entry {
-          x.id        post_url
+          x.id        post.url
           x.title     post.title, :type => 'html'
           x.published post.created_at.xmlschema
           x.updated   post.updated_at.xmlschema
-          x.link      post_url, :rel => 'alternate'
+          x.link      post.url, :rel => 'alternate'
           x.content   post.body_rendered, :type => 'html'
           
           post.tags.each do |tag|
@@ -77,12 +81,10 @@ class MainController < Ramaze::Controller
         x.ttl            60
         
         Post.recent.each do |post|
-          post_url = SITE_URL.chomp('/') + post.url
-          
           x.item {
             x.title       post.title
-            x.link        post_url
-            x.guid        post_url, :isPermaLink => 'true'
+            x.link        post.url
+            x.guid        post.url, :isPermaLink => 'true'
             x.pubDate     post.created_at.rfc2822
             x.description post.body_rendered
             
@@ -95,15 +97,25 @@ class MainController < Ramaze::Controller
     }
   end
   
-  # Legacy redirect.
+  # Legacy redirect to /archive/+page+.
   def archives(page = 1)
     redirect R(ArchiveController, page), :status => 301
   end
   
-  # Legacy redirect.
+  # Legacy redirect to /post/+name+.
   def article(name)
     redirect R(PostController, name), :status => 301
   end
   
-  # TODO: recent-comments redirect
+  # Legacy redirect to /comments.
+  def recent_comments
+    if type = request[:type]
+      redirect R(CommentsController, type), :status => 301
+    else
+      redirect R(CommentsController), :status => 301
+    end  
+  end
+  
+  alias_method 'recent-comments', :recent_comments
+  
 end
