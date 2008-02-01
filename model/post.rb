@@ -24,7 +24,7 @@ class Post < Sequel::Model
     # TODO: This should work according to the Sequel docs, but it doesn't.
     #true_for :title, :logic => lambda { !Post[:title => title] }, :message => 'This title was already used for another post.'
 
-    # format_of :name, :with => //
+    format_of :name, :with => /^[0-9a-z_-]+$/i, :message => 'Page names may only contain letters, numbers, underscores, and dashes.'
   end
   
   before_create do
@@ -127,12 +127,16 @@ class Post < Sequel::Model
       name = title.strip.downcase.gsub(/&[^\s;]+;/, '_').
           gsub(/[^\s0-9a-z-]/, '').gsub(/\s+/, '_')[0..63]
 
+      # Strip off any trailing non-alphanumeric characters.
+      name.gsub!(/[_-]+$/, '')
+
       # Ensure that the name doesn't conflict with any methods on the Post
       # controller.
       while PostController.methods.include?(name)
         if name[-1] == index
           name[-1] = (index += 1).to_s
         else
+          name = name[0..62] if name.size >= 64
           name += (index += 1).to_s
         end
       end
@@ -142,6 +146,7 @@ class Post < Sequel::Model
         if name[-1] == index
           name[-1] = (index += 1).to_s
         else
+          name = name[0..62] if name.size >= 64
           name += (index += 1).to_s
         end
       end
