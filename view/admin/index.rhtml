@@ -1,0 +1,5 @@
+<% if check_auth %>
+  <%= render_template :welcome %>
+<% else %>
+  <%= render_template :login %>
+<% end %>

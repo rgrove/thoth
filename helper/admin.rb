@@ -12,7 +12,7 @@ module Ramaze
   module AdminHelper
     # Include flash and redirect helpers.
     def self.included(klass)
-      klass.send(:helper, :error, :flash, :redirect)
+      klass.send(:helper, :flash, :redirect)
     end
     
     # Authenticates an admin login by checking the +username+ and +password+
@@ -37,10 +37,10 @@ module Ramaze
       redirect_referrer
     end
     
-    # Deletes the +riposte_auth+ cookie and redirects to the referring URL.
+    # Deletes the +riposte_auth+ cookie and redirects to the home page.
     def logout
       response.delete_cookie('riposte_auth', :path => R(MainController))
-      redirect_referrer
+      redirect(R(MainController))
     end
 
     private
@@ -65,10 +65,10 @@ module Ramaze
           request.cookies['riposte_auth'] === auth_key
     end
     
-    # Checks the auth cookie and responds with a 404 error if the user is not
+    # Checks the auth cookie and redirects to the login page if the user is not
     # authenticated.
     def require_auth
-      error_404 unless check_auth
+      redirect(R(AdminController)) unless check_auth
     end
   end
   

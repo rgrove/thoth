@@ -3,13 +3,18 @@ class AdminController < Ramaze::Controller
 
   helper :admin
   helper :error
+  helper :flash
   helper :partial
 
   layout '/layout/main'
   
   def index
-    # TODO: Some kind of dashboard display or something?
-    error_404
-  end
-  
+    if check_auth
+      @title         = 'Welcome to Riposte'
+      @template_root = File.join(Ramaze::APPDIR, Ramaze::Global.template_root)
+      @public_root   = File.join(Ramaze::APPDIR, Ramaze::Global.public_root)
+    else
+      @title = 'Login'
+    end
+  end  
 end

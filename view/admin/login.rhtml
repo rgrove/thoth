@@ -1,0 +1,22 @@
+<h2>Login</h2>
+
+<% if flash[:login_error] %>
+  <div class="error">Um, no.</div>
+<% end %>
+
+<form id="login_page" action="<%= R(AdminController, :login) %>" method="post">
+  <p>
+    <label for="username">Username</label>
+    <input type="text" name="username" id="username" maxlength="255"
+        tabindex="1" />
+  </p>
+
+  <p>
+    <label for="password">Password</label>
+    <input type="password" name="password" id="password" />
+  </p>
+
+  <p>
+    <input type="submit" value="Login" />
+  </p>
+</form>
