@@ -22,7 +22,7 @@ class Page < Sequel::Model
     length_of :title, :maximum => 255, :message => 'Please enter a title under 255 characters.'
     length_of :name,  :maximum => 64,  :message => 'Please enter a name under 64 characters.'
     
-    format_of :name, :with => /^[0-9a-z_-]+$/i, :message => 'Post names may only contain letters, numbers, underscores, and dashes.'
+    format_of :name, :with => /^[0-9a-z_-]+$/i, :message => 'Page names may only contain letters, numbers, underscores, and dashes.'
   end
   
   before_create do
