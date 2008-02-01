@@ -1,0 +1,5 @@
+* Inheritable themes
+* Default Riposte theme
+* Refuse admin logins for 15 minutes after 5 failed attempts from the same IP
+* Rakefile
+* WordPress 2.x import script
