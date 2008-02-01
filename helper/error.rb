@@ -1,6 +1,8 @@
 module Ramaze  
+  
+  # The ErrorHelper module provides methods for interrupting the current request
+  # and responding with an error message and corresponding HTTP error code.
   module ErrorHelper
-    
     def error_layout(status, title, content = '')
       respond %[
         <html>
@@ -15,6 +17,7 @@ module Ramaze
       ].unindent, status
     end
     
+    # Displays a "404 Not Found" error message and returns a 404 response code.
     def error_404
       error_layout 404, '404 Not Found', %[
         <p>
@@ -24,6 +27,8 @@ module Ramaze
       ]
     end
     
+    # Displays a "500 Internal Server Error" error message and returns a 500
+    # response code.
     def error_500
       error_layout 500, '500 Internal Server Error', %[
         <p>
@@ -32,6 +37,6 @@ module Ramaze
         </p>
       ]
     end
-    
   end  
+
 end

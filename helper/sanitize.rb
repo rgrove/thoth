@@ -2,7 +2,9 @@ require 'hpricot'
 
 module Ramaze
   
-  # Helper for sanitizing user-supplied HTML.
+  # The SanitizeHelper module provides a method for stripping dangerous elements
+  # and attributes from user-supplied HTML based on element and attribute
+  # whitelists.
   module SanitizeHelper
     private
 
@@ -21,15 +23,15 @@ module Ramaze
     # Attributes that should be checked for valid protocols.
     PROTOCOL_ATTRIBUTES = {'a' => ['href']}
 
-    # Valid protocols for HTML attributes.
+    # Valid protocols.
     PROTOCOLS = ['ftp', 'http', 'https', 'mailto']
     
-    # Uses Hpricot to sanitize HTML based on a whitelist. This is a more strict
-    # version of the code at
+    # Uses Hpricot to sanitize HTML based on element and attribute whitelists.
+    # This is a more strict version of the method at
     # http://rid.onkulo.us/archives/14-sanitizing-html-with-ruby-and-hpricot
     def sanitize_html(html)
-      # First turn <% and %> into entities to prevent arbitrary code execution
-      # via Erubis.
+      # Turn <% and %> into entities to prevent arbitrary code execution via
+      # Erubis.
       html.gsub!('<%', '&lt;%')
       html.gsub!('%>', '%&gt;')
 
@@ -43,8 +45,8 @@ module Ramaze
             # Delete any element that isn't in the whitelist.
             el.parent.replace_child(el, el.children)
           elsif ATTRIBUTES.has_key?(tag)
-            # Delete any attribute that isn't in the whitelist for this particular
-            # element.
+            # Delete any attribute that isn't in the whitelist for this
+            # particular element.
             el.raw_attributes.delete_if do |key, val|
               !ATTRIBUTES[tag].include?(key.downcase)
             end
@@ -57,7 +59,8 @@ module Ramaze
               end
             end
           else
-            # Delete all attributes from elements with no whitelisted attributes.
+            # Delete all attributes from elements with no whitelisted
+            # attributes.
             el.raw_attributes = {}
           end
         elsif el.comment?

@@ -9,7 +9,10 @@ module Ramaze
   module YsearchHelper
     class SearchError < Ramaze::Error; end
     
-    API_ID  = 'pNi6xQDV34FbvnO3QRfWKSByhmPFG.3fVS_R2KzOhMek3szHWKNBrTsdi1mob2vZgKjLoLuZ4A--'
+    # Yahoo! Developer API key. Feel free to replace this with your own key.
+    API_ID = 'pNi6xQDV34FbvnO3QRfWKSByhmPFG.3fVS_R2KzOhMek3szHWKNBrTsdi1mob2vZgKjLoLuZ4A--'
+
+    # Yahoo! Search API URL.
     API_URL = 'http://search.yahooapis.com/WebSearchService/V1/webSearch'
     
     private
@@ -26,7 +29,7 @@ module Ramaze
       
       r = JSON.parse(open(request).read)['ResultSet']
       
-      # Parse the response into a less annoying format.
+      # Parse the response into a more Rubyish format.
       data = {
         :available => r['totalResultsAvailable'],
         :end       => r['totalResultsReturned'] + r['firstResultPosition'] - 1,
@@ -51,7 +54,7 @@ module Ramaze
       return data
 
     rescue => e
-      raise SearchError, 'Unable to retrieve search results.'
+      raise SearchError, "Unable to retrieve search results: #{e}"
     end
     
   end
