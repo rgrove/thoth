@@ -5,7 +5,7 @@ SITE_NAME = 'wonko.com'
 SITE_DESCRIPTION = 'The eclectic musings of a bitter software engineer.'
 
 # Absolute URL of your site.
-SITE_URL = 'http://wonko.com/'
+SITE_URL = 'http://localhost:7000/'
 
 # Your name.
 AUTHOR_NAME = 'Ryan Grove'

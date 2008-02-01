@@ -1,3 +1,5 @@
+RIPOSTE_VERSION = '0.0.1 alpha'
+
 require 'rubygems'
 require 'builder'
 require 'ramaze'
