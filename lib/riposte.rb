@@ -37,6 +37,7 @@ require 'sequel'
 require 'time'
 
 require 'riposte/config'
+require 'riposte/linkhelper'
 require 'riposte/version'
 
 module Riposte
