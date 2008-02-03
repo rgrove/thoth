@@ -1,4 +1,7 @@
+* Recent comments feed says I'm the author of every comment. Ack!
 * Use Ramaze sessions instead of manual cookies (Ramaze::Session::COOKIE.merge!(:expires => 14.days.from_now))
+* Better tag deduping, ensure posts don't get posted if tags throw errors
+* Clear cache after new post/page
 * Delete comments in admin mode
 * Inheritable themes
 * Default Riposte theme
