@@ -58,7 +58,7 @@ module Ramaze
           password === Riposte::Config::ADMIN_PASS
         # Set an auth cookie that expires in two weeks.
         response.set_cookie('riposte_auth', :expires => Time.now + 1209600,
-            :path => R(MainController), :value => auth_key)
+            :path => Ra(MainController), :value => auth_key)
         
         redirect_referrer
       end
@@ -69,8 +69,8 @@ module Ramaze
     
     # Deletes the +riposte_auth+ cookie and redirects to the home page.
     def logout
-      response.delete_cookie('riposte_auth', :path => R(MainController))
-      redirect(R(MainController))
+      response.delete_cookie('riposte_auth', :path => Ra(MainController))
+      redirect(Ra(MainController))
     end
 
     private
@@ -99,7 +99,7 @@ module Ramaze
     # Checks the auth cookie and redirects to the login page if the user is not
     # authenticated.
     def require_auth
-      redirect(R(AdminController)) unless check_auth
+      redirect(Ra(AdminController)) unless check_auth
     end
   end
   

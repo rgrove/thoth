@@ -1,7 +1,7 @@
 <div id="post-<%= post.id %>" class="post">
   <div class="hd">
     <h2>
-      <a href="<%= post.relative_url %>" rel="bookmark"
+      <a href="<%= post.url %>" rel="bookmark"
           title="Permalink for this article">
         <%= h(post.title) %>
       </a>
@@ -22,7 +22,7 @@
       <ul>
         <% post.tags.each do |tag| %>
           <li>
-            <a href="<%= tag.relative_url %>" rel="tag"><%= h(tag.name) %></a>
+            <a href="<%= tag.url %>" rel="tag"><%= h(tag.name) %></a>
           </li>
         <% end %>
       </ul>
@@ -31,7 +31,7 @@
     <div class="meta robots-nocontent">
       <span class="icon comments"></span>
       <% comment_count = post.comments.count %>
-      <a href="<%= post.relative_url %>#comments">
+      <a href="<%= post.url %>#comments">
         <%= comment_count %> comment<%= comment_count == 1 ? '' : 's' %>
       </a>
     </div>

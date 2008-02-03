@@ -28,18 +28,17 @@
 
 # = import_pants.rb
 #
-# Connects to a Pants MySQL database and imports it into a Riposte SQLite3
-# database.
+# Connects to a Pants MySQL database and imports it into a Riposte database.
 #
 # == Usage
 #
-#   # ruby import_pants.rb mysql://user:pass@hostname/pants_db output.db
+#   # ruby import_pants.rb mysql://user:pass@hostname/pants_db [connection uri]
 #
 # == Output
 #
-# The imported data will be written to the file named in the second command line
-# argument. If the file already exists, it will be overwritten. The original
-# Pants data in the MySQL database will not be modified in any way.
+# The imported data will be written to the database named in the second
+# connection string argument. The original Pants database will not be modified
+# in any way.
 #
 
 require 'rubygems'
@@ -62,27 +61,13 @@ if ARGV.empty? || !(ARGV[0] =~ /^mysql:\/\//i)
   abort "Invalid MySQL connection string."
 end
 
-# Check that we got an output db arg.
+# Check that we got a second arg.
 unless ARGV[1]
   abort "No output DB specified."
 end
 
-DEST_DB = File.expand_path(ARGV[1])
-
-# Delete the output file if it exists.
-if File.exist?(DEST_DB)
-  begin
-    File.delete(DEST_DB)
-  rescue => e
-    abort "Unable to delete #{DEST_DB}"
-  end
-end
-
-DB    = Sequel.open("sqlite:///#{DEST_DB}")
+DB    = Sequel.open(ARGV[1])
 MYSQL = Sequel.open(ARGV[0])
-
-DB.synchronous = :off
-DB.temp_store  = :memory
 
 # Load models and controllers.
 acquire "#{APP_DIR}/controller/*"

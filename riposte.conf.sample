@@ -91,17 +91,13 @@ module Riposte; module Config # <-- don't remove this line
 
   # DB_PRODUCTION: string
   #
-  # Connection URI for the production database. Currently only SQLite3
-  # databases are supported. If this database doesn't exist, Riposte will
-  # attempt to create it.
+  # Connection URI for the production database.
   
   # DB_PRODUCTION = "sqlite:///#{Ramaze::APPDIR}/db/production.db"
 
   # DB_TEST: string
   #
-  # Connection URI for the test (development) database.  Currently only SQLite3
-  # databases are supported. If this database doesn't exist, Riposte will
-  # attempt to create it.
+  # Connection URI for the test (development) database.
   
   # DB_TEST = "sqlite:///#{Ramaze::APPDIR}/db/test.db"
 

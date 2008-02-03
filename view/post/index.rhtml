@@ -1,7 +1,7 @@
 <div id="post-<%= @post.id %>" class="post">
   <div class="hd">
     <h1>
-      <a href="<%= @post.relative_url %>" rel="bookmark"
+      <a href="<%= @post.url %>" rel="bookmark"
           title="Permalink for this article">
         <%= h(@post.title) %>
       </a>
@@ -22,7 +22,7 @@
       <ul>
         <% @post.tags.each do |tag| %>
           <li>
-            <a href="<%= tag.relative_url %>" rel="tag"><%= h(tag.name) %></a>
+            <a href="<%= tag.url %>" rel="tag"><%= h(tag.name) %></a>
           </li>
         <% end %>
       </ul>
@@ -38,12 +38,12 @@
 <div id="comments">
   <h3>Comments</h3>
   
-  <% @post.comments.each do |comment| %>
+  <% @post.comments.all.each do |comment| %>
       <div id="comment-<%= comment.id %>" class="comment">
         <div class="hd">
           <h4>
             <span class="icon comment"></span>
-            <a href="<%= comment.relative_url %>" rel="bookmark"
+            <a href="<%= comment.url %>" rel="bookmark"
                 title="Permalink for this comment"><%= h(comment.title) %></a>
           </h4>
         </div>
@@ -79,7 +79,7 @@
         <div class="hd">
           <h4>
             <span class="icon comment"></span>
-            <a href="<%= @post.relative_url %>" rel="bookmark"
+            <a href="<%= @post.url %>" rel="bookmark"
                 title="Permalink for this comment"><%= h(@preview.title) %></a>
           </h4>
         </div>

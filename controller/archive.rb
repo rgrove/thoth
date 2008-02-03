@@ -43,7 +43,6 @@ class ArchiveController < Ramaze::Controller
     page = page.to_i
     page = 1 unless page >= 1
   
-    @title = Riposte::Config::SITE_NAME + ' Archives'
     @posts = Post.recent(page, 10)
   
     if page > @posts.page_count
@@ -51,9 +50,11 @@ class ArchiveController < Ramaze::Controller
       @posts = Post.recent(page, 10)
     end
 
+    @title      = Riposte::Config::SITE_NAME + ' Archives'
     @page_start = @posts.current_page_record_range.first
     @page_end   = @posts.current_page_record_range.last
-    @prev_url   = @posts.prev_page ? Rs(@posts.prev_page) : nil
-    @next_url   = @posts.next_page ? Rs(@posts.next_page) : nil
+    @total      = @posts.pagination_record_count
+    @prev_url   = @posts.prev_page ? Rsa(@posts.prev_page) : nil
+    @next_url   = @posts.next_page ? Rsa(@posts.next_page) : nil
   end
 end

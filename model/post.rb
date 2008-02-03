@@ -87,8 +87,8 @@ class Post < Sequel::Model
     end
   end
 
-  # Relative URL for this Post (e.g., +/post/foo+).
-  def relative_url
+  # URL for this Post.
+  def url
     R(PostController, name)
   end
   
@@ -191,11 +191,6 @@ class Post < Sequel::Model
     else
       format ? Time.now.strftime(format) : Time.now
     end
-  end
-  
-  # Absolute URL for this Post (e.g., +http://example.com/post/foo+).
-  def url
-    Riposte::Config::SITE_URL.chomp('/') + relative_url
   end
 end
 

@@ -1,4 +1,3 @@
-* Monkeypatch Ramaze::LinkHelper to build absolute links based on SITE_URL
 * Delete comments in admin mode
 * Inheritable themes
 * Default Riposte theme

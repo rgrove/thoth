@@ -1,5 +1,3 @@
-<% admin_url = Riposte::Config::SITE_URL.chomp('/') + Rs() %>
-
 <div class="welcome">
   <h2>Welcome to Riposte!</h2>
   <span class="version">Version <%= h(Riposte::APP_VERSION) %></span>
@@ -14,7 +12,7 @@
 
   <p>
     When you want to login again in the future, you can either return to 
-    <a href="<%= admin_url %>">this page</a> or use the keyboard shortcut
+    <a href="<%= Rsa() %>">this page</a> or use the keyboard shortcut
     <kbd>Ctrl+Alt+A</kbd> to login quickly from any Riposte URL.
   </p>
 

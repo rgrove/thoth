@@ -58,5 +58,6 @@ class TagController < Ramaze::Controller
     @page_end   = @posts.current_page_record_range.last
     @prev_url   = @posts.prev_page ? Rs(@tag.name, @posts.prev_page) : nil
     @next_url   = @posts.next_page ? Rs(@tag.name, @posts.next_page) : nil
+    @total      = @posts.pagination_record_count
   end
 end

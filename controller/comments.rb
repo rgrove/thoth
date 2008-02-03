@@ -74,7 +74,7 @@ class CommentsController < Ramaze::Controller
         x.uri   Riposte::Config::SITE_URL
       }
 
-      Comment.recent.each do |comment|
+      Comment.recent.all.each do |comment|
         x.entry {
           x.id        comment.url
           x.title     comment.title, :type => 'html'
@@ -103,7 +103,7 @@ class CommentsController < Ramaze::Controller
         x.docs           'http://backend.userland.com/rss/'
         x.ttl            30
         
-        Comment.recent.each do |comment|
+        Comment.recent.all.each do |comment|
           x.item {
             x.title       comment.title
             x.link        comment.url

@@ -46,12 +46,12 @@ class MainController < Ramaze::Controller
   def index
     # Check for legacy feed requests and redirect if necessary.
     if type = request[:type]
-      redirect Rs(type), :status => 301      
+      redirect Rsa(type), :status => 301      
     end
     
     @title    = Riposte::Config::SITE_NAME
     @posts    = Post.recent
-    @next_url = @posts.next_page ? Rs(:archive, @posts.next_page) : nil
+    @next_url = @posts.next_page ? Rsa(:archive, @posts.next_page) : nil
   end
   
   def atom
@@ -66,7 +66,7 @@ class MainController < Ramaze::Controller
       x.subtitle Riposte::Config::SITE_DESCRIPTION
       x.updated  Time.now.rfc2822 # TODO: use modification time of the last post
       x.link     :href => Riposte::Config::SITE_URL
-      x.link     :href => Riposte::Config::SITE_URL.chomp('/') + Rs(:atom),
+      x.link     :href => Riposte::Config::SITE_URL.chomp('/') + Rsa(:atom),
                  :rel => 'self'
       
       x.author {
@@ -75,7 +75,7 @@ class MainController < Ramaze::Controller
         x.uri   Riposte::Config::SITE_URL
       }
       
-      Post.recent.each do |post|
+      Post.recent.all.each do |post|
         x.entry {
           x.id        post.url
           x.title     post.title, :type => 'html'
@@ -108,7 +108,7 @@ class MainController < Ramaze::Controller
         x.docs           'http://backend.userland.com/rss/'
         x.ttl            60
         
-        Post.recent.each do |post|
+        Post.recent.all.each do |post|
           x.item {
             x.title       post.title
             x.link        post.url
@@ -127,20 +127,20 @@ class MainController < Ramaze::Controller
   
   # Legacy redirect to /archive/+page+.
   def archives(page = 1)
-    redirect R(ArchiveController, page), :status => 301
+    redirect Ra(ArchiveController, page), :status => 301
   end
   
   # Legacy redirect to /post/+name+.
   def article(name)
-    redirect R(PostController, name), :status => 301
+    redirect Ra(PostController, name), :status => 301
   end
   
   # Legacy redirect to /comments.
   def recent_comments
     if type = request[:type]
-      redirect R(CommentsController, type), :status => 301
+      redirect Ra(CommentsController, type), :status => 301
     else
-      redirect R(CommentsController), :status => 301
+      redirect Ra(CommentsController), :status => 301
     end  
   end
   

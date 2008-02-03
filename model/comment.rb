@@ -112,19 +112,13 @@ class Comment < Sequel::Model
     @post ||= Post[post_id]
   end
   
-  # Relative URL for this comment (e.g., +/post/42#comment-204).
-  def relative_url
-    R(PostController, post_id) + "#comment-#{id}"
+  # URL for this comment.
+  def url
+    Ra(PostController, post_id) + "#comment-#{id}"
   end
   
   def updated_at(format = nil)
     format ? self[:updated_at].strftime(format) : self[:updated_at]
-  end
-  
-  # Absolute URL for this comment (e.g.,
-  # +http://example.com/post/42#comment-204+).
-  def url
-    Riposte::Config::SITE_URL.chomp('/') + relative_url
   end
 end
 

@@ -4,7 +4,7 @@
   <ul class="slick">
     <% @today.each do |comment| %>
       <li>
-        <a href="<%= comment.relative_url %>"><%= h(comment.title) %></a> by
+        <a href="<%= comment.url %>"><%= h(comment.title) %></a> by
         <% if comment.author_url.empty? %>
           <%= h(comment.author) %>
         <% else %>
@@ -15,7 +15,7 @@
         on <%= comment.created_at(Riposte::Config::TIMESTAMP_SHORT) %><br />
         <small>
           attached to 
-          <a href="<%= comment.post.relative_url %>">
+          <a href="<%= comment.post.url %>">
             <%= h(comment.post.title) %>
           </a>
         </small>
@@ -30,7 +30,7 @@
   <ul class="slick">
     <% @ancient.each do |comment| %>
       <li>
-        <a href="<%= comment.relative_url %>"><%= h(comment.title) %></a> by
+        <a href="<%= comment.url %>"><%= h(comment.title) %></a> by
         <% if comment.author_url.empty? %>
           <%= h(comment.author) %>
         <% else %>
@@ -41,7 +41,7 @@
         on <%= comment.created_at(Riposte::Config::TIMESTAMP_SHORT) %><br />
         <small>
           attached to
-          <a href="<%= comment.post.relative_url %>">
+          <a href="<%= comment.post.url %>">
             <%= h(comment.post.title) %>
           </a>
         </small>

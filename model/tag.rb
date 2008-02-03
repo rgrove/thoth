@@ -47,14 +47,9 @@ class Tag < Sequel::Model
         reverse_order(:created_at)
   end
   
-  # Relative URL for this tag (e.g., +/tag/foo+).
-  def relative_url
-    R(TagController, u(name))
-  end
-  
-  # Absolute URL for this tag (e.g., +http://example.com/tag/foo+).
+  # URL for this tag.
   def url
-    Riposte::Config::SITE_URL.chomp('/') + relative_url
+    R(TagController, u(name))
   end
 end
 

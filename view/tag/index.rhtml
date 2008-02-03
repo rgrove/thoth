@@ -4,10 +4,10 @@
   <p>
     Displaying posts
     <strong><%= @page_start %></strong>-<strong><%= @page_end %></strong> of
-    <strong><%= @posts.pagination_record_count %></strong>
+    <strong><%= @total %></strong>
   </p>
 
-  <% if @posts.page_count > 1 %>
+  <% if @prev_url || @next_url %>
     <%= 
     render_template('../pager',
         :prev_url  => @prev_url,
@@ -18,14 +18,14 @@
   <% end %>
 
   <ul>
-    <% @posts.each do |post| %>
+    <% @posts.all.each do |post| %>
       <li>
         <%= render_template('../post/tiny', :post => post) %>
       </li>
     <% end %>
   </ul>
 
-  <% if @posts.page_count > 1 %>
+  <% if @prev_url || @next_url %>
     <%= 
     render_template('../pager',
         :prev_url  => @prev_url,
