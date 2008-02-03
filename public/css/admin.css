@@ -1,3 +1,12 @@
+/* -- Toolbar Login Form ---------------------------------------------------- */
+#adminToolbar form {
+  float: right;
+  margin: 0;
+}
+
+#adminToolbar form div { display: inline; }
+
+/* -- Toolbar Icons --------------------------------------------------------- */
 div.toolbar ul {
   float: left;
   list-style: none;
@@ -30,13 +39,7 @@ div.toolbar a img {
   width: 16px;
 }
 
-#adminToolbar form {
-  float: right;
-  margin: 0;
-}
-
-#adminToolbar form div { display: inline; }
-
+/* -- Misc. Forms ----------------------------------------------------------- */
 form table th {
   padding-right: 0.5em;
   text-align: right;
@@ -59,3 +62,15 @@ form table tfoot td {
 #tags { width:100%; }
 
 #name{ width: 20em; }
+
+/* -- Welcome Page ---------------------------------------------------------- */
+
+.welcome .version {
+  color: #666;
+  font-size: 85%; 
+  float: right;
+}
+
+.welcome dl.customizing { margin-left: 2ex; }
+.welcome dl.customizing dt { font-weight: bold; }
+.welcome dl.customizing dd { margin: 0 0 1em 0; }

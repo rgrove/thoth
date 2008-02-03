@@ -26,25 +26,40 @@
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #++
 
-class TagsPostsMap < Sequel::Model(:tags_posts_map)
-  set_schema do
-    primary_key :id
-    
-    foreign_key :post_id, :table => :posts
-    foreign_key :tag_id,  :table => :tags
-    
-    unique([:post_id, :tag_id])
-  end
-  
-  # Gets the Post associated with this mapping.
-  def post
-    Post[post_id]
-  end
-  
-  # Gets the Tag associated with this mapping.
-  def tag
-    Tag[tag_id]
-  end
-end
+module Riposte
 
-TagsPostsMap.create_table unless TagsPostsMap.table_exists?
+  module Config
+    @default = {
+      :SITE_NAME        => "New Riposte Blog",
+      :SITE_DESCRIPTION => "Riposte is awesome!",
+      :SITE_URL         => "http://localhost:7000/",
+      :AUTHOR_NAME      => "John Doe",
+      :AUTHOR_EMAIL     => "",
+      :ADMIN_USER       => "riposte",
+      :ADMIN_PASS       => "riposte",
+      :ENABLE_CACHE     => true,
+      :AUTH_SEED        => "43c55@051a19a/4f88a3ff+355cd1418",
+      :TIMESTAMP_LONG   => "%A %B %d, %Y @ %I:%M %p (%Z)",
+      :TIMESTAMP_SHORT  => "%Y-%m-%d %I:%M",
+      :DB_PRODUCTION    => "sqlite:///#{Ramaze::APPDIR}/db/production.db",
+      :DB_TEST          => "sqlite:///#{Ramaze::APPDIR}/db/test.db"
+    }
+    
+    @filename = nil
+
+    def self.const_missing(name)
+      @default[name]
+    end
+
+    def self.load_config(config_file)
+      if File.exist?(config_file)
+        @filename = config_file
+        load config_file
+      end
+    rescue => e
+      message = e.message.gsub("\n", '; ')
+      abort("** Error: configuration error in #{config_file}: #{message}")
+    end
+  end
+
+end

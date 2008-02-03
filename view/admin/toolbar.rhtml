@@ -1,17 +1,18 @@
 <div id="adminToolbar" class="toolbar robots-nocontent<%= check_auth ? '' : ' hidden' %>">
   <% if check_auth %>
+    <% image_url = Riposte::Config::SITE_URL.chomp('/') + '/images' %>
     <ul>
       <li>
         <a href="<%= R(PostController, :new) %>"
             title="Create a new blog post">
-          <img src="/images/toolbar/post_new.png" alt="New Post" />
+          <img src="<%= image_url %>/toolbar/post_new.png" alt="New Post" />
         </a>
       </li>
       <% if @post && !@post.new? %>
         <li>
           <a href="<%= R(PostController, :edit, @post.id) %>"
               title="Edit this blog post">
-            <img src="/images/toolbar/post_edit.png" alt="Edit Post" />
+            <img src="<%= image_url %>/toolbar/post_edit.png" alt="Edit Post" />
           </a>
         </li>
       <% end %>
@@ -19,7 +20,7 @@
       <li>
         <a href="<%= R(PageController, :new) %>"
             title="Create a new page">
-          <img src="/images/toolbar/page_new.png" alt="New Page" />
+          <img src="<%= image_url %>/toolbar/page_new.png" alt="New Page" />
         </a>
       </li>
 
@@ -27,7 +28,7 @@
         <li>
           <a href="<%= R(PageController, :edit, @page.id) %>"
               title="Edit this page">
-            <img src="/images/toolbar/page_edit.png" alt="Edit Page" />
+            <img src="<%= image_url %>/toolbar/page_edit.png" alt="Edit Page" />
           </a>
         </li>
       <% end %>

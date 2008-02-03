@@ -1,3 +1,31 @@
+#--
+# Copyright (c) 2008 Ryan Grove <ryan@wonko.com>
+# All rights reserved.
+#
+# Redistribution and use in source and binary forms, with or without
+# modification, are permitted provided that the following conditions are met:
+#
+#   * Redistributions of source code must retain the above copyright notice,
+#     this list of conditions and the following disclaimer.
+#   * Redistributions in binary form must reproduce the above copyright notice,
+#     this list of conditions and the following disclaimer in the documentation
+#     and/or other materials provided with the distribution.
+#   * Neither the name of this project nor the names of its contributors may be
+#     used to endorse or promote products derived from this software without
+#     specific prior written permission.
+#
+# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+# AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+# IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+# DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE
+# FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+# DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+# SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+# CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+# OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+# OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+#++
+
 class CommentsController < Ramaze::Controller
   engine :Erubis
   
@@ -6,7 +34,7 @@ class CommentsController < Ramaze::Controller
   
   layout '/layout/main'
 
-  if ENABLE_CACHE
+  if Riposte::Config::ENABLE_CACHE
     cache :index, :ttl => 30, :key => lambda { check_auth }
     cache :atom, :rss, :ttl => 60
   end
@@ -30,19 +58,20 @@ class CommentsController < Ramaze::Controller
     x.instruct!
 
     respond x.feed(:xmlns => 'http://www.w3.org/2005/Atom') {
-      comments_url = SITE_URL.chomp('/') + Rs()
+      comments_url = Riposte::Config::SITE_URL.chomp('/') + Rs()
       
       x.id       comments_url
-      x.title    "#{SITE_NAME}: Recent Comments"
-      x.subtitle SITE_DESCRIPTION
+      x.title    "#{Riposte::Config::SITE_NAME}: Recent Comments"
+      x.subtitle Riposte::Config::SITE_DESCRIPTION
       x.updated  Time.now.rfc2822 # TODO: use modification time of the last post
       x.link     :href => comments_url
-      x.link     :href => SITE_URL.chomp('/') + Rs(:atom), :rel => 'self'
+      x.link     :href => Riposte::Config::SITE_URL.chomp('/') + Rs(:atom),
+                 :rel => 'self'
 
       x.author {
-        x.name  AUTHOR_NAME
-        x.email AUTHOR_EMAIL
-        x.uri   SITE_URL
+        x.name  Riposte::Config::AUTHOR_NAME
+        x.email Riposte::Config::AUTHOR_EMAIL
+        x.uri   Riposte::Config::SITE_URL
       }
 
       Comment.recent.each do |comment|
@@ -66,11 +95,11 @@ class CommentsController < Ramaze::Controller
 
     respond x.rss(:version => '2.0') {
       x.channel {
-        x.title          "#{SITE_NAME}: Recent Comments"
-        x.link           SITE_URL
-        x.description    SITE_DESCRIPTION
-        x.managingEditor "#{AUTHOR_EMAIL} (#{AUTHOR_NAME})"
-        x.webMaster      "#{AUTHOR_EMAIL} (#{AUTHOR_NAME})"
+        x.title          "#{Riposte::Config::SITE_NAME}: Recent Comments"
+        x.link           Riposte::Config::SITE_URL
+        x.description    Riposte::Config::SITE_DESCRIPTION
+        x.managingEditor "#{Riposte::Config::AUTHOR_EMAIL} (#{Riposte::Config::AUTHOR_NAME})"
+        x.webMaster      "#{Riposte::Config::AUTHOR_EMAIL} (#{Riposte::Config::AUTHOR_NAME})"
         x.docs           'http://backend.userland.com/rss/'
         x.ttl            30
         

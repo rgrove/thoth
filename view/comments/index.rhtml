@@ -8,11 +8,16 @@
         <% if comment.author_url.empty? %>
           <%= h(comment.author) %>
         <% else %>
-          <a href="<%= h(comment.author_url) %>" rel="nofollow"><%= h(comment.author) %></a>
+          <a href="<%= h(comment.author_url) %>" rel="nofollow">
+            <%= h(comment.author) %>
+          </a>
         <% end %>
-        on <%= comment.created_at(TIMESTAMP_SHORT) %><br />
+        on <%= comment.created_at(Riposte::Config::TIMESTAMP_SHORT) %><br />
         <small>
-          attached to <a href="<%= comment.post.relative_url %>"><%= h(comment.post.title) %></a>
+          attached to 
+          <a href="<%= comment.post.relative_url %>">
+            <%= h(comment.post.title) %>
+          </a>
         </small>
       </li>
     <% end %>
@@ -29,11 +34,16 @@
         <% if comment.author_url.empty? %>
           <%= h(comment.author) %>
         <% else %>
-          <a href="<%= h(comment.author_url) %>" rel="nofollow"><%= h(comment.author) %></a>
+          <a href="<%= h(comment.author_url) %>" rel="nofollow">
+            <%= h(comment.author) %>
+          </a>
         <% end %>
-        on <%= comment.created_at(TIMESTAMP_SHORT) %><br />
+        on <%= comment.created_at(Riposte::Config::TIMESTAMP_SHORT) %><br />
         <small>
-          attached to <a href="<%= comment.post.relative_url %>"><%= h(comment.post.title) %></a>
+          attached to
+          <a href="<%= comment.post.relative_url %>">
+            <%= h(comment.post.title) %>
+          </a>
         </small>
       </li>
     <% end %>

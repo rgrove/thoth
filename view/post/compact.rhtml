@@ -1,12 +1,15 @@
 <div id="post-<%= post.id %>" class="post">
   <div class="hd">
     <h2>
-      <a href="<%= post.relative_url %>" rel="bookmark" title="Permalink for this article">
+      <a href="<%= post.relative_url %>" rel="bookmark"
+          title="Permalink for this article">
         <%= h(post.title) %>
       </a>
     </h2>
     
-    <span class="date robots-nocontent"><%= post.created_at(TIMESTAMP_LONG) %></span>
+    <span class="date robots-nocontent">
+      <%= post.created_at(Riposte::Config::TIMESTAMP_LONG) %>
+    </span>
   </div>
   
   <div class="bd">
@@ -18,7 +21,9 @@
       <span class="icon tag"></span>
       <ul>
         <% post.tags.each do |tag| %>
-          <li><a href="<%= tag.relative_url %>" rel="tag"><%= h(tag.name) %></a></li>
+          <li>
+            <a href="<%= tag.relative_url %>" rel="tag"><%= h(tag.name) %></a>
+          </li>
         <% end %>
       </ul>
     </div>

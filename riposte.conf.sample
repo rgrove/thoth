@@ -1,0 +1,108 @@
+#
+# riposte.conf.sample - Riposte sample configuration file.
+#
+# Rename this file to riposte.conf and customize it as desired. You must restart
+# Riposte before configuration changes will take effect.
+#
+# Syntax:
+#   string:  'foo' or "foo"
+#   boolean: true or false
+#
+# You guessed it: this file is Ruby, so you've gotta use Ruby syntax. But
+# Ruby's a real friendly sort of language, so don't you worry. Just pay
+# attention to the comments and you'll be fine.
+#
+
+module Riposte; module Config # <-- don't remove this line
+
+  # SITE_NAME: string
+  # 
+  # Name of your blog. This will be displayed as the title of your blog's index
+  # page and in your blog's feeds.
+
+  # SITE_NAME = "New Riposte Blog"
+
+  # SITE_DESCRIPTION: string
+  # 
+  # A brief description or subtitle for your blog.
+  
+  # SITE_DESCRIPTION = "Riposte is awesome!"
+
+  # SITE_URL: string
+  #
+  # Base URL of your site. This is necessary in order for Riposte to know how to
+  # construct links for feeds.
+  
+  # SITE_URL = "http://localhost:7000/"
+
+  # AUTHOR_NAME: string
+  #
+  # Your name.
+  
+  # AUTHOR_NAME = "John Doe"
+
+  # AUTHOR_EMAIL: string
+  #
+  # Your email address. If you leave this blank or comment it out, it won't be
+  # displayed.
+  
+  # AUTHOR_EMAIL = ""
+
+  # ADMIN_USER: string
+  #
+  # Administrator username. This is the name you will use to log into Riposte.
+  
+  # ADMIN_USER = "riposte"
+
+  # ADMIN_PASS: string
+  #
+  # Administrator password. This is the password you will use to log into
+  # Riposte.
+  
+  # ADMIN_PASS = "riposte"
+
+  # ENABLE_CACHE = boolean
+  #
+  # Whether or not to enable caching. Enabling caching will significantly
+  # improve Riposte's performance under heavy traffic, but new blog posts,
+  # comments, and other changes may take a minute or two to become visible.
+  
+  # ENABLE_CACHE = true
+
+  # AUTH_SEED: string
+  # 
+  # String of random characters to add uniqueness to the admin auth cookie.
+  
+  # AUTH_SEED = "43c55@051a19a/4f88a3ff+355cd1418"
+
+  # TIMESTAMP_LONG: string
+  # 
+  # Format for long timestamps. For details, see:
+  # http://www.ruby-doc.org/core/classes/Time.html#M000297
+
+  # TIMESTAMP_LONG = "%A %B %d, %Y @ %I:%M %p (%Z)"
+
+  # TIMESTAMP_SHORT: string
+  #
+  # Format for short timestamps. For details, see:
+  # http://www.ruby-doc.org/core/classes/Time.html#M000297
+  
+  # TIMESTAMP_SHORT = "%Y-%m-%d %I:%M"
+
+  # DB_PRODUCTION: string
+  #
+  # Connection URI for the production database. Currently only SQLite3
+  # databases are supported. If this database doesn't exist, Riposte will
+  # attempt to create it.
+  
+  # DB_PRODUCTION = "sqlite:///#{Ramaze::APPDIR}/db/production.db"
+
+  # DB_TEST: string
+  #
+  # Connection URI for the test (development) database.  Currently only SQLite3
+  # databases are supported. If this database doesn't exist, Riposte will
+  # attempt to create it.
+  
+  # DB_TEST = "sqlite:///#{Ramaze::APPDIR}/db/test.db"
+
+end; end # <-- don't remove this line

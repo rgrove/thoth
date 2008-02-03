@@ -1,8 +1,8 @@
-<% admin_url = SITE_URL.chomp('/') + Rs() %>
+<% admin_url = Riposte::Config::SITE_URL.chomp('/') + Rs() %>
 
 <div class="welcome">
   <h2>Welcome to Riposte!</h2>
-  <span class="version">Version <%= h(RIPOSTE_VERSION) %></span>
+  <span class="version">Version <%= h(Riposte::APP_VERSION) %></span>
 
   <h4>Getting Started</h4>
 
@@ -42,7 +42,7 @@
   <h4>Useful Linkage</h4>
 
   <ul>
-    <li><a href="http://riposteblog.org/">Riposte Website</a></li>
+    <li><a href="<%= Riposte::APP_URL %>">Riposte Website</a></li>
     <li><a href="http://code.google.com/p/riposte/w/list">Riposte Wiki</a></li>
     <li><a href="http://code.google.com/p/riposte/issues/list">Bugs &amp; Feature Requests</a></li>
     <li><a href="http://code.google.com/p/riposte/source/checkout">Source Code</a></li>

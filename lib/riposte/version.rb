@@ -26,25 +26,12 @@
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #++
 
-class TagsPostsMap < Sequel::Model(:tags_posts_map)
-  set_schema do
-    primary_key :id
-    
-    foreign_key :post_id, :table => :posts
-    foreign_key :tag_id,  :table => :tags
-    
-    unique([:post_id, :tag_id])
-  end
-  
-  # Gets the Post associated with this mapping.
-  def post
-    Post[post_id]
-  end
-  
-  # Gets the Tag associated with this mapping.
-  def tag
-    Tag[tag_id]
-  end
+module Riposte
+  APP_NAME      = 'Riposte'
+  APP_VERSION   = '0.0.1'
+  APP_AUTHOR    = 'Ryan Grove'
+  APP_EMAIL     = 'ryan@wonko.com'
+  APP_URL       = 'http://riposteblog.org/'
+  APP_COPYRIGHT = 'Copyright (c) 2008 Ryan Grove <ryan@wonko.com>. All ' +
+                  'rights reserved.'
 end
-
-TagsPostsMap.create_table unless TagsPostsMap.table_exists?
