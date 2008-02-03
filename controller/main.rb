@@ -32,7 +32,9 @@ class MainController < Ramaze::Controller
   layout '/layout/main'
   
   if Riposte::Config::ENABLE_CACHE
-    cache :index, :ttl => 60, :key => lambda { check_auth }
+    cache :index, :ttl => 60, :key => lambda {
+      check_auth.to_s + (request[:type] || '')
+    }
     cache :atom, :rss, :ttl => 60
   end
 
