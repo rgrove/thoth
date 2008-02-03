@@ -74,7 +74,6 @@ module Riposte
       if DEVEL_MODE
         Ramaze::Global.benchmarking = true
       else
-        Ramaze::Global.compile      = true
         Ramaze::Global.sourcereload = false
         Ramaze::Inform.ignored_tags = [:debug]
         Ramaze::Inform.loggers      = []

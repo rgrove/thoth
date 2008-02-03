@@ -50,7 +50,7 @@ class ArchiveController < Ramaze::Controller
     @page_start = @posts.current_page_record_range.first
     @page_end   = @posts.current_page_record_range.last
     @total      = @posts.pagination_record_count
-    @prev_url   = @posts.prev_page ? Rsa(@posts.prev_page) : nil
-    @next_url   = @posts.next_page ? Rsa(@posts.next_page) : nil
+    @prev_url   = @posts.prev_page ? Rs(@posts.prev_page) : nil
+    @next_url   = @posts.next_page ? Rs(@posts.next_page) : nil
   end
 end

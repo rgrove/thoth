@@ -45,7 +45,7 @@ class PageController < Ramaze::Controller
 
     if @page = Page[id]
       @title       = "Edit page - #{@page.title}"
-      @form_action = Rsa(:edit, id)
+      @form_action = Rs(:edit, id)
       
       if request.post?
         @page.name  = request[:name]
@@ -58,14 +58,14 @@ class PageController < Ramaze::Controller
           rescue => e
             @page_error = "There was an error saving your page: #{e}"
           else
-            redirect(Rsa(@page.name))
+            redirect(Rs(@page.name))
           end
         end
       end
     else
       @title       = 'New page - Untitled'
       @page_error  = 'Invalid page id.'
-      @form_action = Rsa(:new)
+      @form_action = Rs(:new)
     end
   end
 
@@ -73,7 +73,7 @@ class PageController < Ramaze::Controller
     require_auth
     
     @title       = "New page - Untitled"
-    @form_action = Rsa(:new)
+    @form_action = Rs(:new)
     
     if request.post?
       @page = Page.new(
@@ -88,7 +88,7 @@ class PageController < Ramaze::Controller
         rescue => e
           @page_error = "There was an error saving your page: #{e}"
         else
-          redirect(Rsa(@page.name))
+          redirect(Rs(@page.name))
         end
       end
       

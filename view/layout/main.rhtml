@@ -124,8 +124,7 @@
                 <%= h(Riposte::Config::AUTHOR_NAME) %>.
               <% else %>
                 <a href="mailto:<%= h(Riposte::Config::AUTHOR_EMAIL) %>">
-                  <%= h(Riposte::Config::AUTHOR_NAME) %>
-                </a>.
+                  <%= h(Riposte::Config::AUTHOR_NAME) %></a>.
               <% end %>
               
               All rights reserved.
@@ -147,14 +146,14 @@
     <script src="/js/pants.js"></script>
 
     <script>
-      //var gaJsHost = "https:" == document.location.protocol ? "https://ssl." : "http://www.";
-      //document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js'%3E%3C/script%3E"));
+      var gaJsHost = "https:" == document.location.protocol ? "https://ssl." : "http://www.";
+      document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js'%3E%3C/script%3E"));
     </script>
     
     <script>
-      //var pageTracker = _gat._getTracker("UA-1804438-1");
-      //pageTracker._initData();
-      //pageTracker._trackPageview();
+      var pageTracker = _gat._getTracker("UA-1804438-1");
+      pageTracker._initData();
+      pageTracker._trackPageview();
     </script>
 
     <div id="fakeflickrbadge" style="display: none;">

@@ -109,6 +109,8 @@ class Post < Sequel::Model
       raise ArgumentError, "Expected String or Array, got #{tag_names.class}"
     end
     
+    tag_names.uniq!
+    
     if exists?
       real_tags = []
       

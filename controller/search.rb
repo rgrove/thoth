@@ -56,7 +56,7 @@ class SearchController < Ramaze::Controller
     @title = "Search results for #{@query}"
 
     @data = yahoo_search(
-      "#{@query} -inurl:/tag -inurl:/archive",
+      "#{@query} -inurl:/tag -inurl:/archive -inurl:/search",
       :adult_ok => 1,
       :results  => count,
       :site     => Riposte::Config::SITE_URL.gsub(
@@ -70,7 +70,7 @@ class SearchController < Ramaze::Controller
         prev_start = start - count
         prev_start = 1 if prev_start < 1
         
-        @prev_url = "#{Rsa()}?q=#{u(@query)}&count=#{count}&start=" +
+        @prev_url = "#{Rs()}?q=#{u(@query)}&count=#{count}&start=" +
             prev_start.to_s
       end
       
@@ -78,7 +78,7 @@ class SearchController < Ramaze::Controller
         next_start = start + @data[:returned]
         next_start = 1001 - count if next_start > (1001 - count)
         
-        @next_url = "#{Rsa()}?q=#{u(@query)}&count=#{count}&start=" +
+        @next_url = "#{Rs()}?q=#{u(@query)}&count=#{count}&start=" +
             next_start.to_s
       end
     end

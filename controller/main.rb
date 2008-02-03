@@ -39,12 +39,12 @@ class MainController < Ramaze::Controller
   def index
     # Check for legacy feed requests and redirect if necessary.
     if type = request[:type]
-      redirect Rsa(type), :status => 301      
+      redirect Rs(type), :status => 301      
     end
     
     @title    = Riposte::Config::SITE_NAME
     @posts    = Post.recent
-    @next_url = @posts.next_page ? Rsa(:archive, @posts.next_page) : nil
+    @next_url = @posts.next_page ? Rs(:archive, @posts.next_page) : nil
   end
   
   def atom
@@ -59,7 +59,7 @@ class MainController < Ramaze::Controller
       x.subtitle Riposte::Config::SITE_DESCRIPTION
       x.updated  Time.now.rfc2822 # TODO: use modification time of the last post
       x.link     :href => Riposte::Config::SITE_URL
-      x.link     :href => Riposte::Config::SITE_URL.chomp('/') + Rsa(:atom),
+      x.link     :href => Riposte::Config::SITE_URL.chomp('/') + Rs(:atom),
                  :rel => 'self'
       
       x.author {
@@ -120,20 +120,20 @@ class MainController < Ramaze::Controller
   
   # Legacy redirect to /archive/+page+.
   def archives(page = 1)
-    redirect Ra(ArchiveController, page), :status => 301
+    redirect R(ArchiveController, page), :status => 301
   end
   
   # Legacy redirect to /post/+name+.
   def article(name)
-    redirect Ra(PostController, name), :status => 301
+    redirect R(PostController, name), :status => 301
   end
   
   # Legacy redirect to /comments.
   def recent_comments
     if type = request[:type]
-      redirect Ra(CommentsController, type), :status => 301
+      redirect R(CommentsController, type), :status => 301
     else
-      redirect Ra(CommentsController), :status => 301
+      redirect R(CommentsController), :status => 301
     end  
   end
   

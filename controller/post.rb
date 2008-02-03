@@ -61,10 +61,10 @@ class PostController < Ramaze::Controller
       # Set cookies.
       expire = Time.now + 315360000 # expire in 10 years
 
-      response.set_cookie(:author, :expires => expire,
-          :path => Rsa(), :value => comment.author)
-      response.set_cookie(:author_url, :expires => expire,
-          :path => Rsa(), :value => comment.author_url)
+      response.set_cookie(:riposte_author, :expires => expire,
+          :path => Rs(), :value => comment.author)
+      response.set_cookie(:riposte_author_url, :expires => expire,
+          :path => Rs(), :value => comment.author_url)
       
       if request[:action] == 'Preview Comment' || !comment.valid?
         @preview = comment
@@ -88,7 +88,7 @@ class PostController < Ramaze::Controller
 
     if @post = Post[id]
       @title       = "Edit blog post - #{@post.title}"
-      @form_action = Rsa(:edit, id)
+      @form_action = Rs(:edit, id)
       
       if request.post?
         @post.title = request[:title]
@@ -103,14 +103,14 @@ class PostController < Ramaze::Controller
           rescue => e
             @post_error = "There was an error saving your post: #{e}"
           else
-            redirect(Rsa(@post.name))
+            redirect(Rs(@post.name))
           end
         end
       end
     else
       @title       = 'New blog post - Untitled'
       @post_error  = 'Invalid post id.'
-      @form_action = Rsa(:new)
+      @form_action = Rs(:new)
     end
   end
   
@@ -118,7 +118,7 @@ class PostController < Ramaze::Controller
     require_auth
 
     @title       = "New blog post - Untitled"
-    @form_action = Rsa(:new)
+    @form_action = Rs(:new)
     
     if request.post?
       @post = Post.new(
@@ -135,7 +135,7 @@ class PostController < Ramaze::Controller
         rescue => e
           @post_error = "There was an error saving your post: #{e}"
         else
-          redirect(Rsa(@post.name))
+          redirect(Rs(@post.name))
         end
       end
       

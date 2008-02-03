@@ -64,7 +64,7 @@ module Ramaze
     # Deletes the +riposte_auth+ cookie and redirects to the home page.
     def logout
       response.delete_cookie('riposte_auth', :path => R(MainController))
-      redirect(Ra(MainController))
+      redirect(R(MainController))
     end
 
     private
@@ -93,7 +93,7 @@ module Ramaze
     # Checks the auth cookie and redirects to the login page if the user is not
     # authenticated.
     def require_auth
-      redirect(Ra(AdminController)) unless check_auth
+      redirect(R(AdminController)) unless check_auth
     end
   end
   

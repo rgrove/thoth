@@ -54,14 +54,14 @@ class CommentsController < Ramaze::Controller
     x.instruct!
 
     respond x.feed(:xmlns => 'http://www.w3.org/2005/Atom') {
-      comments_url = Riposte::Config::SITE_URL.chomp('/') + Rsa()
+      comments_url = Riposte::Config::SITE_URL.chomp('/') + Rs()
       
       x.id       comments_url
       x.title    "#{Riposte::Config::SITE_NAME}: Recent Comments"
       x.subtitle Riposte::Config::SITE_DESCRIPTION
       x.updated  Time.now.rfc2822 # TODO: use modification time of the last post
       x.link     :href => comments_url
-      x.link     :href => Riposte::Config::SITE_URL.chomp('/') + Rsa(:atom),
+      x.link     :href => Riposte::Config::SITE_URL.chomp('/') + Rs(:atom),
                  :rel => 'self'
 
       x.author {
