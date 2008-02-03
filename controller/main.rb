@@ -28,14 +28,7 @@
 
 class MainController < Ramaze::Controller
   engine :Erubis
-
-  helper :admin
-  helper :cache
-  helper :error
-  helper :partial
-  helper :redirect
-  helper :ysearch
-
+  helper :admin, :cache, :error, :partial, :redirect, :ysearch
   layout '/layout/main'
   
   if Riposte::Config::ENABLE_CACHE

@@ -69,7 +69,7 @@ desc "create bzip2 and tarball"
 task :distribute => :gem do
   sh "rm -rf pkg/riposte-#{Riposte::APP_VERSION}"
   sh "mkdir -p pkg/riposte-#{Riposte::APP_VERSION}/db"
-  sh "cp -r {controller,helper,model,public,view,LICENSE,README,riposte.conf.sample,riposte-server.rb} pkg/riposte-#{Riposte::APP_VERSION}"
+  sh "cp -r {controller,helper,model,public,scripts,view,LICENSE,README,riposte.conf.sample,riposte-server.rb} pkg/riposte-#{Riposte::APP_VERSION}"
   sh "find pkg -type f -name '._*' -delete" 
   sh "find pkg -type f -name '.DS_Store' -delete" 
   sh "find pkg -type d -name .svn -delete" 

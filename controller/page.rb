@@ -27,13 +27,8 @@
 #++
 
 class PageController < Ramaze::Controller
-  engine :Erubis
-  
-  helper :admin
-  helper :cache
-  helper :error
-  helper :partial
-
+  engine :Erubis  
+  helper :admin, :cache, :error, :partial
   layout '/layout/main'
   
   if Riposte::Config::ENABLE_CACHE
@@ -50,7 +45,7 @@ class PageController < Ramaze::Controller
 
     if @page = Page[id]
       @title       = "Edit page - #{@page.title}"
-      @form_action = Rs(:edit, id)
+      @form_action = Rsa(:edit, id)
       
       if request.post?
         @page.name  = request[:name]
@@ -63,14 +58,14 @@ class PageController < Ramaze::Controller
           rescue => e
             @page_error = "There was an error saving your page: #{e}"
           else
-            redirect(Rs(@page.name))
+            redirect(Rsa(@page.name))
           end
         end
       end
     else
       @title       = 'New page - Untitled'
       @page_error  = 'Invalid page id.'
-      @form_action = Rs(:new)
+      @form_action = Rsa(:new)
     end
   end
 
@@ -78,7 +73,7 @@ class PageController < Ramaze::Controller
     require_auth
     
     @title       = "New page - Untitled"
-    @form_action = Rs(:new)
+    @form_action = Rsa(:new)
     
     if request.post?
       @page = Page.new(
@@ -93,7 +88,7 @@ class PageController < Ramaze::Controller
         rescue => e
           @page_error = "There was an error saving your page: #{e}"
         else
-          redirect(Rs(@page.name))
+          redirect(Rsa(@page.name))
         end
       end
       

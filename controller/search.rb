@@ -28,13 +28,7 @@
 
 class SearchController < Ramaze::Controller
   engine :Erubis
-
-  helper :admin
-  helper :cache
-  helper :partial
-  helper :redirect
-  helper :ysearch
-
+  helper :admin, :cache, :partial, :redirect, :ysearch
   layout '/layout/main'
   
   if Riposte::Config::ENABLE_CACHE
@@ -76,7 +70,7 @@ class SearchController < Ramaze::Controller
         prev_start = start - count
         prev_start = 1 if prev_start < 1
         
-        @prev_url = "#{Rs()}?q=#{u(@query)}&count=#{count}&start=" +
+        @prev_url = "#{Rsa()}?q=#{u(@query)}&count=#{count}&start=" +
             prev_start.to_s
       end
       
@@ -84,7 +78,7 @@ class SearchController < Ramaze::Controller
         next_start = start + @data[:returned]
         next_start = 1001 - count if next_start > (1001 - count)
         
-        @next_url = "#{Rs()}?q=#{u(@query)}&count=#{count}&start=" +
+        @next_url = "#{Rsa()}?q=#{u(@query)}&count=#{count}&start=" +
             next_start.to_s
       end
     end

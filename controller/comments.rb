@@ -28,10 +28,7 @@
 
 class CommentsController < Ramaze::Controller
   engine :Erubis
-  
-  helper :admin
-  helper :cache
-  
+  helper :admin, :cache
   layout '/layout/main'
 
   if Riposte::Config::ENABLE_CACHE
@@ -46,9 +43,8 @@ class CommentsController < Ramaze::Controller
       comment.created_at('%Y%j') == now
     end
 
-    @title   = 'Recent Comments'
-    @today   = comments[0]
-    @ancient = comments[1]
+    @title = 'Recent Comments'
+    @today, @ancient = comments
   end
   
   def atom
@@ -58,14 +54,14 @@ class CommentsController < Ramaze::Controller
     x.instruct!
 
     respond x.feed(:xmlns => 'http://www.w3.org/2005/Atom') {
-      comments_url = Riposte::Config::SITE_URL.chomp('/') + Rs()
+      comments_url = Riposte::Config::SITE_URL.chomp('/') + Rsa()
       
       x.id       comments_url
       x.title    "#{Riposte::Config::SITE_NAME}: Recent Comments"
       x.subtitle Riposte::Config::SITE_DESCRIPTION
       x.updated  Time.now.rfc2822 # TODO: use modification time of the last post
       x.link     :href => comments_url
-      x.link     :href => Riposte::Config::SITE_URL.chomp('/') + Rs(:atom),
+      x.link     :href => Riposte::Config::SITE_URL.chomp('/') + Rsa(:atom),
                  :rel => 'self'
 
       x.author {

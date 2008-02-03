@@ -27,9 +27,8 @@
 #++
 
 class Tag < Sequel::Model
-  include Ramaze::CgiHelper
   include Ramaze::LinkHelper
-
+  
   set_schema do
     primary_key :id
     varchar :name, :null => false, :unique => true
@@ -49,7 +48,7 @@ class Tag < Sequel::Model
   
   # URL for this tag.
   def url
-    R(TagController, u(name))
+    Riposte::Config::SITE_URL.chomp('/') + R(TagController, CGI.escape(name))
   end
 end
 

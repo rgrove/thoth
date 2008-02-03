@@ -28,19 +28,14 @@
 
 class AdminController < Ramaze::Controller
   engine :Erubis
-
-  helper :admin
-  helper :error
-  helper :flash
-  helper :partial
-
+  helper :admin, :error, :flash, :partial
   layout '/layout/main'
   
   def index
     if check_auth
       @title         = 'Welcome to Riposte'
-      @template_root = File.join(Ramaze::APPDIR, Ramaze::Global.template_root)
-      @public_root   = File.join(Ramaze::APPDIR, Ramaze::Global.public_root)
+      @template_root = Riposte::DIR/Ramaze::Global.template_root
+      @public_root   = Riposte::DIR/Ramaze::Global.public_root
     else
       @title = 'Login'
     end

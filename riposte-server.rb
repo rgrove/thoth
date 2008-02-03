@@ -45,10 +45,11 @@ require 'rubygems'
 require 'riposte'
 
 module Riposte
+  
+  DIR = File.expand_path(File.dirname(__FILE__))
 
   options = {
-    :config  => ENV['RIPOSTE_CONF'] ||
-                File.join(Ramaze::APPDIR, 'riposte.conf'),
+    :config  => ENV['RIPOSTE_CONF'] || DIR/'riposte.conf',
     :daemon  => nil,
     :devel   => false,
     :ip      => '0.0.0.0',
@@ -125,7 +126,7 @@ module Riposte
   DEVEL_MODE  = options[:devel]
   IP          = options[:ip]
   LOG_SQL     = options[:log_sql]
-  PID_FILE    = File.join(File.dirname(__FILE__), 'riposte.pid')
+  PID_FILE    = DIR/'riposte.pid'
   PORT        = options[:port]
   
   case options[:daemon]

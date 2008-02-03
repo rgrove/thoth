@@ -1,3 +1,4 @@
+* Use Ramaze sessions instead of manual cookies (Ramaze::Session::COOKIE.merge!(:expires => 14.days.from_now))
 * Delete comments in admin mode
 * Inheritable themes
 * Default Riposte theme

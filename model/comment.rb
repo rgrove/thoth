@@ -114,7 +114,8 @@ class Comment < Sequel::Model
   
   # URL for this comment.
   def url
-    Ra(PostController, post_id) + "#comment-#{id}"
+    Riposte::Config::SITE_URL.chomp('/') + R(PostController, post_id) +
+        "#comment-#{id}"
   end
   
   def updated_at(format = nil)

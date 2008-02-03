@@ -89,7 +89,7 @@ class Post < Sequel::Model
 
   # URL for this Post.
   def url
-    R(PostController, name)
+    Riposte::Config::SITE_URL.chomp('/') + R(PostController, name)
   end
   
   # Tags attached to this Post, ordered by name.

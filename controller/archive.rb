@@ -28,11 +28,7 @@
 
 class ArchiveController < Ramaze::Controller
   engine :Erubis
-
-  helper :admin
-  helper :cache
-  helper :partial
-
+  helper :admin, :cache, :partial
   layout '/layout/main'
 
   if Riposte::Config::ENABLE_CACHE

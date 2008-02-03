@@ -45,17 +45,12 @@ module Riposte
       :DB_TEST          => "sqlite:///#{Ramaze::APPDIR}/db/test.db"
     }
     
-    @filename = nil
-
     def self.const_missing(name)
       @default[name]
     end
 
     def self.load_config(config_file)
-      if File.exist?(config_file)
-        @filename = config_file
-        load config_file
-      end
+      load config_file if File.exist?(config_file)
     rescue => e
       message = e.message.gsub("\n", '; ')
       abort("** Error: configuration error in #{config_file}: #{message}")

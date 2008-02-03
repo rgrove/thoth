@@ -26,12 +26,6 @@
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #++
 
-if RUBY_VERSION >= '1.9.0'
-  require 'digest/sha1'
-else
-  require 'digest/sha2'
-end
-
 module Ramaze
   
   # The AdminHelper module provides genric +login+ and +logout+ actions for
@@ -58,7 +52,7 @@ module Ramaze
           password === Riposte::Config::ADMIN_PASS
         # Set an auth cookie that expires in two weeks.
         response.set_cookie('riposte_auth', :expires => Time.now + 1209600,
-            :path => Ra(MainController), :value => auth_key)
+            :path => R(MainController), :value => auth_key)
         
         redirect_referrer
       end
@@ -69,7 +63,7 @@ module Ramaze
     
     # Deletes the +riposte_auth+ cookie and redirects to the home page.
     def logout
-      response.delete_cookie('riposte_auth', :path => Ra(MainController))
+      response.delete_cookie('riposte_auth', :path => R(MainController))
       redirect(Ra(MainController))
     end
 
@@ -89,11 +83,11 @@ module Ramaze
           Riposte::Config::ADMIN_PASS)
     end
     
-    # Checks the auth cookie and returne +true+ if the user is authenticated,
+    # Checks the auth cookie and returns +true+ if the user is authenticated,
     # +false+ otherwise.
     def check_auth
       request.cookies['riposte_auth'] && 
-          request.cookies['riposte_auth'] === auth_key
+          request.cookies['riposte_auth'] == auth_key
     end
     
     # Checks the auth cookie and redirects to the login page if the user is not

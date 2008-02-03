@@ -27,12 +27,8 @@
 #++
 
 class PostController < Ramaze::Controller
-  engine :Erubis
-  
-  helper :admin
-  helper :error
-  helper :partial
-
+  engine :Erubis  
+  helper :admin, :error, :partial
   layout '/layout/main'
   
   def index(name = nil)
@@ -40,8 +36,8 @@ class PostController < Ramaze::Controller
     @title = @post.title
 
     # Get form cookies.
-    @author     = request.cookies['author']     || ''
-    @author_url = request.cookies['author_url'] || ''
+    @author     = request.cookies['riposte_author']     || ''
+    @author_url = request.cookies['riposte_author_url'] || ''
   end
   
   def comment(name)
@@ -66,9 +62,9 @@ class PostController < Ramaze::Controller
       expire = Time.now + 315360000 # expire in 10 years
 
       response.set_cookie(:author, :expires => expire,
-          :path => Rs(), :value => comment.author)
+          :path => Rsa(), :value => comment.author)
       response.set_cookie(:author_url, :expires => expire,
-          :path => Rs(), :value => comment.author_url)
+          :path => Rsa(), :value => comment.author_url)
       
       if request[:action] == 'Preview Comment' || !comment.valid?
         @preview = comment
@@ -80,8 +76,8 @@ class PostController < Ramaze::Controller
       @author_url = comment.author_url
     else
       # Get form cookies.
-      @author     = request.cookies['author']     || ''
-      @author_url = request.cookies['author_url'] || ''
+      @author     = request.cookies['riposte_author']     || ''
+      @author_url = request.cookies['riposte_author_url'] || ''
     end
     
     render_template(:index)
@@ -92,7 +88,7 @@ class PostController < Ramaze::Controller
 
     if @post = Post[id]
       @title       = "Edit blog post - #{@post.title}"
-      @form_action = Rs(:edit, id)
+      @form_action = Rsa(:edit, id)
       
       if request.post?
         @post.title = request[:title]
@@ -107,14 +103,14 @@ class PostController < Ramaze::Controller
           rescue => e
             @post_error = "There was an error saving your post: #{e}"
           else
-            redirect(Rs(@post.name))
+            redirect(Rsa(@post.name))
           end
         end
       end
     else
       @title       = 'New blog post - Untitled'
       @post_error  = 'Invalid post id.'
-      @form_action = Rs(:new)
+      @form_action = Rsa(:new)
     end
   end
   
@@ -122,7 +118,7 @@ class PostController < Ramaze::Controller
     require_auth
 
     @title       = "New blog post - Untitled"
-    @form_action = Rs(:new)
+    @form_action = Rsa(:new)
     
     if request.post?
       @post = Post.new(
@@ -139,7 +135,7 @@ class PostController < Ramaze::Controller
         rescue => e
           @post_error = "There was an error saving your post: #{e}"
         else
-          redirect(Rs(@post.name))
+          redirect(Rsa(@post.name))
         end
       end
       
