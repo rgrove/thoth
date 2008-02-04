@@ -40,7 +40,7 @@ class TagsPostsMap < Sequel::Model(:tags_posts_map)
   def post
     Post[post_id]
   end
-  
+
   # Gets the Tag associated with this mapping.
   def tag
     Tag[tag_id]

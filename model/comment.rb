@@ -55,10 +55,15 @@ class Comment < Sequel::Model
     presence_of :author, :message => 'Please enter your name.'
     presence_of :title,  :message => 'Please enter a title for this comment.'
 
-    length_of :author,     :maximum => 64,    :message => 'Please enter a name under 64 characters.'
-    length_of :author_url, :maximum => 255,   :message => 'Please enter a shorter URL.'
-    length_of :body,       :maximum => 65536, :message => 'You appear to be writing a novel. Please try to keep it under 64K.'
-    length_of :title,      :maximum => 255,   :message => 'Please enter a title shorter than 255 characters.'
+    length_of :author, :maximum => 64,
+        :message => 'Please enter a name under 64 characters.'
+    length_of :author_url, :maximum => 255,
+        :message => 'Please enter a shorter URL.'
+    length_of :body, :maximum => 65536,
+        :message => 'You appear to be writing a novel. Please try to keep it ' +
+                    'under 64K.'
+    length_of :title, :maximum => 255,
+        :message => 'Please enter a title shorter than 255 characters.'
   end
   
   before_create do
@@ -112,14 +117,14 @@ class Comment < Sequel::Model
     @post ||= Post[post_id]
   end
   
+  def updated_at(format = nil)
+    format ? self[:updated_at].strftime(format) : self[:updated_at]
+  end
+
   # URL for this comment.
   def url
     Riposte::Config::SITE_URL.chomp('/') + R(PostController, post_id) +
         "#comment-#{id}"
-  end
-  
-  def updated_at(format = nil)
-    format ? self[:updated_at].strftime(format) : self[:updated_at]
   end
 end
 

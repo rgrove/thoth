@@ -17,16 +17,18 @@
   </div>
   
   <div class="ft">
-    <div class="tags">
-      <span class="icon tag"></span>
-      <ul>
-        <% post.tags.each do |tag| %>
-          <li>
-            <a href="<%= tag.url %>" rel="tag"><%= h(tag.name) %></a>
-          </li>
-        <% end %>
-      </ul>
-    </div>
+    <% unless post.tags.empty? %>
+      <div class="tags">
+        <span class="icon tag"></span>
+        <ul>
+          <% post.tags.each do |tag| %>
+            <li>
+              <a href="<%= tag.url %>" rel="tag"><%= h(tag.name) %></a>
+            </li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
     
     <div class="meta robots-nocontent">
       <span class="icon comments"></span>

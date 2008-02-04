@@ -66,6 +66,9 @@ module Riposte
       # Load controllers and models.
       acquire "#{Ramaze::APPDIR}/controller/*"
       acquire "#{Ramaze::APPDIR}/model/*"
+      
+      # Set up routes.
+      Ramaze::Route[/\/comments\/?/] = '/comment'
 
       # Set up error handlers.
       Ramaze::Dispatcher::Error::HANDLE_ERROR[Ramaze::Error::NoAction] = 

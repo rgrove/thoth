@@ -31,6 +31,8 @@
 $:.unshift(File.join(File.dirname(__FILE__), 'lib'))
 $:.uniq!
 
+require 'find'
+
 require 'rubygems'
 require 'rake/gempackagetask'
 require 'rake/rdoctask'
@@ -55,7 +57,8 @@ spec = Gem::Specification.new do |s|
   s.add_dependency('hpricot',      '>=0.6')
   s.add_dependency('json_pure',    '>=1.1.2')
   s.add_dependency('mongrel',      '>=1.0.1')
-  s.add_dependency('ramaze',       '>=0.3.5')
+  s.add_dependency('mysql',        '>=2.7')
+  s.add_dependency('ramaze',       '>=0.3.6')
   s.add_dependency('sequel',       '>=1.0')
   s.add_dependency('sqlite3-ruby', '>=1.2.1')
   s.add_dependency('swiftiply',    '>=0.6.1.1')
@@ -67,17 +70,34 @@ end
 
 desc "create bzip2 and tarball"
 task :distribute => :gem do
-  sh "rm -rf pkg/riposte-#{Riposte::APP_VERSION}"
-  sh "mkdir -p pkg/riposte-#{Riposte::APP_VERSION}/db"
-  sh "cp -r {controller,helper,model,public,scripts,view,LICENSE,README,riposte.conf.sample,riposte-server.rb} pkg/riposte-#{Riposte::APP_VERSION}"
-  sh "find pkg -type f -name '._*' -delete" 
-  sh "find pkg -type f -name '.DS_Store' -delete" 
-  sh "find pkg -type d -name .svn -delete" 
+  pkgname = "riposte-#{Riposte::APP_VERSION}"
+  pkgdir  = "pkg/#{pkgname}"
   
-  Dir.chdir('pkg') do |pwd|
-    sh "tar -zcvf riposte-#{Riposte::APP_VERSION}.tar.gz riposte-#{Riposte::APP_VERSION}"
-    sh "tar -jcvf riposte-#{Riposte::APP_VERSION}.tar.bz2 riposte-#{Riposte::APP_VERSION}"
+  sh "rm -rf #{pkgdir}"
+  sh "mkdir -p #{pkgdir}/db"
+  sh "cp -r {controller,helper,model,public,scripts,view,LICENSE,README,riposte.conf.sample,riposte-server.rb} #{pkgdir}"
+  
+  Find.find(pkgdir) do |path|
+    name = File.basename(path)
+    
+    if File.directory?(path)
+      if name == '.svn' 
+        FileUtils.rm_rf(path)    
+      end      
+    else
+      if name == '.DS_Store'
+        FileUtils.rm_f(path)
+      end
+    end
   end
   
-  sh "rm -rf pkg/riposte-#{Riposte::APP_VERSION}"
+  ENV['COPY_EXTENDED_ATTRIBUTES_DISABLE'] = 'true'
+  ENV['COPYFILE_DISABLE'] = 'true'
+
+  Dir.chdir('pkg') do |pwd|
+    sh "tar -zcvf #{pkgname}.tar.gz #{pkgname}"
+    sh "tar -jcvf #{pkgname}.tar.bz2 #{pkgname}"
+  end
+  
+  sh "rm -rf #{pkgdir}"
 end

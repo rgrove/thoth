@@ -44,23 +44,28 @@ class Page < Sequel::Model
   
   validates do
     presence_of :title, :message => 'Please enter a title for this page.'
-    presence_of :name,  :message => 'Please enter a name for this page.'
-    presence_of :body,  :message => "Come on, I'm sure you can think of something to write."
+    presence_of :name, :message => 'Please enter a name for this page.'
+    presence_of :body, 
+        :message => "Come on, I'm sure you can think of something to write."
     
-    length_of :title, :maximum => 255, :message => 'Please enter a title under 255 characters.'
-    length_of :name,  :maximum => 64,  :message => 'Please enter a name under 64 characters.'
+    length_of :title, :maximum => 255,
+        :message => 'Please enter a title under 255 characters.'
+    length_of :name,  :maximum => 64,
+        :message => 'Please enter a name under 64 characters.'
     
-    format_of :name, :with => /^[0-9a-z_-]+$/i, :message => 'Page names may only contain letters, numbers, underscores, and dashes.'
+    format_of :name, :with => /^[0-9a-z_-]+$/i,
+        :message => 'Page names may only contain letters, numbers, ' +
+                    'underscores, and dashes.'
   end
-  
+
   before_create do
     self.created_at = Time.now
   end
-  
+
   before_save do
     self.updated_at = Time.now
   end
-  
+
   def body=(body)
     body_rendered = body.dup
     

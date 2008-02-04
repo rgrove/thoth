@@ -1,9 +1,8 @@
-* Use Ramaze sessions instead of manual cookies (Ramaze::Session::COOKIE.merge!(:expires => 14.days.from_now))
-* Better tag deduping, ensure posts don't get posted if tags throw errors
+* Use Ramaze sessions instead of manual cookies 
+  (Ramaze::Session::COOKIE.merge!(:expires => 14.days.from_now))
 * Clear cache after new post/page
 * Delete comments in admin mode
 * Delete posts/pages in admin mode
-* Move comment posting to CommentsController (or CommentController?)
 * Refuse admin logins for 15 minutes after 5 failed attempts from the same IP
 * WordPress 2.x import script
 * Flickr helper

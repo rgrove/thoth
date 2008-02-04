@@ -26,13 +26,13 @@
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #++
 
-class CommentsController < Ramaze::Controller
+class CommentController < Ramaze::Controller
   engine :Erubis
   helper :admin, :cache
   layout '/layout'
 
-  template_root Riposte::Config::CUSTOM_VIEW/:comments,
-                Riposte::DIR/:view/:comments
+  template_root Riposte::Config::CUSTOM_VIEW/:comment,
+                Riposte::DIR/:view/:comment
   
   if Riposte::Config::ENABLE_CACHE
     cache :index, :ttl => 30, :key => lambda { check_auth }
@@ -84,6 +84,50 @@ class CommentsController < Ramaze::Controller
         }
       end
     }
+  end
+  
+  def new(name)
+    error_404 unless @post = Post.get(name)
+    @title = @post.title
+
+    if request.post?
+      # Dump the request if the robot traps were triggered.
+      error_404 unless request['captcha'].empty? && request['comment'].empty?
+      
+      # Create a new comment.
+      comment = Comment.new(
+        :post_id    => @post.id,
+        :author     => request[:author],
+        :author_url => request[:author_url],
+        :title      => request[:title],
+        :body       => request[:body],
+        :ip         => request.ip
+      )
+      
+      # Set cookies.
+      expire = Time.now + 315360000 # expire in 10 years
+
+      response.set_cookie(:riposte_author, :expires => expire,
+          :path => '/', :value => comment.author)
+      response.set_cookie(:riposte_author_url, :expires => expire,
+          :path => '/', :value => comment.author_url)
+      
+      if request[:action] == 'Preview Comment' || !comment.valid?
+        @preview = comment
+      elsif request[:action] == 'Post Comment'
+        comment.save
+        redirect(R(PostController, @post.name) + "#comment-#{comment.id}")
+      end
+      
+      @author     = comment.author
+      @author_url = comment.author_url
+    else
+      # Get form cookies.
+      @author     = request.cookies['riposte_author']     || ''
+      @author_url = request.cookies['riposte_author_url'] || ''
+    end
+    
+    render_template('../post/index')
   end
   
   def rss

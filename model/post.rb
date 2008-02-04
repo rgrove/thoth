@@ -44,15 +44,20 @@ class Post < Sequel::Model
   
   validates do
     presence_of :title, :message => 'Please enter a title for this post.'
-    presence_of :body,  :message => "What's the matter? Cat got your tongue?"
+    presence_of :body, :message => "What's the matter? Cat got your tongue?"
     
-    length_of :title, :maximum => 255, :message => 'Please enter a title under 255 characters.'
-    length_of :name,  :maximum => 64,  :message => 'Please enter a name under 64 characters.'
+    length_of :title, :maximum => 255,
+        :message => 'Please enter a title under 255 characters.'
+    length_of :name, :maximum => 64,
+        :message => 'Please enter a name under 64 characters.'
     
     # TODO: This should work according to the Sequel docs, but it doesn't.
-    #true_for :title, :logic => lambda { !Post[:title => title] }, :message => 'This title was already used for another post.'
+    #true_for :title, :logic => lambda { !Post[:title => title] },
+    #    :message => 'This title was already used for another post.'
 
-    format_of :name, :with => /^[0-9a-z_-]+$/i, :message => 'Page names may only contain letters, numbers, underscores, and dashes.'
+    format_of :name, :with => /^[0-9a-z_-]+$/i,
+        :message => 'Page names may only contain letters, numbers, ' +
+                    'underscores, and dashes.'
   end
   
   before_create do
@@ -74,6 +79,20 @@ class Post < Sequel::Model
     self[:body]          = body
   end
   
+  # Gets the Post with the specified name, where +name+ can be either a name or
+  # an id.
+  def self.get(name)
+    return Post[name] if name.is_a?(Numeric)
+    
+    name = name.to_s.strip.downcase
+    
+    if name =~ /^\d+$/
+      Post[name]
+    else
+      Post[:name => name]
+    end
+  end
+
   # Comments attached to this Post, ordered by creation time.
   def comments
     Comment.filter(:post_id => id).order(:created_at)
@@ -104,8 +123,8 @@ class Post < Sequel::Model
       raise ArgumentError, "Expected String or Array, got #{tag_names.class}"
     end
     
-    tag_names.uniq!
-    
+    tag_names = tag_names.map{|n| n.strip.downcase}.uniq.delete_if{|n| n.empty?}
+
     if exists?
       real_tags = []
       
@@ -114,17 +133,11 @@ class Post < Sequel::Model
       
       # Create new tags and new mappings.
       tag_names.each do |name|
-        name = name.strip.downcase
-
-        unless tag = Tag[:name => name]
-          tag = Tag.create(:name => name)
-        end
-        
+        tag = Tag.find_or_create[:name => name]
         real_tags << tag
-
         TagsPostsMap.create(:post_id => id, :tag_id => tag.id)
       end
-      
+
       return real_tags
     else
       # This Post hasn't been saved yet, so instead of attaching actual tags to
@@ -132,10 +145,7 @@ class Post < Sequel::Model
       # create the real ones until the Post is saved.
       @fake_tags = []
 
-      tag_names.each do |name|
-        @fake_tags << Tag.new(:name => name.strip.downcase)
-      end
-      
+      tag_names.each {|name| @fake_tags << Tag.new(:name => name) }
       @fake_tags.sort! {|a, b| a.name <=> b.name }
 
       return @fake_tags
@@ -143,6 +153,8 @@ class Post < Sequel::Model
   end
   
   def title=(title)
+    title.strip!
+    
     # Set the post's name if it isn't already set.
     if self[:name].nil? || self[:name].empty?
       index = 1
@@ -156,18 +168,11 @@ class Post < Sequel::Model
       name.gsub!(/[_-]+$/, '')
 
       # Ensure that the name doesn't conflict with any methods on the Post
-      # controller.
-      while PostController.methods.include?(name)
-        if name[-1] == index
-          name[-1] = (index += 1).to_s
-        else
-          name = name[0..62] if name.size >= 64
-          name += (index += 1).to_s
-        end
-      end
-    
-      # Ensure that no two posts have the same name.
-      while Post[:name => name]
+      # controller and that no two posts have the same name.
+      while PostController.methods.include?(name) || 
+            PostController.instance_methods.include?(name) ||
+            Post[:name => name]
+        
         if name[-1] == index
           name[-1] = (index += 1).to_s
         else
