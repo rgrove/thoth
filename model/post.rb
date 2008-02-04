@@ -87,11 +87,6 @@ class Post < Sequel::Model
     end
   end
 
-  # URL for this Post.
-  def url
-    Riposte::Config::SITE_URL.chomp('/') + R(PostController, name)
-  end
-  
   # Tags attached to this Post, ordered by name.
   def tags
     if exists?
@@ -194,6 +189,41 @@ class Post < Sequel::Model
       format ? Time.now.strftime(format) : Time.now
     end
   end
+
+  # URL for this Post.
+  def url
+    Riposte::Config::SITE_URL.chomp('/') + R(PostController, name)
+  end
 end
 
-Post.create_table unless Post.table_exists?
+unless Post.table_exists?
+  Post.create_table
+  Post.create(
+    :title => 'Welcome to your new Riposte blog',
+    :body  => %[
+      <p>
+        If you're reading this, you've successfully installed Riposte.
+        Congratulations!
+      </p>
+      
+      <p>
+        Now you'll probably want to get started tweaking and customizing. The
+        first thing to do, if you haven't already, is to rename
+        <code>riposte.conf.sample</code> to <code>riposte.conf</code> and edit
+        it to set up your blog. Be sure to change the administrator username and
+        password, and remember that you need to restart Riposte in order for
+        your changes to take effect.
+      </p>
+      
+      <p>
+        Once you've edited the config file to your liking, you can
+        <a href="/admin">login</a> and begin creating blog posts and pages. You
+        can also delete this post to make way for your own glorious words.
+      </p>
+      
+      <p>
+        Enjoy!
+      </p>
+    ].unindent
+  )
+end
