@@ -1,4 +1,4 @@
-# robots.txt file for http://wonko.com/
+# robots.txt file for Riposte
 
 User-agent: *
 Disallow: /post/comment
