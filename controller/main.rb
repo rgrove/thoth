@@ -78,7 +78,7 @@ class MainController < Ramaze::Controller
           x.title     post.title, :type => 'html'
           x.published post.created_at.xmlschema
           x.updated   post.updated_at.xmlschema
-          x.link      post.url, :rel => 'alternate'
+          x.link      :href => post.url, :rel => 'alternate'
           x.content   post.body_rendered, :type => 'html'
           
           post.tags.each do |tag|

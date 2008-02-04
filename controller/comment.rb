@@ -79,7 +79,7 @@ class CommentController < Ramaze::Controller
           x.title     comment.title, :type => 'html'
           x.published comment.created_at.xmlschema
           x.updated   comment.updated_at.xmlschema
-          x.link      comment.url, :rel => 'alternate'
+          x.link      :href => comment.url, :rel => 'alternate'
           x.content   comment.body_rendered, :type => 'html'
         }
       end
