@@ -1,0 +1,56 @@
+<% unless @today.empty? %>
+  <h3>Today's Comments</h3>
+
+  <ul class="slick">
+    <% @today.each do |comment| %>
+      <li>
+        <a href="<%= comment.url %>"><%= h(comment.title) %></a> by
+        <% if comment.author_url.empty? %>
+          <%= h(comment.author) %>
+        <% else %>
+          <a href="<%= h(comment.author_url) %>" rel="nofollow">
+            <%= h(comment.author) %>
+          </a>
+        <% end %>
+        on <%= comment.created_at(Riposte::Config::TIMESTAMP_SHORT) %><br />
+        <small>
+          attached to 
+          <a href="<%= comment.post.url %>">
+            <%= h(comment.post.title) %>
+          </a>
+        </small>
+      </li>
+    <% end %>
+  </ul>
+<% end %>
+
+<% unless @ancient.empty? %>
+  <h3>Ancient History</h3>
+
+  <ul class="slick">
+    <% @ancient.each do |comment| %>
+      <li>
+        <a href="<%= comment.url %>"><%= h(comment.title) %></a> by
+        <% if comment.author_url.empty? %>
+          <%= h(comment.author) %>
+        <% else %>
+          <a href="<%= h(comment.author_url) %>" rel="nofollow">
+            <%= h(comment.author) %>
+          </a>
+        <% end %>
+        on <%= comment.created_at(Riposte::Config::TIMESTAMP_SHORT) %><br />
+        <small>
+          attached to
+          <a href="<%= comment.post.url %>">
+            <%= h(comment.post.title) %>
+          </a>
+        </small>
+      </li>
+    <% end %>
+  </ul>
+<% end %>
+
+<% if @today.empty? && @ancient.empty? %>
+  <h3>Recent Comments</h3>
+  <p>It's been pretty quiet around here.</p>
+<% end %>
