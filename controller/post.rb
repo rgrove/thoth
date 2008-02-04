@@ -29,7 +29,10 @@
 class PostController < Ramaze::Controller
   engine :Erubis  
   helper :admin, :error, :partial
-  layout '/layout/main'
+  layout '/layout'
+  
+  template_root Riposte::Config::CUSTOM_VIEW/:post,
+                Riposte::DIR/:view/:post
   
   def index(name = nil)
     error_404 unless name && @post = get_post(name)

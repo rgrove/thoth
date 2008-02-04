@@ -1,0 +1,14 @@
+<div id="ft">
+  <p id="copyright">
+    Copyright &copy; <%= Time.now.year %>
+
+    <% if Riposte::Config::AUTHOR_EMAIL.empty? %>
+      <%= h(Riposte::Config::AUTHOR_NAME) %>.
+    <% else %>
+      <a href="mailto:<%= h(Riposte::Config::AUTHOR_EMAIL) %>">
+        <%= h(Riposte::Config::AUTHOR_NAME) %></a>.
+    <% end %>
+
+    All rights reserved.
+  </p>
+</div>

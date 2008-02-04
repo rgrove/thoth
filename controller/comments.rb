@@ -29,8 +29,11 @@
 class CommentsController < Ramaze::Controller
   engine :Erubis
   helper :admin, :cache
-  layout '/layout/main'
+  layout '/layout'
 
+  template_root Riposte::Config::CUSTOM_VIEW/:comments,
+                Riposte::DIR/:view/:comments
+  
   if Riposte::Config::ENABLE_CACHE
     cache :index, :ttl => 30, :key => lambda { check_auth }
     cache :atom, :rss, :ttl => 60
@@ -64,11 +67,11 @@ class CommentsController < Ramaze::Controller
       x.link     :href => Riposte::Config::SITE_URL.chomp('/') + Rs(:atom),
                  :rel => 'self'
 
-      x.author {
-        x.name  Riposte::Config::AUTHOR_NAME
-        x.email Riposte::Config::AUTHOR_EMAIL
-        x.uri   Riposte::Config::SITE_URL
-      }
+      # x.author {
+      #   x.name  Riposte::Config::AUTHOR_NAME
+      #   x.email Riposte::Config::AUTHOR_EMAIL
+      #   x.uri   Riposte::Config::SITE_URL
+      # }
 
       Comment.recent.all.each do |comment|
         x.entry {

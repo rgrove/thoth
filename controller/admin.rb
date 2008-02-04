@@ -29,7 +29,10 @@
 class AdminController < Ramaze::Controller
   engine :Erubis
   helper :admin, :error, :flash, :partial
-  layout '/layout/main'
+  layout '/layout'
+  
+  template_root Riposte::Config::CUSTOM_VIEW/:admin,
+                Riposte::DIR/:view/:admin
   
   def index
     if check_auth

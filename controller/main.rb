@@ -29,7 +29,9 @@
 class MainController < Ramaze::Controller
   engine :Erubis
   helper :admin, :cache, :error, :partial, :redirect, :ysearch
-  layout '/layout/main'
+  layout '/layout'
+  
+  template_root Riposte::Config::CUSTOM_VIEW, Riposte::DIR/:view
   
   if Riposte::Config::ENABLE_CACHE
     cache :index, :ttl => 60, :key => lambda {

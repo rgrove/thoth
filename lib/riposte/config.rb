@@ -37,6 +37,8 @@ module Riposte
       :AUTHOR_EMAIL     => "",
       :ADMIN_USER       => "riposte",
       :ADMIN_PASS       => "riposte",
+      :CUSTOM_PUBLIC    => Ramaze::APPDIR/:custom/:public,
+      :CUSTOM_VIEW      => Ramaze::APPDIR/:custom/:view,
       :ENABLE_CACHE     => true,
       :AUTH_SEED        => "43c55@051a19a/4f88a3ff+355cd1418",
       :TIMESTAMP_LONG   => "%A %B %d, %Y @ %I:%M %p (%Z)",

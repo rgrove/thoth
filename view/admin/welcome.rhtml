@@ -24,13 +24,24 @@
   </p>
 
   <dl class="customizing">
-    <dt>Templates</dt>
+    <dt>Default Templates</dt>
     <dd><code><%= @template_root %></code></dd>
-  
-    <dt>CSS</dt>
+    <dt>Default CSS, JS, etc.</dt>
     <dd><code><%= @public_root %></code></dd>
+
+    <dt>Custom Templates</dt>
+    <dd><code><%= Riposte::Config::CUSTOM_VIEW %></code></dd>
+    <dt>Custom CSS, JS, etc.</dt>
+    <dd><code><%= Riposte::Config::CUSTOM_PUBLIC %></code></dd>
   </dl>
 
+  <p>
+    To customize your blog, find the default template or static resource you
+    want to change and copy it to the corresponding custom directory, then make
+    your changes to the copy. Riposte looks for a customized file first, then
+    loads the default file if no customized version is found. 
+  </p>
+  
   <p>
     You'll need to know some XHTML and CSS (and a wee touch of Ruby wouldn't
     hurt), but you should be able to figure it out. You seem like a smart sort

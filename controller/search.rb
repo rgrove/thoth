@@ -29,7 +29,10 @@
 class SearchController < Ramaze::Controller
   engine :Erubis
   helper :admin, :cache, :partial, :redirect, :ysearch
-  layout '/layout/main'
+  layout '/layout'
+  
+  template_root Riposte::Config::CUSTOM_VIEW/:search,
+                Riposte::DIR/:view/:search
   
   if Riposte::Config::ENABLE_CACHE
     cache :index, :ttl => 300, :key => lambda {

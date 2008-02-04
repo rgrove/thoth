@@ -29,8 +29,11 @@
 class ArchiveController < Ramaze::Controller
   engine :Erubis
   helper :admin, :cache, :partial
-  layout '/layout/main'
+  layout '/layout'
 
+  template_root Riposte::Config::CUSTOM_VIEW/:archive,
+                Riposte::DIR/:view/:archive
+  
   if Riposte::Config::ENABLE_CACHE
     cache :index, :ttl => 120, :key => lambda { check_auth }
   end

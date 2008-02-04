@@ -1,0 +1,21 @@
+<div id="hd" class="robots-nocontent">
+  <h1>
+    <a href="<%= R(MainController) %>">
+      <%= h(Riposte::Config::SITE_NAME) %>
+    </a>
+  </h1>
+
+  <div id="toolbar">
+    <div class="subtitle">
+      <%= h(Riposte::Config::SITE_DESCRIPTION) %>
+    </div>
+    
+    <ul>
+      <li><%= A('Home',     :href => R(MainController)) %></li>
+      <li><%= A('Archives', :href => R(MainController, :archive, 2)) %></li>
+      <li><%= A('Comments', :href => R(MainController, :comments)) %></li>
+    </ul>
+  </div>
+
+  <%= render_template 'admin/toolbar' %>
+</div>

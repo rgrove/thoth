@@ -60,6 +60,23 @@ module Riposte; module Config # <-- don't remove this line
   # Riposte.
   
   # ADMIN_PASS = "riposte"
+  
+  # CUSTOM_PUBLIC: string
+  #
+  # Absolute path to a directory containing customized static files such as CSS,
+  # JS, and images. Use this in conjunction with CUSTOM_VIEW to create your own
+  # customized Riposte theme. Any files in this directory will override the
+  # corresponding default files.
+  
+  # CUSTOM_PUBLIC = "#{Ramaze::APPDIR}/custom/public"
+
+  # CUSTOM_VIEW: string
+  #
+  # Absolute path to a directory containing customized view templates. Any
+  # templates in this directory will override the corresponding default
+  # templates.
+  
+  # CUSTOM_VIEW = "#{Ramaze::APPDIR}/custom/view"
 
   # ENABLE_CACHE = boolean
   #
@@ -91,13 +108,21 @@ module Riposte; module Config # <-- don't remove this line
 
   # DB_PRODUCTION: string
   #
-  # Connection URI for the production database.
+  # Connection URI for the production database. Currently SQLite3 and MySQL are
+  # supported. PostgreSQL may work, but hasn't been tested.
+  #
+  # Sample SQLite3 connection string:
+  #   sqlite:////absolute/path/to/database.db
+  #
+  # Sample MySQL connection string:
+  #   mysql://user:pass@hostname/database
   
   # DB_PRODUCTION = "sqlite:///#{Ramaze::APPDIR}/db/production.db"
 
   # DB_TEST: string
   #
-  # Connection URI for the test (development) database.
+  # Connection URI for the test (development) database. See DB_PRODUCTION for
+  # sample connection strings.
   
   # DB_TEST = "sqlite:///#{Ramaze::APPDIR}/db/test.db"
 
