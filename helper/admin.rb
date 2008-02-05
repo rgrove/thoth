@@ -32,9 +32,9 @@ module Ramaze
   # handling Riposte administrator logins and logouts, along with methods for
   # checking for or requiring authorization from within other actions and views.
   module AdminHelper
-    # Include flash and redirect helpers.
+    # Include cookie, flash and redirect helpers.
     def self.included(klass)
-      klass.send(:helper, :flash, :redirect)
+      klass.send(:helper, :cookie, :flash, :redirect)
     end
     
     # Authenticates an admin login by checking the +username+ and +password+
@@ -48,8 +48,8 @@ module Ramaze
     def login
       username, password = request[:username, :password]
       
-      if username === Riposte::Config::ADMIN_USER &&
-          password === Riposte::Config::ADMIN_PASS
+      if username == Riposte::Config::ADMIN_USER &&
+          password == Riposte::Config::ADMIN_PASS
         # Set an auth cookie that expires in two weeks.
         response.set_cookie('riposte_auth', :expires => Time.now + 1209600,
             :path => R(MainController), :value => auth_key)
@@ -86,8 +86,7 @@ module Ramaze
     # Checks the auth cookie and returns +true+ if the user is authenticated,
     # +false+ otherwise.
     def check_auth
-      request.cookies['riposte_auth'] && 
-          request.cookies['riposte_auth'] == auth_key
+      cookie(:riposte_auth) == auth_key
     end
     
     # Checks the auth cookie and redirects to the login page if the user is not
