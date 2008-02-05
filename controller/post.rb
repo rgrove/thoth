@@ -28,7 +28,7 @@
 
 class PostController < Ramaze::Controller
   engine :Erubis  
-  helper :admin, :error, :partial
+  helper :admin, :cookie, :error, :partial
   layout '/layout'
   
   template_root Riposte::Config::CUSTOM_VIEW/:post,
@@ -36,11 +36,10 @@ class PostController < Ramaze::Controller
   
   def index(name = nil)
     error_404 unless name && @post = Post.get(name)
-    @title = @post.title
 
-    # Get form cookies.
-    @author     = request.cookies['riposte_author']     || ''
-    @author_url = request.cookies['riposte_author_url'] || ''
+    @title      = @post.title
+    @author     = cookie(:riposte_author, '')
+    @author_url = cookie(:riposte_author_url, '')
   end
   
   def edit(id = nil)
