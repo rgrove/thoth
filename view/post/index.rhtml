@@ -177,6 +177,10 @@
       <textarea name="comment" rows="6" cols="60"></textarea>
     </p>
     
+    <% if @comment_error %>
+      <div class="error"><%= h(@comment_error) %></div>
+    <% end %>
+
     <p>
       <input type="submit" name="action" value="Preview Comment" />
       <input type="submit" name="action" value="Post Comment" />
