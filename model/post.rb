@@ -74,11 +74,6 @@ class Post < Sequel::Model
     reverse_order(:created_at).paginate(page, limit)
   end
   
-  def body=(body)
-    self[:body_rendered] = body.dup
-    self[:body]          = body
-  end
-  
   # Gets the Post with the specified name, where +name+ can be either a name or
   # an id.
   def self.get(name)
@@ -93,6 +88,11 @@ class Post < Sequel::Model
     end
   end
 
+  def body=(body)
+    self[:body_rendered] = body.dup.strip
+    self[:body]          = body.strip
+  end
+  
   # Comments attached to this Post, ordered by creation time.
   def comments
     Comment.filter(:post_id => id).order(:created_at)
@@ -104,6 +104,10 @@ class Post < Sequel::Model
     else
       format ? Time.now.strftime(format) : Time.now
     end
+  end
+  
+  def name=(name)
+    self[:name] = name.strip unless name.nil?
   end
 
   # Tags attached to this Post, ordered by name.

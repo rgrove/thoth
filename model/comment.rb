@@ -80,18 +80,22 @@ class Comment < Sequel::Model
     order(:created_at.desc).limit(limit)
   end
   
+  def author=(author)
+    self[:author] = author.strip unless author.nil?
+  end
+  
   def author_url=(url)
     # Ensure that the URL begins with a valid protocol.
     unless url.nil? || url.empty? || url =~ /^(?:https?|mailto):\/\//i
       url = 'http://' + url
     end
 
-    self[:author_url] = url
+    self[:author_url] = url.strip unless url.nil?
   end
 
   def body=(body)
-    body          = sanitize_html(body)
-    body_rendered = body.dup
+    body          = sanitize_html(body.strip)
+    body_rendered = body.dup.strip
     
     # Autoformat the comment body if necessary.
     unless body_rendered =~ /<p>/i || body_rendered =~ /(?:<br\s*\/?>\s*){2,}/i
@@ -115,6 +119,10 @@ class Comment < Sequel::Model
   # Post to which this comment is attached.
   def post
     @post ||= Post[post_id]
+  end
+  
+  def title=(title)
+    self[:title] = title.strip unless title.nil?
   end
   
   def updated_at(format = nil)

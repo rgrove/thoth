@@ -67,7 +67,7 @@ class Page < Sequel::Model
   end
 
   def body=(body)
-    body_rendered = body.dup
+    body_rendered = body.dup.strip
     
     # Parse wiki-style links to other pages.
     body_rendered.gsub!(/\[\[([0-9a-z_-]+)\|(.+?)\]\]/i) do
@@ -85,8 +85,16 @@ class Page < Sequel::Model
       A($1, :href => R(PostController, $1.downcase))
     end
 
+    self[:body]          = body.strip
     self[:body_rendered] = body_rendered
-    self[:body]          = body
+  end
+  
+  def name=(name)
+    self[:name] = name.strip unless name.nil?
+  end
+  
+  def title=(title)
+    self[:title] = title.strip unless title.nil?
   end
   
   # URL for this Page.
