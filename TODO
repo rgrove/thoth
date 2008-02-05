@@ -1,5 +1,4 @@
-* Use Ramaze sessions instead of manual cookies 
-  (Ramaze::Session::COOKIE.merge!(:expires => 14.days.from_now))
+* Add address and port settings to config file.
 * Clear cache after new post/page
 * Delete comments in admin mode
 * Delete posts/pages in admin mode
