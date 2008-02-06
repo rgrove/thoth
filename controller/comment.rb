@@ -35,7 +35,7 @@ class CommentController < Ramaze::Controller
                 Riposte::DIR/:view/:comment
   
   if Riposte::Config::ENABLE_CACHE
-    cache :index, :ttl => 30, :key => lambda { check_auth }
+    cache :index, :ttl => 60, :key => lambda { check_auth }
     cache :atom, :rss, :ttl => 60
   end
 
