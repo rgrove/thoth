@@ -1,8 +1,7 @@
-* Add address and port settings to config file.
-* Clear cache after new post/page
 * Delete comments in admin mode
 * Delete posts/pages in admin mode
 * Refuse admin logins for 15 minutes after 5 failed attempts from the same IP
+* MarsEdit support: http://www.red-sweater.com/marsedit/
 * WordPress 2.x import script
 * Flickr helper
 * del.icio.us helper
