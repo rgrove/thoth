@@ -42,6 +42,24 @@ class PostController < Ramaze::Controller
     @author_url = cookie(:riposte_author_url, '')
   end
   
+  def delete(id = nil)
+    require_auth
+    
+    error_404 unless id && @post = Post[id]
+
+    if request.post?
+      if request[:confirm] == 'yes'
+        @post.destroy
+        action_cache.clear
+        redirect(R(MainController))
+      else
+        redirect(@post.url)
+      end
+    end
+    
+    @title = "Delete Post: #{@post.title}"
+  end
+  
   def edit(id = nil)
     require_auth
 

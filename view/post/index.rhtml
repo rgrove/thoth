@@ -41,35 +41,7 @@
   <h3>Comments</h3>
   
   <% @post.comments.all.each do |comment| %>
-      <div id="comment-<%= comment.id %>" class="comment">
-        <div class="hd">
-          <h4>
-            <span class="icon comment"></span>
-            <a href="<%= comment.url %>" rel="bookmark"
-                title="Permalink for this comment"><%= h(comment.title) %></a>
-          </h4>
-        </div>
-
-        <div class="bd">
-          <%= comment.body_rendered %>
-        </div>
-
-        <div class="ft">
-          <span class="date robots-nocontent">
-            <%= comment.created_at(Riposte::Config::TIMESTAMP_LONG) %>
-          </span>
-          <span class="author">
-            Posted by
-            <% if comment.author_url.empty? %>
-              <%= h(comment.author) %>
-            <% else %>
-              <a href="<%= h(comment.author_url) %>" rel="nofollow">
-                <%= h(comment.author) %>
-              </a>
-            <% end %>
-          </span>
-        </div>
-      </div>
+    <%= render_template('../comment/comment.rhtml', :comment => comment) %>
   <% end %>
 </div>
 
@@ -78,35 +50,7 @@
 
   <% if @preview && @preview.valid? %>
     <fieldset>
-      <div class="comment">
-        <div class="hd">
-          <h4>
-            <span class="icon comment"></span>
-            <a href="<%= @post.url %>" rel="bookmark"
-                title="Permalink for this comment"><%= h(@preview.title) %></a>
-          </h4>
-        </div>
-
-        <div class="bd">
-          <%= @preview.body_rendered %>
-        </div>
-
-        <div class="ft">
-          <span class="date robots-nocontent">
-            <%= Time.now.strftime(Riposte::Config::TIMESTAMP_LONG) %>
-          </span>
-          <span class="author">
-            Posted by
-            <% if @preview.author_url.empty? %>
-              <%= h(@preview.author) %>
-            <% else %>
-              <a href="<%= h(@preview.author_url) %>" rel="nofollow">
-                <%= h(@preview.author) %>
-              </a>
-            <% end %>
-          </span>
-        </div>
-      </div>
+      <%= render_template('../comment/comment.rhtml', :comment => @preview) %>
     </fieldset>
   <% end %>
   

@@ -64,6 +64,10 @@ class Post < Sequel::Model
     self.created_at = Time.now
   end
   
+  before_destroy do
+    TagsPostsMap.filter(:post_id => id).destroy
+  end
+  
   before_save do
     self.updated_at = Time.now
   end

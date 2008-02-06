@@ -42,7 +42,25 @@ class PageController < Ramaze::Controller
     error_404 unless name && @page = Page[:name => name.strip.downcase]
     @title = @page.title
   end
+  
+  def delete(id = nil)
+    require_auth
+    
+    error_404 unless id && @page = Page[id]
 
+    if request.post?
+      if request[:confirm] == 'yes'
+        @page.destroy
+        action_cache.clear
+        redirect(R(MainController))
+      else
+        redirect(@page.url)
+      end
+    end
+    
+    @title = "Delete Page: #{@page.title}"
+  end
+  
   def edit(id = nil)
     require_auth
 

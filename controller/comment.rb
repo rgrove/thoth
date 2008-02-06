@@ -28,7 +28,7 @@
 
 class CommentController < Ramaze::Controller
   engine :Erubis
-  helper :admin, :cache, :cookie
+  helper :admin, :cache, :cookie, :error
   layout '/layout'
 
   template_root Riposte::Config::CUSTOM_VIEW/:comment,
@@ -84,6 +84,25 @@ class CommentController < Ramaze::Controller
         }
       end
     }
+  end
+  
+  def delete(id = nil)
+    require_auth
+    
+    error_404 unless id && @comment = Comment[id]
+    
+    if request.post?
+      comment_url = @comment.url
+      
+      if request[:confirm] == 'yes'
+        @comment.destroy
+        action_cache.clear  
+      end
+      
+      redirect(comment_url)
+    end
+    
+    @title = "Delete Comment: #{@comment.title}"
   end
   
   def new(name)
