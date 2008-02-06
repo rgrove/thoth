@@ -137,7 +137,7 @@ class Post < Sequel::Model
       
       # Create new tags and new mappings.
       tag_names.each do |name|
-        tag = Tag.find_or_create[:name => name]
+        tag = Tag.find_or_create(:name => name)
         real_tags << tag
         TagsPostsMap.create(:post_id => id, :tag_id => tag.id)
       end
