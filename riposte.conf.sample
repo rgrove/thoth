@@ -7,6 +7,7 @@
 # Syntax:
 #   string:  'foo' or "foo"
 #   boolean: true or false
+#   integer: 5 or -5
 #
 # You guessed it: this file is Ruby, so you've gotta use Ruby syntax. But
 # Ruby's a real friendly sort of language, so don't you worry. Just pay
@@ -86,26 +87,6 @@ module Riposte; module Config # <-- don't remove this line
   
   # ENABLE_CACHE = true
 
-  # AUTH_SEED: string
-  # 
-  # String of random characters to add uniqueness to the admin auth cookie.
-  
-  # AUTH_SEED = "43c55@051a19a/4f88a3ff+355cd1418"
-
-  # TIMESTAMP_LONG: string
-  # 
-  # Format for long timestamps. For details, see:
-  # http://www.ruby-doc.org/core/classes/Time.html#M000297
-
-  # TIMESTAMP_LONG = "%A %B %d, %Y @ %I:%M %p (%Z)"
-
-  # TIMESTAMP_SHORT: string
-  #
-  # Format for short timestamps. For details, see:
-  # http://www.ruby-doc.org/core/classes/Time.html#M000297
-  
-  # TIMESTAMP_SHORT = "%Y-%m-%d %I:%M"
-
   # DB_PRODUCTION: string
   #
   # Connection URI for the production database. Currently SQLite3 and MySQL are
@@ -125,5 +106,37 @@ module Riposte; module Config # <-- don't remove this line
   # sample connection strings.
   
   # DB_TEST = "sqlite:///#{Ramaze::APPDIR}/db/test.db"
+
+  # AUTH_SEED: string
+  # 
+  # String of random characters to add uniqueness to the admin auth cookie.
+  
+  # AUTH_SEED = "43c55@051a19a/4f88a3ff+355cd1418"
+
+  # TIMESTAMP_LONG: string
+  # 
+  # Format for long timestamps. For details, see:
+  # http://www.ruby-doc.org/core/classes/Time.html#M000297
+
+  # TIMESTAMP_LONG = "%A %B %d, %Y @ %I:%M %p (%Z)"
+
+  # TIMESTAMP_SHORT: string
+  #
+  # Format for short timestamps. For details, see:
+  # http://www.ruby-doc.org/core/classes/Time.html#M000297
+  
+  # TIMESTAMP_SHORT = "%Y-%m-%d %I:%M"
+  
+  # SERVER_ADDRESS: string
+  #
+  # IP address on which the Riposte server should listen for connections.
+  
+  # SERVER_ADDRESS = "0.0.0.0"
+  
+  # SERVER_PORT: integer
+  #
+  # Port on which the Riposte server should listen for connections.
+  
+  # SERVER_PORT: 7000
 
 end; end # <-- don't remove this line

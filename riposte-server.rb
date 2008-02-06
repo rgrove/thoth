@@ -52,9 +52,9 @@ module Riposte
     :config  => ENV['RIPOSTE_CONF'] || DIR/'riposte.conf',
     :daemon  => nil,
     :devel   => false,
-    :ip      => '0.0.0.0',
+    :ip      => nil,
     :log_sql => nil,
-    :port    => 7000
+    :port    => nil
   }
   
   # Parse command-line options.
@@ -122,13 +122,15 @@ module Riposte
     abort("Error: #{e}")
   end
   
+  Config.load_config(options[:config])
+
   CONFIG_FILE = options[:config]
   DEVEL_MODE  = options[:devel]
-  IP          = options[:ip]
+  IP          = options[:ip] || Config::SERVER_ADDRESS
   LOG_SQL     = options[:log_sql]
-  PID_FILE    = DIR/'riposte.pid'
-  PORT        = options[:port]
-  
+  PORT        = options[:port] || Config::SERVER_PORT
+  PID_FILE    = DIR/"riposte_#{IP}_#{PORT}.pid"
+
   case options[:daemon]
   when :restart
     restart

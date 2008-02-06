@@ -53,8 +53,6 @@ module Riposte
 
     # Run Riposte.
     def run
-      Config.load_config(CONFIG_FILE)
-
       # Set up the database connection.
       @db = Sequel.open(DEVEL_MODE ? Config::DB_TEST : Config::DB_PRODUCTION)
 
@@ -85,7 +83,7 @@ module Riposte
         Ramaze::Dispatcher::Error::HANDLE_ERROR[Exception]     = [500, 'error_500']
       end
       
-      Ramaze.start :adapter => :evented_mongrel, :host => IP, :port => PORT,
+      Ramaze.start :adapter => :evented_mongrel, :host  => IP, :port  => PORT,
           :force => true
     end
 

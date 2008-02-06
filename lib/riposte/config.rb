@@ -40,11 +40,13 @@ module Riposte
       :CUSTOM_PUBLIC    => Ramaze::APPDIR/:custom/:public,
       :CUSTOM_VIEW      => Ramaze::APPDIR/:custom/:view,
       :ENABLE_CACHE     => true,
+      :DB_PRODUCTION    => "sqlite:///#{Ramaze::APPDIR}/db/production.db",
+      :DB_TEST          => "sqlite:///#{Ramaze::APPDIR}/db/test.db",
       :AUTH_SEED        => "43c55@051a19a/4f88a3ff+355cd1418",
       :TIMESTAMP_LONG   => "%A %B %d, %Y @ %I:%M %p (%Z)",
       :TIMESTAMP_SHORT  => "%Y-%m-%d %I:%M",
-      :DB_PRODUCTION    => "sqlite:///#{Ramaze::APPDIR}/db/production.db",
-      :DB_TEST          => "sqlite:///#{Ramaze::APPDIR}/db/test.db"
+      :SERVER_ADDRESS   => "0.0.0.0",
+      :SERVER_PORT      => 7000
     }
     
     def self.const_missing(name)
