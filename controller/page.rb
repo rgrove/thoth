@@ -61,6 +61,7 @@ class PageController < Ramaze::Controller
           rescue => e
             @page_error = "There was an error saving your page: #{e}"
           else
+            action_cache.clear
             redirect(Rs(@page.name))
           end
         end
@@ -91,6 +92,7 @@ class PageController < Ramaze::Controller
         rescue => e
           @page_error = "There was an error saving your page: #{e}"
         else
+          action_cache.clear
           redirect(Rs(@page.name))
         end
       end

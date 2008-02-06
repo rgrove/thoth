@@ -28,7 +28,7 @@
 
 class PostController < Ramaze::Controller
   engine :Erubis  
-  helper :admin, :cookie, :error, :partial
+  helper :admin, :cache, :cookie, :error, :partial
   layout '/layout'
   
   template_root Riposte::Config::CUSTOM_VIEW/:post,
@@ -62,6 +62,7 @@ class PostController < Ramaze::Controller
           rescue => e
             @post_error = "There was an error saving your post: #{e}"
           else
+            action_cache.clear
             redirect(Rs(@post.name))
           end
         end
@@ -94,6 +95,7 @@ class PostController < Ramaze::Controller
         rescue => e
           @post_error = "There was an error saving your post: #{e}"
         else
+          action_cache.clear
           redirect(Rs(@post.name))
         end
       end
