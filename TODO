@@ -1,5 +1,4 @@
 * Refuse admin logins for 15 minutes after 5 failed attempts from the same IP
-* MarsEdit support: http://www.red-sweater.com/marsedit/
 * WordPress 2.x import script
 * Flickr helper
 * del.icio.us helper
