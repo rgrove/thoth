@@ -61,7 +61,7 @@ class MainController < Ramaze::Controller
       x.id       Riposte::Config::SITE_URL
       x.title    Riposte::Config::SITE_NAME
       x.subtitle Riposte::Config::SITE_DESCRIPTION
-      x.updated  Time.now.rfc2822 # TODO: use modification time of the last post
+      x.updated  Time.now.xmlschema # TODO: use modification time of the last post
       x.link     :href => Riposte::Config::SITE_URL
       x.link     :href => Riposte::Config::SITE_URL.chomp('/') + Rs(:atom),
                  :rel => 'self'
@@ -95,7 +95,8 @@ class MainController < Ramaze::Controller
     x = Builder::XmlMarkup.new(:indent => 2)
     x.instruct!
 
-    respond x.rss(:version => '2.0') {
+    respond x.rss(:version     => '2.0',
+                  'xmlns:atom' => 'http://www.w3.org/2005/Atom') {
       x.channel {
         x.title          Riposte::Config::SITE_NAME
         x.link           Riposte::Config::SITE_URL
@@ -104,6 +105,9 @@ class MainController < Ramaze::Controller
         x.webMaster      "#{Riposte::Config::AUTHOR_EMAIL} (#{Riposte::Config::AUTHOR_NAME})"
         x.docs           'http://backend.userland.com/rss/'
         x.ttl            60
+        x.atom           :link, :rel => 'self', :type => 'application/rss+xml',
+                         :href => Riposte::Config::SITE_URL.chomp('/') +
+                                  Rs(:rss)
         
         Post.recent.all.each do |post|
           x.item {

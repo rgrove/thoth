@@ -62,16 +62,10 @@ class CommentController < Ramaze::Controller
       x.id       comments_url
       x.title    "#{Riposte::Config::SITE_NAME}: Recent Comments"
       x.subtitle Riposte::Config::SITE_DESCRIPTION
-      x.updated  Time.now.rfc2822 # TODO: use modification time of the last post
+      x.updated  Time.now.xmlschema # TODO: use modification time of the last post
       x.link     :href => comments_url
       x.link     :href => Riposte::Config::SITE_URL.chomp('/') + Rs(:atom),
                  :rel => 'self'
-
-      # x.author {
-      #   x.name  Riposte::Config::AUTHOR_NAME
-      #   x.email Riposte::Config::AUTHOR_EMAIL
-      #   x.uri   Riposte::Config::SITE_URL
-      # }
 
       Comment.recent.all.each do |comment|
         x.entry {
@@ -81,6 +75,14 @@ class CommentController < Ramaze::Controller
           x.updated   comment.updated_at.xmlschema
           x.link      :href => comment.url, :rel => 'alternate'
           x.content   comment.body_rendered, :type => 'html'
+
+          x.author {
+            x.name comment.author
+            
+            if comment.author_url && !comment.author_url.empty?
+              x.uri comment.author_url
+            end
+          }
         }
       end
     }
@@ -156,7 +158,9 @@ class CommentController < Ramaze::Controller
     x = Builder::XmlMarkup.new(:indent => 2)
     x.instruct!
 
-    respond x.rss(:version => '2.0') {
+    respond x.rss(:version     => '2.0',
+                  'xmlns:atom' => 'http://www.w3.org/2005/Atom',
+                  'xmlns:dc'   => 'http://purl.org/dc/elements/1.1/') {
       x.channel {
         x.title          "#{Riposte::Config::SITE_NAME}: Recent Comments"
         x.link           Riposte::Config::SITE_URL
@@ -165,12 +169,15 @@ class CommentController < Ramaze::Controller
         x.webMaster      "#{Riposte::Config::AUTHOR_EMAIL} (#{Riposte::Config::AUTHOR_NAME})"
         x.docs           'http://backend.userland.com/rss/'
         x.ttl            30
+        x.atom           :link, :rel => 'self', :type => 'application/rss+xml',
+                         :href => Riposte::Config::SITE_URL.chomp('/') +
+                                  Rs(:rss)
         
         Comment.recent.all.each do |comment|
           x.item {
             x.title       comment.title
             x.link        comment.url
-            x.author      comment.author
+            x.dc          :creator, comment.author
             x.guid        comment.url, :isPermaLink => 'true'
             x.pubDate     comment.created_at.rfc2822
             x.description comment.body_rendered
