@@ -27,4 +27,6 @@ var Riposte = function () {
   yue.onDOMReady(function () {
     yue.on(window, 'keyup', hotkey, this, true);
   }, this, true);
+  
+  return {};
 }();
