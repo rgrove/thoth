@@ -1,0 +1,52 @@
+<h2>Pages</h2>
+
+<% if @prev_url || @next_url %>
+  <%= 
+  render_template('../pager',
+      :prev_url  => @prev_url,
+      :next_url  => @next_url,
+      :prev_text => '&laquo; Newer pages',
+      :next_text => 'Older pages &raquo;')
+  %>
+<% end %>
+
+<table class="list pages" summary="List of all pages in reverse order">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Title</th>
+      <th>Created</th>
+      <th>Updated</th>
+    </tr>
+  </thead>
+  
+  <tfoot></tfoot>
+  
+  <tbody>
+    <% row = 'even' %>
+    <% @pages.all.each do |page| %>
+      <tr class="<%= row == 'even' ? row = 'odd' : row = 'even' %>">
+        <td class="name"><%= page.name %></td>
+        <td class="title">
+          <a href="<%= page.url %>"><%= h(page.title) %></a>
+        </td>
+        <td class="created">
+          <%= page.created_at(Riposte::Config::TIMESTAMP_SHORT) %>
+        </td>
+        <td class="updated">
+          <%= page.updated_at(Riposte::Config::TIMESTAMP_SHORT) %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<% if @prev_url || @next_url %>
+  <%= 
+  render_template('../pager',
+      :prev_url  => @prev_url,
+      :next_url  => @next_url,
+      :prev_text => '&laquo; Newer pages',
+      :next_text => 'Older pages &raquo;')
+  %>
+<% end %>

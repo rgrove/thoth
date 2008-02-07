@@ -1,6 +1,6 @@
 <div id="adminToolbar" class="toolbar robots-nocontent<%= check_auth ? '' : ' hidden' %>">
   <% if check_auth %>
-    <ul>
+    <ul class="edit">
       <li>
         <a href="<%= R(PostController, :new) %>"
             title="Create a new blog post">
@@ -48,9 +48,26 @@
       <% end %>
     </ul>
     
-    <form action="<%= R(AdminController, :logout) %>" method="post">
-      <div><input type="submit" value="Log out" /></div>
-    </form>
+    <ul class="tools">
+      <li>
+        <a href="<%= R(PostController, :list) %>" title="List all blog posts">
+          <img src="/images/toolbar/posts.png" alt="List All Posts" />
+        </a>
+      </li>
+      
+      <li>
+        <a href="<%= R(PageController, :list) %>" title="List all pages">
+          <img src="/images/toolbar/pages.png" alt="List All Pages" />
+        </a>
+      </li>
+      
+      <li>
+        <a href="<%= R(AdminController, :logout) %>" title="Log out">
+          <img src="/images/toolbar/logout.png" alt="Log Out" />
+        </a>
+      </li>
+    </ul>
+    
   <% else %>
     <form id="login" action="<%= R(AdminController, :login) %>" method="post">
       <div>

@@ -17,8 +17,11 @@
   float: left;
   list-style: none;
   margin: 0;
-  padding: 0;
+  padding: 0 6px;
 }
+
+.toolbar ul.edit { padding-left: 0; }
+.toolbar ul.tools { border-left: 1px solid #dfdfdf; }
 
 .toolbar ul:after {
   clear: left;
@@ -92,6 +95,33 @@ form table tfoot td {
 #tags { width:100%; }
 
 #name{ width: 20em; }
+
+/* -- Lists ----------------------------------------------------------------- */
+table.list {
+  width: 100%;
+}
+
+table.list th,
+table.list td { padding: 1px 2px 1px 2px; }
+
+table.list thead th {
+  font-weight: bold;
+  text-align: left;
+}
+
+table.list tbody tr.odd { background: #fff; }
+table.list tbody tr.even { background: #e7f2ff; }
+table.list tbody tr:hover { background: #d0dbf7; }
+
+table.list tbody td { border: 1px solid transparent; }
+table.list tbody tr:hover td { border: 1px solid #9ab3f7; }
+
+table.list td.title { width: 100%; }
+
+table.list td.created,
+table.list td.updated { white-space: nowrap; }
+
+table.pages td.name { white-space: nowrap; }
 
 /* -- Welcome Page ---------------------------------------------------------- */
 .welcome .version {

@@ -92,6 +92,15 @@ class PostController < Ramaze::Controller
     end
   end
   
+  def list(page = 1)
+    require_auth
+    
+    @posts    = Post.recent(page.to_i, 20)
+    @prev_url = @posts.prev_page ? Rs(:list, @posts.prev_page) : nil
+    @next_url = @posts.next_page ? Rs(:list, @posts.next_page) : nil
+    @title    = "Blog Posts (page #{page} of #{@posts.page_count})"
+  end
+  
   def new
     require_auth
 

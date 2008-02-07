@@ -89,6 +89,14 @@ class Page < Sequel::Model
     self[:body_rendered] = body_rendered
   end
   
+  def created_at(format = nil)
+    if exists?
+      format ? self[:created_at].strftime(format) : self[:created_at]
+    else
+      format ? Time.now.strftime(format) : Time.now
+    end
+  end
+  
   def name=(name)
     self[:name] = name.strip unless name.nil?
   end
@@ -97,6 +105,14 @@ class Page < Sequel::Model
     self[:title] = title.strip unless title.nil?
   end
   
+  def updated_at(format = nil)
+    if exists?
+      format ? self[:updated_at].strftime(format) : self[:updated_at]
+    else
+      format ? Time.now.strftime(format) : Time.now
+    end
+  end
+
   # URL for this Page.
   def url
     Riposte::Config::SITE_URL.chomp('/') + R(PageController, name)

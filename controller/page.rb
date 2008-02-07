@@ -91,6 +91,15 @@ class PageController < Ramaze::Controller
     end
   end
 
+  def list(page = 1)
+    require_auth
+    
+    @pages    = Page.reverse_order(:created_at).paginate(page.to_i, 20)
+    @prev_url = @pages.prev_page ? Rs(:list, @pages.prev_page) : nil
+    @next_url = @pages.next_page ? Rs(:list, @pages.next_page) : nil
+    @title    = "Pages (page #{page} of #{@pages.page_count})"
+  end
+  
   def new
     require_auth
     
