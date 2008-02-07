@@ -1,0 +1,53 @@
+<link rel="stylesheet" href="/css/ramaze_error.css" />
+
+<h1><%= h(@title) %></h1>
+
+<p>The backtrace gives filenames and line numbers for all parts of the call stack.<br />
+Click on any of them to view the surrounding source code.</p>
+
+<table class="main">
+  <tr class="head">
+    <td>File</td><td>Line</td><td>Method</td>
+  </tr>
+  <% @backtrace.each do |lines, hash, file, lineno, meth| %>
+    <tr class="line" id="<%= hash %>">
+      <td><%= file %></td><td class="lineno"><%= lineno %></td><td><pre><%= h(meth) %></pre></td>
+    </tr>
+    <tr id="source_<%= hash %>">
+      <td colspan="3">
+        <div class="source">
+          <table style="width:100%;">
+            <tr>
+              <td class="editor" colspan="2">
+                <%= @editor %> <%= file %> +<%= lineno %>
+                <div style="float: right">
+                  <a href="txmt://open?url=file://#<%= u(file) %>&amp;line=<%= lineno %>">open in TextMate</a>
+                </div>
+              </td>
+            </tr>
+            <% lines.each do |llineno, lcode, lcurrent| %>
+              <tr class="source" <%= 'style="background:#faa;"' if lcurrent %>>
+                <td class="lineno"><%= llineno %></td>
+                <td class="code"><pre><%= h(lcode.to_s.rstrip) %></pre></td>
+              </tr>
+            <% end %>
+          </table>
+        </div>
+      </td>
+    </tr>
+  <% end %>
+</table>
+
+<%
+  { 'Session'   => Thread.current[:session],
+    'Request'   => Thread.current[:request],
+    'Response'  => Thread.current[:response],
+    'Global'    => Global,
+  }.each do |title, content|
+    hash = [title, content].object_id.abs
+  %>
+  <div class="additional">
+    <h3 id="<%= hash %>"><%= title %></h3>
+    <pre style="display:none" id="is_<%= hash %>"><%= h(content.pretty_inspect) %></pre>
+  </div>
+<% end %>
