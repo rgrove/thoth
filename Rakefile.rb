@@ -51,9 +51,10 @@ spec = Gem::Specification.new do |s|
   
   s.files = FileList['lib/**/*'].to_a + ['LICENSE', 'README']
   
-  s.required_ruby_version = '>=1.8.5'
+  s.required_ruby_version = '>=1.8.6'
 
   s.add_dependency('builder',      '>=2.1.2')
+  s.add_dependency('erubis',       '>=2.5.0')
   s.add_dependency('hpricot',      '>=0.6')
   s.add_dependency('json_pure',    '>=1.1.2')
   s.add_dependency('mongrel',      '>=1.0.1')
