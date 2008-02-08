@@ -1,4 +1,3 @@
-* Figure out why deleting a post causes an error
 * Make admin toolbar visibility persistent during a session
 * Refuse admin logins for 15 minutes after 5 failed attempts from the same IP
 * WordPress 2.x import script
