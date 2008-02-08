@@ -57,7 +57,6 @@ spec = Gem::Specification.new do |s|
   s.add_dependency('hpricot',      '>=0.6')
   s.add_dependency('json_pure',    '>=1.1.2')
   s.add_dependency('mongrel',      '>=1.0.1')
-  s.add_dependency('mysql',        '>=2.7')
   s.add_dependency('ramaze',       '>=0.3.6')
   s.add_dependency('sequel',       '>=1.0')
   s.add_dependency('sqlite3-ruby', '>=1.2.1')
