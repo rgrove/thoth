@@ -65,7 +65,8 @@ class Post < Sequel::Model
   end
   
   before_destroy do
-    TagsPostsMap.filter(:post_id => id).destroy
+    TagsPostsMap.filter(:post_id => id).delete
+    Comment.filter(:post_id => id).delete
   end
   
   before_save do
@@ -99,14 +100,14 @@ class Post < Sequel::Model
   
   # Comments attached to this Post, ordered by creation time.
   def comments
-    Comment.filter(:post_id => id).order(:created_at)
+    @comments ||= Comment.filter(:post_id => id).order(:created_at)
   end
   
   def created_at(format = nil)
-    if exists?
-      format ? self[:created_at].strftime(format) : self[:created_at]
-    else
+    if new?
       format ? Time.now.strftime(format) : Time.now
+    else
+      format ? self[:created_at].strftime(format) : self[:created_at]
     end
   end
   
@@ -116,11 +117,11 @@ class Post < Sequel::Model
 
   # Tags attached to this Post, ordered by name.
   def tags
-    if exists?
-      Tag.filter(:id => TagsPostsMap.filter(:post_id => id).select(:tag_id)).
-          order(:name).all
+    if new?
+      @fake_tags || []
     else
-      return @fake_tags || []
+      @tags ||= Tag.join(:tags_posts_map, :tag_id => :id).
+          filter(:tags_posts_map__post_id => id)
     end
   end
   
@@ -133,7 +134,17 @@ class Post < Sequel::Model
     
     tag_names = tag_names.map{|n| n.strip.downcase}.uniq.delete_if{|n| n.empty?}
 
-    if exists?
+    if new?
+      # This Post hasn't been saved yet, so instead of attaching actual tags to
+      # it, we'll create a bunch of fake tags just for the preview. We won't
+      # create the real ones until the Post is saved.
+      @fake_tags = []
+
+      tag_names.each {|name| @fake_tags << Tag.new(:name => name) }
+      @fake_tags.sort! {|a, b| a.name <=> b.name }
+
+      return @fake_tags
+    else
       real_tags = []
       
       # First delete any existing tag mappings for this post.
@@ -147,16 +158,6 @@ class Post < Sequel::Model
       end
 
       return real_tags
-    else
-      # This Post hasn't been saved yet, so instead of attaching actual tags to
-      # it, we'll create a bunch of fake tags just for the preview. We won't
-      # create the real ones until the Post is saved.
-      @fake_tags = []
-
-      tag_names.each {|name| @fake_tags << Tag.new(:name => name) }
-      @fake_tags.sort! {|a, b| a.name <=> b.name }
-
-      return @fake_tags
     end
   end
   
@@ -196,10 +197,10 @@ class Post < Sequel::Model
   end
   
   def updated_at(format = nil)
-    if exists?
-      format ? self[:updated_at].strftime(format) : self[:updated_at]
-    else
+    if new?
       format ? Time.now.strftime(format) : Time.now
+    else
+      format ? self[:updated_at].strftime(format) : self[:updated_at]
     end
   end
 

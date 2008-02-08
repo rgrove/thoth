@@ -48,7 +48,7 @@ class MainController < Ramaze::Controller
     
     @title    = Riposte::Config::SITE_NAME
     @posts    = Post.recent
-    @next_url = @posts.next_page ? Rs(:archive, @posts.next_page) : nil
+#    @next_url = @posts.next_page ? Rs(:archive, @posts.next_page) : nil
   end
   
   def atom

@@ -107,11 +107,11 @@ class PageController < Ramaze::Controller
     @form_action = Rs(:new)
     
     if request.post?
-      @page = Page.new(
-        :name  => request[:name],
-        :title => request[:title],
-        :body  => request[:body]
-      )
+      @page = Page.new do |p|
+        p.name  = request[:name]
+        p.title = request[:title]
+        p.body  = request[:body]
+      end
       
       if @page.valid? && request[:action] === 'Post'
         begin

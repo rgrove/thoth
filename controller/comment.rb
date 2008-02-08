@@ -125,14 +125,14 @@ class CommentController < Ramaze::Controller
     error_404 unless request['captcha'].empty? && request['comment'].empty?
     
     # Create a new comment.
-    comment = Comment.new(
-      :post_id    => @post.id,
-      :author     => request[:author],
-      :author_url => request[:author_url],
-      :title      => request[:title],
-      :body       => request[:body],
-      :ip         => request.ip
-    )
+    comment = Comment.new do |c|
+      c.post_id    = @post.id
+      c.author     = request[:author]
+      c.author_url = request[:author_url]
+      c.title      = request[:title]
+      c.body       = request[:body]
+      c.ip         = request.ip
+    end
     
     # Set cookies.
     expire = Time.now + 5184000 # two months from now

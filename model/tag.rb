@@ -42,8 +42,8 @@ class Tag < Sequel::Model
   
   # Posts attached to this Tag.
   def posts
-    Post.filter(:id => TagsPostsMap.filter(:tag_id => id).select(:post_id)).
-        reverse_order(:created_at)
+    @posts ||= Post.join(:tags_posts_map, :post_id => :id).
+        filter(:tags_posts_map__tag_id => id).reverse_order(:created_at)
   end
   
   # URL for this tag.

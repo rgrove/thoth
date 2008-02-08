@@ -113,7 +113,11 @@ class Comment < Sequel::Model
   end
   
   def created_at(format = nil)
-    format ? self[:created_at].strftime(format) : self[:created_at]
+    if new?
+      format ? Time.now.strftime(format) : Time.now
+    else
+      format ? self[:created_at].strftime(format) : self[:created_at]
+    end
   end
   
   # Post to which this comment is attached.
@@ -126,13 +130,21 @@ class Comment < Sequel::Model
   end
   
   def updated_at(format = nil)
-    format ? self[:updated_at].strftime(format) : self[:updated_at]
+    if new?
+      format ? Time.now.strftime(format) : Time.now
+    else
+      format ? self[:updated_at].strftime(format) : self[:updated_at]
+    end
   end
 
   # URL for this comment.
   def url
-    Riposte::Config::SITE_URL.chomp('/') + R(PostController, post_id) +
-        "#comment-#{id}"
+    if new?
+      '#'
+    else
+      Riposte::Config::SITE_URL.chomp('/') + R(PostController, post_id) +
+          "#comment-#{id}"
+    end
   end
 end
 

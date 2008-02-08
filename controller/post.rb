@@ -108,11 +108,11 @@ class PostController < Ramaze::Controller
     @form_action = Rs(:new)
     
     if request.post?
-      @post = Post.new(
-        :title => request[:title],
-        :body  => request[:body],
-        :tags  => request[:tags]
-      )
+      @post = Post.new do |p|
+        p.title = request[:title]
+        p.body  = request[:body]
+        p.tags  = request[:tags]
+      end
       
       if @post.valid? && request[:action] === 'Post'
         begin
@@ -126,7 +126,7 @@ class PostController < Ramaze::Controller
           redirect(Rs(@post.name))
         end
       end
-      
+
       @title = "New blog post - #{@post.title}"
     end
   end

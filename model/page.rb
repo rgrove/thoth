@@ -90,10 +90,10 @@ class Page < Sequel::Model
   end
   
   def created_at(format = nil)
-    if exists?
-      format ? self[:created_at].strftime(format) : self[:created_at]
-    else
+    if new?
       format ? Time.now.strftime(format) : Time.now
+    else
+      format ? self[:created_at].strftime(format) : self[:created_at]
     end
   end
   
@@ -106,10 +106,10 @@ class Page < Sequel::Model
   end
   
   def updated_at(format = nil)
-    if exists?
-      format ? self[:updated_at].strftime(format) : self[:updated_at]
-    else
+    if new?
       format ? Time.now.strftime(format) : Time.now
+    else
+      format ? self[:updated_at].strftime(format) : self[:updated_at]
     end
   end
 

@@ -2,7 +2,7 @@
   <div class="hd">
     <h4>
       <span class="icon comment"></span>
-      <a href="<%= comment.new? ? '#' : comment.url %>" rel="bookmark"
+      <a href="<%= comment.url %>" rel="bookmark"
           title="Permalink for this comment"><%= h(comment.title) %></a>
     </h4>
     
@@ -26,8 +26,7 @@
 
   <div class="ft">
     <span class="date robots-nocontent">
-      <%= comment.new? ? Time.now.strftime(Riposte::Config::TIMESTAMP_LONG) :
-          comment.created_at(Riposte::Config::TIMESTAMP_LONG) %>
+      <%= comment.created_at(Riposte::Config::TIMESTAMP_LONG) %>
     </span>
     <span class="author">
       Posted by
