@@ -51,7 +51,7 @@ spec = Gem::Specification.new do |s|
   
   s.files = FileList['lib/**/*'].to_a + ['LICENSE', 'README']
   
-  s.required_ruby_version = '>=1.8.6'
+  s.required_ruby_version = '>=1.8.5'
 
   s.add_dependency('builder',      '>=2.1.2')
   s.add_dependency('hpricot',      '>=0.6')
