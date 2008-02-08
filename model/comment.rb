@@ -76,8 +76,8 @@ class Comment < Sequel::Model
   
   # Recently-posted comments (up to +limit+) sorted in reverse order by creation
   # time.
-  def dataset.recent(limit = 10)
-    order(:created_at.desc).limit(limit)
+  def dataset.recent(page = 1, limit = 10)
+    reverse_order(:created_at).paginate(page, limit)
   end
   
   def author=(author)

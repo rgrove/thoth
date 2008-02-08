@@ -123,6 +123,8 @@ table.list td.updated { white-space: nowrap; }
 
 table.pages td.name { white-space: nowrap; }
 
+table.comments td.title { width: 70%; }
+
 /* -- Welcome Page ---------------------------------------------------------- */
 .welcome .version {
   color: #666;

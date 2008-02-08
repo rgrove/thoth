@@ -107,6 +107,15 @@ class CommentController < Ramaze::Controller
     @title = "Delete Comment: #{@comment.title}"
   end
   
+  def list(page = 1)
+    require_auth
+    
+    @comments = Comment.recent(page.to_i, 20)
+    @prev_url = @comments.prev_page ? Rs(:list, @comments.prev_page) : nil
+    @next_url = @comments.next_page ? Rs(:list, @comments.next_page) : nil
+    @title    = "Comments (page #{page} of #{@comments.page_count})"
+  end
+  
   def new(name)
     redirect(R(PostController, name)) unless request.post?
     
