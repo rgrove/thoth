@@ -77,7 +77,7 @@ body {
 }
 
 body,
-input { font-family: Helvetica, Calibri, 'Bitstream Vera Sans', Arial; }
+input { font-family: Helvetica, 'Bitstream Vera Sans', Arial; }
 
 input { font-size: 100%; }
 
@@ -256,11 +256,18 @@ textarea { font: 100% Consolas, Monaco, 'Courier New', monospaced; }
 
 .post .tags {
   float: left;
-  font-size: 77%;
-  line-height: 1em;
+  font-size: 85%;
   min-height: 15px;
   text-align: left;
-  width: 70%;
+  width: 60%;
+}
+
+.post .ft:after {
+  clear: left;
+  content: '.';
+  display: block;
+  height: 0;
+  visibility: hidden;
 }
 
 .post .tags ul {
