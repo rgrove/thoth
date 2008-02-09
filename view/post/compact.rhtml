@@ -21,7 +21,7 @@
       <div class="tags">
         <span class="icon tag"></span>
         <ul>
-          <% post.tags.all.each do |tag| %>
+          <% post.tags.each do |tag| %>
             <li>
               <a href="<%= tag.url %>" rel="tag"><%= h(tag.name) %></a>
             </li>
