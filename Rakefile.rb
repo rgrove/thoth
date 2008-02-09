@@ -35,22 +35,28 @@ require 'find'
 
 require 'rubygems'
 require 'rake/gempackagetask'
-require 'rake/rdoctask'
-
 require 'riposte/version'
 
-spec = Gem::Specification.new do |s|
-  s.name              = 'riposte'
-  s.version           = Riposte::APP_VERSION
-  s.author            = Riposte::APP_AUTHOR
-  s.email             = Riposte::APP_EMAIL
-  s.homepage          = Riposte::APP_URL
-  s.platform          = Gem::Platform::RUBY
-  s.summary           = 'Meta-gem to install dependencies for the Riposte blog engine.'
+# Don't include resource forks in tarballs on Mac OS X.
+ENV['COPY_EXTENDED_ATTRIBUTES_DISABLE'] = 'true'
+ENV['COPYFILE_DISABLE'] = 'true'
+
+# Gemspec for Riposte
+riposte_gemspec = Gem::Specification.new do |s|
   s.rubyforge_project = 'riposte'
-  
-  s.files = FileList['lib/**/*'].to_a + ['LICENSE', 'README']
-  
+
+  s.name     = 'riposte'
+  s.version  = Riposte::APP_VERSION
+  s.author   = Riposte::APP_AUTHOR
+  s.email    = Riposte::APP_EMAIL
+  s.homepage = Riposte::APP_URL
+  s.platform = Gem::Platform::RUBY
+  s.summary  = 'Meta-gem to install dependencies and core libs for the ' +
+               'Riposte blog engine.'
+
+  s.files        = FileList['lib/**/*'].to_a + ['LICENSE', 'README']
+  s.require_path = 'lib'
+
   s.required_ruby_version = '>=1.8.6'
 
   s.add_dependency('builder',      '>=2.1.2')
@@ -64,12 +70,34 @@ spec = Gem::Specification.new do |s|
   s.add_dependency('swiftiply',    '>=0.6.1.1')
 end
 
-Rake::GemPackageTask.new(spec) do |pkg|
-  pkg.need_tar = true
+# Plugin gemspecs
+plugins = []
+
+# Flickr plugin
+plugins << Gem::Specification.new do |s|
+  s.rubyforge_project = 'riposte'
+
+  s.name     = 'riposte_flickr'
+  s.version  = Riposte::APP_VERSION
+  s.author   = Riposte::APP_AUTHOR
+  s.email    = Riposte::APP_EMAIL
+  s.homepage = Riposte::APP_URL
+  s.platform = Gem::Platform::RUBY
+  s.summary  = 'Flickr plugin for the Riposte blog engine.'
+
+  s.files        = ['plugin/riposte_flickr.rb']
+  s.require_path = 'plugin'
+  
+  s.add_dependency('net-flickr', '>=0.0.1')
+  s.add_dependency('riposte',    ">=#{Riposte::APP_VERSION}")
 end
 
-desc "create bzip2 and tarball"
-task :distribute => :gem do
+Rake::GemPackageTask.new(riposte_gemspec) do |p|
+  p.need_tar_gz = true
+end
+
+desc "create tarball"
+task :package => :gem do
   pkgname = "riposte-#{Riposte::APP_VERSION}"
   pkgdir  = "pkg/#{pkgname}"
   
@@ -91,12 +119,8 @@ task :distribute => :gem do
     end
   end
   
-  ENV['COPY_EXTENDED_ATTRIBUTES_DISABLE'] = 'true'
-  ENV['COPYFILE_DISABLE'] = 'true'
-
   Dir.chdir('pkg') do |pwd|
     sh "tar -zcvf #{pkgname}.tar.gz #{pkgname}"
-    sh "tar -jcvf #{pkgname}.tar.bz2 #{pkgname}"
   end
   
   sh "rm -rf #{pkgdir}"
@@ -105,4 +129,17 @@ end
 desc "install Riposte"
 task :install => :gem do
   sh "sudo gem install pkg/riposte-#{Riposte::APP_VERSION}.gem"
+end
+
+desc "create plugin gems"
+task :plugins do
+  plugins.each do |spec|
+    gem_file = "#{spec.name}-#{spec.version}.gem"
+    
+    Gem::Builder.new(spec).build
+    verbose(true) {
+      mv gem_file, "pkg/#{gem_file}"
+    }
+
+  end
 end
