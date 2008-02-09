@@ -54,7 +54,7 @@ riposte_gemspec = Gem::Specification.new do |s|
   s.summary  = 'Meta-gem to install dependencies and core libs for the ' +
                'Riposte blog engine.'
 
-  s.files        = FileList['lib/**/*'].to_a + ['LICENSE', 'README']
+  s.files        = FileList['lib/**/*'].to_a + ['LICENSE']
   s.require_path = 'lib'
 
   s.required_ruby_version = '>=1.8.6'
@@ -103,7 +103,7 @@ task :package => :gem do
   
   sh "rm -rf #{pkgdir}"
   sh "mkdir -p #{pkgdir}/db"
-  sh "cp -r {controller,helper,model,public,scripts,view,LICENSE,README,riposte.conf.sample,riposte-server.rb} #{pkgdir}"
+  sh "cp -r {controller,helper,model,public,scripts,view,LICENSE,riposte.conf.sample,riposte-server.rb} #{pkgdir}"
   
   Find.find(pkgdir) do |path|
     name = File.basename(path)
