@@ -280,6 +280,10 @@ textarea { font: 100% Consolas, Monaco, 'Courier New', monospaced; }
   vertical-align: middle;
 }
 
+@media print {
+  .post .ft .meta { display: none; }
+}
+
 /* -- Comments -------------------------------------------------------------- */
 div.comment {
   border: 1px solid #fff;
@@ -333,6 +337,10 @@ div.comment:hover {
 
 #post-comment .error { font-size: 85%; }
 
+@media print {
+  #post-comment { display: none; }
+}
+
 /* -- Pagination ------------------------------------------------------------ */
 .pg {
   background: #f9f9f9;
@@ -360,6 +368,10 @@ div.comment:hover {
 }
 
 .pg a.prev { float: left; }
+
+@media print {
+  .pg { display: none; }
+}
 
 /* -- Search Results -------------------------------------------------------- */
 .search h4 {

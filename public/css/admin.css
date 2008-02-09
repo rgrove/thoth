@@ -56,6 +56,10 @@
   width: 16px;
 }
 
+@media print {
+  .toolbar { display: none; }
+}
+
 /* -- Mini-Toolbar ---------------------------------------------------------- */
 .toolbar.mini {
   background: none;
