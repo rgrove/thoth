@@ -38,6 +38,7 @@ require 'time'
 
 require 'riposte/config'
 require 'riposte/version'
+require 'riposte/plugin'
 require 'riposte/dispatcher/file'
 
 module Riposte
