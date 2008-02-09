@@ -77,7 +77,7 @@ body {
 }
 
 body,
-input { font: Helvetica, Calibri, 'Bitstream Vera Sans', Arial; }
+input { font-family: Helvetica, Calibri, 'Bitstream Vera Sans', Arial; }
 
 input { font-size: 100%; }
 
