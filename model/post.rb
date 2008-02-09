@@ -121,7 +121,7 @@ class Post < Sequel::Model
       @fake_tags || []
     else
       @tags ||= Tag.join(:tags_posts_map, :tag_id => :id).
-          filter(:tags_posts_map__post_id => id)
+          filter(:tags_posts_map__post_id => id).order(:name).all
     end
   end
   
