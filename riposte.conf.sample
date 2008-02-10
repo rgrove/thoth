@@ -137,6 +137,6 @@ module Riposte; module Config # <-- don't remove this line
   #
   # Port on which the Riposte server should listen for connections.
   
-  # SERVER_PORT: 7000
+  # SERVER_PORT = 7000
 
 end; end # <-- don't remove this line
