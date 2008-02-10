@@ -35,6 +35,7 @@ require 'find'
 
 require 'rubygems'
 require 'rake/gempackagetask'
+require 'rake/rdoctask'
 require 'riposte/version'
 
 # Don't include resource forks in tarballs on Mac OS X.
@@ -56,6 +57,7 @@ riposte_gemspec = Gem::Specification.new do |s|
 
   s.files        = FileList['lib/**/*'].to_a + ['LICENSE']
   s.require_path = 'lib'
+  s.has_rdoc     = true
 
   s.required_ruby_version = '>=1.8.6'
 
@@ -72,6 +74,26 @@ end
 
 plugins = []
 
+# del.icio.us plugin
+plugins << Gem::Specification.new do |s|
+  s.rubyforge_project = 'riposte'
+
+  s.name     = 'riposte_delicious'
+  s.version  = Riposte::APP_VERSION
+  s.author   = Riposte::APP_AUTHOR
+  s.email    = Riposte::APP_EMAIL
+  s.homepage = Riposte::APP_URL
+  s.platform = Gem::Platform::RUBY
+  s.summary  = 'del.icio.us plugin for the Riposte blog engine.'
+
+  s.files        = ['plugin/riposte_delicious.rb']
+  s.require_path = 'plugin'
+  s.has_rdoc     = true
+  
+  s.add_dependency('json_pure', '>=0.0.1')
+  s.add_dependency('riposte',   ">=#{Riposte::APP_VERSION}")
+end
+
 # Flickr plugin
 plugins << Gem::Specification.new do |s|
   s.rubyforge_project = 'riposte'
@@ -86,6 +108,7 @@ plugins << Gem::Specification.new do |s|
 
   s.files        = ['plugin/riposte_flickr.rb']
   s.require_path = 'plugin'
+  s.has_rdoc     = true
   
   s.add_dependency('net-flickr', '>=0.0.1')
   s.add_dependency('riposte',    ">=#{Riposte::APP_VERSION}")
@@ -93,6 +116,30 @@ end
 
 Rake::GemPackageTask.new(riposte_gemspec) do |p|
   p.need_tar_gz = true
+end
+
+Rake::RDocTask.new do |rd|
+  rd.main     = 'Riposte'
+  rd.title    = 'Riposte'
+  rd.rdoc_dir = 'doc'
+
+  rd.rdoc_files.include('lib/**/*.rb')
+end
+
+Rake::RDocTask.new(:rdoc_delicious) do |rd|
+  rd.main     = 'Riposte::Plugin::Delicious'
+  rd.title    = 'Riposte::Plugin::Delicious'
+  rd.rdoc_dir = 'doc/delicious'
+  
+  rd.rdoc_files.include('plugin/riposte_delicious.rb')
+end
+
+Rake::RDocTask.new(:rdoc_flickr) do |rd|
+  rd.main     = 'Riposte::Plugin::Flickr'
+  rd.title    = 'Riposte::Plugin::Delicious'
+  rd.rdoc_dir = 'doc/flickr'
+  
+  rd.rdoc_files.include('plugin/riposte_flickr.rb')
 end
 
 desc "create tarball"
