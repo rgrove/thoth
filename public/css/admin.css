@@ -72,7 +72,7 @@
 
 .comment .toolbar {
   position: absolute;
-  right: 3px;
+  right: -3px;
   top: 3px;
 }
 
