@@ -94,8 +94,26 @@ class Post < Sequel::Model
   end
 
   def body=(body)
-    self[:body_rendered] = body.dup.strip
+    body_rendered = body.dup.strip
+    
+    # Parse wiki-style links to other pages.
+    body_rendered.gsub!(/\[\[([0-9a-z_-]+)\|(.+?)\]\]/i) do
+      A($2, :href => R(PageController, $1.downcase))
+    end
+    body_rendered.gsub!(/\[\[([0-9a-z_-]+)\]\]/i) do
+      A($1, :href => R(PageController, $1.downcase))
+    end
+    
+    # Parse wiki-style links to articles.
+    body_rendered.gsub!(/\[\[@(\d+|[0-9a-z_-]+)\|(.+?)\]\]/i) do
+      A($2, :href => R(PostController, $1.downcase))
+    end
+    body_rendered.gsub!(/\[\[@(\d+|[0-9a-z_-]+)\]\]/i) do
+      A($1, :href => R(PostController, $1.downcase))
+    end
+
     self[:body]          = body.strip
+    self[:body_rendered] = body_rendered
   end
   
   # Comments attached to this Post, ordered by creation time.
