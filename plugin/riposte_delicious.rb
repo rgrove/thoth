@@ -44,9 +44,9 @@ module Riposte; module Plugin
       # performance and to avoid pounding del.icio.us with excess traffic.
       #
       # Available options:
-      #  [+:count+] Number of bookmarks to return (default is 5)
-      #  [+:tags+]  Array of tags to filter by. Only bookmarks with the
-      #             specified tags will be returned.
+      # [<tt>:count</tt>] Number of bookmarks to return (default is 5)
+      # [<tt>:tags</tt>]  Array of tags to filter by. Only bookmarks with the
+      #                   specified tags will be returned.
       #
       def recent_bookmarks(username, options = {})
         @cache ||= {}
