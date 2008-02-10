@@ -70,7 +70,6 @@ riposte_gemspec = Gem::Specification.new do |s|
   s.add_dependency('swiftiply',    '>=0.6.1.1')
 end
 
-# Plugin gemspecs
 plugins = []
 
 # Flickr plugin
