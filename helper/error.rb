@@ -26,7 +26,7 @@
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #++
 
-module Ramaze  
+module Ramaze
   
   # The ErrorHelper module provides methods for interrupting the current request
   # and responding with an error message and corresponding HTTP error code.
@@ -43,6 +43,12 @@ module Ramaze
           </body>
         </html>
       ].unindent, status
+    end
+    
+    # Displays an error backtrace.
+    def error
+      Ramaze::Action.current.template ||= Riposte::DIR/:view/'error.rhtml'
+      super
     end
     
     # Displays a "404 Not Found" error message and returns a 404 response code.
