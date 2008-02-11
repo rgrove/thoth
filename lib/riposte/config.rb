@@ -46,7 +46,8 @@ module Riposte
       :TIMESTAMP_LONG   => "%A %B %d, %Y @ %I:%M %p (%Z)",
       :TIMESTAMP_SHORT  => "%Y-%m-%d %I:%M",
       :SERVER_ADDRESS   => "0.0.0.0",
-      :SERVER_PORT      => 7000
+      :SERVER_PORT      => 7000,
+      :ERROR_LOG        => Ramaze::APPDIR/'error.log'
     }
     
     def self.const_missing(name)

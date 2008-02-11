@@ -138,5 +138,12 @@ module Riposte; module Config # <-- don't remove this line
   # Port on which the Riposte server should listen for connections.
   
   # SERVER_PORT = 7000
+  
+  # ERROR_LOG: string
+  #
+  # Filename to which errors should be logged when running in production mode,
+  # or blank if you don't care about errors.
+  
+  # ERROR_LOG = "#{Ramaze::APPDIR}/error.log"
 
 end; end # <-- don't remove this line

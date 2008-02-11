@@ -77,8 +77,14 @@ module Riposte
         Ramaze::Global.benchmarking = true
       else
         Ramaze::Global.sourcereload = false
-        Ramaze::Inform.ignored_tags = [:debug]
-        Ramaze::Inform.loggers      = []
+        
+        if Config::ERROR_LOG.empty?
+          Ramaze::Inform.loggers = []
+        else
+          Ramaze::Inform.loggers = [
+            Ramaze::Informer.new(Config::ERROR_LOG, [:error])
+          ]
+        end
 
         Ramaze::Dispatcher::Error::HANDLE_ERROR[ArgumentError] = [404, 'error_404']
         Ramaze::Dispatcher::Error::HANDLE_ERROR[Exception]     = [500, 'error_500']
