@@ -31,10 +31,10 @@ class SearchController < Ramaze::Controller
   helper :admin, :cache, :partial, :redirect, :ysearch
   layout '/layout'
   
-  template_root Riposte::Config::CUSTOM_VIEW/:search,
+  template_root Riposte::Config.theme.view/:search,
                 Riposte::DIR/:view/:search
   
-  if Riposte::Config::ENABLE_CACHE
+  if Riposte::Config.server.enable_cache
     cache :index, :ttl => 300, :key => lambda {
       check_auth.to_s + request[:q] + (request[:start] || '') +
           (request[:count] || '')
@@ -62,7 +62,7 @@ class SearchController < Ramaze::Controller
       "#{@query} -inurl:/tag -inurl:/archive -inurl:/search",
       :adult_ok => 1,
       :results  => count,
-      :site     => Riposte::Config::SITE_URL.gsub(
+      :site     => Riposte::Config.site.url.gsub(
                    /^https?:\/\/([^\/]+)\/?$/i){$1},
       :start    => start
     )

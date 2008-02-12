@@ -1,13 +1,13 @@
 <div id="hd" class="robots-nocontent">
   <h1>
     <a href="<%= R(MainController) %>">
-      <%= h(Riposte::Config::SITE_NAME) %>
+      <%= h(Riposte::Config.site.name) %>
     </a>
   </h1>
 
   <div id="toolbar">
     <div class="subtitle">
-      <%= h(Riposte::Config::SITE_DESCRIPTION) %>
+      <%= h(Riposte::Config.site.desc) %>
     </div>
     
     <ul>

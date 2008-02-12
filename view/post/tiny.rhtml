@@ -1,4 +1,4 @@
 <h4><a href="<%= post.url %>"><%= h(post.title) %></a></h4>
 <span class="date">
-  <%= post.created_at(Riposte::Config::TIMESTAMP_LONG) %>
+  <%= post.created_at(Riposte::Config.timestamp.long) %>
 </span>

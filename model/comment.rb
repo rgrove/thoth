@@ -142,7 +142,7 @@ class Comment < Sequel::Model
     if new?
       '#'
     else
-      Riposte::Config::SITE_URL.chomp('/') + R(PostController, post_id) +
+      Riposte::Config.site.url.chomp('/') + R(PostController, post_id) +
           "#comment-#{id}"
     end
   end

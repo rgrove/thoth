@@ -31,10 +31,10 @@ class ArchiveController < Ramaze::Controller
   helper :admin, :cache, :partial
   layout '/layout'
 
-  template_root Riposte::Config::CUSTOM_VIEW/:archive,
+  template_root Riposte::Config.theme.view/:archive,
                 Riposte::DIR/:view/:archive
   
-  if Riposte::Config::ENABLE_CACHE
+  if Riposte::Config.server.enable_cache
     cache :index, :ttl => 120, :key => lambda { check_auth }
   end
 
@@ -49,7 +49,7 @@ class ArchiveController < Ramaze::Controller
       @posts = Post.recent(page, 10)
     end
 
-    @title      = Riposte::Config::SITE_NAME + ' Archives'
+    @title      = Riposte::Config.site.name + ' Archives'
     @page_start = @posts.current_page_record_range.first
     @page_end   = @posts.current_page_record_range.last
     @total      = @posts.pagination_record_count

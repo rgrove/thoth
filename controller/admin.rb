@@ -31,7 +31,7 @@ class AdminController < Ramaze::Controller
   helper :admin, :error, :flash, :partial
   layout '/layout'
   
-  template_root Riposte::Config::CUSTOM_VIEW/:admin,
+  template_root Riposte::Config.theme.view/:admin,
                 Riposte::DIR/:view/:admin
   
   def index

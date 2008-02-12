@@ -2,11 +2,11 @@
   <p id="copyright">
     Copyright &copy; <%= Time.now.year %>
 
-    <% if Riposte::Config::AUTHOR_EMAIL.empty? %>
-      <%= h(Riposte::Config::AUTHOR_NAME) %>.
+    <% if Riposte::Config.admin.email.empty? %>
+      <%= h(Riposte::Config.admin.name) %>.
     <% else %>
-      <a href="mailto:<%= h(Riposte::Config::AUTHOR_EMAIL) %>">
-        <%= h(Riposte::Config::AUTHOR_NAME) %></a>.
+      <a href="mailto:<%= h(Riposte::Config.admin.email) %>">
+        <%= h(Riposte::Config.admin.name) %></a>.
     <% end %>
 
     All rights reserved.

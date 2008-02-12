@@ -4,91 +4,10 @@
 # Rename this file to riposte.conf and customize it as desired. You must restart
 # Riposte before configuration changes will take effect.
 #
-# Syntax:
-#   string:  'foo' or "foo"
-#   boolean: true or false
-#   integer: 5 or -5
-#
-# You guessed it: this file is Ruby, so you've gotta use Ruby syntax. But
-# Ruby's a real friendly sort of language, so don't you worry. Just pay
-# attention to the comments and you'll be fine.
-#
 
-module Riposte; module Config # <-- don't remove this line
+# Settings for production mode.
+Configuration.for("riposte_production") {
 
-  # SITE_NAME: string
-  # 
-  # Name of your blog. This will be displayed as the title of your blog's index
-  # page and in your blog's feeds.
-
-  # SITE_NAME = "New Riposte Blog"
-
-  # SITE_DESCRIPTION: string
-  # 
-  # A brief description or subtitle for your blog.
-  
-  # SITE_DESCRIPTION = "Riposte is awesome!"
-
-  # SITE_URL: string
-  #
-  # Base URL of your site. This is necessary in order for Riposte to know how to
-  # construct links for feeds.
-  
-  # SITE_URL = "http://localhost:7000/"
-
-  # AUTHOR_NAME: string
-  #
-  # Your name.
-  
-  # AUTHOR_NAME = "John Doe"
-
-  # AUTHOR_EMAIL: string
-  #
-  # Your email address. If you leave this blank or comment it out, it won't be
-  # displayed.
-  
-  # AUTHOR_EMAIL = ""
-
-  # ADMIN_USER: string
-  #
-  # Administrator username. This is the name you will use to log into Riposte.
-  
-  # ADMIN_USER = "riposte"
-
-  # ADMIN_PASS: string
-  #
-  # Administrator password. This is the password you will use to log into
-  # Riposte.
-  
-  # ADMIN_PASS = "riposte"
-  
-  # CUSTOM_PUBLIC: string
-  #
-  # Absolute path to a directory containing customized static files such as CSS,
-  # JS, and images. Use this in conjunction with CUSTOM_VIEW to create your own
-  # customized Riposte theme. Any files in this directory will override the
-  # corresponding default files.
-  
-  # CUSTOM_PUBLIC = "#{Ramaze::APPDIR}/custom/public"
-
-  # CUSTOM_VIEW: string
-  #
-  # Absolute path to a directory containing customized view templates. Any
-  # templates in this directory will override the corresponding default
-  # templates.
-  
-  # CUSTOM_VIEW = "#{Ramaze::APPDIR}/custom/view"
-
-  # ENABLE_CACHE = boolean
-  #
-  # Whether or not to enable caching. Enabling caching will significantly
-  # improve Riposte's performance under heavy traffic, but new blog posts,
-  # comments, and other changes may take a minute or two to become visible.
-  
-  # ENABLE_CACHE = true
-
-  # DB_PRODUCTION: string
-  #
   # Connection URI for the production database. Currently SQLite3 and MySQL are
   # supported. PostgreSQL may work, but hasn't been tested.
   #
@@ -97,53 +16,121 @@ module Riposte; module Config # <-- don't remove this line
   #
   # Sample MySQL connection string:
   #   mysql://user:pass@hostname/database
-  
-  # DB_PRODUCTION = "sqlite:///#{Ramaze::APPDIR}/db/production.db"
-
-  # DB_TEST: string
   #
-  # Connection URI for the test (development) database. See DB_PRODUCTION for
-  # sample connection strings.
+  # db "sqlite:///#{Ramaze::APPDIR}/db/production.db"
+
+  site {
+
+    # Name of your blog. This will be displayed as the title of your blog's
+    # index page and in your blog's feeds.
+    #
+    # name "New Riposte Blog"
+    
+    # A brief description or subtitle for your blog.
+    #
+    # desc "Riposte is awesome!"
+    
+    # Base URL of your site. This is necessary in order for Riposte to know how
+    # to construct links.
+    #
+    # url "http://localhost:7000/"
+
+  }
   
-  # DB_TEST = "sqlite:///#{Ramaze::APPDIR}/db/test.db"
+  admin {
+    # Your name. This will be displayed in the copyright notice at the bottom of
+    # the page, and will be used as the author name for your site's feeds.
+    #
+    # name "John Doe"
 
-  # AUTH_SEED: string
-  # 
-  # String of random characters to add uniqueness to the admin auth cookie.
+    # Your email address. If you leave this blank or comment it out, it won't be
+    # displayed.
+    #
+    # email ""
+    
+    # Administrator username. This is the name you'll use to log into Riposte.
+    #
+    # user "riposte"
+    
+    # Administrator password.
+    #
+    # pass "riposte"
+    
+    # String of random characters to add uniqueness to the admin auth cookie.
+    # You should uncomment this now and fill it with nonsense.
+    #
+    # seed "43c55@051a19a/4f88a3ff+355cd1418"
+  }
+
+  theme {
+
+    # Absolute path to a directory containing customized static files such as
+    # CSS, JS, and images. Use this in conjunction with the "view" setting to
+    # create your own customized Riposte theme. Any files in this directory will
+    # override the corresponding default files.
+    #
+    # public "#{Ramaze::APPDIR}/custom/public"
   
-  # AUTH_SEED = "43c55@051a19a/4f88a3ff+355cd1418"
+    # Absolute path to a directory containing customized view templates. Any
+    # templates in this directory will override the corresponding default
+    # templates.
+    #
+    # view "#{Ramaze::APPDIR}/custom/view"
+    
+  }
 
-  # TIMESTAMP_LONG: string
-  # 
-  # Format for long timestamps. For details, see:
-  # http://www.ruby-doc.org/core/classes/Time.html#M000297
+  timestamp {
 
-  # TIMESTAMP_LONG = "%A %B %d, %Y @ %I:%M %p (%Z)"
+    # Format for long timestamps. For details, see:
+    # http://www.ruby-doc.org/core/classes/Time.html#M000297
+    #
+    # long "%A %B %d, %Y @ %I:%M %p (%Z)"
+    
+    # Format for short timestamps. For details, see:
+    # http://www.ruby-doc.org/core/classes/Time.html#M000297
+    #
+    # short "%Y-%m-%d %I:%M"
 
-  # TIMESTAMP_SHORT: string
+  }
+
+  server {
+
+    # IP address on which the Riposte server should listen for connections.
+    #
+    # address "0.0.0.0"
+    
+    # Port on which the Riposte server should listen for connections.
+    #
+    # port 7000
+    
+    # Whether or not to enable caching. Enabling caching will significantly
+    # improve Riposte's performance under heavy traffic, but new comments and
+    # other changes may take a minute or two to become visible.
+    #
+    # enable_cache true
+
+    # Filename to which errors should be logged when running in production mode,
+    # or blank if you don't care about errors.
+    #
+    # error_log "#{Ramaze::APPDIR}/error.log"
+
+  }
+
+}
+
+# Settings for devel mode. All defaults except db are the same as production
+# mode.
+Configuration.for("riposte_devel") {
+
+  # Connection URI for the devel database. Currently SQLite3 and MySQL are
+  # supported. PostgreSQL may work, but hasn't been tested.
   #
-  # Format for short timestamps. For details, see:
-  # http://www.ruby-doc.org/core/classes/Time.html#M000297
-  
-  # TIMESTAMP_SHORT = "%Y-%m-%d %I:%M"
-  
-  # SERVER_ADDRESS: string
+  # Sample SQLite3 connection string:
+  #   sqlite:////absolute/path/to/database.db
   #
-  # IP address on which the Riposte server should listen for connections.
-  
-  # SERVER_ADDRESS = "0.0.0.0"
-  
-  # SERVER_PORT: integer
+  # Sample MySQL connection string:
+  #   mysql://user:pass@hostname/database
   #
-  # Port on which the Riposte server should listen for connections.
-  
-  # SERVER_PORT = 7000
-  
-  # ERROR_LOG: string
-  #
-  # Filename to which errors should be logged when running in production mode,
-  # or blank if you don't care about errors.
-  
-  # ERROR_LOG = "#{Ramaze::APPDIR}/error.log"
+  # db "sqlite:///#{Ramaze::APPDIR}/db/devel.db"
 
-end; end # <-- don't remove this line
+}

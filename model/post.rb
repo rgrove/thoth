@@ -224,7 +224,7 @@ class Post < Sequel::Model
 
   # URL for this Post.
   def url
-    Riposte::Config::SITE_URL.chomp('/') + R(PostController, name)
+    Riposte::Config.site.url.chomp('/') + R(PostController, name)
   end
 end
 

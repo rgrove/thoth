@@ -35,6 +35,7 @@ require 'builder'
 require 'ramaze'
 require 'sequel'
 require 'time'
+require 'configuration'
 
 require 'riposte/config'
 require 'riposte/version'
@@ -55,7 +56,7 @@ module Riposte
     # Run Riposte.
     def run
       # Set up the database connection.
-      @db = Sequel.open(DEVEL_MODE ? Config::DB_TEST : Config::DB_PRODUCTION)
+      @db = Sequel.open(Config.db)
 
       if LOG_SQL
         require 'logger'
@@ -73,21 +74,26 @@ module Riposte
       Ramaze::Dispatcher::Error::HANDLE_ERROR[Ramaze::Error::NoAction] = 
       Ramaze::Dispatcher::Error::HANDLE_ERROR[Ramaze::Error::NoController] = [404, 'error_404']
 
-      if DEVEL_MODE
-        Ramaze::Global.benchmarking = true
-      else
-        Ramaze::Global.sourcereload = false
-        
-        if Config::ERROR_LOG.empty?
-          Ramaze::Inform.loggers = []
-        else
-          Ramaze::Inform.loggers = [
-            Ramaze::Informer.new(Config::ERROR_LOG, [:error])
-          ]
-        end
+      case Riposte::Config.mode
+        when :devel
+          Ramaze::Global.benchmarking = true
 
-        Ramaze::Dispatcher::Error::HANDLE_ERROR[ArgumentError] = [404, 'error_404']
-        Ramaze::Dispatcher::Error::HANDLE_ERROR[Exception]     = [500, 'error_500']
+        when :production
+          Ramaze::Global.sourcereload = false
+        
+          if Config.server.error_log.empty?
+            Ramaze::Inform.loggers = []
+          else
+            Ramaze::Inform.loggers = [
+              Ramaze::Informer.new(Config.server.error_log, [:error])
+            ]
+          end
+
+          Ramaze::Dispatcher::Error::HANDLE_ERROR[ArgumentError] = [404, 'error_404']
+          Ramaze::Dispatcher::Error::HANDLE_ERROR[Exception]     = [500, 'error_500']
+      
+        else
+          raise "Invalid mode: #{Riposte::Config.mode}"
       end
       
       Ramaze.start :adapter => :evented_mongrel, :host  => IP, :port  => PORT,

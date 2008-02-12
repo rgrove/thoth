@@ -31,10 +31,10 @@ class PageController < Ramaze::Controller
   helper :admin, :cache, :error, :partial
   layout '/layout'
   
-  template_root Riposte::Config::CUSTOM_VIEW/:page,
+  template_root Riposte::Config.theme.view/:page,
                 Riposte::DIR/:view/:page
   
-  if Riposte::Config::ENABLE_CACHE
+  if Riposte::Config.server.enable_cache
     cache :index, :ttl => 60, :key => lambda { check_auth }
   end
   

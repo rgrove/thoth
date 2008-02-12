@@ -61,15 +61,16 @@ riposte_gemspec = Gem::Specification.new do |s|
 
   s.required_ruby_version = '>=1.8.6'
 
-  s.add_dependency('builder',      '>=2.1.2')
-  s.add_dependency('erubis',       '>=2.5.0')
-  s.add_dependency('hpricot',      '>=0.6')
-  s.add_dependency('json_pure',    '>=1.1.2')
-  s.add_dependency('mongrel',      '>=1.0.1')
-  s.add_dependency('ramaze',       '>=0.3.6')
-  s.add_dependency('sequel',       '>=1.0')
-  s.add_dependency('sqlite3-ruby', '>=1.2.1')
-  s.add_dependency('swiftiply',    '>=0.6.1.1')
+  s.add_dependency('builder',       '>=2.1.2')
+  s.add_dependency('configuration', '>=0.0.3')
+  s.add_dependency('erubis',        '>=2.5.0')
+  s.add_dependency('hpricot',       '>=0.6')
+  s.add_dependency('json_pure',     '>=1.1.2')
+  s.add_dependency('mongrel',       '>=1.0.1')
+  s.add_dependency('ramaze',        '>=0.3.6')
+  s.add_dependency('sequel',        '>=1.0')
+  s.add_dependency('sqlite3-ruby',  '>=1.2.1')
+  s.add_dependency('swiftiply',     '>=0.6.1.1')
 end
 
 plugins = []
@@ -90,7 +91,7 @@ plugins << Gem::Specification.new do |s|
   s.require_path = 'plugin'
   s.has_rdoc     = true
   
-  s.add_dependency('json_pure', '>=0.0.1')
+  s.add_dependency('json_pure', '>=1.1.2')
   s.add_dependency('riposte',   ">=#{Riposte::APP_VERSION}")
 end
 

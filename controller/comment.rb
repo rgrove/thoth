@@ -31,10 +31,10 @@ class CommentController < Ramaze::Controller
   helper :admin, :cache, :cookie, :error
   layout '/layout'
 
-  template_root Riposte::Config::CUSTOM_VIEW/:comment,
+  template_root Riposte::Config.theme.view/:comment,
                 Riposte::DIR/:view/:comment
   
-  if Riposte::Config::ENABLE_CACHE
+  if Riposte::Config.server.enable_cache
     cache :index, :ttl => 60, :key => lambda { check_auth }
     cache :atom, :rss, :ttl => 60
   end
@@ -57,14 +57,14 @@ class CommentController < Ramaze::Controller
     x.instruct!
 
     respond x.feed(:xmlns => 'http://www.w3.org/2005/Atom') {
-      comments_url = Riposte::Config::SITE_URL.chomp('/') + Rs()
+      comments_url = Riposte::Config.site.url.chomp('/') + Rs()
       
       x.id       comments_url
-      x.title    "#{Riposte::Config::SITE_NAME}: Recent Comments"
-      x.subtitle Riposte::Config::SITE_DESCRIPTION
+      x.title    "#{Riposte::Config.site.name}: Recent Comments"
+      x.subtitle Riposte::Config.site.desc
       x.updated  Time.now.xmlschema # TODO: use modification time of the last post
       x.link     :href => comments_url
-      x.link     :href => Riposte::Config::SITE_URL.chomp('/') + Rs(:atom),
+      x.link     :href => Riposte::Config.site.url.chomp('/') + Rs(:atom),
                  :rel => 'self'
 
       Comment.recent.all.each do |comment|
@@ -171,15 +171,15 @@ class CommentController < Ramaze::Controller
                   'xmlns:atom' => 'http://www.w3.org/2005/Atom',
                   'xmlns:dc'   => 'http://purl.org/dc/elements/1.1/') {
       x.channel {
-        x.title          "#{Riposte::Config::SITE_NAME}: Recent Comments"
-        x.link           Riposte::Config::SITE_URL
-        x.description    Riposte::Config::SITE_DESCRIPTION
-        x.managingEditor "#{Riposte::Config::AUTHOR_EMAIL} (#{Riposte::Config::AUTHOR_NAME})"
-        x.webMaster      "#{Riposte::Config::AUTHOR_EMAIL} (#{Riposte::Config::AUTHOR_NAME})"
+        x.title          "#{Riposte::Config.site.name}: Recent Comments"
+        x.link           Riposte::Config.site.url
+        x.description    Riposte::Config.site.desc
+        x.managingEditor "#{Riposte::Config.admin.email} (#{Riposte::Config.admin.name})"
+        x.webMaster      "#{Riposte::Config.admin.email} (#{Riposte::Config.admin.name})"
         x.docs           'http://backend.userland.com/rss/'
         x.ttl            30
         x.atom           :link, :rel => 'self', :type => 'application/rss+xml',
-                         :href => Riposte::Config::SITE_URL.chomp('/') +
+                         :href => Riposte::Config.site.url.chomp('/') +
                                   Rs(:rss)
         
         Comment.recent.all.each do |comment|

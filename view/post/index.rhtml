@@ -8,7 +8,7 @@
     </h1>
     
     <span class="date robots-nocontent">
-      <%= @post.created_at(Riposte::Config::TIMESTAMP_LONG) %>
+      <%= @post.created_at(Riposte::Config.timestamp.long) %>
     </span>
   </div>
   

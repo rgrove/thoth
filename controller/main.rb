@@ -31,9 +31,9 @@ class MainController < Ramaze::Controller
   helper :admin, :cache, :error, :partial, :redirect, :ysearch
   layout '/layout'
   
-  template_root Riposte::Config::CUSTOM_VIEW, Riposte::DIR/:view
+  template_root Riposte::Config.theme.view, Riposte::DIR/:view
   
-  if Riposte::Config::ENABLE_CACHE
+  if Riposte::Config.server.enable_cache
     cache :index, :ttl => 60, :key => lambda {
       check_auth.to_s + (request[:type] || '')
     }
@@ -46,7 +46,7 @@ class MainController < Ramaze::Controller
       redirect Rs(type), :status => 301      
     end
     
-    @title    = Riposte::Config::SITE_NAME
+    @title    = Riposte::Config.site.name
     @posts    = Post.recent
     @next_url = @posts.next_page ? Rs(:archive, @posts.next_page) : nil
   end
@@ -58,18 +58,18 @@ class MainController < Ramaze::Controller
     x.instruct!
     
     respond x.feed(:xmlns => 'http://www.w3.org/2005/Atom') {
-      x.id       Riposte::Config::SITE_URL
-      x.title    Riposte::Config::SITE_NAME
-      x.subtitle Riposte::Config::SITE_DESCRIPTION
+      x.id       Riposte::Config.site.url
+      x.title    Riposte::Config.site.name
+      x.subtitle Riposte::Config.site.desc
       x.updated  Time.now.xmlschema # TODO: use modification time of the last post
-      x.link     :href => Riposte::Config::SITE_URL
-      x.link     :href => Riposte::Config::SITE_URL.chomp('/') + Rs(:atom),
+      x.link     :href => Riposte::Config.site.url
+      x.link     :href => Riposte::Config.site.url.chomp('/') + Rs(:atom),
                  :rel => 'self'
       
       x.author {
-        x.name  Riposte::Config::AUTHOR_NAME
-        x.email Riposte::Config::AUTHOR_EMAIL
-        x.uri   Riposte::Config::SITE_URL
+        x.name  Riposte::Config.admin.name
+        x.email Riposte::Config.admin.email
+        x.uri   Riposte::Config.site.url
       }
       
       Post.recent.all.each do |post|
@@ -98,15 +98,15 @@ class MainController < Ramaze::Controller
     respond x.rss(:version     => '2.0',
                   'xmlns:atom' => 'http://www.w3.org/2005/Atom') {
       x.channel {
-        x.title          Riposte::Config::SITE_NAME
-        x.link           Riposte::Config::SITE_URL
-        x.description    Riposte::Config::SITE_DESCRIPTION
-        x.managingEditor "#{Riposte::Config::AUTHOR_EMAIL} (#{Riposte::Config::AUTHOR_NAME})"
-        x.webMaster      "#{Riposte::Config::AUTHOR_EMAIL} (#{Riposte::Config::AUTHOR_NAME})"
+        x.title          Riposte::Config.site.name
+        x.link           Riposte::Config.site.url
+        x.description    Riposte::Config.site.desc
+        x.managingEditor "#{Riposte::Config.admin.email} (#{Riposte::Config.admin.name})"
+        x.webMaster      "#{Riposte::Config.admin.email} (#{Riposte::Config.admin.name})"
         x.docs           'http://backend.userland.com/rss/'
         x.ttl            60
         x.atom           :link, :rel => 'self', :type => 'application/rss+xml',
-                         :href => Riposte::Config::SITE_URL.chomp('/') +
+                         :href => Riposte::Config.site.url.chomp('/') +
                                   Rs(:rss)
         
         Post.recent.all.each do |post|

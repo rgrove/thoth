@@ -122,13 +122,13 @@ module Riposte
     abort("Error: #{e}")
   end
   
-  Config.load_config(options[:config])
-
+  Config.load(options[:config], options[:devel] ? :devel : :production)
+  
   CONFIG_FILE = options[:config]
   DEVEL_MODE  = options[:devel]
-  IP          = options[:ip] || Config::SERVER_ADDRESS
+  IP          = options[:ip] || Config.server.address
   LOG_SQL     = options[:log_sql]
-  PORT        = options[:port] || Config::SERVER_PORT
+  PORT        = options[:port] || Config.server.port
   PID_FILE    = DIR/"riposte_#{IP}_#{PORT}.pid"
 
   case options[:daemon]

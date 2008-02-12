@@ -31,10 +31,10 @@ class TagController < Ramaze::Controller
   helper :admin, :cache, :error, :partial
   layout '/layout'
 
-  template_root Riposte::Config::CUSTOM_VIEW/:tag,
+  template_root Riposte::Config.theme.view/:tag,
                 Riposte::DIR/:view/:tag
   
-  if Riposte::Config::ENABLE_CACHE
+  if Riposte::Config.server.enable_cache
     cache :index, :ttl => 60, :key => lambda { check_auth }
   end
 

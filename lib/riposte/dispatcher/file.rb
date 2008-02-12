@@ -37,9 +37,9 @@ module Ramaze
         alias __resolve_path resolve_path
       
         def resolve_path(path)
-          return __resolve_path(path) unless Riposte::Config::CUSTOM_PUBLIC
+          return __resolve_path(path) unless Riposte::Config.theme.public
 
-          joined = Riposte::Config::CUSTOM_PUBLIC/path
+          joined = Riposte::Config.theme.public/path
         
           return __resolve_path(path) unless ::File.exist?(joined)
 

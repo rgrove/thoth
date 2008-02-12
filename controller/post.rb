@@ -31,7 +31,7 @@ class PostController < Ramaze::Controller
   helper :admin, :cache, :cookie, :error, :partial
   layout '/layout'
   
-  template_root Riposte::Config::CUSTOM_VIEW/:post,
+  template_root Riposte::Config.theme.view/:post,
                 Riposte::DIR/:view/:post
   
   def index(name = nil)

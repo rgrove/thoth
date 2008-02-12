@@ -40,7 +40,7 @@
           <% end %>
         </td>
         <td class="created">
-          <%= comment.created_at(Riposte::Config::TIMESTAMP_SHORT) %>
+          <%= comment.created_at(Riposte::Config.timestamp.short) %>
         </td>
       </tr>
     <% end %>

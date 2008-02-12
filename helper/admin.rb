@@ -48,8 +48,8 @@ module Ramaze
     def login
       username, password = request[:username, :password]
       
-      if username == Riposte::Config::ADMIN_USER &&
-          password == Riposte::Config::ADMIN_PASS
+      if username == Riposte::Config.admin.user &&
+          password == Riposte::Config.admin.pass
         # Set an auth cookie that expires in two weeks.
         response.set_cookie('riposte_auth', :expires => Time.now + 1209600,
             :path => R(MainController), :value => auth_key)
@@ -79,8 +79,8 @@ module Ramaze
     #   - ADMIN_PASS from Riposte config
     def auth_key
       Digest::SHA256.hexdigest(File.expand_path(__FILE__) + request.ip +
-          Riposte::Config::AUTH_SEED + Riposte::Config::ADMIN_USER + 
-          Riposte::Config::ADMIN_PASS)
+          Riposte::Config.admin.seed + Riposte::Config.admin.user + 
+          Riposte::Config.admin.pass)
     end
     
     # Checks the auth cookie and returns +true+ if the user is authenticated,

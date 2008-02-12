@@ -12,7 +12,7 @@
             <%= h(comment.author) %>
           </a>
         <% end %>
-        on <%= comment.created_at(Riposte::Config::TIMESTAMP_SHORT) %><br />
+        on <%= comment.created_at(Riposte::Config.timestamp.short) %><br />
         <small>
           attached to 
           <a href="<%= comment.post.url %>">
@@ -38,7 +38,7 @@
             <%= h(comment.author) %>
           </a>
         <% end %>
-        on <%= comment.created_at(Riposte::Config::TIMESTAMP_SHORT) %><br />
+        on <%= comment.created_at(Riposte::Config.timestamp.short) %><br />
         <small>
           attached to
           <a href="<%= comment.post.url %>">

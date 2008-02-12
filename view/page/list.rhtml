@@ -31,10 +31,10 @@
           <a href="<%= page.url %>"><%= h(page.title) %></a>
         </td>
         <td class="created">
-          <%= page.created_at(Riposte::Config::TIMESTAMP_SHORT) %>
+          <%= page.created_at(Riposte::Config.timestamp.short) %>
         </td>
         <td class="updated">
-          <%= page.updated_at(Riposte::Config::TIMESTAMP_SHORT) %>
+          <%= page.updated_at(Riposte::Config.timestamp.short) %>
         </td>
       </tr>
     <% end %>

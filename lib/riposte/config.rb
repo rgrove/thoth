@@ -26,40 +26,57 @@
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #++
 
-module Riposte
-
-  module Config
-    @default = {
-      :SITE_NAME        => "New Riposte Blog",
-      :SITE_DESCRIPTION => "Riposte is awesome!",
-      :SITE_URL         => "http://localhost:7000/",
-      :AUTHOR_NAME      => "John Doe",
-      :AUTHOR_EMAIL     => "",
-      :ADMIN_USER       => "riposte",
-      :ADMIN_PASS       => "riposte",
-      :CUSTOM_PUBLIC    => Ramaze::APPDIR/:custom/:public,
-      :CUSTOM_VIEW      => Ramaze::APPDIR/:custom/:view,
-      :ENABLE_CACHE     => true,
-      :DB_PRODUCTION    => "sqlite:///#{Ramaze::APPDIR}/db/production.db",
-      :DB_TEST          => "sqlite:///#{Ramaze::APPDIR}/db/test.db",
-      :AUTH_SEED        => "43c55@051a19a/4f88a3ff+355cd1418",
-      :TIMESTAMP_LONG   => "%A %B %d, %Y @ %I:%M %p (%Z)",
-      :TIMESTAMP_SHORT  => "%Y-%m-%d %I:%M",
-      :SERVER_ADDRESS   => "0.0.0.0",
-      :SERVER_PORT      => 7000,
-      :ERROR_LOG        => Ramaze::APPDIR/'error.log'
-    }
+module Riposte; module Config
+  class << self
+    attr_reader :mode
     
-    def self.const_missing(name)
-      @default[name]
-    end
+    ['devel', 'production'].each do |env|
+      Configuration.for("riposte_#{env}") {
+        db "sqlite:///#{Ramaze::APPDIR}/db/#{env}.db"
+  
+        site {
+          name "New Riposte Blog"
+          desc "Riposte is awesome!"
+          url  "http://localhost:7000/"
+        }
 
-    def self.load_config(config_file)
-      load config_file if File.exist?(config_file)
-    rescue => e
-      message = e.message.gsub("\n", '; ')
-      abort("** Error: configuration error in #{config_file}: #{message}")
+        admin {
+          name  "John Doe"
+          email ""
+          user  "riposte"
+          pass  "riposte"
+          seed  "43c55@051a19a/4f88a3ff+355cd1418"
+        }
+    
+        theme {
+          public Ramaze::APPDIR/:custom/:public
+          view   Ramaze::APPDIR/:custom/:view
+        }
+  
+        timestamp {
+          long  "%A %B %d, %Y @ %I:%M %p (%Z)"
+          short "%Y-%m-%d %I:%M"
+        }
+    
+        server {
+          address      "0.0.0.0"
+          port         7000
+          enable_cache true
+          error_log    Ramaze::APPDIR/"error.log"
+        }
+      }
     end
+    
+    def load(file, mode = :production)
+      Kernel.load(file)
+
+      @mode = mode
+      @conf = Configuration.for("riposte_#{@mode.to_s}")
+    end
+    
+    def method_missing(name)
+      @conf.__send__(name)
+    end
+  
   end
-
-end
+end; end

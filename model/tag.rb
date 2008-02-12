@@ -48,7 +48,7 @@ class Tag < Sequel::Model
   
   # URL for this tag.
   def url
-    Riposte::Config::SITE_URL.chomp('/') + R(TagController, CGI.escape(name))
+    Riposte::Config.site.url.chomp('/') + R(TagController, CGI.escape(name))
   end
 end
 

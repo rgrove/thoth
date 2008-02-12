@@ -115,7 +115,7 @@ class Page < Sequel::Model
 
   # URL for this Page.
   def url
-    Riposte::Config::SITE_URL.chomp('/') + R(PageController, name)
+    Riposte::Config.site.url.chomp('/') + R(PageController, name)
   end
 end
 

@@ -30,9 +30,9 @@
     <dd><code><%= @public_root %></code></dd>
 
     <dt>Custom Templates</dt>
-    <dd><code><%= Riposte::Config::CUSTOM_VIEW %></code></dd>
+    <dd><code><%= Riposte::Config.theme.view %></code></dd>
     <dt>Custom CSS, JS, etc.</dt>
-    <dd><code><%= Riposte::Config::CUSTOM_PUBLIC %></code></dd>
+    <dd><code><%= Riposte::Config.theme.public %></code></dd>
   </dl>
 
   <p>
