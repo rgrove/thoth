@@ -38,6 +38,7 @@ Configuration.for("riposte_production") {
   }
   
   admin {
+
     # Your name. This will be displayed in the copyright notice at the bottom of
     # the page, and will be used as the author name for your site's feeds.
     #
@@ -60,6 +61,7 @@ Configuration.for("riposte_production") {
     # You should uncomment this now and fill it with nonsense.
     #
     # seed "43c55@051a19a/4f88a3ff+355cd1418"
+
   }
 
   theme {
