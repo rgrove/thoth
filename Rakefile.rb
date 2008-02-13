@@ -69,7 +69,6 @@ riposte_gemspec = Gem::Specification.new do |s|
   s.add_dependency('mongrel',       '>=1.0.1')
   s.add_dependency('ramaze',        '>=0.3.6')
   s.add_dependency('sequel',        '>=1.0')
-  s.add_dependency('sqlite3-ruby',  '>=1.2.1')
   s.add_dependency('swiftiply',     '>=0.6.1.1')
 end
 
@@ -150,8 +149,9 @@ task :package => :gem do
   
   sh "rm -rf #{pkgdir}"
   sh "mkdir -p #{pkgdir}/db"
+  sh "mkdir #{pkgdir}/plugin"
   sh "cp -r {controller,helper,model,public,scripts,view,LICENSE,riposte.conf.sample,riposte-server.rb} #{pkgdir}"
-  
+
   Find.find(pkgdir) do |path|
     name = File.basename(path)
     
