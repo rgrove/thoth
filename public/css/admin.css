@@ -82,12 +82,8 @@ form table th {
   text-align: right;
 }
 
-form table tr{ vertical-align: top; }
-
-form table tr.tip {
-  font-size: 0.9em;
-  font-style: italic;
-}
+form table tr { vertical-align: top; }
+form table tr.tip { font-size: 93%; }
 
 form table tfoot td {
   padding-top: 1em;
