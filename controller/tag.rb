@@ -28,7 +28,7 @@
 
 class TagController < Ramaze::Controller
   engine :Erubis
-  helper :admin, :cache, :error, :partial
+  helper :admin, :cache, :error
   layout '/layout'
 
   template_root Riposte::Config.theme.view/:tag,

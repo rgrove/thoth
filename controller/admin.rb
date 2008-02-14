@@ -28,7 +28,7 @@
 
 class AdminController < Ramaze::Controller
   engine :Erubis
-  helper :admin, :error, :flash, :partial
+  helper :admin, :error, :flash
   layout '/layout'
   
   template_root Riposte::Config.theme.view/:admin,

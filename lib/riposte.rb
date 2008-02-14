@@ -30,6 +30,8 @@
 $:.unshift(File.dirname(__FILE__))
 $:.uniq!
 
+require 'fileutils'
+
 require 'rubygems'
 require 'builder'
 require 'ramaze'
@@ -95,7 +97,7 @@ module Riposte
         else
           raise "Invalid mode: #{Riposte::Config.mode}"
       end
-      
+
       Ramaze.start :adapter => :evented_mongrel, :host  => IP, :port  => PORT,
           :force => true
     end

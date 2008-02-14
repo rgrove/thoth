@@ -26,34 +26,61 @@
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #++
 
-class ArchiveController < Ramaze::Controller
-  engine :Erubis
-  helper :admin, :cache
-  layout '/layout'
-
-  template_root Riposte::Config.theme.view/:archive,
-                Riposte::DIR/:view/:archive
+class Media < Sequel::Model(:media)
+  include Ramaze::LinkHelper
   
-  if Riposte::Config.server.enable_cache
-    cache :index, :ttl => 120, :key => lambda { check_auth }
+  set_schema do
+    primary_key :id
+    
+    varchar  :filename,   :null => false, :unique => true
+    varchar  :mimetype,   :null => false
+    datetime :created_at, :null => false
+    datetime :updated_at, :null => false
+    
+    unique :filename
+  end
+  
+  before_create do
+    self.created_at = Time.now
+  end
+  
+  before_destroy do
+    FileUtils.rm(path)
   end
 
-  def index(page = 1)
-    page = page.to_i
-    page = 1 unless page >= 1
-  
-    @posts = Post.recent(page, 10)
-  
-    if page > @posts.page_count
-      page = @posts.page_count
-      @posts = Post.recent(page, 10)
-    end
+  before_save do
+    self.updated_at = Time.now
+  end
 
-    @title      = Riposte::Config.site.name + ' Archives'
-    @page_start = @posts.current_page_record_range.first
-    @page_end   = @posts.current_page_record_range.last
-    @total      = @posts.pagination_record_count
-    @prev_url   = @posts.prev_page ? Rs(@posts.prev_page) : nil
-    @next_url   = @posts.next_page ? Rs(@posts.next_page) : nil
+  def created_at(format = nil)
+    if new?
+      format ? Time.now.strftime(format) : Time.now
+    else
+      format ? self[:created_at].strftime(format) : self[:created_at]
+    end
+  end
+  
+  def filename=(filename)
+    self[:filename] = filename.strip unless filename.nil?
+  end
+  
+  # Absolute path to this file.
+  def path
+    Riposte::Config.media/filename[0].chr.downcase/filename
+  end
+  
+  def updated_at(format = nil)
+    if new?
+      format ? Time.now.strftime(format) : Time.now
+    else
+      format ? self[:updated_at].strftime(format) : self[:updated_at]
+    end
+  end
+
+  # URL for this file.
+  def url
+    Riposte::Config.site.url.chomp('/') + R(MediaController, filename)
   end
 end
+
+Media.create_table unless Media.table_exists?

@@ -26,105 +26,110 @@
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #++
 
-class PageController < Ramaze::Controller
+class MediaController < Ramaze::Controller
   engine :Erubis  
-  helper :admin, :cache, :error, :wiki
+  helper :admin, :error
   layout '/layout'
   
-  template_root Riposte::Config.theme.view/:page,
-                Riposte::DIR/:view/:page
+  template_root Riposte::Config.theme.view/:media,
+                Riposte::DIR/:view/:media
   
-  if Riposte::Config.server.enable_cache
-    cache :index, :ttl => 60, :key => lambda { check_auth }
-  end
-  
-  def index(name = nil)
-    error_404 unless name && @page = Page[:name => name.strip.downcase]
-    @title = @page.title
+  deny_layout :index
+
+  def index(filename = nil)
+    unless filename && file = Media[:filename => filename.strip]
+      error_404
+    end
+    
+    send_file(file.path)
   end
   
   def delete(id = nil)
     require_auth
     
-    error_404 unless id && @page = Page[id]
+    error_404 unless id && @file = Media[id]
 
     if request.post?
       if request[:confirm] == 'yes'
-        @page.destroy
-        action_cache.clear
-        redirect(R(MainController))
+        @file.destroy
+        redirect(Rs(:list))
       else
-        redirect(@page.url)
+        redirect(Rs(:edit, id))
       end
     end
     
-    @title = "Delete Page: #{@page.title}"
+    @title  = "Delete File: #{@file.filename}"
+    @delete = true
   end
   
   def edit(id = nil)
     require_auth
 
-    if @page = Page[id]
-      @title       = "Edit page - #{@page.title}"
+    if id && @file = Media[id]
+      @title       = "Edit Media - #{@file.filename}"
       @form_action = Rs(:edit, id)
-      
+
       if request.post?
-        @page.name  = request[:name]
-        @page.title = request[:title]
-        @page.body  = request[:body]
+        tempfile, filename, type = request[:file].values_at(
+            :tempfile, :filename, :type)
+            
+        @file.mimetype = type
         
-        if @page.valid? && request[:action] === 'Post'
-          begin
-            raise unless @page.save
-          rescue => e
-            @page_error = "There was an error saving your page: #{e}"
-          else
-            action_cache.clear
-            redirect(Rs(@page.name))
+        begin
+          unless File.directory?(File.dirname(@file.path))
+            FileUtils.mkdir_p(File.dirname(@file.path))
           end
+
+          FileUtils.mv(tempfile.path, @file.path)
+
+          @file.save
+        rescue => e
+          @media_error = "Error: #{e}"
         end
       end
     else
-      @title       = 'New page - Untitled'
-      @page_error  = 'Invalid page id.'
-      @form_action = Rs(:new)
+      redirect(Rs(:new))
     end
   end
 
   def list(page = 1)
     require_auth
     
-    @pages    = Page.reverse_order(:created_at).paginate(page.to_i, 20)
-    @prev_url = @pages.prev_page ? Rs(:list, @pages.prev_page) : nil
-    @next_url = @pages.next_page ? Rs(:list, @pages.next_page) : nil
-    @title    = "Pages (page #{page} of #{@pages.page_count})"
+    @files    = Media.reverse_order(:created_at).paginate(page.to_i, 20)
+    @prev_url = @files.prev_page ? Rs(:list, @files.prev_page) : nil
+    @next_url = @files.next_page ? Rs(:list, @files.next_page) : nil
+    @title    = "Files (page #{page} of #{@files.page_count})"
   end
-  
+
   def new
     require_auth
     
-    @title       = "New page - Untitled"
+    @title       = "Upload Media"
     @form_action = Rs(:new)
     
     if request.post?
-      @page = Page.new do |p|
-        p.name  = request[:name]
-        p.title = request[:title]
-        p.body  = request[:body]
+      tempfile, filename, type = request[:file].values_at(
+          :tempfile, :filename, :type)
+      
+      @file = Media.new do |f|
+        f.filename = filename
+        f.mimetype = type
       end
       
-      if @page.valid? && request[:action] === 'Post'
-        begin
-          raise unless @page.save
-        rescue => e
-          @page_error = "There was an error saving your page: #{e}"
-        else
-          action_cache.clear
-          redirect(Rs(@page.name))
+      begin
+        unless File.directory?(File.dirname(@file.path))
+          FileUtils.mkdir_p(File.dirname(@file.path))
         end
+
+        FileUtils.mv(tempfile.path, @file.path)
+        
+        @file.save
+      rescue => e
+        @media_error = "Error: #{e}"
+      else
+        @success = true
       end
-      
-      @title = "New page - #{@page.title}"
     end
   end
+  
 end

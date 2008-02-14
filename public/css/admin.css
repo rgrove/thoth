@@ -129,6 +129,22 @@ table.pages td.name { white-space: nowrap; }
 
 table.comments td.title { width: 70%; }
 
+/* -- Media ----------------------------------------------------------------- */
+fieldset.replace {
+  padding: 0.3em 1em;
+}
+
+table.details th {
+  font-weight: bold;
+  padding-right: 4px;
+  text-align: right;
+}
+
+table.details.media tr.filename td,
+table.details.media tr.path td {
+  font-family: Consolas, Monaco, 'Courier New', monospaced;
+}
+
 /* -- Welcome Page ---------------------------------------------------------- */
 .welcome .version {
   color: #666;

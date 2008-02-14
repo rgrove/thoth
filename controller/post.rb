@@ -28,7 +28,7 @@
 
 class PostController < Ramaze::Controller
   engine :Erubis  
-  helper :admin, :cache, :cookie, :error, :partial
+  helper :admin, :cache, :cookie, :error, :wiki
   layout '/layout'
   
   template_root Riposte::Config.theme.view/:post,

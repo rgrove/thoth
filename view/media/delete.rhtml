@@ -1,0 +1,14 @@
+<h2>Delete Media</h2>
+
+<p>
+  Are you sure you want to permanently delete the following file?
+</p>
+
+<%= render_template(:media, :mfile => @file) %>
+
+<form action="<%= Rs(:delete, @file.id) %>" method="post">
+  <p>
+    <button name="confirm" value="yes">Yes, delete this file forever</button>
+    <button name="confirm" value="no">No, do not delete this file</button>
+  </p>
+</form>

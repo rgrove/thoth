@@ -28,7 +28,7 @@
 
 class SearchController < Ramaze::Controller
   engine :Erubis
-  helper :admin, :cache, :partial, :redirect, :ysearch
+  helper :admin, :cache, :redirect, :ysearch
   layout '/layout'
   
   template_root Riposte::Config.theme.view/:search,

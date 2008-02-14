@@ -1,0 +1,52 @@
+<h2>Media</h2>
+
+<% if @prev_url || @next_url %>
+  <%= 
+  render_template('../pager',
+      :prev_url  => @prev_url,
+      :next_url  => @next_url,
+      :prev_text => '&laquo; Newer files',
+      :next_text => 'Older files &raquo;')
+  %>
+<% end %>
+
+<table class="list media" summary="List of all media in reverse order">
+  <thead>
+    <tr>
+      <th>Filename</th>
+      <th>Type</th>
+      <th>Created</th>
+      <th>Updated</th>
+    </tr>
+  </thead>
+  
+  <tfoot></tfoot>
+  
+  <tbody>
+    <% row = 'even' %>
+    <% @files.all.each do |file| %>
+      <tr class="<%= row == 'even' ? row = 'odd' : row = 'even' %>">
+        <td class="filename">
+          <a href="<%= Rs(:edit, file.id) %>"><%= h(file.filename) %></a>
+        </td>
+        <td class="type"><%= h(file.mimetype) %></a></td>
+        <td class="created">
+          <%= file.created_at(Riposte::Config.timestamp.short) %>
+        </td>
+        <td class="updated">
+          <%= file.updated_at(Riposte::Config.timestamp.short) %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<% if @prev_url || @next_url %>
+  <%= 
+  render_template('../pager',
+      :prev_url  => @prev_url,
+      :next_url  => @next_url,
+      :prev_text => '&laquo; Newer files',
+      :next_text => 'Older files &raquo;')
+  %>
+<% end %>

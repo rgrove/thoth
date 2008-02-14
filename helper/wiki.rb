@@ -26,34 +26,52 @@
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #++
 
-class ArchiveController < Ramaze::Controller
-  engine :Erubis
-  helper :admin, :cache
-  layout '/layout'
+module Ramaze
+  
+  module WikiHelper
+    private
+    
+    # Parse wiki-style markup into HTML markup.
+    def wiki_to_html(string)
+      # [[page_name|link text]]
+      string.gsub!(/\[\[([0-9a-z_-]+)\|(.+?)\]\]/i) do
+        A($2, :href => R(PageController, $1.downcase))
+      end
 
-  template_root Riposte::Config.theme.view/:archive,
-                Riposte::DIR/:view/:archive
-  
-  if Riposte::Config.server.enable_cache
-    cache :index, :ttl => 120, :key => lambda { check_auth }
-  end
+      # [[page_name]]
+      string.gsub!(/\[\[([0-9a-z_-]+)\]\]/i) do
+        A($1, :href => R(PageController, $1.downcase))
+      end
 
-  def index(page = 1)
-    page = page.to_i
-    page = 1 unless page >= 1
-  
-    @posts = Post.recent(page, 10)
-  
-    if page > @posts.page_count
-      page = @posts.page_count
-      @posts = Post.recent(page, 10)
+      # [[@post_name|link text]]
+      # [[@123|link text]]
+      string.gsub!(/\[\[@(\d+|[0-9a-z_-]+)\|(.+?)\]\]/i) do
+        A($2, :href => R(PostController, $1.downcase))
+      end
+
+      # [[@post_name]]
+      # [[@123]]
+      string.gsub!(/\[\[@(\d+|[0-9a-z_-]+)\]\]/i) do
+        A($1, :href => R(PostController, $1.downcase))
+      end
+      
+      # [[media:filename|link text]]
+      string.gsub!(/\[\[media:([^\]]+)\|(.+?)\]\]/i) do
+        A($2, :href => R(MediaController, $1))
+      end
+
+      # [[media:filename]]
+      string.gsub!(/\[\[media:([^\]]+)\]\]/i) do
+        A($1, :href => R(MediaController, $1))
+      end
+      
+      # [[media_url:filename]]
+      string.gsub!(/\[\[media_url:([^\]]+)\]\]/i) do
+        R(MediaController, $1)
+      end
+      
+      string
     end
-
-    @title      = Riposte::Config.site.name + ' Archives'
-    @page_start = @posts.current_page_record_range.first
-    @page_end   = @posts.current_page_record_range.last
-    @total      = @posts.pagination_record_count
-    @prev_url   = @posts.prev_page ? Rs(@posts.prev_page) : nil
-    @next_url   = @posts.next_page ? Rs(@posts.next_page) : nil
   end
+  
 end

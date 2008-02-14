@@ -28,7 +28,7 @@
 
 class MainController < Ramaze::Controller
   engine :Erubis
-  helper :admin, :cache, :error, :partial, :redirect, :ysearch
+  helper :admin, :cache, :error, :redirect, :ysearch
   layout '/layout'
   
   template_root Riposte::Config.theme.view, Riposte::DIR/:view

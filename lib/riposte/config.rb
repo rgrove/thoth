@@ -52,6 +52,8 @@ module Riposte; module Config
           public Ramaze::APPDIR/:custom/:public
           view   Ramaze::APPDIR/:custom/:view
         }
+        
+        media Ramaze::APPDIR/:custom/:media
   
         timestamp {
           long  "%A %B %d, %Y @ %I:%M %p (%Z)"
