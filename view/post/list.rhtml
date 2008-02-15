@@ -24,7 +24,7 @@
   
   <tbody>
     <% row = 'even' %>
-    <% @posts.all.each do |post| %>
+    <% @posts.all do |post| %>
       <tr class="<%= row == 'even' ? row = 'odd' : row = 'even' %>">
         <td class="id"><%= post.id %></td>
         <td class="title">

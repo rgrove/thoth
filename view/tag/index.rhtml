@@ -18,7 +18,7 @@
   <% end %>
 
   <ul>
-    <% @posts.all.each do |post| %>
+    <% @posts.all do |post| %>
       <li>
         <%= render_template('../post/tiny', :post => post) %>
       </li>

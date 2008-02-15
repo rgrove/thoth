@@ -1,4 +1,4 @@
-<% @posts.all.each do |post| %>
+<% @posts.all do |post| %>
   <%= render_template('post/compact', :post => post) %>
 <% end %>
 

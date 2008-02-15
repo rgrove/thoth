@@ -24,7 +24,7 @@
   
   <tbody>
     <% row = 'even' %>
-    <% @pages.all.each do |page| %>
+    <% @pages.all do |page| %>
       <tr class="<%= row == 'even' ? row = 'odd' : row = 'even' %>">
         <td class="name"><%= page.name %></td>
         <td class="title">

@@ -24,7 +24,7 @@
   
   <tbody>
     <% row = 'even' %>
-    <% @comments.all.each do |comment| %>
+    <% @comments.all do |comment| %>
       <tr class="<%= row == 'even' ? row = 'odd' : row = 'even' %>">
         <td class="id"><%= comment.id %></td>
         <td class="title">
