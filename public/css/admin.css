@@ -125,6 +125,10 @@ table.pages td.name { white-space: nowrap; }
 
 table.comments td.title { width: 70%; }
 
+table.media td.filename { width: 100%; }
+table.media td.type { white-space: nowrap; }
+table.media td.size { text-align: right; }
+
 /* -- Media ----------------------------------------------------------------- */
 fieldset.replace {
   padding: 0.3em 1em;
