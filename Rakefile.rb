@@ -68,7 +68,8 @@ riposte_gemspec = Gem::Specification.new do |s|
   s.add_dependency('json_pure',     '>=1.1.2')
   s.add_dependency('mongrel',       '>=1.0.1')
   s.add_dependency('ramaze',        '>=0.3.6')
-  s.add_dependency('sequel',        '>=1.0')
+  s.add_dependency('sequel',        '>=1.1')
+  s.add_dependency('sequel_core',   '>=1.0.10')
   s.add_dependency('swiftiply',     '>=0.6.1.1')
 end
 
