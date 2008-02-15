@@ -1,5 +1,3 @@
-* require recent Sequel, use dataset.all {} rather than dataset.all.each to
-  get around MySQL sync issues
 * Investigate Sequel NotNaughty plugin
 * Display an error when a comment's body is all caps.
 * Make admin toolbar visibility persistent during a session
