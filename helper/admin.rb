@@ -32,6 +32,8 @@ module Ramaze
   # handling Riposte administrator logins and logouts, along with methods for
   # checking for or requiring authorization from within other actions and views.
   module AdminHelper
+    Helper::LOOKUP << self
+    
     # Include cookie, flash and redirect helpers.
     def self.included(klass)
       klass.send(:helper, :cookie, :flash, :redirect)
