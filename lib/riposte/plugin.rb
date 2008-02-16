@@ -27,6 +27,10 @@
 #++
 
 module Riposte
+
+  # Namespace for Riposte plugins. See
+  # http://code.google.com/p/riposte/wiki/CreatingPlugins for more info on
+  # creating plugins.
   module Plugin
 
     def self.const_missing(name)

@@ -38,9 +38,7 @@ module Ramaze
       
         def resolve_path(path)
           return __resolve_path(path) unless Riposte::Config.theme.public
-
           joined = Riposte::Config.theme.public/path
-        
           return __resolve_path(path) unless ::File.exist?(joined)
 
           if ::File.directory?(joined)

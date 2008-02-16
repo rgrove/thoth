@@ -94,7 +94,7 @@ class Comment < Sequel::Model
   end
 
   def body=(body)
-    body          = sanitize_html(body.strip)
+    body          = sanitize_html(body.rstrip)
     body_rendered = body.dup.strip
     
     # Autoformat the comment body if necessary.
@@ -103,13 +103,18 @@ class Comment < Sequel::Model
         if match =~ /<(?:address|blockquote|dl|h[1-6]|ol|pre|table|ul)>/i
           match
         else
-          "<p>#{match}</p>"
+          "<p>#{match.strip}</p>"
         end
       end
     end
+
+    redcloth = RedCloth.new(body_rendered)
     
-    self[:body_rendered] = body_rendered
+    redcloth.filter_styles = true
+    redcloth.lite_mode     = true
+    
     self[:body]          = body
+    self[:body_rendered] = redcloth.to_html
   end
   
   def created_at(format = nil)

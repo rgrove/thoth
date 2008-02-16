@@ -96,7 +96,7 @@ class Post < Sequel::Model
 
   def body=(body)
     self[:body]          = body.strip
-    self[:body_rendered] = wiki_to_html(body.dup.strip)
+    self[:body_rendered] = RedCloth.new(wiki_to_html(body.dup.strip)).to_html
   end
   
   # Comments attached to this Post, ordered by creation time.
