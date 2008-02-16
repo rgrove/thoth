@@ -42,19 +42,15 @@
 #
 
 require 'rubygems'
-require 'ramaze'
-require 'sequel'
+require 'riposte'
 
-APP_DIR = File.expand_path(File.join(File.dirname(__FILE__), '..'))
+Ramaze::Inform.loggers = []
 
-# Append the Riposte /lib directory to the include path if it's not there
-# already.
-$:.unshift(File.join(APP_DIR, 'lib'))
-$:.uniq!
+module Riposte
+  DIR = File.expand_path(File.join(File.dirname(__FILE__), '..'))
+end
 
-require 'riposte/config'
-
-Riposte::Config.load_config(File.join(APP_DIR, 'riposte.conf'))
+Riposte::Config.load(File.join(Riposte::DIR, 'riposte.conf'))
 
 # Check that we got a MySQL connection string arg.
 if ARGV.empty? || !(ARGV[0] =~ /^mysql:\/\//i)
@@ -70,8 +66,8 @@ DB    = Sequel.open(ARGV[1])
 MYSQL = Sequel.open(ARGV[0])
 
 # Load models and controllers.
-acquire "#{APP_DIR}/controller/*"
-acquire "#{APP_DIR}/model/*"
+acquire "#{Riposte::DIR}/controller/*"
+acquire "#{Riposte::DIR}/model/*"
 
 # Disable model hooks.
 class Comment
@@ -91,6 +87,8 @@ end
 
 # Import pages.
 puts 'Importing pages...'
+
+Page.delete
 
 DB.transaction do
   MYSQL[:pages].each do |row|
@@ -115,6 +113,8 @@ end
 # Import posts.
 puts 'Importing posts...'
 
+Post.delete
+
 DB.transaction do
   MYSQL[:articles].each do |row|
     Post.new do |post|
@@ -137,6 +137,9 @@ end
 # Import tags.
 puts 'Importing tags...'
 
+Tag.delete
+TagsPostsMap.delete
+
 DB.transaction do
   MYSQL[:tags].each do |tag|
     DB[:tags] << {:id => tag[:id], :name => tag[:name]}
@@ -150,6 +153,8 @@ end
 
 # Import comments.
 puts 'Importing comments...'
+
+Comment.delete
 
 DB.transaction do
   MYSQL[:comments].each do |row|
