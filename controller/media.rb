@@ -73,7 +73,7 @@ class MediaController < Ramaze::Controller
         tempfile, filename, type = request[:file].values_at(
             :tempfile, :filename, :type)
             
-        @file.mimetype = type
+        @file.mimetype = type || 'application/octet-stream'
         
         begin
           unless File.directory?(File.dirname(@file.path))
@@ -113,7 +113,7 @@ class MediaController < Ramaze::Controller
       
       @file = Media.new do |f|
         f.filename = filename
-        f.mimetype = type
+        f.mimetype = type || 'application/octet-stream'
       end
       
       begin
