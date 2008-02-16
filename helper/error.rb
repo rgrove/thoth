@@ -31,22 +31,11 @@ module Ramaze
   # The ErrorHelper module provides methods for interrupting the current request
   # and responding with an error message and corresponding HTTP error code.
   module ErrorHelper
-    def error_layout(status, title, content = '')
-      respond %[
-        <html>
-          <head>
-            <title>#{h(title)}</title>
-          </head>
-          <body>
-            <h1>#{h(title)}</h1>
-            #{content}
-          </body>
-        </html>
-      ].unindent, status
-    end
+    Helper::LOOKUP << self
     
     # Displays an error backtrace.
     def error
+      error_404 unless Riposte::DEVEL_MODE
       Ramaze::Action.current.template ||= Riposte::DIR/:view/'error.rhtml'
       super
     end
@@ -70,6 +59,22 @@ module Ramaze
           your request.
         </p>
       ]
+    end
+
+    private
+    
+    def error_layout(status, title, content = '')
+      respond %[
+        <html>
+          <head>
+            <title>#{h(title)}</title>
+          </head>
+          <body>
+            <h1>#{h(title)}</h1>
+            #{content}
+          </body>
+        </html>
+      ].unindent, status
     end
   end  
 
