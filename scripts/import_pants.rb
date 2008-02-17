@@ -142,7 +142,7 @@ TagsPostsMap.delete
 
 DB.transaction do
   MYSQL[:tags].each do |tag|
-    DB[:tags] << {:id => tag[:id], :name => tag[:name]}
+    DB[:tags] << {:id => tag[:id], :name => tag[:name].downcase}
   end
 
   MYSQL[:tags_articles_map].each do |tagmap|
