@@ -123,17 +123,11 @@ table.list tbody tr:hover { background: #d0dbf7; }
 table.list tbody td { border: 1px solid transparent; }
 table.list tbody tr:hover td { border: 1px solid #9ab3f7; }
 
-table.list td.title { width: 100%; }
-
 table.list td.created,
 table.list td.updated { white-space: nowrap; }
 
 table.pages td.name { white-space: nowrap; }
 
-table.comments td.title { width: 70%; }
-
-table.media td.filename { width: 100%; }
-table.media td.type { white-space: nowrap; }
 table.media td.size { text-align: right; }
 
 /* -- Media ----------------------------------------------------------------- */

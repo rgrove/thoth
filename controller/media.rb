@@ -98,7 +98,7 @@ class MediaController < Ramaze::Controller
     @files    = Media.reverse_order(:created_at).paginate(page.to_i, 20)
     @prev_url = @files.prev_page ? Rs(:list, @files.prev_page) : nil
     @next_url = @files.next_page ? Rs(:list, @files.next_page) : nil
-    @title    = "Files (page #{page} of #{@files.page_count})"
+    @title    = "Media (page #{page} of #{@files.page_count})"
   end
 
   def new

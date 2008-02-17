@@ -15,7 +15,6 @@
   <thead>
     <tr>
       <th>Filename</th>
-      <th>Type</th>
       <th>Size</th>
       <th>Created</th>
       <th>Updated</th>
@@ -31,7 +30,6 @@
         <td class="filename">
           <a href="<%= Rs(:edit, file.id) %>"><%= h(file.filename) %></a>
         </td>
-        <td class="type"><%= h(file.mimetype) %></a></td>
         <td class="size"><%= File.size(file.path).filesize_format %></td>
         <td class="created">
           <%= file.created_at(Riposte::Config.timestamp.short) %>
