@@ -35,8 +35,8 @@ module Riposte; module Config
         db "sqlite:///#{Ramaze::APPDIR}/db/#{env}.db"
   
         site {
-          name "New Riposte Blog"
-          desc "Riposte is awesome!"
+          name "Riposte"
+          desc "Simple, elegant, awesome."
           url  "http://localhost:7000/"
         }
 

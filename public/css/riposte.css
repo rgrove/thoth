@@ -7,8 +7,7 @@ version: 2.4.1
 */
 body {font:13px/1.231 arial,helvetica,clean,sans-serif;*font-size:small;*font:x-small;}table {font-size:inherit;font:100%;}pre,code,kbd,samp,tt{font-family:monospace;*font-size:108%;line-height:100%;}
 
-/* -- Sprite Consumers ------------------------------------------------------ */
-#logo,
+/* -- Icon Sprite Consumers ------------------------------------------------- */
 #toolbar .bl,
 #toolbar .br,
 .icon {
@@ -70,14 +69,14 @@ a:hover { text-decoration: underline; }
 a img { border: 0; }
 
 body {
-  background: #fff;
+  background: #ededed;
   color: #000;
   margin: 0;
   padding: 0;
 }
 
 body,
-input { font-family: Helvetica, 'Bitstream Vera Sans', Arial; }
+input { font-family: Helvetica, 'Bitstream Vera Sans'; }
 
 input { font-size: 100%; }
 
@@ -93,17 +92,12 @@ h3 {
   font-weight: bold;
 }
 
-textarea { font: 100% Consolas, Monaco, 'Courier New', monospaced; }
+textarea { font: 100% Consolas, Monaco, 'Courier New'; }
 
 #doc {
-  background: #fff;
-  margin: 0 auto 2em auto;
+  margin: 0 auto;
   padding: 0;
   min-width: 550px;
-}
-
-#bd {
-  padding-top: 0.8em;
 }
 
 /* -- Header ---------------------------------------------------------------- */
@@ -117,19 +111,22 @@ textarea { font: 100% Consolas, Monaco, 'Courier New', monospaced; }
 }
 
 #hd h1 {
-  background: #222;
+  background: #4d4c4c;
   border: 0;
-  font-size: 197%;
+  font-size: 246%;
   margin: 0;
-  padding: 0.2em;
+  padding: 0.3em 0.2em;
 }
 
 #toolbar {
-  background: #000;
+  background: #323232;
+  border-bottom: 1px solid #000;
+  border-top: 1px solid #5e5d5d;
   color: #fff;
   font-size: 93%;
+  height: 1.75em;
   margin: 0;
-  padding: 4px 7px 3px 7px;
+  padding: 0 0.7em;
   position: relative;
   text-align: right;
 }
@@ -137,39 +134,65 @@ textarea { font: 100% Consolas, Monaco, 'Courier New', monospaced; }
 #toolbar .subtitle {
   float: left;
   font-weight: bold;
-  margin: 0;
+  margin-top: 0.35em;
 }
 
 #toolbar ul {
+  float: right;
   list-style: none;
   margin: 0;
 }
 
 #toolbar ul li {
   display: inline;
-  margin: 0 5px;
 }
 
-#toolbar ul li a { color: #fff; }
-#toolbar ul li a:hover { text-decoration: underline; }
+#toolbar ul li a { 
+  color: #fff;
+  display: block;
+  float: left;
+  height: 1.44em;
+  margin: 0 0.2em;
+  padding: 0.35em 0.5em 0 0.5em;
+}
+
+#toolbar ul li a:hover {
+  background: #474343;
+}
 
 @media print {
   #hd { display: none; }
 }
 
+/* -- Body ------------------------------------------------------------------ */
+#bd {
+  background: #fff;
+  border: 1px solid #d3d3d3;
+  border-top: 0;
+  padding-top: 0.8em;
+  margin: 0 auto;
+  max-width: 800px;
+}
+
+#bd:after {
+  clear: both;
+  content: '.';
+  display: block;
+  height: 0;
+  visibility: hidden;  
+}
+
 /* -- Footer ---------------------------------------------------------------- */
 #ft {
   clear: both;
-  margin: 0 1.5em;
-}
-
-#copyright {
   color: #666;
   font-size: 85%;
-  margin: 1.5em 0 0 0;
+  margin: 0 auto;
+  max-width: 800px;
+  padding: 1em 0;
 }
 
-#copyright a { color: #666; }
+#ft a { color: #666; }
 
 /* -- Content --------------------------------------------------------------- */
 #main {
@@ -186,13 +209,11 @@ textarea { font: 100% Consolas, Monaco, 'Courier New', monospaced; }
 
 /* -- Sidebar --------------------------------------------------------------- */
 #sidebar {
-  background: #f5f5f5;
-  border: 1px solid #dfdfdf;
-  border-right: none;
+  border-left: 1px solid #dfdfdf;
   float: right;
-  margin: 4px 0 0 0;
+  margin: 0 0 0.5em 0;
   padding: 0 0 1em 0.7em;
-  width: 170px;
+  width: 175px;
 }
 
 #sidebar a {
@@ -407,12 +428,13 @@ div.comment:hover {
 /* -- Admin Toolbar --------------------------------------------------------- */
 #adminToolbar {
   background: #f5f5f5;
-  border: 1px solid #dfdfdf;
+  border: 1px solid #d3d3d3;
   border-top: none;
   color: #000;
   font-size: 93%;
-  height: 2em;
-  margin: 0 10px;
+  height: 24px;
+  margin: 0 auto;
+  max-width: 820px;
   padding: 3px 4px 4px 4px;
 }
 
@@ -476,7 +498,7 @@ img.right {
 pre {
   background: #f5f5f5;
   border-left: 4px solid #dfdfdf;
-  font: 85% Consolas, 'Lucida Console', 'Courier New', monospaced;
+  font: 85% Consolas, Monaco, 'Courier New';
   overflow-x: auto;
   padding: 2px 5px;
   width: 99%;
