@@ -39,7 +39,7 @@ class Tag < Sequel::Model
     length_of :name, :maximum => 64
   end
   
-  # Posts attached to this Tag.
+  # Gets posts with this tag.
   def posts
     @posts ||= Post.join(:tags_posts_map, :post_id => :id).
         filter(:tags_posts_map__tag_id => id).reverse_order(:created_at)

@@ -74,11 +74,19 @@ class Comment < Sequel::Model
     self.updated_at = Time.now
   end
   
-  # Recently-posted comments (up to +limit+) sorted in reverse order by creation
+  #--
+  # Dataset Methods
+  #++
+  
+  # Recently-posted comments (up to _limit_) sorted in reverse order by creation
   # time.
   def dataset.recent(page = 1, limit = 10)
     reverse_order(:created_at).paginate(page, limit)
   end
+  
+  #--
+  # Instance Methods
+  #++
   
   def author=(author)
     self[:author] = author.strip unless author.nil?
@@ -117,6 +125,8 @@ class Comment < Sequel::Model
     self[:body_rendered] = redcloth.to_html
   end
   
+  # Gets the creation time of this comment. If _format_ is provided, the time
+  # will be returned as a formatted String. See Time.strftime for details.
   def created_at(format = nil)
     if new?
       format ? Time.now.strftime(format) : Time.now
@@ -125,7 +135,7 @@ class Comment < Sequel::Model
     end
   end
   
-  # Post to which this comment is attached.
+  # Gets the post to which this comment is attached.
   def post
     @post ||= Post[post_id]
   end
@@ -134,6 +144,8 @@ class Comment < Sequel::Model
     self[:title] = title.strip unless title.nil?
   end
   
+  # Gets the time this comment was last updated. If _format_ is provided, the
+  # time will be returned as a formatted String. See Time.strftime for details.
   def updated_at(format = nil)
     if new?
       format ? Time.now.strftime(format) : Time.now

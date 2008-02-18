@@ -36,12 +36,12 @@ class TagsPostsMap < Sequel::Model(:tags_posts_map)
     unique([:post_id, :tag_id])
   end
   
-  # Gets the Post associated with this mapping.
+  # Gets the post associated with this mapping.
   def post
     Post[post_id]
   end
 
-  # Gets the Tag associated with this mapping.
+  # Gets the tag associated with this mapping.
   def tag
     Tag[tag_id]
   end

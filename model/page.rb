@@ -70,6 +70,8 @@ class Page < Sequel::Model
     self[:body_rendered] = RedCloth.new(wiki_to_html(body.dup.strip)).to_html
   end
   
+  # Gets the creation time of this page. If _format_ is provided, the time will
+  # be returned as a formatted String. See Time.strftime for details.
   def created_at(format = nil)
     if new?
       format ? Time.now.strftime(format) : Time.now
@@ -86,6 +88,8 @@ class Page < Sequel::Model
     self[:title] = title.strip unless title.nil?
   end
   
+  # Gets the time this page was last updated. If _format_ is provided, the time
+  # will be returned as a formatted String. See Time.strftime for details.
   def updated_at(format = nil)
     if new?
       format ? Time.now.strftime(format) : Time.now
@@ -94,7 +98,7 @@ class Page < Sequel::Model
     end
   end
 
-  # URL for this Page.
+  # URL for this page.
   def url
     Riposte::Config.site.url.chomp('/') + R(PageController, name)
   end

@@ -50,6 +50,8 @@ class Media < Sequel::Model(:media)
     self.updated_at = Time.now
   end
 
+  # Gets the creation time of this file. If _format_ is provided, the time will
+  # be returned as a formatted String. See Time.strftime for details.
   def created_at(format = nil)
     if new?
       format ? Time.now.strftime(format) : Time.now
@@ -62,11 +64,13 @@ class Media < Sequel::Model(:media)
     self[:filename] = filename.strip unless filename.nil?
   end
   
-  # Absolute path to this file.
+  # Gets the absolute path to this file.
   def path
     Riposte::Config.media/filename[0].chr.downcase/filename
   end
   
+  # Gets the time this file was last updated. If _format_ is provided, the time
+  # will be returned as a formatted String. See Time.strftime for details.
   def updated_at(format = nil)
     if new?
       format ? Time.now.strftime(format) : Time.now

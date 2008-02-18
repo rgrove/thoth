@@ -50,12 +50,8 @@ class Post < Sequel::Model
     length_of :name, :maximum => 64,
         :message => 'Please enter a name under 64 characters.'
     
-    # TODO: This should work according to the Sequel docs, but it doesn't.
-    #true_for :title, :logic => lambda { !Post[:title => title] },
-    #    :message => 'This title was already used for another post.'
-
     format_of :name, :with => /^[0-9a-z_-]+$/i,
-        :message => 'Page names may only contain letters, numbers, ' +
+        :message => 'Post names may only contain letters, numbers, ' +
                     'underscores, and dashes.'
   end
   
@@ -72,36 +68,44 @@ class Post < Sequel::Model
     self.updated_at = Time.now
   end
   
+  #--
+  # Dataset Methods
+  #++
+
   # Gets a paginated dataset of recent posts sorted in reverse order by creation
   # time.
   def dataset.recent(page = 1, limit = 10)
     reverse_order(:created_at).paginate(page, limit)
   end
   
-  # Gets the Post with the specified name, where +name+ can be either a name or
+  #--
+  # Class Methods
+  #++
+  
+  # Gets the Post with the specified name, where _name_ can be either a name or
   # an id.
   def self.get(name)
     return Post[name] if name.is_a?(Numeric)
-    
     name = name.to_s.strip.downcase
-    
-    if name =~ /^\d+$/
-      Post[name]
-    else
-      Post[:name => name]
-    end
+    name =~ /^\d+$/ ? Post[name] : Post[:name => name]
   end
+  
+  #--
+  # Instance Methods
+  #++
 
   def body=(body)
     self[:body]          = body.strip
     self[:body_rendered] = RedCloth.new(wiki_to_html(body.dup.strip)).to_html
   end
   
-  # Comments attached to this Post, ordered by creation time.
+  # Gets a dataset of comments attached to this post, ordered by creation time.
   def comments
     @comments ||= Comment.filter(:post_id => id).order(:created_at)
   end
   
+  # Gets the creation time of this post. If _format_ is provided, the time will
+  # be returned as a formatted String. See Time.strftime for details.
   def created_at(format = nil)
     if new?
       format ? Time.now.strftime(format) : Time.now
@@ -114,7 +118,7 @@ class Post < Sequel::Model
     self[:name] = name.strip unless name.nil?
   end
 
-  # Tags attached to this Post, ordered by name.
+  # Gets an Array of tags attached to this post, ordered by name.
   def tags
     if new?
       @fake_tags || []
@@ -195,6 +199,8 @@ class Post < Sequel::Model
     self[:title] = title
   end
   
+  # Gets the time this post was last updated. If _format_ is provided, the time
+  # will be returned as a formatted String. See Time.strftime for details.
   def updated_at(format = nil)
     if new?
       format ? Time.now.strftime(format) : Time.now
@@ -203,7 +209,7 @@ class Post < Sequel::Model
     end
   end
 
-  # URL for this Post.
+  # Gets the URL for this post.
   def url
     Riposte::Config.site.url.chomp('/') + R(PostController, name)
   end
