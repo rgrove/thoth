@@ -39,8 +39,6 @@ class Page < Sequel::Model
     text     :body_rendered, :null => false
     datetime :created_at,    :null => false
     datetime :updated_at,    :null => false
-    
-    unique :name
   end
   
   validates do

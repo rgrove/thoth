@@ -36,8 +36,6 @@ class Media < Sequel::Model(:media)
     varchar  :mimetype,   :null => false
     datetime :created_at, :null => false
     datetime :updated_at, :null => false
-    
-    unique :filename
   end
   
   before_create do

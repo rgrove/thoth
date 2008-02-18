@@ -32,7 +32,6 @@ class Tag < Sequel::Model
   set_schema do
     primary_key :id
     varchar :name, :null => false, :unique => true
-    unique :name
   end
   
   validates do
