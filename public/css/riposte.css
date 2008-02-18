@@ -7,15 +7,9 @@ version: 2.4.1
 */
 body {font:13px/1.231 arial,helvetica,clean,sans-serif;*font-size:small;*font:x-small;}table {font-size:inherit;font:100%;}pre,code,kbd,samp,tt{font-family:monospace;*font-size:108%;line-height:100%;}
 
-/* -- Icon Sprite Consumers ------------------------------------------------- */
-#toolbar .bl,
-#toolbar .br,
-.icon {
-  background: url(../images/riposte-sprite.png) no-repeat;
-}
-
 /* -- Icons ----------------------------------------------------------------- */
 .icon {
+  background: url(../images/riposte-sprite.png) no-repeat;
   display: -moz-inline-box;
   display: inline-block;
   vertical-align: middle;

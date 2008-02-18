@@ -1,3 +1,28 @@
+/* -- Icons ----------------------------------------------------------------- */
+.adminicon {
+  background: url(../images/admin-sprite.png) no-repeat;
+  display: -moz-inline-box;
+  display: inline-block;
+  height: 16px;
+  vertical-align: middle;
+  width: 16px;
+}
+
+.adminicon.comment-delete { background-position: -180px 0; }
+.adminicon.comment-list   { background-position: -196px 0; }
+.adminicon.logout         { background-position: -213px 0; }
+.adminicon.media-delete   { background-position: -147px 0; }
+.adminicon.media-list     { background-position: -164px 0; }
+.adminicon.media-new      { background-position: -130px 0; }
+.adminicon.page-delete    { background-position: -97px 0;  }
+.adminicon.page-edit      { background-position: -81px 0;  }
+.adminicon.page-list      { background-position: -113px 0; }
+.adminicon.page-new       { background-position: -65px 0;  }
+.adminicon.post-delete    { background-position: -32px 0;  }
+.adminicon.post-edit      { background-position: -16px 0;  }
+.adminicon.post-list      { background-position: -48px 0;  }
+.adminicon.post-new       {}
+
 /* -- Toolbar Login Form ---------------------------------------------------- */
 #adminToolbar form {
   float: right;
@@ -42,7 +67,7 @@
   border: 1px solid transparent;
   cursor: pointer;
   display: block;
-  padding: 3px 3px 0 3px;
+  padding: 3px;
 }
 
 .toolbar a:hover {

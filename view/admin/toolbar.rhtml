@@ -4,7 +4,7 @@
       <li>
         <a href="<%= R(PostController, :new) %>"
             title="Create a new blog post">
-          <img src="/images/toolbar/post_new.png" alt="New Post" />
+          <span class="adminicon post-new"></span>
         </a>
       </li>
 
@@ -12,14 +12,14 @@
         <li>
           <a href="<%= R(PostController, :edit, @post.id) %>"
               title="Edit this blog post">
-            <img src="/images/toolbar/post_edit.png" alt="Edit Post" />
+            <span class="adminicon post-edit"></span>
           </a>
         </li>
         
         <li>
           <a href="<%= R(PostController, :delete, @post.id) %>"
               title="Delete this blog post">
-            <img src="/images/toolbar/post_delete.png" alt="Delete Post" />
+            <span class="adminicon post-delete"></span>
           </a>
         </li>
       <% end %>
@@ -27,7 +27,7 @@
       <li>
         <a href="<%= R(PageController, :new) %>"
             title="Create a new page">
-          <img src="/images/toolbar/page_new.png" alt="New Page" />
+          <span class="adminicon page-new"></span>
         </a>
       </li>
 
@@ -35,21 +35,21 @@
         <li>
           <a href="<%= R(PageController, :edit, @page.id) %>"
               title="Edit this page">
-            <img src="/images/toolbar/page_edit.png" alt="Edit Page" />
+            <span class="adminicon page-edit"></span>
           </a>
         </li>
         
         <li>
           <a href="<%= R(PageController, :delete, @page.id) %>"
               title="Delete this page">
-            <img src="/images/toolbar/page_delete.png" alt="Delete Page" />
+            <span class="adminicon page-delete"></span>
           </a>
         </li>
       <% end %>
       
       <li>
         <a href="<%= R(MediaController, :new) %>" title="Upload media">
-          <img src="/images/toolbar/media_new.png" alt="Upload Media" />
+          <span class="adminicon media-new"></span>
         </a>
       </li>
       
@@ -57,7 +57,7 @@
         <li>
           <a href="<%= R(MediaController, :delete, @file.id) %>"
               title="Delete this file">
-            <img src="/images/toolbar/media_delete.png" alt="Delete Media" />
+            <span class="adminicon media-delete"></span>
           </a>
         </li>
       <% end %>
@@ -66,25 +66,25 @@
     <ul class="tools">
       <li>
         <a href="<%= R(PostController, :list) %>" title="List all blog posts">
-          <img src="/images/toolbar/posts.png" alt="List All Posts" />
+          <span class="adminicon post-list"></span>
         </a>
       </li>
       
       <li>
         <a href="<%= R(PageController, :list) %>" title="List all pages">
-          <img src="/images/toolbar/pages.png" alt="List All Pages" />
+          <span class="adminicon page-list"></span>
         </a>
       </li>
       
       <li>
         <a href="<%= R(CommentController, :list) %>" title="List all comments">
-          <img src="/images/toolbar/comments.png" alt="List All Comments" />
+          <span class="adminicon comment-list"></span>
         </a>
       </li>
       
       <li>
         <a href="<%= R(MediaController, :list) %>" title="List all media">
-          <img src="/images/toolbar/media.png" alt="List All Media" />
+          <span class="adminicon media-list"></span>
         </a>
       </li>
     </ul>
@@ -92,7 +92,7 @@
     <ul class="tools">
       <li>
         <a href="<%= R(AdminController, :logout) %>" title="Log out">
-          <img src="/images/toolbar/logout.png" alt="Log Out" />
+          <span class="adminicon logout"></span>
         </a>
       </li>
     </ul>
