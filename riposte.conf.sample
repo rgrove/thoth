@@ -124,6 +124,15 @@ Configuration.for("riposte_production") {
     # error_log "#{Ramaze::APPDIR}/error.log"
 
   }
+  
+  # Plugins that should be loaded when Riposte starts. Usually it's not
+  # necessary to load a plugin until the first time it's used, but some plugins
+  # alter core functionality and thus must be loaded at start time.
+  #
+  # Example:
+  #   plugins ['foo', 'bar', 'baz']
+  #
+  # plugins []
 
 }
 

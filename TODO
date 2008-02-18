@@ -1,5 +1,4 @@
 * Figure out how to allow plugins to specify default configs.
-* Add config setting to specify plugins that should be autoloaded.
 * Bacon!
 * Display an error when a comment's body is all caps.
 * Make admin toolbar visibility persistent during a session

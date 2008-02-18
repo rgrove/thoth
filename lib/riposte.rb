@@ -79,7 +79,7 @@ module Riposte
       error::HANDLE_ERROR[Ramaze::Error::NoAction]     = 
       error::HANDLE_ERROR[Ramaze::Error::NoController] = [404, 'error_404']
 
-      case Riposte::Config.mode
+      case Config.mode
       when :devel
         Ramaze::Global.benchmarking = true
 
@@ -100,7 +100,11 @@ module Riposte
       else
         raise "Invalid mode: #{Config.mode}"
       end
-
+      
+      # Load startup plugins.
+      Config.plugins.each {|plugin| Plugin.load(plugin) }
+      
+      # Fire up Ramaze.
       Ramaze.start :adapter => :evented_mongrel, :host  => IP, :port  => PORT,
           :force => true
     end

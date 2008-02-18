@@ -66,6 +66,8 @@ module Riposte; module Config
           enable_cache true
           error_log    Ramaze::APPDIR/"error.log"
         }
+        
+        plugins []
       }
     end
     

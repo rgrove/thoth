@@ -38,7 +38,6 @@
 #                          [--devel] [--ip <address>] [--log-sql <file>]
 #                          [--port <number>]
 
-require 'fileutils'
 require 'optparse'
 
 require 'rubygems'

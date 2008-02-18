@@ -30,21 +30,28 @@ module Riposte
 
   # Namespace for Riposte plugins. See
   # http://code.google.com/p/riposte/wiki/CreatingPlugins for more info on
-  # creating plugins.
+  # creating and using plugins.
   module Plugin
-
     def self.const_missing(name)
-      filename = "riposte_#{name.to_s.downcase}"
-      
-      files = Dir["{#{DIR/:plugin},#{$:.join(',')}}/#{filename}.{bundle,rb,so}"]
-      
-      # First try to load a local copy of the plugin, then try the gem.
-      unless (files.any? && require(files.first)) || require(filename)
-        raise LoadError, "Riposte::Plugin::#{name} not found"        
-      end
-      
+      self.load(name)
       self.const_get(name)
     end
-    
+
+    # Attempts to load the specified plugin, first from Riposte's
+    # <tt>/plugin</tt> directory, then as a gem.
+    def self.load(name)
+      plugin = "riposte_#{name.to_s.downcase.gsub(/^riposte_/, '')}"
+      files  = Dir["{#{DIR/:plugin},#{$:.join(',')}}/#{plugin}.{bundle,rb,so}"]
+
+      # First try to load a local copy of the plugin, then try the gem.
+      unless (files.any? && require(files.first)) || require(plugin)
+        raise LoadError, "Riposte::Plugin::#{name} not found"
+      end
+      
+      Ramaze::Inform.info "Loaded plugin: #{plugin}"
+      
+      true
+    end
   end
+
 end
