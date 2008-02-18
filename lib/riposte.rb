@@ -67,36 +67,38 @@ module Riposte
       end
 
       # Load controllers and models.
-      acquire "#{Ramaze::APPDIR}/controller/*"
-      acquire "#{Ramaze::APPDIR}/model/*"
+      acquire "#{DIR}/controller/*"
+      acquire "#{DIR}/model/*"
       
       # Set up routes.
       Ramaze::Route[/\/comments\/?/] = '/comment'
 
       # Set up error handlers.
-      Ramaze::Dispatcher::Error::HANDLE_ERROR[Ramaze::Error::NoAction] = 
-      Ramaze::Dispatcher::Error::HANDLE_ERROR[Ramaze::Error::NoController] = [404, 'error_404']
+      error = Ramaze::Dispatcher::Error
+      
+      error::HANDLE_ERROR[Ramaze::Error::NoAction]     = 
+      error::HANDLE_ERROR[Ramaze::Error::NoController] = [404, 'error_404']
 
       case Riposte::Config.mode
-        when :devel
-          Ramaze::Global.benchmarking = true
+      when :devel
+        Ramaze::Global.benchmarking = true
 
-        when :production
-          Ramaze::Global.sourcereload = false
-        
-          if Config.server.error_log.empty?
-            Ramaze::Inform.loggers = []
-          else
-            Ramaze::Inform.loggers = [
-              Ramaze::Informer.new(Config.server.error_log, [:error])
-            ]
-          end
-
-          Ramaze::Dispatcher::Error::HANDLE_ERROR[ArgumentError] = [404, 'error_404']
-          Ramaze::Dispatcher::Error::HANDLE_ERROR[Exception]     = [500, 'error_500']
+      when :production
+        Ramaze::Global.sourcereload = false
       
+        if Config.server.error_log.empty?
+          Ramaze::Inform.loggers = []
         else
-          raise "Invalid mode: #{Riposte::Config.mode}"
+          Ramaze::Inform.loggers = [
+            Ramaze::Informer.new(Config.server.error_log, [:error])
+          ]
+        end
+
+        error::HANDLE_ERROR[ArgumentError] = [404, 'error_404']
+        error::HANDLE_ERROR[Exception]     = [500, 'error_500']
+    
+      else
+        raise "Invalid mode: #{Config.mode}"
       end
 
       Ramaze.start :adapter => :evented_mongrel, :host  => IP, :port  => PORT,
@@ -122,7 +124,7 @@ module Riposte
         File.open(PID_FILE, 'w') {|file| file << Process.pid }
     
         # Set working directory.
-        Dir.chdir(Ramaze::APPDIR)
+        Dir.chdir(DIR)
     
         # Reset umask.
         File.umask(0000)
