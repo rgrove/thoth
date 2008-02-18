@@ -177,7 +177,7 @@ end
 
 desc "install Riposte"
 task :install => :gem do
-  sh "sudo gem install pkg/riposte-#{Riposte::APP_VERSION}.gem"
+  sh "gem install pkg/riposte-#{Riposte::APP_VERSION}.gem"
 end
 
 desc "create plugin gems"
