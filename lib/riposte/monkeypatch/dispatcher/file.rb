@@ -29,8 +29,7 @@
 module Ramaze
   module Dispatcher
     
-    # Monkeypatch to add support for multiple public_roots in
-    # Ramaze::Dispatcher::File.
+    # Monkeypatch to add support for multiple public_roots.
     class File
       
       class << self

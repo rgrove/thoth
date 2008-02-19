@@ -43,7 +43,8 @@ require 'configuration'
 require 'riposte/config'
 require 'riposte/version'
 require 'riposte/plugin'
-require 'riposte/dispatcher/file'
+require 'riposte/monkeypatch/controller/resolve'
+require 'riposte/monkeypatch/dispatcher/file'
 
 module Riposte
   
@@ -58,7 +59,6 @@ module Riposte
 
     # Run Riposte.
     def run
-      # Set up the database connection.
       @db = Sequel.open(Config.db)
 
       if LOG_SQL
@@ -66,16 +66,12 @@ module Riposte
         @db.logger = Logger.new(LOG_SQL)
       end
 
-      # Load controllers and models.
       acquire "#{DIR}/controller/*"
       acquire "#{DIR}/model/*"
       
-      # Set up routes.
       Ramaze::Route[/\/comments\/?/] = '/comment'
 
-      # Set up error handlers.
       error = Ramaze::Dispatcher::Error
-      
       error::HANDLE_ERROR[Ramaze::Error::NoAction]     = 
       error::HANDLE_ERROR[Ramaze::Error::NoController] = [404, 'error_404']
 
@@ -101,10 +97,8 @@ module Riposte
         raise "Invalid mode: #{Config.mode}"
       end
       
-      # Load startup plugins.
       Config.plugins.each {|plugin| Plugin.load(plugin) }
       
-      # Fire up Ramaze.
       Ramaze.start :adapter => :evented_mongrel, :host  => IP, :port  => PORT,
           :force => true
     end
