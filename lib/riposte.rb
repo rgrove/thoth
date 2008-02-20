@@ -43,7 +43,6 @@ require 'configuration'
 require 'riposte/config'
 require 'riposte/version'
 require 'riposte/plugin'
-require 'riposte/monkeypatch/controller/resolve'
 require 'riposte/monkeypatch/dispatcher/file'
 
 module Riposte
@@ -74,6 +73,8 @@ module Riposte
       error = Ramaze::Dispatcher::Error
       error::HANDLE_ERROR[Ramaze::Error::NoAction]     = 
       error::HANDLE_ERROR[Ramaze::Error::NoController] = [404, 'error_404']
+
+      Ramaze::Global.actionless_templates = false
 
       case Config.mode
       when :devel
