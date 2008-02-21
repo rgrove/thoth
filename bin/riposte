@@ -37,7 +37,8 @@ module Riposte
     OptionParser.new {|o|
       o.summary_indent = '  '
       o.summary_width  = 24
-      o.banner         = 'Usage: riposte [options] [home dir]'
+      o.banner         = "Usage: riposte [options] [home dir]\n" +
+                         "       riposte [info]"
   
       o.separator ''
       o.separator 'Options:'
@@ -53,19 +54,9 @@ module Riposte
         trait[:daemon] = cmd
       end
   
-      o.on('--devel',
-          'Run Riposte in development mode.') do
-        trait[:mode] = :devel
-      end
-      
       o.on('-i', '--ip [address]',
           'Listen for connections on the specified IP address.') do |address|
         trait[:ip] = address
-      end
-  
-      o.on('--log-sql [filename]',
-          'Log all SQL queries to the specified file.') do |filename|
-        trait[:sql_log] = File.expand_path(filename)
       end
   
       o.on('-p', '--port [number]',
@@ -73,9 +64,31 @@ module Riposte
         trait[:port] = port.to_i
       end
   
+      o.on('--devel',
+          'Run Riposte in development mode.') do
+        trait[:mode] = :devel
+      end
+
+      o.on('--log-sql [filename]',
+          'Log all SQL queries to the specified file.') do |filename|
+        trait[:sql_log] = File.expand_path(filename)
+      end
+      
+      o.separator ''
+      o.separator 'Info:'
+
       o.on_tail('-h', '--help',
           'Display usage information (this message).') do
+        require 'riposte'
+        
+        puts "#{APP_NAME} v#{APP_VERSION} <#{APP_URL}>"
+        puts "#{APP_COPYRIGHT}"
+        puts
         puts o
+        puts
+        puts 'Default Directories:'
+        puts "  public: #{PUBLIC_DIR}"
+        puts "    view: #{VIEW_DIR}"
         exit
       end
   
