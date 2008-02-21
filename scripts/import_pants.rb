@@ -50,7 +50,7 @@ module Riposte
   DIR = File.expand_path(File.join(File.dirname(__FILE__), '..'))
 end
 
-Riposte::Config.load(File.join(Riposte::DIR, 'riposte.conf'))
+Riposte::Config.load(File.join(Riposte::HOME_DIR, 'riposte.conf'))
 
 # Check that we got a MySQL connection string arg.
 if ARGV.empty? || !(ARGV[0] =~ /^mysql:\/\//i)
@@ -66,8 +66,8 @@ DB    = Sequel.open(ARGV[1])
 MYSQL = Sequel.open(ARGV[0])
 
 # Load models and controllers.
-acquire "#{Riposte::DIR}/controller/*"
-acquire "#{Riposte::DIR}/model/*"
+acquire "#{Riposte::HOME_DIR}/controller/*"
+acquire "#{Riposte::HOME_DIR}/model/*"
 
 # Disable model hooks.
 class Comment

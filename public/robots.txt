@@ -1,5 +1,0 @@
-# robots.txt file for Riposte
-
-User-agent: *
-Disallow: /comment/new
-Disallow: /search
