@@ -83,6 +83,11 @@ module Riposte
 
     # Opens a Sequel database connection to the Riposte database.
     def open_db
+      if Config.db =~ /^sqlite:\/{3}(.+)$/
+        dir = File.dirname($1)
+        FileUtils.mkdir_p(dir) unless File.directory?(dir) 
+      end
+      
       @db = Sequel.open(Config.db)
 
       if trait[:sql_log]
