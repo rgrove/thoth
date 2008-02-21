@@ -28,7 +28,7 @@
 
 module Riposte
   APP_NAME      = 'Riposte'
-  APP_VERSION   = '0.0.1'
+  APP_VERSION   = '0.1.0'
   APP_AUTHOR    = 'Ryan Grove'
   APP_EMAIL     = 'ryan@wonko.com'
   APP_URL       = 'http://riposteblog.org/'

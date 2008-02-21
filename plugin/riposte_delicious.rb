@@ -37,11 +37,26 @@ module Riposte; module Plugin
   module Delicious
     FEED_URL = 'http://feeds.delicious.com/feeds/json'
     
+    Configuration.for("riposte_#{Riposte.trait[:mode]}") do
+      delicious {
+
+        # Time in seconds to cache results. It's a good idea to keep this nice
+        # and high both to improve the performance of your site and to avoid
+        # pounding on del.icio.us's servers. Default is 900 seconds (15
+        # minutes).
+        cache_ttl 900 unless Send('respond_to?', :cache_ttl)
+        
+        # Request timeout in seconds.
+        request_timeout 5 unless Send('respond_to?', :request_timeout)
+
+      }
+    end
+    
     class << self
       
       # Gets recent del.icio.us bookmarks for the specified _username_. The
-      # return value of this method is cached for 15 minutes to improve
-      # performance and to avoid pounding del.icio.us with excess traffic.
+      # return value of this method is cached to improve performance and to
+      # avoid pounding del.icio.us with excess traffic.
       #
       # Available options:
       # [<tt>:count</tt>] Number of bookmarks to return (default is 5)
@@ -62,7 +77,7 @@ module Riposte; module Plugin
         
         r = []
 
-        Timeout.timeout(5, StandardError) do
+        Timeout.timeout(Config.delicious.request_timeout, StandardError) do
           r = JSON.parse(open(request).read)
         end
         
@@ -79,7 +94,7 @@ module Riposte; module Plugin
         end
 
         @cache[request] = {
-          :expires => Time.now + 900, # expire in 15 minutes
+          :expires => Time.now + Config.delicious.cache_ttl,
           :value   => data
         }
         

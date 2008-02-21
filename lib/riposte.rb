@@ -27,7 +27,7 @@
 #++
 
 # Append this file's directory to the include path if it's not there already.
-$:.unshift(File.dirname(__FILE__))
+$:.unshift(File.dirname(File.expand_path(__FILE__)))
 $:.uniq!
 
 require 'fileutils'
@@ -40,43 +40,82 @@ require 'sequel'
 require 'time'
 require 'configuration'
 
+# The main Riposte namespace.
+module Riposte
+  HOME_DIR   = ENV['RIPOSTE_HOME'] || File.expand_path('.') unless const_defined?(:HOME_DIR)
+  LIB_DIR    = File.dirname(File.expand_path(__FILE__))/:riposte
+  PUBLIC_DIR = LIB_DIR/:public unless const_defined?(:PUBLIC_DIR)
+  VIEW_DIR   = LIB_DIR/:view unless const_defined?(:VIEW_DIR)
+end
+
+Ramaze::APPDIR.replace(Riposte::LIB_DIR)
+
 require 'riposte/config'
 require 'riposte/version'
 require 'riposte/plugin'
 require 'riposte/monkeypatch/dispatcher/file'
 
 module Riposte
+  # Path to the config file.
+  trait[:config_file] ||= ENV['RIPOSTE_CONF'] || HOME_DIR/'riposte.conf'
   
+  # Daemon command to execute (:start, :stop, :restart) or nil.
+  trait[:daemon] ||= nil
+  
+  # IP address this Riposte instance should attach to.
+  trait[:ip] ||= nil
+  
+  # What mode we're running in (either :devel or :production).
+  trait[:mode] ||= :production
+
+  # Port number this Riposte instance should attach to.
+  trait[:port] ||= nil
+  
+  # Path to the daemon process id file.
+  trait[:pidfile] ||= HOME_DIR/"riposte_#{trait[:ip]}_#{trait[:port]}.pid"
+  
+  # Filename to which all SQL commands should be logged, or nil to disable
+  # SQL logging.
+  trait[:sql_log] ||= nil
+
   class << self
     attr_reader :db
 
-    # Restart the running Riposte daemon (if any).
+    # Opens a Sequel database connection to the Riposte database.
+    def open_db
+      @db = Sequel.open(Config.db)
+
+      if trait[:sql_log]
+        require 'logger'
+        @db.logger = Logger.new(trait[:sql_log])
+      end
+    end
+    
+    # Restarts the running Riposte daemon (if any).
     def restart
       stop
       start
     end
 
-    # Run Riposte.
+    # Runs Riposte.
     def run
-      @db = Sequel.open(Config.db)
+      open_db
 
-      if LOG_SQL
-        require 'logger'
-        @db.logger = Logger.new(LOG_SQL)
-      end
-
-      acquire "#{DIR}/controller/*"
-      acquire "#{DIR}/model/*"
+      acquire LIB_DIR/:helper/'*'
+      acquire LIB_DIR/:controller/'*'
+      acquire LIB_DIR/:model/'*'
       
-      Ramaze::Route[/\/comments\/?/] = '/comment'
-
       error = Ramaze::Dispatcher::Error
       error::HANDLE_ERROR[Ramaze::Error::NoAction]     = 
       error::HANDLE_ERROR[Ramaze::Error::NoController] = [404, 'error_404']
 
       Ramaze::Global.actionless_templates = false
+      Ramaze::Global.public_root          = PUBLIC_DIR
+      Ramaze::Global.template_root        = VIEW_DIR
 
-      case Config.mode
+      Ramaze::Route[/\/comments\/?/] = '/comment'
+
+      case trait[:mode]
       when :devel
         Ramaze::Global.benchmarking = true
 
@@ -95,20 +134,22 @@ module Riposte
         error::HANDLE_ERROR[Exception]     = [500, 'error_500']
     
       else
-        raise "Invalid mode: #{Config.mode}"
+        raise "Invalid mode: #{trait[:mode]}"
       end
       
       Config.plugins.each {|plugin| Plugin.load(plugin) }
       
-      Ramaze.start :adapter => :evented_mongrel, :host  => IP, :port  => PORT,
-          :force => true
+      Ramaze.startup :adapter => :evented_mongrel,
+          :force  => true,
+          :host   => trait[:ip],
+          :port   => trait[:port]
     end
 
-    # Start Riposte as a daemon.
+    # Starts Riposte as a daemon.
     def start
       # Check the pid file to see if Riposte is already running.
-      if File.file?(PID_FILE)
-        pid = File.read(PID_FILE, 20).strip
+      if File.file?(trait[:pidfile])
+        pid = File.read(trait[:pidfile], 20).strip
         abort("riposte already running? (pid=#{pid})")
       end
   
@@ -120,10 +161,10 @@ module Riposte
         exit if fork
     
         # Write PID file.
-        File.open(PID_FILE, 'w') {|file| file << Process.pid }
+        File.open(trait[:pidfile], 'w') {|file| file << Process.pid }
     
         # Set working directory.
-        Dir.chdir(DIR)
+        Dir.chdir(HOME_DIR)
     
         # Reset umask.
         File.umask(0000)
@@ -138,16 +179,16 @@ module Riposte
       end
     end
 
-    # Stop the running Riposte daemon (if any).
+    # Stops the running Riposte daemon (if any).
     def stop
-      unless File.file?(PID_FILE)
-        abort("riposte not running? (check #{PID_FILE}).")
+      unless File.file?(trait[:pidfile])
+        abort("riposte not running? (check #{trait[:pidfile]}).")
       end
   
       puts "Stopping riposte."
   
-      pid = File.read(PID_FILE, 20).strip
-      FileUtils.rm(PID_FILE)
+      pid = File.read(trait[:pidfile], 20).strip
+      FileUtils.rm(trait[:pidfile])
   
       pid && Process.kill('TERM', pid.to_i)
     end

@@ -8,7 +8,7 @@
 # Settings for production mode. You only need to uncomment the settings you want
 # to change.
 Configuration.for("riposte_production") {
-
+  
   # Connection URI for the production database. Currently SQLite3 and MySQL are
   # supported. PostgreSQL may work, but hasn't been tested.
   #
@@ -18,7 +18,7 @@ Configuration.for("riposte_production") {
   # Sample MySQL connection string:
   #   mysql://user:pass@hostname/database
   #
-  # db "sqlite:///#{Ramaze::APPDIR}/db/production.db"
+  # db "sqlite:///#{Riposte::HOME_DIR}/db/production.db"
 
   site {
 
@@ -72,13 +72,13 @@ Configuration.for("riposte_production") {
     # create your own customized Riposte theme. Any files in this directory will
     # override the corresponding default files.
     #
-    # public "#{Ramaze::APPDIR}/custom/public"
+    # public "#{Riposte::HOME_DIR}/custom/public"
   
     # Absolute path to a directory containing customized view templates. Any
     # templates in this directory will override the corresponding default
     # templates.
     #
-    # view "#{Ramaze::APPDIR}/custom/view"
+    # view "#{Riposte::HOME_DIR}/custom/view"
     
   }
   
@@ -86,7 +86,7 @@ Configuration.for("riposte_production") {
   # etc.) for your blog posts and pages should be stored. This directory needs
   # to be readable and writeable by the user running the Riposte server.
   #
-  # media "#{Ramaze::APPDIR}/custom/media"
+  # media "#{Riposte::HOME_DIR}/custom/media"
 
   timestamp {
 
@@ -121,7 +121,7 @@ Configuration.for("riposte_production") {
     # Filename to which errors should be logged when running in production mode,
     # or blank if you don't care about errors.
     #
-    # error_log "#{Ramaze::APPDIR}/error.log"
+    # error_log "#{Riposte::HOME_DIR}/error.log"
 
   }
   
@@ -149,6 +149,6 @@ Configuration.for("riposte_devel") {
   # Sample MySQL connection string:
   #   mysql://user:pass@hostname/database
   #
-  # db "sqlite:///#{Ramaze::APPDIR}/db/devel.db"
+  # db "sqlite:///#{Riposte::HOME_DIR}/db/devel.db"
 
 }

@@ -52,26 +52,27 @@ riposte_gemspec = Gem::Specification.new do |s|
   s.email    = Riposte::APP_EMAIL
   s.homepage = Riposte::APP_URL
   s.platform = Gem::Platform::RUBY
-  s.summary  = 'Meta-gem to install dependencies and core libs for the ' +
-               'Riposte blog engine.'
+  s.summary  = 'A fast and simple blog engine based on Ramaze and Sequel.'
 
-  s.files        = FileList['lib/**/*'].to_a + ['LICENSE']
+  s.files        = FileList['{bin,lib}/**/*', 'LICENSE'].to_a
+  s.executables  = ['riposte']
   s.require_path = 'lib'
   s.has_rdoc     = true
 
-  s.required_ruby_version = '>=1.8.6'
+  s.required_ruby_version = '>= 1.8.6'
 
-  s.add_dependency('builder',       '>=2.1.2')
-  s.add_dependency('configuration', '>=0.0.3')
-  s.add_dependency('erubis',        '>=2.5.0')
-  s.add_dependency('hpricot',       '>=0.6')
-  s.add_dependency('json_pure',     '>=1.1.2')
-  s.add_dependency('mongrel',       '>=1.0.1')
-  s.add_dependency('ramaze',        '>=0.3.6')
-  s.add_dependency('RedCloth',      '>=3.0.4')
-  s.add_dependency('sequel',        '>=1.1')
-  s.add_dependency('sequel_core',   '>=1.0.10')
-  s.add_dependency('swiftiply',     '>=0.6.1.1')
+  s.add_dependency('builder',       '~> 2.1.2')
+  s.add_dependency('configuration', '~> 0.0.5')
+  s.add_dependency('erubis',        '~> 2.5.0')
+  s.add_dependency('hpricot',       '~> 0.6')
+  s.add_dependency('json_pure',     '~> 1.1.2')
+  s.add_dependency('mongrel',       '~> 1.0.1')
+  s.add_dependency('ramaze',        '~> 0.3.6')
+  s.add_dependency('RedCloth',      '~> 3.0.4')
+  s.add_dependency('sequel',        '~> 1.1')
+  s.add_dependency('sequel_core',   '~> 1.2')
+  s.add_dependency('sequel_model',  '~> 0.4.1')
+  s.add_dependency('swiftiply',     '~> 0.6.1.1')
 end
 
 plugins = []
@@ -92,8 +93,8 @@ plugins << Gem::Specification.new do |s|
   s.require_path = 'plugin'
   s.has_rdoc     = true
   
-  s.add_dependency('json_pure', '>=1.1.2')
-  s.add_dependency('riposte',   ">=#{Riposte::APP_VERSION}")
+  s.add_dependency('json_pure', '~> 1.1.2')
+  s.add_dependency('riposte',   "~> #{Riposte::APP_VERSION}")
 end
 
 # Flickr plugin
@@ -112,8 +113,8 @@ plugins << Gem::Specification.new do |s|
   s.require_path = 'plugin'
   s.has_rdoc     = true
   
-  s.add_dependency('net-flickr', '>=0.0.1')
-  s.add_dependency('riposte',    ">=#{Riposte::APP_VERSION}")
+  s.add_dependency('net-flickr', '= 0.0.1')
+  s.add_dependency('riposte',    "~> #{Riposte::APP_VERSION}")
 end
 
 Rake::GemPackageTask.new(riposte_gemspec) do |p|
@@ -142,37 +143,6 @@ Rake::RDocTask.new(:rdoc_flickr) do |rd|
   rd.rdoc_dir = 'doc/flickr'
   
   rd.rdoc_files.include('plugin/riposte_flickr.rb')
-end
-
-desc "create tarball"
-task :package => :gem do
-  pkgname = "riposte-#{Riposte::APP_VERSION}"
-  pkgdir  = "pkg/#{pkgname}"
-  
-  sh "rm -rf #{pkgdir}"
-  sh "mkdir -p #{pkgdir}/db"
-  sh "mkdir #{pkgdir}/plugin"
-  sh "cp -r {controller,helper,model,public,scripts,view,LICENSE,riposte.conf.sample,riposte-server.rb} #{pkgdir}"
-
-  Find.find(pkgdir) do |path|
-    name = File.basename(path)
-    
-    if File.directory?(path)
-      if name == '.svn' 
-        FileUtils.rm_rf(path)    
-      end      
-    else
-      if name == '.DS_Store'
-        FileUtils.rm_f(path)
-      end
-    end
-  end
-  
-  Dir.chdir('pkg') do |pwd|
-    sh "tar -zcvf #{pkgname}.tar.gz #{pkgname}"
-  end
-  
-  sh "rm -rf #{pkgdir}"
 end
 
 desc "install Riposte"

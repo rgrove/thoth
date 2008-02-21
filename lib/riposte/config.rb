@@ -26,61 +26,64 @@
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #++
 
-module Riposte; module Config
-  class << self
-    attr_reader :mode
-    
-    ['devel', 'production'].each do |env|
-      Configuration.for("riposte_#{env}") {
-        db "sqlite:///#{Ramaze::APPDIR}/db/#{env}.db"
-  
-        site {
-          name "Riposte"
-          desc "Simple, elegant, awesome."
-          url  "http://localhost:7000/"
-        }
+module Riposte
+  module Config
 
-        admin {
-          name  "John Doe"
-          email ""
-          user  "riposte"
-          pass  "riposte"
-          seed  "43c55@051a19a/4f88a3ff+355cd1418"
-        }
-    
-        theme {
-          public Ramaze::APPDIR/:custom/:public
-          view   Ramaze::APPDIR/:custom/:view
-        }
-        
-        media Ramaze::APPDIR/:custom/:media
+    class << self
+      [:devel, :production].each do |env|
+        Configuration.for("riposte_#{env.to_s}") {
+          db "sqlite:///#{Riposte::HOME_DIR}/db/#{env.to_s}.db"
   
-        timestamp {
-          long  "%A %B %d, %Y @ %I:%M %p (%Z)"
-          short "%Y-%m-%d %I:%M"
-        }
-    
-        server {
-          address      "0.0.0.0"
-          port         7000
-          enable_cache true
-          error_log    Ramaze::APPDIR/"error.log"
-        }
-        
-        plugins []
-      }
-    end
-    
-    def load(file, mode = :production)
-      Kernel.load(file)
+          site {
+            name "Riposte"
+            desc "Simple, elegant, awesome."
+            url  "http://localhost:7000/"
+          }
 
-      @mode = mode
-      @conf = Configuration.for("riposte_#{@mode.to_s}")
-    end
+          admin {
+            name  "John Doe"
+            email ""
+            user  "riposte"
+            pass  "riposte"
+            seed  "43c55@051a19a/4f88a3ff+355cd1418"
+          }
     
-    def method_missing(name)
-      @conf.__send__(name)
-    end
+          theme {
+            public Riposte::HOME_DIR/:custom/:public
+            view   Riposte::HOME_DIR/:custom/:view
+          }
+        
+          media Riposte::HOME_DIR/:custom/:media
   
+          timestamp {
+            long  "%A %B %d, %Y @ %I:%M %p (%Z)"
+            short "%Y-%m-%d %I:%M"
+          }
+    
+          server {
+            address      "0.0.0.0"
+            port         7000
+            enable_cache true
+            error_log    Riposte::HOME_DIR/"error.log"
+          }
+        
+          plugins []
+        }
+      end
+    
+      def load(file)
+        begin
+          Kernel.load(file)
+        rescue LoadError => e
+        end
+
+        @conf = Configuration.for("riposte_#{Riposte.trait[:mode].to_s}")
+      end
+    
+      def method_missing(name)
+        @conf.__send__(name)
+      end
+    end
+
   end
-end; end
+end

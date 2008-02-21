@@ -33,15 +33,29 @@ module Riposte; module Plugin
 
   # Flickr plugin for Riposte.
   module Flickr
-    # Flickr API key. You can either use the default or replace this with your
-    # own key.
-    API_KEY = '5b1d9919cb2d97585bd3d83e05af80b8'
+    
+    Configuration.for("riposte_#{Riposte.trait[:mode]}") do
+      flickr {
+
+        # Flickr API key. You can either use the default or replace this with
+        # your own key.
+        api_key '5b1d9919cb2d97585bd3d83e05af80b8' unless Send('respond_to?', :api_key)
+        
+        # Time in seconds to cache results. It's a good idea to keep this nice
+        # and high both to improve the performance of your site and to avoid
+        # pounding on Flickr's servers. Default is 900 seconds (15 minutes).
+        cache_ttl 900 unless Send('respond_to?', :cache_ttl)
+        
+        # Request timeout in seconds.
+        request_timeout 5 unless Send('respond_to?', :request_timeout)
+
+      }
+    end
     
     class << self
-
       # Gets recent Flickr photos (up to _limit_) for the specified _username_.
-      # The return value of this method is cached for 15 minutes to improve
-      # performance and to avoid abusing the Flickr API.
+      # The return value of this method is cached to improve performance and to
+      # avoid abusing the Flickr API.
       def recent_photos(username, limit = 4)
         @cache ||= {}
 
@@ -51,12 +65,12 @@ module Riposte; module Plugin
           return cached[:value] if cached[:expires] > Time.now
         end
 
-        @flickr ||= Net::Flickr.new(API_KEY)
+        @flickr ||= Net::Flickr.new(Config.flickr.api_key)
         
         begin
-          Timeout.timeout(5, StandardError) do
+          Timeout.timeout(Config.flickr.request_timeout.to_i, StandardError) do
             @cache[key] = {
-              :expires => Time.now + 900, # expire in 15 minutes
+              :expires => Time.now + Config.flickr.cache_ttl.to_i,
               :value   => @flickr.people.find_by_username(username).
                   photos(:per_page => limit)
             }
