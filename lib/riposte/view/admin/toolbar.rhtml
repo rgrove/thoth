@@ -1,0 +1,115 @@
+<div id="adminToolbar" class="toolbar robots-nocontent<%= check_auth ? '' : ' hidden' %>">
+  <% if check_auth %>
+    <ul class="edit">
+      <li>
+        <a href="<%= R(PostController, :new) %>"
+            title="Create a new blog post">
+          <span class="adminicon post-new"></span>
+        </a>
+      </li>
+
+      <% if @post && !@post.new? %>
+        <li>
+          <a href="<%= R(PostController, :edit, @post.id) %>"
+              title="Edit this blog post">
+            <span class="adminicon post-edit"></span>
+          </a>
+        </li>
+        
+        <li>
+          <a href="<%= R(PostController, :delete, @post.id) %>"
+              title="Delete this blog post">
+            <span class="adminicon post-delete"></span>
+          </a>
+        </li>
+      <% end %>
+      
+      <li>
+        <a href="<%= R(PageController, :new) %>"
+            title="Create a new page">
+          <span class="adminicon page-new"></span>
+        </a>
+      </li>
+
+      <% if @page && !@page.new? %>
+        <li>
+          <a href="<%= R(PageController, :edit, @page.id) %>"
+              title="Edit this page">
+            <span class="adminicon page-edit"></span>
+          </a>
+        </li>
+        
+        <li>
+          <a href="<%= R(PageController, :delete, @page.id) %>"
+              title="Delete this page">
+            <span class="adminicon page-delete"></span>
+          </a>
+        </li>
+      <% end %>
+      
+      <li>
+        <a href="<%= R(MediaController, :new) %>" title="Upload media">
+          <span class="adminicon media-new"></span>
+        </a>
+      </li>
+      
+      <% if @file && !@file.new? %>
+        <li>
+          <a href="<%= R(MediaController, :delete, @file.id) %>"
+              title="Delete this file">
+            <span class="adminicon media-delete"></span>
+          </a>
+        </li>
+      <% end %>
+    </ul>
+    
+    <ul class="tools">
+      <li>
+        <a href="<%= R(PostController, :list) %>" title="List all blog posts">
+          <span class="adminicon post-list"></span>
+        </a>
+      </li>
+      
+      <li>
+        <a href="<%= R(PageController, :list) %>" title="List all pages">
+          <span class="adminicon page-list"></span>
+        </a>
+      </li>
+      
+      <li>
+        <a href="<%= R(CommentController, :list) %>" title="List all comments">
+          <span class="adminicon comment-list"></span>
+        </a>
+      </li>
+      
+      <li>
+        <a href="<%= R(MediaController, :list) %>" title="List all media">
+          <span class="adminicon media-list"></span>
+        </a>
+      </li>
+    </ul>
+    
+    <ul class="tools">
+      <li>
+        <a href="<%= R(AdminController, :logout) %>" title="Log out">
+          <span class="adminicon logout"></span>
+        </a>
+      </li>
+    </ul>
+    
+  <% else %>
+    <form id="login" action="<%= R(AdminController, :login) %>" method="post">
+      <div>
+        <label for="username">Username:</label>
+        <input type="text" id="username" name="username" maxlength="64"
+            title="Enter your username" />
+      
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" maxlength="64"
+            title="Enter your password" />
+      
+        <input type="submit" value="Login" />
+      </div>
+    </form>
+  <% end %>
+</div>

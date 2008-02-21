@@ -1,0 +1,15 @@
+<div id="ft">
+  Copyright &copy; <%= Time.now.year %>
+
+  <% if Riposte::Config.admin.email.empty? %>
+    <%= h(Riposte::Config.admin.name) %>.
+  <% else %>
+    <a href="mailto:<%= h(Riposte::Config.admin.email) %>">
+      <%= h(Riposte::Config.admin.name) %></a>.
+  <% end %>
+
+  All rights reserved.
+  
+  <br />
+  Powered by <a href="http://riposteblog.org/">Riposte</a>.
+</div>

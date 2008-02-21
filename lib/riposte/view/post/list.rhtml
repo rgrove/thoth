@@ -1,0 +1,52 @@
+<h2>Blog Posts</h2>
+
+<% if @prev_url || @next_url %>
+  <%= 
+  render_template('../pager',
+      :prev_url  => @prev_url,
+      :next_url  => @next_url,
+      :prev_text => '&laquo; Newer posts',
+      :next_text => 'Older posts &raquo;')
+  %>
+<% end %>
+
+<table class="list posts" summary="List of all blog posts in reverse order">
+  <thead>
+    <tr>
+      <th>Id</th>
+      <th>Title</th>
+      <th>Created</th>
+      <th>Updated</th>
+    </tr>
+  </thead>
+  
+  <tfoot></tfoot>
+  
+  <tbody>
+    <% row = 'even' %>
+    <% @posts.all do |post| %>
+      <tr class="<%= row == 'even' ? row = 'odd' : row = 'even' %>">
+        <td class="id"><%= post.id %></td>
+        <td class="title">
+          <a href="<%= post.url %>"><%= h(post.title) %></a>
+        </td>
+        <td class="created">
+          <%= post.created_at(Riposte::Config.timestamp.short) %>
+        </td>
+        <td class="updated">
+          <%= post.updated_at(Riposte::Config.timestamp.short) %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<% if @prev_url || @next_url %>
+  <%= 
+  render_template('../pager',
+      :prev_url  => @prev_url,
+      :next_url  => @next_url,
+      :prev_text => '&laquo; Newer posts',
+      :next_text => 'Older posts &raquo;')
+  %>
+<% end %>

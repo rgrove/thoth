@@ -1,0 +1,58 @@
+<h2>Comments</h2>
+
+<% if @prev_url || @next_url %>
+  <%= 
+  render_template('../pager',
+      :prev_url  => @prev_url,
+      :next_url  => @next_url,
+      :prev_text => '&laquo; Newer comments',
+      :next_text => 'Older comments &raquo;')
+  %>
+<% end %>
+
+<table class="list comments" summary="List of all comments in reverse order">
+  <thead>
+    <tr>
+      <th>Id</th>
+      <th>Title</th>
+      <th>Author</th>
+      <th>Created</th>
+    </tr>
+  </thead>
+  
+  <tfoot></tfoot>
+  
+  <tbody>
+    <% row = 'even' %>
+    <% @comments.all do |comment| %>
+      <tr class="<%= row == 'even' ? row = 'odd' : row = 'even' %>">
+        <td class="id"><%= comment.id %></td>
+        <td class="title">
+          <a href="<%= comment.url %>"><%= h(comment.title) %></a>
+        </td>
+        <td class="author">
+          <% if comment.author_url && !comment.author_url.empty? %>
+            <a href="<%= h(comment.author_url) %>" rel="nofollow">
+              <%= h(comment.author) %>
+            </a>
+          <% else %>
+            <%= h(comment.author) %>
+          <% end %>
+        </td>
+        <td class="created">
+          <%= comment.created_at(Riposte::Config.timestamp.short) %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<% if @prev_url || @next_url %>
+  <%= 
+  render_template('../pager',
+      :prev_url  => @prev_url,
+      :next_url  => @next_url,
+      :prev_text => '&laquo; Newer comments',
+      :next_text => 'Older comments &raquo;')
+  %>
+<% end %>
