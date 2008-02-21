@@ -32,13 +32,13 @@ class AdminController < Ramaze::Controller
   layout '/layout'
   
   template_root Riposte::Config.theme.view/:admin,
-                Riposte::DIR/:view/:admin
+                Riposte::VIEW_DIR/:admin
   
   def index
     if check_auth
       @title         = 'Welcome to Riposte'
-      @template_root = Riposte::DIR/Ramaze::Global.template_root
-      @public_root   = Riposte::DIR/Ramaze::Global.public_root
+      @public_root   = Riposte::PUBLIC_DIR
+      @template_root = Riposte::VIEW_DIR
     else
       @title = 'Login'
     end

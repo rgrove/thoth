@@ -32,7 +32,7 @@ class PageController < Ramaze::Controller
   layout '/layout'
   
   template_root Riposte::Config.theme.view/:page,
-                Riposte::DIR/:view/:page
+                Riposte::VIEW_DIR/:page
   
   if Riposte::Config.server.enable_cache
     cache :index, :ttl => 60, :key => lambda { check_auth }

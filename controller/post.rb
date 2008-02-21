@@ -32,7 +32,7 @@ class PostController < Ramaze::Controller
   layout '/layout'
   
   template_root Riposte::Config.theme.view/:post,
-                Riposte::DIR/:view/:post
+                Riposte::VIEW_DIR/:post
   
   def index(name = nil)
     error_404 unless name && @post = Post.get(name)

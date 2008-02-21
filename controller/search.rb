@@ -32,7 +32,7 @@ class SearchController < Ramaze::Controller
   layout '/layout'
   
   template_root Riposte::Config.theme.view/:search,
-                Riposte::DIR/:view/:search
+                Riposte::VIEW_DIR/:search
   
   if Riposte::Config.server.enable_cache
     cache :index, :ttl => 300, :key => lambda {

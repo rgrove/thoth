@@ -32,7 +32,7 @@ class MediaController < Ramaze::Controller
   layout '/layout'
   
   template_root Riposte::Config.theme.view/:media,
-                Riposte::DIR/:view/:media
+                Riposte::VIEW_DIR/:media
   
   deny_layout :index
 

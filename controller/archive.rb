@@ -32,7 +32,7 @@ class ArchiveController < Ramaze::Controller
   layout '/layout'
 
   template_root Riposte::Config.theme.view/:archive,
-                Riposte::DIR/:view/:archive
+                Riposte::VIEW_DIR/:archive
   
   if Riposte::Config.server.enable_cache
     cache :index, :ttl => 120, :key => lambda { check_auth }

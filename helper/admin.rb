@@ -74,13 +74,13 @@ module Ramaze
     # Generates and returns an auth key suitable for storage in a client-side
     # auth cookie. The key is an SHA256 hash of the following elements:
     #
-    #   - absolute path of the AdminHelper source file (this file)
+    #   - Riposte HOME_DIR path
     #   - user's IP address
     #   - AUTH_SEED from Riposte config
     #   - ADMIN_USER from Riposte config
     #   - ADMIN_PASS from Riposte config
     def auth_key
-      Digest::SHA256.hexdigest(File.expand_path(__FILE__) + request.ip +
+      Digest::SHA256.hexdigest(Riposte::HOME_DIR + request.ip +
           Riposte::Config.admin.seed + Riposte::Config.admin.user + 
           Riposte::Config.admin.pass)
     end

@@ -35,8 +35,8 @@ module Ramaze
     
     # Displays an error backtrace.
     def error
-      error_404 unless Riposte::DEVEL_MODE
-      Ramaze::Action.current.template ||= Riposte::DIR/:view/'error.rhtml'
+      error_404 unless Riposte.trait[:mode] == :devel
+      Ramaze::Action.current.template ||= Riposte::VIEW_DIR/'error.rhtml'
       super
     end
     

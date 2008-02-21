@@ -32,7 +32,7 @@ class TagController < Ramaze::Controller
   layout '/layout'
 
   template_root Riposte::Config.theme.view/:tag,
-                Riposte::DIR/:view/:tag
+                Riposte::VIEW_DIR/:tag
   
   if Riposte::Config.server.enable_cache
     cache :index, :ttl => 60, :key => lambda { check_auth }

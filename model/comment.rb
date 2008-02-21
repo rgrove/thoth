@@ -29,8 +29,6 @@
 require 'rubygems'
 require 'hpricot'
 
-require 'helper/sanitize'
-
 class Comment < Sequel::Model
   include Ramaze::LinkHelper
   include Ramaze::SanitizeHelper

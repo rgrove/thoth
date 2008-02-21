@@ -32,7 +32,7 @@ class CommentController < Ramaze::Controller
   layout '/layout'
 
   template_root Riposte::Config.theme.view/:comment,
-                Riposte::DIR/:view/:comment
+                Riposte::VIEW_DIR/:comment
   
   if Riposte::Config.server.enable_cache
     cache :index, :ttl => 60, :key => lambda { check_auth }

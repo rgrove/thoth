@@ -31,7 +31,8 @@ class MainController < Ramaze::Controller
   helper :admin, :cache, :error, :redirect, :ysearch
   layout '/layout'
   
-  template_root Riposte::Config.theme.view, Riposte::DIR/:view
+  template_root Riposte::Config.theme.view,
+                Riposte::VIEW_DIR
   
   if Riposte::Config.server.enable_cache
     cache :index, :ttl => 60, :key => lambda {
