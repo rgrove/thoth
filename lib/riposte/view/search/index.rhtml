@@ -1,0 +1,53 @@
+<h2>Search Results</h2>
+
+<div class="search">
+  <% unless @error.nil? %>
+    <p><%= h(@error) %></p>
+  <% end %>
+
+  <% if @data[:results].empty? %>
+    <p>There were no results for the query <strong><%= h(@query) %></strong></p>
+  <% else %>
+    <p>
+      Results
+      <strong><%= @data[:start] %></strong>-<strong><%= @data[:end] %></strong>
+      of
+      <strong><%= @data[:available] %></strong> for
+      <strong><%= h(@query) %></strong>
+    </p>
+
+    <% if @prev_url || @next_url %>
+      <%= 
+      render_template('../pager',
+          :prev_url  => @prev_url,
+          :next_url  => @next_url,
+          :prev_text => '&laquo; Prev',
+          :next_text => 'Next &raquo;')
+      %>
+    <% end %>
+
+    <ul>
+      <% @data[:results].each do |result| %>
+        <li>
+          <h4><a href="<%= result[:url] %>"><%= result[:title] %></a></h4>
+          <div class="summary"><%= result[:summary] %></div>
+          <span class="url"><%= result[:url].gsub(/https?:\/\//i, '') %></span>
+        </li>
+      <% end %>
+    </ul>
+
+    <% if @prev_url || @next_url %>
+      <%= 
+      render_template('../pager',
+          :prev_url  => @prev_url,
+          :next_url  => @next_url,
+          :prev_text => '&laquo; Prev',
+          :next_text => 'Next &raquo;')
+      %>
+    <% end %>
+    
+    <p class="plug">
+      Powered by <a href="http://search.yahoo.com/">Yahoo! Search</a>
+    </p>
+  <% end %>
+</div>

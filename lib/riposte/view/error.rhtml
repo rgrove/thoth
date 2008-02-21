@@ -1,0 +1,79 @@
+<link rel="stylesheet" href="/css/error.css" />
+
+<h1><%= h(@title) %></h1>
+
+<table class="backtrace">
+  <thead>
+    <tr>
+      <th>File</th>
+      <th>Line</th>
+      <th>Method</th>
+    </tr>
+  </thead>
+  
+  <tfoot></tfoot>
+  
+  <tbody>
+    <% @backtrace.each do |source, hash, file, line, method| %>
+      <tr class="file" id="<%= hash %>">
+        <td class="file"><%= file %></td>
+        <td class="line"><%= line %></td>
+        <td class="method"><%= h(method) %></td>
+      </tr>
+
+      <tr class="source hidden" id="source_<%= hash %>">
+        <td colspan="3">
+          <a href="txmt://open?url=file://<%= u(file) %>&amp;line=<%= line %>"
+              class="textmate">
+            Open in TextMate
+          </a>
+          
+          <ol start="<%= source.first[0] %>">
+            <% source.each do |lnum, lcode, lcurrent| %>
+              <li<%= lcurrent ? ' class="current"' : '' %>>
+                <span><%= h(lcode.to_s.rstrip) %></span>
+              </li>
+            <% end %>
+          </ol>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<script type="text/javascript" src="http://yui.yahooapis.com/2.4.1/build/yahoo-dom-event/yahoo-dom-event.js"></script>
+<script type="text/javascript">
+  (function () {
+    var yud   = YAHOO.util.Dom,
+        yue   = YAHOO.util.Event,
+        files = yud.getElementsByClassName('file', 'tr');
+        
+    yue.on(files, 'click', function (e) {
+      var el = yue.getTarget(e);
+      
+      while (el.nodeName != 'TR') {
+        el = el.parentNode;
+      }
+      
+      var source = yud.get('source_' + el.id);
+      
+      if (yud.hasClass(source, 'hidden')) {
+        yud.removeClass(source, 'hidden');
+      } else {
+        yud.addClass(source, 'hidden');
+      }
+    });
+  })();
+</script>
+
+<% {'Session'  => Thread.current[:session],
+    'Request'  => Thread.current[:request],
+    'Response' => Thread.current[:response],
+    'Global'   => Global
+  }.each do |title, content| %>
+    <% hash = [title, content].object_id.abs %>
+    <div class="additional">
+      <h2 id="<%= hash %>"><%= title %></h2>
+      <pre id="is_<%= hash %>"><%= h(content.pretty_inspect) %></pre>
+    </div>
+<% end %>

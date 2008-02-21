@@ -1,0 +1,14 @@
+<h2>Delete Page</h2>
+
+<p>
+  Are you sure you want to permanently delete the following page?
+</p>
+
+<%= render_template(:index) %>
+
+<form action="<%= Rs(:delete, @page.id) %>" method="post">
+  <p>
+    <button name="confirm" value="yes">Yes, delete this page forever</button>
+    <button name="confirm" value="no">No, do not delete this page</button>
+  </p>
+</form>
