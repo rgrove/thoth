@@ -142,6 +142,9 @@ module Riposte
         raise "Invalid mode: #{trait[:mode]}"
       end
       
+      Ramaze::Inform.info "Riposte home: #{HOME_DIR}"
+      Ramaze::Inform.info "Riposte lib : #{LIB_DIR}"
+      
       Config.plugins.each {|plugin| Plugin.load(plugin) }
       
       Ramaze.startup :adapter => :evented_mongrel,

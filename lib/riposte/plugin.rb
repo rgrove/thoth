@@ -41,7 +41,7 @@ module Riposte
     # <tt>/plugin</tt> directory, then as a gem.
     def self.load(name)
       plugin = "riposte_#{name.to_s.downcase.gsub(/^riposte_/, '')}"
-      files  = Dir["{#{HOME_DIR/:plugin},#{$:.join(',')}}/#{plugin}.{bundle,rb,so}"]
+      files  = Dir["{#{HOME_DIR/:plugin},#{$:.join(',')}}/#{plugin}.rb"]
 
       # First try to load a local copy of the plugin, then try the gem.
       unless (files.any? && require(files.first)) || require(plugin)

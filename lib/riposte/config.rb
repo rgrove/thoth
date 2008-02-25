@@ -32,7 +32,7 @@ module Riposte
     class << self
       [:devel, :production].each do |env|
         Configuration.for("riposte_#{env.to_s}") {
-          db "sqlite:///#{Riposte::HOME_DIR}/db/#{env.to_s}.db"
+          db "sqlite:///#{HOME_DIR}/db/#{env.to_s}.db"
   
           site {
             name "Riposte"
@@ -49,11 +49,11 @@ module Riposte
           }
     
           theme {
-            public Riposte::HOME_DIR/:custom/:public
-            view   Riposte::HOME_DIR/:custom/:view
+            public HOME_DIR/:custom/:public
+            view   HOME_DIR/:custom/:view
           }
         
-          media Riposte::HOME_DIR/:custom/:media
+          media HOME_DIR/:custom/:media
   
           timestamp {
             long  "%A %B %d, %Y @ %I:%M %p (%Z)"
@@ -64,7 +64,7 @@ module Riposte
             address      "0.0.0.0"
             port         7000
             enable_cache true
-            error_log    Riposte::HOME_DIR/"error.log"
+            error_log    HOME_DIR/"error.log"
           }
         
           plugins []
