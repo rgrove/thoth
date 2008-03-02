@@ -1,4 +1,3 @@
-* Use instance vars in partial templates since Ramaze supports them as of 2008-02-29
 * Finish rc.d script
 * Ping after post
 * Bacon!
