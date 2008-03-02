@@ -5,7 +5,7 @@
     The following file was uploaded successfully.
   </p>
 
-  <%= render_template(:media, :mfile => @file) %>
+  <%= render_template(:media, :file => @file) %>
 <% else %>
   <% if @media_error %>
     <div class="error"><%= @media_error %></div>

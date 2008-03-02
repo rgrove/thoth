@@ -1,27 +1,27 @@
-<div id="post-<%= post.id %>" class="post">
+<div id="post-<%= @post.id %>" class="post">
   <div class="hd">
     <h2>
-      <a href="<%= post.url %>" rel="bookmark"
+      <a href="<%= @post.url %>" rel="bookmark"
           title="Permalink for this article">
-        <%= h(post.title) %>
+        <%= h(@post.title) %>
       </a>
     </h2>
     
     <span class="date robots-nocontent">
-      <%= post.created_at(Riposte::Config.timestamp.long) %>
+      <%= @post.created_at(Riposte::Config.timestamp.long) %>
     </span>
   </div>
   
   <div class="bd">
-    <%= post.body_rendered %>
+    <%= @post.body_rendered %>
   </div>
   
   <div class="ft">
-    <% unless post.tags.empty? %>
+    <% unless @post.tags.empty? %>
       <div class="tags">
         <span class="icon tag"></span>
         <ul>
-          <% post.tags.each do |tag| %>
+          <% @post.tags.each do |tag| %>
             <li>
               <a href="<%= tag.url %>" rel="tag"><%= h(tag.name) %></a>
             </li>
@@ -32,8 +32,8 @@
     
     <div class="meta robots-nocontent">
       <span class="icon comments"></span>
-      <% comment_count = post.comments.count %>
-      <a href="<%= post.url %>#comments">
+      <% comment_count = @post.comments.count %>
+      <a href="<%= @post.url %>#comments">
         <%= comment_count %> comment<%= comment_count == 1 ? '' : 's' %>
       </a>
     </div>

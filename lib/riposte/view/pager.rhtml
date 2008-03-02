@@ -1,9 +1,9 @@
 <div class="pg robots-nocontent">
-  <% if prev_url %>
-    <a rel="prev" class="prev" href="<%= prev_url %>"><%= prev_text %></a>
+  <% if @prev_url %>
+    <a rel="prev" class="prev" href="<%= @prev_url %>"><%= @prev_text || 'Previous' %></a>
   <% end %>
   
-  <% if next_url %>
-    <a rel="next" class="next" href="<%= next_url %>"><%= next_text %></a>
+  <% if @next_url %>
+    <a rel="next" class="next" href="<%= @next_url %>"><%= @next_text || 'Next' %></a>
   <% end %>
 </div>
