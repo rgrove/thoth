@@ -72,7 +72,7 @@ class PostController < Ramaze::Controller
         @post.body  = request[:body]
         @post.tags  = request[:tags]
         
-        if @post.valid? && request[:action] === 'Post'
+        if @post.valid? && request[:action] == 'Post'
           begin
             Riposte.db.transaction do
               raise unless @post.save && @post.tags = request[:tags]
@@ -114,7 +114,7 @@ class PostController < Ramaze::Controller
         p.tags  = request[:tags]
       end
       
-      if @post.valid? && request[:action] === 'Post'
+      if @post.valid? && request[:action] == 'Post'
         begin
           Riposte.db.transaction do
             raise unless @post.save && @post.tags = request[:tags]
