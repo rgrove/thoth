@@ -73,7 +73,7 @@ class PageController < Ramaze::Controller
         @page.title = request[:title]
         @page.body  = request[:body]
         
-        if @page.valid? && request[:action] === 'Post'
+        if @page.valid? && request[:action] == 'Post'
           begin
             raise unless @page.save
           rescue => e
@@ -113,7 +113,7 @@ class PageController < Ramaze::Controller
         p.body  = request[:body]
       end
       
-      if @page.valid? && request[:action] === 'Post'
+      if @page.valid? && request[:action] == 'Post'
         begin
           raise unless @page.save
         rescue => e
