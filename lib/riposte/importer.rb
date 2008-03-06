@@ -51,7 +51,7 @@ module Riposte
     
       def run
         # Bootstrap.
-        Ramaze::Inform.loggers = []
+        Ramaze::Log.loggers = []
         Riposte.open_db
 
         acquire LIB_DIR/:helper/'*'

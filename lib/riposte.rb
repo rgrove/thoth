@@ -128,9 +128,9 @@ module Riposte
         Ramaze::Global.sourcereload = false
       
         if Config.server.error_log.empty?
-          Ramaze::Inform.loggers = []
+          Ramaze::Log.loggers = []
         else
-          Ramaze::Inform.loggers = [
+          Ramaze::Log.loggers = [
             Ramaze::Informer.new(Config.server.error_log, [:error])
           ]
         end
@@ -142,8 +142,8 @@ module Riposte
         raise "Invalid mode: #{trait[:mode]}"
       end
       
-      Ramaze::Inform.info "Riposte home: #{HOME_DIR}"
-      Ramaze::Inform.info "Riposte lib : #{LIB_DIR}"
+      Ramaze::Log.info "Riposte home: #{HOME_DIR}"
+      Ramaze::Log.info "Riposte lib : #{LIB_DIR}"
       
       Config.plugins.each {|plugin| Plugin.load(plugin) }
       

@@ -48,7 +48,7 @@ module Riposte
         raise LoadError, "Riposte::Plugin::#{name} not found"
       end
       
-      Ramaze::Inform.info "Loaded plugin: #{plugin}"
+      Ramaze::Log.info "Loaded plugin: #{plugin}"
       
       true
     end
