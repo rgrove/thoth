@@ -26,11 +26,12 @@
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #++
 
-module Ramaze
+module Ramaze; module Helper
   
-  # The ErrorHelper module provides methods for interrupting the current request
-  # and responding with an error message and corresponding HTTP error code.
-  module ErrorHelper
+  # The Error helper module provides methods for interrupting the current
+  # request and responding with an error message and corresponding HTTP error
+  # code.
+  module Error
     Helper::LOOKUP << self
     
     # Displays an error backtrace.
@@ -78,4 +79,4 @@ module Ramaze
     end
   end  
 
-end
+end; end

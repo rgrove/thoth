@@ -67,8 +67,8 @@ module Riposte; module Plugin
         @cache ||= {}
         
         options = {:count => 5}.merge(options)
-        request = "#{FEED_URL}/#{CGI.escape(username)}" +
-            (options[:tags] ? '/' + CGI.escape(options[:tags].join(' ')) : '') +
+        request = "#{FEED_URL}/#{::CGI.escape(username)}" +
+            (options[:tags] ? '/' + ::CGI.escape(options[:tags].join(' ')) : '') +
             "?raw&count=#{options[:count]}"
         
         if cached = @cache[request]

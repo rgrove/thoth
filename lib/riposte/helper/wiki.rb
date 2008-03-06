@@ -26,9 +26,9 @@
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #++
 
-module Ramaze
+module Ramaze; module Helper
   
-  module WikiHelper
+  module Wiki
     private
     
     # Parse wiki-style markup into HTML markup.
@@ -74,4 +74,4 @@ module Ramaze
     end
   end
   
-end
+end; end

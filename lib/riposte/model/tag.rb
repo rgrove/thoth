@@ -27,7 +27,7 @@
 #++
 
 class Tag < Sequel::Model
-  include Ramaze::LinkHelper
+  include Ramaze::Helper::Link
   
   set_schema do
     primary_key :id

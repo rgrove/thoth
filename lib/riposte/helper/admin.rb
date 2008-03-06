@@ -26,12 +26,12 @@
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #++
 
-module Ramaze
+module Ramaze; module Helper
   
-  # The AdminHelper module provides genric +login+ and +logout+ actions for
-  # handling Riposte administrator logins and logouts, along with methods for
-  # checking for or requiring authorization from within other actions and views.
-  module AdminHelper
+  # The Admin helper provides genric +login+ and +logout+ actions for handling
+  # Riposte administrator logins and logouts, along with methods for checking
+  # for or requiring authorization from within other actions and views.
+  module Admin
     Helper::LOOKUP << self
     
     # Include cookie, flash and redirect helpers.
@@ -98,4 +98,4 @@ module Ramaze
     end
   end
   
-end
+end; end

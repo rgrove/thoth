@@ -30,11 +30,11 @@ require 'cgi'
 require 'json'
 require 'open-uri'
 
-module Ramaze
+module Ramaze; module Helper
   
-  # Helper that provides search results using the Yahoo! Search API. Requires
-  # the json or json_pure gem.
-  module YsearchHelper
+  # The YSearch helper provides search results using the Yahoo! Search API.
+  # Requires the json or json_pure gem.
+  module Ysearch
     class SearchError < Ramaze::Error; end
     
     # Yahoo! Developer API key. Feel free to replace this with your own key.
@@ -50,9 +50,9 @@ module Ramaze
     # http://developer.yahoo.com/search/web/V1/webSearch.html
     def yahoo_search(query, options = {})
       options = {:format => 'html'}.merge(options).collect{|key, val|
-          "#{key.to_s}=#{CGI.escape(val.to_s)}"}.join('&')
+          "#{key.to_s}=#{::CGI.escape(val.to_s)}"}.join('&')
       
-      request = "#{API_URL}?appid=#{API_ID}&query=#{CGI.escape(query)}&" +
+      request = "#{API_URL}?appid=#{API_ID}&query=#{::CGI.escape(query)}&" +
           options + '&output=json'
       
       r = JSON.parse(open(request).read)['ResultSet']
@@ -84,6 +84,6 @@ module Ramaze
     rescue => e
       raise SearchError, "Unable to retrieve search results: #{e}"
     end
-    
   end
-end
+
+end; end

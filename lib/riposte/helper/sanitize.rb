@@ -28,12 +28,12 @@
 
 require 'hpricot'
 
-module Ramaze
+module Ramaze; module Helper
   
-  # The SanitizeHelper module provides a method for stripping dangerous elements
-  # and attributes from user-supplied HTML based on element and attribute
-  # whitelists.
-  module SanitizeHelper
+  # The Sanitize helper module provides a method for stripping dangerous
+  # elements and attributes from user-supplied HTML based on element and
+  # attribute whitelists.
+  module Sanitize
     private
 
     # Elements to allow in sanitized HTML.
@@ -101,4 +101,5 @@ module Ramaze
       h.to_s
     end
   end
-end
+
+end; end

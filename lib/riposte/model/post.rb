@@ -27,8 +27,8 @@
 #++
 
 class Post < Sequel::Model
-  include Ramaze::LinkHelper
-  include Ramaze::WikiHelper
+  include Ramaze::Helper::Link
+  include Ramaze::Helper::Wiki
   
   set_schema do
     primary_key :id

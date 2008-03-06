@@ -26,11 +26,11 @@
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #++
 
-module Ramaze
+module Ramaze; module Helper
   
-  # The CookieHelper wraps access to Ramaze's request.cookies hash and returns
+  # The Cookie helper wraps access to Ramaze's request.cookies hash and returns
   # only the first cookie matching a specified name (rather than an array).
-  module CookieHelper
+  module Cookie
     private
     
     # Gets the first cookie matching the specified +name+. If not found, the
@@ -42,4 +42,4 @@ module Ramaze
     end
   end
   
-end
+end; end

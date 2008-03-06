@@ -30,8 +30,8 @@ require 'rubygems'
 require 'hpricot'
 
 class Comment < Sequel::Model
-  include Ramaze::LinkHelper
-  include Ramaze::SanitizeHelper
+  include Ramaze::Helper::Link
+  include Ramaze::Helper::Sanitize
   
   set_schema do
     primary_key :id
