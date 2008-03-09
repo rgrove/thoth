@@ -289,6 +289,8 @@ textarea { font: 100% Consolas, Monaco, 'Courier New'; }
   visibility: hidden;
 }
 
+.post .tags a { color: #73ade7; }
+
 .post .tags ul {
   list-style: none;
   margin: 0;
