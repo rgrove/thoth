@@ -3,7 +3,10 @@ HIGH PRIORITY
   http://groups.google.com/group/sequel-talk/browse_frm/thread/5b88d9dc0dd85001
 
 MEDIUM PRIORITY
+* Add Flash messages to indicate successful actions (post saved, file uploaded,
+  etc.)
 * Bacon!
+* Native search functionality (Ferret?)
 
 LOW PRIORITY
 * Finish rc.d script
