@@ -1,0 +1,5 @@
+# robots.txt file for Thoth
+
+User-agent: *
+Disallow: /comment/new
+Disallow: /search

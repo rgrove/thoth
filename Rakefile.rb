@@ -26,7 +26,7 @@
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #++
 
-# Append the Riposte /lib directory to the include path if it's not there
+# Append the Thoth /lib directory to the include path if it's not there
 # already.
 $:.unshift(File.join(File.dirname(__FILE__), 'lib'))
 $:.uniq!
@@ -36,26 +36,26 @@ require 'find'
 require 'rubygems'
 require 'rake/gempackagetask'
 require 'rake/rdoctask'
-require 'riposte/version'
+require 'thoth/version'
 
 # Don't include resource forks in tarballs on Mac OS X.
 ENV['COPY_EXTENDED_ATTRIBUTES_DISABLE'] = 'true'
 ENV['COPYFILE_DISABLE'] = 'true'
 
-# Gemspec for Riposte
-riposte_gemspec = Gem::Specification.new do |s|
-  s.rubyforge_project = 'riposte'
+# Gemspec for Thoth
+thoth_gemspec = Gem::Specification.new do |s|
+  s.rubyforge_project = 'thoth'
 
-  s.name     = 'riposte'
-  s.version  = Riposte::APP_VERSION
-  s.author   = Riposte::APP_AUTHOR
-  s.email    = Riposte::APP_EMAIL
-  s.homepage = Riposte::APP_URL
+  s.name     = 'thoth'
+  s.version  = Thoth::APP_VERSION
+  s.author   = Thoth::APP_AUTHOR
+  s.email    = Thoth::APP_EMAIL
+  s.homepage = Thoth::APP_URL
   s.platform = Gem::Platform::RUBY
   s.summary  = 'A fast and simple blog engine based on Ramaze and Sequel.'
 
   s.files        = FileList['{bin,lib}/**/*', 'LICENSE'].to_a
-  s.executables  = ['riposte']
+  s.executables  = ['thoth']
   s.require_path = 'lib'
   s.has_rdoc     = true
 
@@ -79,75 +79,75 @@ plugins = []
 
 # del.icio.us plugin
 plugins << Gem::Specification.new do |s|
-  s.rubyforge_project = 'riposte'
+  s.rubyforge_project = 'thoth'
 
-  s.name     = 'riposte_delicious'
-  s.version  = Riposte::APP_VERSION
-  s.author   = Riposte::APP_AUTHOR
-  s.email    = Riposte::APP_EMAIL
-  s.homepage = Riposte::APP_URL
+  s.name     = 'thoth_delicious'
+  s.version  = Thoth::APP_VERSION
+  s.author   = Thoth::APP_AUTHOR
+  s.email    = Thoth::APP_EMAIL
+  s.homepage = Thoth::APP_URL
   s.platform = Gem::Platform::RUBY
-  s.summary  = 'del.icio.us plugin for the Riposte blog engine.'
+  s.summary  = 'del.icio.us plugin for the Thoth blog engine.'
 
-  s.files        = ['plugin/riposte_delicious.rb']
+  s.files        = ['plugin/thoth_delicious.rb']
   s.require_path = 'plugin'
   s.has_rdoc     = true
   
   s.add_dependency('json_pure', '~> 1.1.2')
-  s.add_dependency('riposte',   "~> #{Riposte::APP_VERSION}")
+  s.add_dependency('thoth',   "~> #{Thoth::APP_VERSION}")
 end
 
 # Flickr plugin
 plugins << Gem::Specification.new do |s|
-  s.rubyforge_project = 'riposte'
+  s.rubyforge_project = 'thoth'
 
-  s.name     = 'riposte_flickr'
-  s.version  = Riposte::APP_VERSION
-  s.author   = Riposte::APP_AUTHOR
-  s.email    = Riposte::APP_EMAIL
-  s.homepage = Riposte::APP_URL
+  s.name     = 'thoth_flickr'
+  s.version  = Thoth::APP_VERSION
+  s.author   = Thoth::APP_AUTHOR
+  s.email    = Thoth::APP_EMAIL
+  s.homepage = Thoth::APP_URL
   s.platform = Gem::Platform::RUBY
-  s.summary  = 'Flickr plugin for the Riposte blog engine.'
+  s.summary  = 'Flickr plugin for the Thoth blog engine.'
 
-  s.files        = ['plugin/riposte_flickr.rb']
+  s.files        = ['plugin/thoth_flickr.rb']
   s.require_path = 'plugin'
   s.has_rdoc     = true
   
   s.add_dependency('net-flickr', '= 0.0.1')
-  s.add_dependency('riposte',    "~> #{Riposte::APP_VERSION}")
+  s.add_dependency('thoth',    "~> #{Thoth::APP_VERSION}")
 end
 
-Rake::GemPackageTask.new(riposte_gemspec) do |p|
+Rake::GemPackageTask.new(thoth_gemspec) do |p|
   p.need_tar_gz = true
 end
 
 Rake::RDocTask.new do |rd|
-  rd.main     = 'Riposte'
-  rd.title    = 'Riposte'
+  rd.main     = 'Thoth'
+  rd.title    = 'Thoth'
   rd.rdoc_dir = 'doc'
 
   rd.rdoc_files.include('lib/**/*.rb')
 end
 
 Rake::RDocTask.new(:rdoc_delicious) do |rd|
-  rd.main     = 'Riposte::Plugin::Delicious'
-  rd.title    = 'Riposte::Plugin::Delicious'
+  rd.main     = 'Thoth::Plugin::Delicious'
+  rd.title    = 'Thoth::Plugin::Delicious'
   rd.rdoc_dir = 'doc/delicious'
   
-  rd.rdoc_files.include('plugin/riposte_delicious.rb')
+  rd.rdoc_files.include('plugin/thoth_delicious.rb')
 end
 
 Rake::RDocTask.new(:rdoc_flickr) do |rd|
-  rd.main     = 'Riposte::Plugin::Flickr'
-  rd.title    = 'Riposte::Plugin::Delicious'
+  rd.main     = 'Thoth::Plugin::Flickr'
+  rd.title    = 'Thoth::Plugin::Delicious'
   rd.rdoc_dir = 'doc/flickr'
   
-  rd.rdoc_files.include('plugin/riposte_flickr.rb')
+  rd.rdoc_files.include('plugin/thoth_flickr.rb')
 end
 
-desc "install Riposte"
+desc "install Thoth"
 task :install => :gem do
-  sh "gem install pkg/riposte-#{Riposte::APP_VERSION}.gem"
+  sh "gem install pkg/thoth-#{Thoth::APP_VERSION}.gem"
 end
 
 desc "create plugin gems"

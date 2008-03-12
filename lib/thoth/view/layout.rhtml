@@ -1,0 +1,40 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title><%= h(@title ? @title : Thoth::Config.site.name) %></title>
+    <base href="<%= Thoth::Config.site.url %>" />
+
+    <%= render_template :css %>
+
+    <link rel="alternate" type="application/atom+xml"
+        href="<%= R(MainController, :atom) %>" title="Posts (Atom)" />
+    <link rel="alternate" type="application/rss+xml"
+        href="<%= R(MainController, :rss) %>" title="Posts (RSS)" />
+    
+    <% if @prev_url %>
+      <link id="prev_url" rel="prev" href="<%= @prev_url %>" />
+    <% end %>
+    
+    <% if @next_url %>
+      <link id="next_url" rel="next" href="<%= @next_url %>" />
+    <% end %>
+  </head>
+  <body>
+    <div id="doc">
+      <%= render_template :header %>
+      
+      <div id="bd">
+        <%= render_template :sidebar %>
+      
+        <div id="main">
+          <%= @content %>
+        </div>
+      </div>
+      
+      <%= render_template :footer %>
+    </div>
+
+    <%= render_template :js %>
+  </body>
+</html>

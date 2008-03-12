@@ -1,0 +1,149 @@
+#!/usr/bin/env ruby
+#--
+# Copyright (c) 2008 Ryan Grove <ryan@wonko.com>
+# All rights reserved.
+#
+# Redistribution and use in source and binary forms, with or without
+# modification, are permitted provided that the following conditions are met:
+#
+#   * Redistributions of source code must retain the above copyright notice,
+#     this list of conditions and the following disclaimer.
+#   * Redistributions in binary form must reproduce the above copyright notice,
+#     this list of conditions and the following disclaimer in the documentation
+#     and/or other materials provided with the distribution.
+#   * Neither the name of this project nor the names of its contributors may be
+#     used to endorse or promote products derived from this software without
+#     specific prior written permission.
+#
+# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+# AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+# IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+# DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE
+# FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+# DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+# SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+# CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+# OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+# OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+#++
+
+require 'optparse'
+require 'rubygems'
+require 'ramaze'
+
+module Thoth
+  importer = nil
+  
+  # Parse command-line options.
+  begin
+    OptionParser.new {|o|
+      o.summary_indent = '  '
+      o.summary_width  = 24
+      o.banner         = "Usage: thoth [options]\n" +
+                         "       thoth [info]"
+  
+      o.separator ''
+      o.separator 'Options:'
+  
+      o.on('-c', '--config [filename]',
+          'Use the specified configuration file.') do |filename|
+        trait[:config_file] = File.expand_path(filename)
+      end
+  
+      o.on('-d', '--daemon [command]', [:start, :stop, :restart],
+          'Issue the specified daemon command (start, stop, or',
+          'restart).') do |cmd|
+        trait[:daemon] = cmd
+      end
+      
+      o.on('-H, --home [home dir]', 
+          'Use the specified home directory.') do |home|
+        unless File.directory?(home)
+          abort("Error: home directory not found or not a directory: #{home}")
+        end
+
+        HOME_DIR = File.expand_path(home)
+      end
+  
+      o.on('-i', '--ip [address]',
+          'Listen for connections on the specified IP address.') do |address|
+        trait[:ip] = address
+      end
+  
+      o.on('-p', '--port [number]',
+          'Listen for connections on the specified port number.') do |port|
+        trait[:port] = port.to_i
+      end
+  
+      o.on('--devel',
+          'Run Thoth in development mode.') do
+        trait[:mode] = :devel
+      end
+      
+      o.on('--log-sql [filename]',
+          'Log all SQL queries to the specified file.') do |filename|
+        trait[:sql_log] = File.expand_path(filename)
+      end
+      
+      o.on('--import [module]',
+           'Import content from another blog engine using the',
+           'specified import module.') do |import_module|
+        importer = import_module
+      end
+
+      o.separator ''
+      o.separator 'Info:'
+
+      o.on_tail('-h', '--help',
+          'Display usage information (this message).') do
+        require 'thoth'
+        
+        puts "#{APP_NAME} v#{APP_VERSION} <#{APP_URL}>"
+        puts "#{APP_COPYRIGHT}"
+        puts
+        puts o
+        puts
+        puts 'Default Directories:'
+        puts "  public: #{PUBLIC_DIR}"
+        puts "    view: #{VIEW_DIR}"
+        exit
+      end
+  
+      o.on_tail('-v', '--version',
+          'Display version information.') do
+        require 'thoth'
+        
+        puts "#{APP_NAME} v#{APP_VERSION} <#{APP_URL}>"
+        puts "#{APP_COPYRIGHT}"
+        puts
+        puts "#{APP_NAME} comes with ABSOLUTELY NO WARRANTY."
+        puts
+        puts "This program is open source software distributed under the BSD license. For"
+        puts "details, see the LICENSE file contained in the source distribution."
+        exit
+      end
+    }.parse!(ARGV)
+  rescue => e
+    abort("Error: #{e}")
+  end
+  
+  require 'thoth'
+
+  Config.load(trait[:config_file])
+
+  if importer
+    require 'thoth/importer'
+    
+    begin
+      Importer.load_importer(importer).run
+    rescue LoadError => e
+      abort("Error: #{e}")
+    end
+  else
+    trait[:ip]      ||= Config.server.address
+    trait[:port]    ||= Config.server.port
+    trait[:pidfile]   = HOME_DIR/"thoth_#{trait[:ip]}_#{trait[:port]}.pid"
+
+    send(trait[:daemon] || :run)
+  end
+end

@@ -1,0 +1,15 @@
+<div id="ft">
+  Copyright &copy; <%= Time.now.year %>
+
+  <% if Thoth::Config.admin.email.empty? %>
+    <%= h(Thoth::Config.admin.name) %>.
+  <% else %>
+    <a href="mailto:<%= h(Thoth::Config.admin.email) %>">
+      <%= h(Thoth::Config.admin.name) %></a>.
+  <% end %>
+
+  All rights reserved.
+  
+  <br />
+  Powered by <a href="http://thothblog.org/">Thoth</a>.
+</div>

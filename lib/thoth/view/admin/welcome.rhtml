@@ -1,0 +1,59 @@
+<div class="welcome">
+  <h2>Welcome to Thoth!</h2>
+  <span class="version">Version <%= h(Thoth::APP_VERSION) %></span>
+
+  <h4>Getting Started</h4>
+
+  <p>
+    Use the icons in the admin toolbar above to create new blog posts and pages.
+    To edit an existing blog post or page, simply browse to it and an edit icon
+    will appear in the toolbar.
+  </p>
+
+  <p>
+    When you want to login again in the future, you can either return to 
+    <a href="<%= Rs() %>">this page</a> or use the keyboard shortcut
+    <kbd>Ctrl+Alt+A</kbd> to login quickly from any Thoth URL.
+  </p>
+
+  <h4>Customizing Thoth</h4>
+
+  <p>
+    Tired of the default template and want to design your own? Just fire up your
+    favorite text editor and open up these directories:
+  </p>
+
+  <dl class="customizing">
+    <dt>Default Templates</dt>
+    <dd><code><%= @template_root %></code></dd>
+    <dt>Default CSS, JS, etc.</dt>
+    <dd><code><%= @public_root %></code></dd>
+
+    <dt>Custom Templates</dt>
+    <dd><code><%= Thoth::Config.theme.view %></code></dd>
+    <dt>Custom CSS, JS, etc.</dt>
+    <dd><code><%= Thoth::Config.theme.public %></code></dd>
+  </dl>
+
+  <p>
+    To customize your blog, find the default template or static resource you
+    want to change and copy it to the corresponding custom directory, then make
+    your changes to the copy. Thoth looks for a customized file first, then
+    loads the default file if no customized version is found. 
+  </p>
+  
+  <p>
+    You'll need to know some XHTML and CSS (and a wee touch of Ruby wouldn't
+    hurt), but you should be able to figure it out. You seem like a smart sort
+    of bean.
+  </p>
+
+  <h4>Useful Linkage</h4>
+
+  <ul>
+    <li><a href="<%= Thoth::APP_URL %>">Thoth Website</a></li>
+    <li><a href="http://code.google.com/p/thoth/w/list">Thoth Wiki</a></li>
+    <li><a href="http://code.google.com/p/thoth/issues/list">Bugs &amp; Feature Requests</a></li>
+    <li><a href="http://code.google.com/p/thoth/source/checkout">Source Code</a></li>
+  </ul>
+</div>

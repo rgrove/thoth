@@ -1,0 +1,4 @@
+<h4><a href="<%= @post.url %>"><%= h(@post.title) %></a></h4>
+<span class="date">
+  <%= @post.created_at(Thoth::Config.timestamp.long) %>
+</span>
