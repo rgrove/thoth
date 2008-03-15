@@ -1,7 +1,3 @@
-HIGH PRIORITY
-* Use Sequel 1.3 associations
-  http://groups.google.com/group/sequel-talk/browse_frm/thread/5b88d9dc0dd85001
-
 MEDIUM PRIORITY
 * Add Flash messages to indicate successful actions (post saved, file uploaded,
   etc.)
