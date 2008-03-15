@@ -71,7 +71,7 @@ thoth_gemspec = Gem::Specification.new do |s|
   s.add_dependency('RedCloth',      '>= 3.0.4')
   s.add_dependency('sequel',        '>= 1.3')
   s.add_dependency('sequel_core',   '>= 1.3')
-  s.add_dependency('sequel_model',  '>= 0.5')
+  s.add_dependency('sequel_model',  '>= 0.5.0.2')
   s.add_dependency('swiftiply',     '>= 0.6.1.1')
 end
 
@@ -93,8 +93,8 @@ plugins << Gem::Specification.new do |s|
   s.require_path = 'plugin'
   s.has_rdoc     = true
   
-  s.add_dependency('json_pure', '~> 1.1.2')
-  s.add_dependency('thoth',   "~> #{Thoth::APP_VERSION}")
+  s.add_dependency('json_pure', '>= 1.1.2')
+  s.add_dependency('thoth',     "~> #{Thoth::APP_VERSION}")
 end
 
 # Flickr plugin
@@ -114,7 +114,7 @@ plugins << Gem::Specification.new do |s|
   s.has_rdoc     = true
   
   s.add_dependency('net-flickr', '= 0.0.1')
-  s.add_dependency('thoth',    "~> #{Thoth::APP_VERSION}")
+  s.add_dependency('thoth',      "~> #{Thoth::APP_VERSION}")
 end
 
 Rake::GemPackageTask.new(thoth_gemspec) do |p|
