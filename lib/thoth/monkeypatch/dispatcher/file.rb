@@ -26,28 +26,25 @@
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #++
 
-module Ramaze
-  module Dispatcher
+module Ramaze::Dispatcher
     
-    # Monkeypatch to add support for multiple public_roots.
-    class File
-      
-      class << self
-        alias __resolve_path resolve_path
-      
-        def resolve_path(path)
-          return __resolve_path(path) unless Thoth::Config.theme.public
-          joined = Thoth::Config.theme.public/path
-          return __resolve_path(path) unless ::File.exist?(joined)
+  # Monkeypatch to add support for multiple public_roots.
+  class File
+    class << self
+      alias __resolve_path resolve_path
+    
+      def resolve_path(path)
+        return __resolve_path(path) unless Thoth::Config.theme.public
+        joined = Thoth::Config.theme.public/path
+        return __resolve_path(path) unless ::File.exist?(joined)
 
-          if ::File.directory?(joined)
-            Dir[joined/"{#{INDICES.join(',')}}"].first || joined
-          else
-            joined
-          end
+        if ::File.directory?(joined)
+          Dir[joined/"{#{INDICES.join(',')}}"].first || joined
+        else
+          joined
         end
       end
-
     end
   end
+
 end
