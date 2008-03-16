@@ -28,7 +28,7 @@
 
 class AdminController < Ramaze::Controller
   engine :Erubis
-  helper :admin, :error, :flash
+  helper :admin, :error
   layout '/layout'
   
   template_root Thoth::Config.theme.view/:admin,

@@ -28,7 +28,7 @@
 
 class MainController < Ramaze::Controller
   engine :Erubis
-  helper :admin, :cache, :error, :redirect, :ysearch
+  helper :admin, :cache, :error, :ysearch
   layout '/layout'
   
   template_root Thoth::Config.theme.view,
