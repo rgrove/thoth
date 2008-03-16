@@ -98,7 +98,9 @@ class CommentController < Ramaze::Controller
       
       if request[:confirm] == 'yes'
         @comment.destroy
-        action_cache.clear  
+        action_cache.clear
+
+        flash[:success] = 'Comment deleted.'
       end
       
       redirect(comment_url)
@@ -149,6 +151,7 @@ class CommentController < Ramaze::Controller
         @comment_error = 'There was an error posting your comment. Please ' +
             'try again later.'
       else
+        flash[:success] = 'Comment posted.'
         redirect(R(PostController, @post.name) + "#comment-#{comment.id}")
       end
     end

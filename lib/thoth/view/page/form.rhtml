@@ -24,7 +24,7 @@
       <% if @page; @page.errors.on(:name).each do |error| %>
         <tr>
           <td></td>
-          <td class="error">
+          <td class="flash error">
             <%= h(error) %>
           </td>
         </tr>
@@ -43,7 +43,7 @@
       <% if @page; @page.errors.on(:title).each do |error| %>
         <tr>
           <td></td>
-          <td class="error">
+          <td class="flash error">
             <%= h(error) %>
           </td>
         </tr>
@@ -61,7 +61,7 @@
       <% if @page; @page.errors.on(:body).each do |error| %>
         <tr>
           <td></td>
-          <td class="error">
+          <td class="flash error">
             <%= h(error) %>
           </td>
         </tr>

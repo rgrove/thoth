@@ -28,6 +28,7 @@
         <%= render_template :sidebar %>
       
         <div id="main">
+          <%= flashbox('<div class="flash %key">%value</div>') %>
           <%= @content %>
         </div>
       </div>

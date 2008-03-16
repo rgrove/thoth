@@ -1,7 +1,7 @@
 <h2>Login</h2>
 
 <% if flash[:login_error] %>
-  <div class="error"><%= h(flash[:login_error]) %></div>
+  <div class="flash error"><%= h(flash[:login_error]) %></div>
 <% end %>
 
 <form id="login_page" action="<%= R(AdminController, :login) %>" method="post">

@@ -52,6 +52,7 @@ class MediaController < Ramaze::Controller
     if request.post?
       if request[:confirm] == 'yes'
         @file.destroy
+        flash[:success] = 'File deleted.'
         redirect(Rs(:list))
       else
         redirect(Rs(:edit, id))
@@ -64,31 +65,30 @@ class MediaController < Ramaze::Controller
   
   def edit(id = nil)
     require_auth
+    redirect(Rs(:new)) unless id && @file = Media[id]
 
-    if id && @file = Media[id]
-      @title       = "Edit Media - #{@file.filename}"
-      @form_action = Rs(:edit, id)
+    @title       = "Edit Media - #{@file.filename}"
+    @form_action = Rs(:edit, id)
 
-      if request.post?
-        tempfile, filename, type = request[:file].values_at(
-            :tempfile, :filename, :type)
-            
-        @file.mimetype = type || 'application/octet-stream'
-        
-        begin
-          unless File.directory?(File.dirname(@file.path))
-            FileUtils.mkdir_p(File.dirname(@file.path))
-          end
-
-          FileUtils.mv(tempfile.path, @file.path)
-
-          @file.save
-        rescue => e
-          @media_error = "Error: #{e}"
+    if request.post?
+      tempfile, filename, type = request[:file].values_at(
+          :tempfile, :filename, :type)
+          
+      @file.mimetype = type || 'application/octet-stream'
+      
+      begin
+        unless File.directory?(File.dirname(@file.path))
+          FileUtils.mkdir_p(File.dirname(@file.path))
         end
+
+        FileUtils.mv(tempfile.path, @file.path)
+        @file.save
+        
+        flash[:success] = 'File saved.'
+        redirect(Rs(:edit, id))
+      rescue => e
+        @media_error = "Error: #{e}"
       end
-    else
-      redirect(Rs(:new))
     end
   end
 
@@ -111,23 +111,23 @@ class MediaController < Ramaze::Controller
       tempfile, filename, type = request[:file].values_at(
           :tempfile, :filename, :type)
       
-      @file = Media.new do |f|
+      file = Media.new do |f|
         f.filename = filename
         f.mimetype = type || 'application/octet-stream'
       end
       
       begin
-        unless File.directory?(File.dirname(@file.path))
-          FileUtils.mkdir_p(File.dirname(@file.path))
+        unless File.directory?(File.dirname(file.path))
+          FileUtils.mkdir_p(File.dirname(file.path))
         end
 
-        FileUtils.mv(tempfile.path, @file.path)
+        FileUtils.mv(tempfile.path, file.path)
+        file.save
         
-        @file.save
+        flash[:success] = 'File uploaded.'
+        redirect(Rs(:edit, file.id))
       rescue => e
         @media_error = "Error: #{e}"
-      else
-        @success = true
       end
     end
   end

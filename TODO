@@ -1,6 +1,5 @@
 MEDIUM PRIORITY
-* Add Flash messages to indicate successful actions (post saved, file uploaded,
-  etc.)
+* Sortable tables in admin views
 * Bacon!
 * Native search functionality (Ferret?)
 

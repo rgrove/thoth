@@ -65,7 +65,7 @@
     </p>
     
     <% if @preview; @preview.errors.on(:author).each do |error| %>
-      <div class="error">
+      <div class="flash error">
         <%= h(error) %>
       </div>
     <% end; end %>
@@ -78,7 +78,7 @@
     </p>
   
     <% if @preview; @preview.errors.on(:author_url).each do |error| %>
-      <div class="error">
+      <div class="flash error">
         <%= h(error) %>
       </div>
     <% end; end %>
@@ -91,7 +91,7 @@
     </p>
   
     <% if @preview; @preview.errors.on(:title).each do |error| %>
-      <div class="error">
+      <div class="flash error">
         <%= h(error) %>
       </div>
     <% end; end %>
@@ -101,7 +101,7 @@
     </p>
   
     <% if @preview; @preview.errors.on(:body).each do |error| %>
-      <div class="error">
+      <div class="flash error">
         <%= h(error) %>
       </div>
     <% end; end %>
@@ -125,7 +125,7 @@
     </p>
     
     <% if @comment_error %>
-      <div class="error"><%= h(@comment_error) %></div>
+      <div class="flash error"><%= h(@comment_error) %></div>
     <% end %>
 
     <p>

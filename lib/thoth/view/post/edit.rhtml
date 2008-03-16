@@ -1,7 +1,7 @@
 <h2>Edit Blog Post</h2>
 
 <% if @post_error %>
-  <div class="error"><%= @post_error %></div>
+  <div class="flash error"><%= @post_error %></div>
 <% end %>
 
 <%= render_template(:form, :form_action => @form_action, :post => @post) %>

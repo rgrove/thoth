@@ -34,9 +34,9 @@ module Ramaze; module Helper
   module Admin
     Helper::LOOKUP << self
     
-    # Include cookie, flash and redirect helpers.
+    # Include cookie helper.
     def self.included(klass)
-      klass.send(:helper, :cookie, :flash, :redirect)
+      klass.send(:helper, :cookie)
     end
     
     # Authenticates an admin login by checking the +username+ and +password+
@@ -59,7 +59,7 @@ module Ramaze; module Helper
         redirect_referrer
       end
 
-      flash[:login_error] = 'Invalid username or password.'
+      flash[:error] = 'Invalid username or password.'
       redirect_referrer
     end
     

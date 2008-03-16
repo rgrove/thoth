@@ -3,7 +3,7 @@
 <%= render_template(:media, :file => @file) %>
 
 <% if @media_error %>
-  <div class="error"><%= @media_error %></div>
+  <div class="flash error"><%= @media_error %></div>
 <% end %>
 
 <fieldset class="replace">

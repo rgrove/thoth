@@ -24,7 +24,7 @@
       <% if @post; @post.errors.on(:title).each do |error| %>
         <tr>
           <td></td>
-          <td class="error">
+          <td class="flash error">
             <%= h(error) %>
           </td>
         </tr>
@@ -42,7 +42,7 @@
       <% if @post; @post.errors.on(:body).each do |error| %>
         <tr>
           <td></td>
-          <td class="error">
+          <td class="flash error">
             <%= h(error) %>
           </td>
         </tr>
@@ -61,7 +61,7 @@
       <% if @post; @post.errors.on(:tags).each do |error| %>
         <tr>
           <td></td>
-          <td class="error">
+          <td class="flash error">
             <%= h(error) %>
           </td>
         </tr>

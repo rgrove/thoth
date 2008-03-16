@@ -52,6 +52,7 @@ class PageController < Ramaze::Controller
       if request[:confirm] == 'yes'
         @page.destroy
         action_cache.clear
+        flash[:success] = 'Page deleted.'
         redirect(R(MainController))
       else
         redirect(@page.url)
@@ -64,31 +65,31 @@ class PageController < Ramaze::Controller
   def edit(id = nil)
     require_auth
 
-    if @page = Page[id]
-      @title       = "Edit page - #{@page.title}"
-      @form_action = Rs(:edit, id)
+    unless @page = Page[id]
+      flash[:error] = 'Invalid page id.'
+      redirect(Rs(:new))
+    end
+    
+    if request.post?
+      @page.name  = request[:name]
+      @page.title = request[:title]
+      @page.body  = request[:body]
       
-      if request.post?
-        @page.name  = request[:name]
-        @page.title = request[:title]
-        @page.body  = request[:body]
-        
-        if @page.valid? && request[:action] == 'Post'
-          begin
-            raise unless @page.save
-          rescue => e
-            @page_error = "There was an error saving your page: #{e}"
-          else
-            action_cache.clear
-            redirect(Rs(@page.name))
-          end
+      if @page.valid? && request[:action] == 'Post'
+        begin
+          raise unless @page.save
+        rescue => e
+          @page_error = "There was an error saving your page: #{e}"
+        else
+          action_cache.clear
+          flash[:success] = 'Page saved.'
+          redirect(Rs(@page.name))
         end
       end
-    else
-      @title       = 'New page - Untitled'
-      @page_error  = 'Invalid page id.'
-      @form_action = Rs(:new)
     end
+
+    @title       = "Edit page - #{@page.title}"
+    @form_action = Rs(:edit, id)
   end
 
   def list(page = 1)
@@ -120,6 +121,7 @@ class PageController < Ramaze::Controller
           @page_error = "There was an error saving your page: #{e}"
         else
           action_cache.clear
+          flash[:success] = 'Page created.'
           redirect(Rs(@page.name))
         end
       end

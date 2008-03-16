@@ -51,6 +51,7 @@ class PostController < Ramaze::Controller
       if request[:confirm] == 'yes'
         @post.destroy
         action_cache.clear
+        flash[:success] = 'Blog post deleted.'
         redirect(R(MainController))
       else
         redirect(@post.url)
@@ -63,33 +64,33 @@ class PostController < Ramaze::Controller
   def edit(id = nil)
     require_auth
 
-    if @post = Post[id]
-      @title       = "Edit blog post - #{@post.title}"
-      @form_action = Rs(:edit, id)
+    unless @post = Post[id]
+      flash[:error] = 'Invalid post id.'
+      redirect(Rs(:new))
+    end
+    
+    if request.post?
+      @post.title = request[:title]
+      @post.body  = request[:body]
+      @post.tags  = request[:tags]
       
-      if request.post?
-        @post.title = request[:title]
-        @post.body  = request[:body]
-        @post.tags  = request[:tags]
-        
-        if @post.valid? && request[:action] == 'Post'
-          begin
-            Thoth.db.transaction do
-              raise unless @post.save && @post.tags = request[:tags]
-            end
-          rescue => e
-            @post_error = "There was an error saving your post: #{e}"
-          else
-            action_cache.clear
-            redirect(Rs(@post.name))
+      if @post.valid? && request[:action] == 'Post'
+        begin
+          Thoth.db.transaction do
+            raise unless @post.save && @post.tags = request[:tags]
           end
+        rescue => e
+          @post_error = "There was an error saving your post: #{e}"
+        else
+          action_cache.clear
+          flash[:success] = 'Blog post saved.'
+          redirect(Rs(@post.name))
         end
       end
-    else
-      @title       = 'New blog post - Untitled'
-      @post_error  = 'Invalid post id.'
-      @form_action = Rs(:new)
     end
+
+    @title       = "Edit blog post - #{@post.title}"
+    @form_action = Rs(:edit, id)
   end
   
   def list(page = 1)
@@ -123,6 +124,7 @@ class PostController < Ramaze::Controller
           @post_error = "There was an error saving your post: #{e}"
         else
           action_cache.clear
+          flash[:success] = 'Blog post created.'
           redirect(Rs(@post.name))
         end
       end
