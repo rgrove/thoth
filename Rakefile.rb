@@ -67,12 +67,11 @@ thoth_gemspec = Gem::Specification.new do |s|
   s.add_dependency('erubis',        '>= 2.5.0')
   s.add_dependency('hpricot',       '>= 0.6')
   s.add_dependency('json_pure',     '>= 1.1.2')
-  s.add_dependency('mongrel',       '>= 1.1.4')
   s.add_dependency('RedCloth',      '>= 3.0.4')
   s.add_dependency('sequel',        '>= 1.3')
   s.add_dependency('sequel_core',   '>= 1.3')
   s.add_dependency('sequel_model',  '>= 0.5.0.2')
-  s.add_dependency('swiftiply',     '>= 0.6.1.1')
+  s.add_dependency('thin',          '>= 0.7.1')
 end
 
 plugins = []

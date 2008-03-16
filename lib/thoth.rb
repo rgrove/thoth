@@ -147,10 +147,10 @@ module Thoth
       
       Config.plugins.each {|plugin| Plugin.load(plugin) }
       
-      Ramaze.startup :adapter => :evented_mongrel,
-          :force  => true,
-          :host   => trait[:ip],
-          :port   => trait[:port]
+      Ramaze.startup :adapter => :thin,
+          :force => true,
+          :host  => trait[:ip],
+          :port  => trait[:port]
     end
 
     # Starts Thoth as a daemon.
