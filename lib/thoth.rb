@@ -42,7 +42,7 @@ require 'configuration'
 
 # The main Thoth namespace.
 module Thoth
-  HOME_DIR   = ENV['RIPOSTE_HOME'] || File.expand_path('.') unless const_defined?(:HOME_DIR)
+  HOME_DIR   = ENV['THOTH_HOME'] || File.expand_path('.') unless const_defined?(:HOME_DIR)
   LIB_DIR    = File.dirname(File.expand_path(__FILE__))/:thoth
   PUBLIC_DIR = LIB_DIR/:public unless const_defined?(:PUBLIC_DIR)
   VIEW_DIR   = LIB_DIR/:view unless const_defined?(:VIEW_DIR)
@@ -57,7 +57,7 @@ require 'thoth/monkeypatch/dispatcher/file'
 
 module Thoth
   # Path to the config file.
-  trait[:config_file] ||= ENV['RIPOSTE_CONF'] || HOME_DIR/'thoth.conf'
+  trait[:config_file] ||= ENV['THOTH_CONF'] || HOME_DIR/'thoth.conf'
   
   # Daemon command to execute (:start, :stop, :restart) or nil.
   trait[:daemon] ||= nil
