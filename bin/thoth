@@ -56,7 +56,7 @@ module Thoth
         trait[:daemon] = cmd
       end
       
-      o.on('-H, --home [home dir]', 
+      o.on('-H, --home [path]', 
           'Use the specified home directory.') do |home|
         unless File.directory?(home)
           abort("Error: home directory not found or not a directory: #{home}")
@@ -74,7 +74,26 @@ module Thoth
           'Listen for connections on the specified port number.') do |port|
         trait[:port] = port.to_i
       end
+      
+      o.separator ''
   
+      o.on('--create [path]',
+          'Create a new Thoth home directory with a sample',
+          'config file.') do |path|
+        require 'thoth'
+        
+        begin
+          create(path)
+        rescue => e
+          abort("Error: #{e}")
+        end
+        
+        puts 'Your new Thoth home directory has been created at ' <<
+            File.expand_path(path)
+
+        exit
+      end
+      
       o.on('--devel',
           'Run Thoth in development mode.') do
         trait[:mode] = :devel

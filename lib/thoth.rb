@@ -80,6 +80,22 @@ module Thoth
 
   class << self
     attr_reader :db
+    
+    # Creates a new Thoth home directory with a sample config file at the
+    # specified path.
+    def create(path)
+      path = File.expand_path(path)
+      
+      if File.exist?(path)
+        raise "specified path already exists: #{path}"
+      end
+      
+      FileUtils.mkdir_p(path/:media)
+      FileUtils.mkdir(path/:public)
+      FileUtils.mkdir(path/:view)
+      FileUtils.cp(LIB_DIR/'..'/'..'/'thoth.conf.sample', path/'thoth.conf')
+      File.chmod(0640, path/'thoth.conf')
+    end
 
     # Opens a Sequel database connection to the Thoth database.
     def open_db
