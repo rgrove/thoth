@@ -31,8 +31,16 @@ module Ramaze::Dispatcher
   # Monkeypatch to add support for multiple public_roots.
   class File
     class << self
+      def in_public?(path)
+        path = expand(path)
+        
+        path.start_with?(expand(Ramaze::Global.public_root)) ||
+            (Thoth::Config.theme.public &&
+            path.start_with?(expand(Thoth::Config.theme.public)))
+      end
+
       alias __resolve_path resolve_path
-    
+
       def resolve_path(path)
         return __resolve_path(path) unless Thoth::Config.theme.public
         joined = Thoth::Config.theme.public/path
