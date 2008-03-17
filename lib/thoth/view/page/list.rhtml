@@ -1,27 +1,10 @@
 <h2>Pages</h2>
 
-<% if @prev_url || @next_url %>
-  <%= 
-  render_template('../pager',
-      :prev_url  => @prev_url,
-      :next_url  => @next_url,
-      :prev_text => '&laquo; Newer pages',
-      :next_text => 'Older pages &raquo;')
-  %>
-<% end %>
+<%= render_template('../pager') %>
 
-<table class="list pages" summary="List of all pages in reverse order">
-  <thead>
-    <tr>
-      <th>Name</th>
-      <th>Title</th>
-      <th>Created</th>
-      <th>Updated</th>
-    </tr>
-  </thead>
-  
+<table class="list pages" summary="List of all pages">
+  <%= render_template('../util/table_sortheader') %>
   <tfoot></tfoot>
-  
   <tbody>
     <% row = 'even' %>
     <% @pages.all do |page| %>
@@ -41,12 +24,4 @@
   </tbody>
 </table>
 
-<% if @prev_url || @next_url %>
-  <%= 
-  render_template('../pager',
-      :prev_url  => @prev_url,
-      :next_url  => @next_url,
-      :prev_text => '&laquo; Newer pages',
-      :next_text => 'Older pages &raquo;')
-  %>
-<% end %>
+<%= render_template('../pager') %>

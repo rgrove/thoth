@@ -96,10 +96,21 @@ class PostController < Ramaze::Controller
   def list(page = 1)
     require_auth
     
-    @posts    = Post.recent(page.to_i, 20)
-    @prev_url = @posts.prev_page ? Rs(:list, @posts.prev_page) : nil
-    @next_url = @posts.next_page ? Rs(:list, @posts.next_page) : nil
-    @title    = "Blog Posts (page #{page} of #{@posts.page_count})"
+    page = page.to_i
+    
+    @columns  = [:id, :title, :created_at, :updated_at]
+    @order    = (request[:order] || :desc).to_sym
+    @sort     = (request[:sort]  || :created_at).to_sym
+    @sort     = :created_at unless @columns.include?(@sort)
+    @sort_url = Rs(:list, page)
+
+    @posts = Post.paginate(page, 20).order(@order == :desc ? @sort.desc : @sort)
+    @title = "Blog Posts (page #{@page} of #{@posts.page_count})"
+
+    @prev_url  = @posts.prev_page ? Rs(:list, @posts.prev_page, :sort => @sort,
+        :order => @order) : nil
+    @next_url  = @posts.next_page ? Rs(:list, @posts.next_page, :sort => @sort,
+        :order => @order) : nil
   end
   
   def new

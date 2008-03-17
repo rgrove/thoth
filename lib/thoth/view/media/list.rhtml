@@ -1,28 +1,10 @@
 <h2>Media</h2>
 
-<% if @prev_url || @next_url %>
-  <%= 
-  render_template('../pager',
-      :prev_url  => @prev_url,
-      :next_url  => @next_url,
-      :prev_text => '&laquo; Newer files',
-      :next_text => 'Older files &raquo;')
-  %>
-<% end %>
+<%= render_template('../pager') %>
 
-<table class="list media"
-    summary="List of all media in reverse order by upload time">
-  <thead>
-    <tr>
-      <th>Filename</th>
-      <th>Size</th>
-      <th>Created</th>
-      <th>Updated</th>
-    </tr>
-  </thead>
-  
+<table class="list media" summary="List of all media">
+  <%= render_template('../util/table_sortheader') %>
   <tfoot></tfoot>
-  
   <tbody>
     <% row = 'even' %>
     <% @files.all do |file| %>
@@ -42,12 +24,4 @@
   </tbody>
 </table>
 
-<% if @prev_url || @next_url %>
-  <%= 
-  render_template('../pager',
-      :prev_url  => @prev_url,
-      :next_url  => @next_url,
-      :prev_text => '&laquo; Newer files',
-      :next_text => 'Older files &raquo;')
-  %>
-<% end %>
+<%= render_template('../pager') %>

@@ -1,0 +1,20 @@
+<thead>
+  <tr>
+    <% @columns.each do |field| %>
+      <% label = field.to_s.capitalize.gsub(/_.*$/, '') %>
+      <th class="<%= h(field) + (@sort == field ? ' sortfield' : '') %>">
+        <% if @nosort && @nosort.include?(field) %>
+          <%= label %>
+        <% else %>
+          <% if @sort == field %>
+            <span class="adminicon sort <%= @order %>"></span>
+          <% end %>
+          <% order = @sort == field ? (@order == :asc ? :desc : :asc) : :asc %>
+          <a href="<%= h(@sort_url) %>?sort=<%= u(field) %>&amp;order=<%= order %>">
+            <%= label %>
+          </a>
+        <% end %>
+      </th>
+    <% end %>
+  </tr>
+</thead>

@@ -1,27 +1,10 @@
 <h2>Comments</h2>
 
-<% if @prev_url || @next_url %>
-  <%= 
-  render_template('../pager',
-      :prev_url  => @prev_url,
-      :next_url  => @next_url,
-      :prev_text => '&laquo; Newer comments',
-      :next_text => 'Older comments &raquo;')
-  %>
-<% end %>
+<%= render_template('../pager') %>
 
-<table class="list comments" summary="List of all comments in reverse order">
-  <thead>
-    <tr>
-      <th>Id</th>
-      <th>Title</th>
-      <th>Author</th>
-      <th>Created</th>
-    </tr>
-  </thead>
-  
+<table class="list comments" summary="List of all comments">
+  <%= render_template('../util/table_sortheader') %>
   <tfoot></tfoot>
-  
   <tbody>
     <% row = 'even' %>
     <% @comments.all do |comment| %>
@@ -47,12 +30,4 @@
   </tbody>
 </table>
 
-<% if @prev_url || @next_url %>
-  <%= 
-  render_template('../pager',
-      :prev_url  => @prev_url,
-      :next_url  => @next_url,
-      :prev_text => '&laquo; Newer comments',
-      :next_text => 'Older comments &raquo;')
-  %>
-<% end %>
+<%= render_template('../pager') %>

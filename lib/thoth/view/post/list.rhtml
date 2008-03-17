@@ -1,27 +1,10 @@
 <h2>Blog Posts</h2>
 
-<% if @prev_url || @next_url %>
-  <%= 
-  render_template('../pager',
-      :prev_url  => @prev_url,
-      :next_url  => @next_url,
-      :prev_text => '&laquo; Newer posts',
-      :next_text => 'Older posts &raquo;')
-  %>
-<% end %>
+<%= render_template('../pager') %>
 
-<table class="list posts" summary="List of all blog posts in reverse order">
-  <thead>
-    <tr>
-      <th>Id</th>
-      <th>Title</th>
-      <th>Created</th>
-      <th>Updated</th>
-    </tr>
-  </thead>
-  
+<table class="list posts" summary="List of all blog posts">
+  <%= render_template('../util/table_sortheader') %>
   <tfoot></tfoot>
-  
   <tbody>
     <% row = 'even' %>
     <% @posts.all do |post| %>
@@ -41,12 +24,4 @@
   </tbody>
 </table>
 
-<% if @prev_url || @next_url %>
-  <%= 
-  render_template('../pager',
-      :prev_url  => @prev_url,
-      :next_url  => @next_url,
-      :prev_text => '&laquo; Newer posts',
-      :next_text => 'Older posts &raquo;')
-  %>
-<% end %>
+<%= render_template('../pager') %>

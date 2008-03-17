@@ -112,10 +112,22 @@ class CommentController < Ramaze::Controller
   def list(page = 1)
     require_auth
     
-    @comments = Comment.recent(page.to_i, 20)
-    @prev_url = @comments.prev_page ? Rs(:list, @comments.prev_page) : nil
-    @next_url = @comments.next_page ? Rs(:list, @comments.next_page) : nil
-    @title    = "Comments (page #{page} of #{@comments.page_count})"
+    page = page.to_i
+    
+    @columns  = [:id, :title, :author, :created_at]
+    @order    = (request[:order] || :desc).to_sym
+    @sort     = (request[:sort]  || :created_at).to_sym
+    @sort     = :created_at unless @columns.include?(@sort)
+    @sort_url = Rs(:list, page)
+
+    @comments = Comment.paginate(page, 20).order(@order == :desc ?
+        @sort.desc : @sort)
+    @title = "Comments (page #{page} of #{@comments.page_count})"
+    
+    @prev_url = @comments.prev_page ? Rs(:list, @comments.prev_page,
+        :sort => @sort, :order => @order) : nil
+    @next_url = @comments.next_page ? Rs(:list, @comments.next_page,
+        :sort => @sort, :order => @order) : nil
   end
   
   def new(name)

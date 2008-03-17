@@ -95,10 +95,21 @@ class PageController < Ramaze::Controller
   def list(page = 1)
     require_auth
     
-    @pages    = Page.reverse_order(:created_at).paginate(page.to_i, 20)
-    @prev_url = @pages.prev_page ? Rs(:list, @pages.prev_page) : nil
-    @next_url = @pages.next_page ? Rs(:list, @pages.next_page) : nil
-    @title    = "Pages (page #{page} of #{@pages.page_count})"
+    page = page.to_i
+    
+    @columns  = [:name, :title, :created_at, :updated_at]
+    @order    = (request[:order] || :desc).to_sym
+    @sort     = (request[:sort]  || :created_at).to_sym
+    @sort     = :created_at unless @columns.include?(@sort)
+    @sort_url = Rs(:list, page)
+    
+    @pages = Page.paginate(page, 20).order(@order == :desc ? @sort.desc : @sort)
+    @title = "Pages (page #{page} of #{@pages.page_count})"
+    
+    @prev_url = @pages.prev_page ? Rs(:list, @pages.prev_page, :sort => @sort,
+        :order => @order) : nil
+    @next_url = @pages.next_page ? Rs(:list, @pages.next_page, :sort => @sort,
+        :order => @order) : nil
   end
   
   def new

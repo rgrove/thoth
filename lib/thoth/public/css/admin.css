@@ -23,6 +23,14 @@
 .adminicon.post-list      { background-position: -48px 0;  }
 .adminicon.post-new       {}
 
+.adminicon.sort {
+  height: 5px;
+  width: 7px;
+}
+
+.adminicon.sort.asc  { background-position: -230px 0; }
+.adminicon.sort.desc { background-position: -230px -6px; }
+
 /* -- Toolbar Login Form ---------------------------------------------------- */
 #adminToolbar form {
   float: right;
@@ -139,6 +147,7 @@ table.list td { padding: 1px 2px 1px 2px; }
 table.list thead th {
   font-weight: bold;
   text-align: left;
+  white-space: nowrap;
 }
 
 table.list tbody tr.odd { background: #fff; }

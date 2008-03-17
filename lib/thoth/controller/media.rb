@@ -95,10 +95,22 @@ class MediaController < Ramaze::Controller
   def list(page = 1)
     require_auth
     
-    @files    = Media.reverse_order(:created_at).paginate(page.to_i, 20)
-    @prev_url = @files.prev_page ? Rs(:list, @files.prev_page) : nil
-    @next_url = @files.next_page ? Rs(:list, @files.next_page) : nil
-    @title    = "Media (page #{page} of #{@files.page_count})"
+    page = page.to_i
+    
+    @columns  = [:filename, :size, :created_at, :updated_at]
+    @nosort   = [:size]
+    @order    = (request[:order] || :desc).to_sym
+    @sort     = (request[:sort]  || :created_at).to_sym
+    @sort     = :created_at unless @columns.include?(@sort)
+    @sort_url = Rs(:list, page)
+    
+    @files = Media.paginate(page, 20).order(@order == :desc ? @sort.desc : @sort)
+    @title = "Media (page #{page} of #{@files.page_count})"
+        
+    @prev_url = @files.prev_page ? Rs(:list, @files.prev_page, :sort => @sort,
+        :order => @order) : nil
+    @next_url = @files.next_page ? Rs(:list, @files.next_page, :sort => @sort,
+        :order => @order) : nil
   end
 
   def new
