@@ -44,7 +44,7 @@ ENV['COPYFILE_DISABLE'] = 'true'
 
 # Gemspec for Thoth
 thoth_gemspec = Gem::Specification.new do |s|
-  s.rubyforge_project = 'thoth'
+  s.rubyforge_project = 'riposte'
 
   s.name     = 'thoth'
   s.version  = Thoth::APP_VERSION
