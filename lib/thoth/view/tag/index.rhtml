@@ -7,15 +7,11 @@
     <strong><%= @total %></strong>
   </p>
 
-  <% if @prev_url || @next_url %>
-    <%= 
-    render_template('../pager',
-        :prev_url  => @prev_url,
-        :next_url  => @next_url,
-        :prev_text => '&laquo; Newer stuff',
-        :next_text => 'Older stuff &raquo;')
-    %>
-  <% end %>
+  <%= 
+  render_template('../util/pager',
+      :prev_text => '&laquo; Newer stuff',
+      :next_text => 'Older stuff &raquo;')
+  %>
 
   <ul>
     <% @posts.all do |post| %>
@@ -25,13 +21,9 @@
     <% end %>
   </ul>
 
-  <% if @prev_url || @next_url %>
-    <%= 
-    render_template('../pager',
-        :prev_url  => @prev_url,
-        :next_url  => @next_url,
-        :prev_text => '&laquo; Newer stuff',
-        :next_text => 'Older stuff &raquo;')
-    %>
-  <% end %>
+  <%= 
+  render_template('../util/pager',
+      :prev_text => '&laquo; Newer stuff',
+      :next_text => 'Older stuff &raquo;')
+  %>
 </div>

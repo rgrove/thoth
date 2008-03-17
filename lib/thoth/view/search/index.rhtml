@@ -16,15 +16,11 @@
       <strong><%= h(@query) %></strong>
     </p>
 
-    <% if @prev_url || @next_url %>
-      <%= 
-      render_template('../pager',
-          :prev_url  => @prev_url,
-          :next_url  => @next_url,
-          :prev_text => '&laquo; Prev',
-          :next_text => 'Next &raquo;')
-      %>
-    <% end %>
+    <%= 
+    render_template('../util/pager',
+        :prev_text => '&laquo; Prev',
+        :next_text => 'Next &raquo;')
+    %>
 
     <ul>
       <% @data[:results].each do |result| %>
@@ -36,15 +32,11 @@
       <% end %>
     </ul>
 
-    <% if @prev_url || @next_url %>
-      <%= 
-      render_template('../pager',
-          :prev_url  => @prev_url,
-          :next_url  => @next_url,
-          :prev_text => '&laquo; Prev',
-          :next_text => 'Next &raquo;')
-      %>
-    <% end %>
+    <%= 
+    render_template('../util/pager',
+        :prev_text => '&laquo; Prev',
+        :next_text => 'Next &raquo;')
+    %>
     
     <p class="plug">
       Powered by <a href="http://search.yahoo.com/">Yahoo! Search</a>
