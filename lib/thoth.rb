@@ -91,9 +91,10 @@ module Thoth
       end
       
       FileUtils.mkdir_p(path/:media)
+      FileUtils.mkdir(path/:plugin)
       FileUtils.mkdir(path/:public)
       FileUtils.mkdir(path/:view)
-      FileUtils.cp(LIB_DIR/'..'/'..'/'thoth.conf.sample', path/'thoth.conf')
+      FileUtils.cp(LIB_DIR/'..'/:proto/'thoth.conf.sample', path/'thoth.conf')
       File.chmod(0640, path/'thoth.conf')
     end
 
