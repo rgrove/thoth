@@ -36,7 +36,8 @@ module Ramaze; module Helper
     
     # Displays an error backtrace.
     def error
-      error_404 unless Thoth.trait[:mode] == :devel
+      error_500 unless Thoth.trait[:mode] == :devel
+      response['Content-Type'] = 'text/html'
       Ramaze::Action.current.template ||= Thoth::VIEW_DIR/'error.rhtml'
       super
     end
