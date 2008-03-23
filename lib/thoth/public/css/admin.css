@@ -1,6 +1,6 @@
 /* -- Icons ----------------------------------------------------------------- */
 .adminicon {
-  background: url(../images/admin-sprite.png) no-repeat;
+  background: url(/images/admin-sprite.png) no-repeat;
   display: -moz-inline-box;
   display: inline-block;
   height: 16px;
