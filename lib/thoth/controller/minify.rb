@@ -28,14 +28,39 @@
 
 class MinifyController < Ramaze::Controller
   engine :Erubis
-  helper :cache, :error, :minify
+  helper :cache, :error
   layout '/layout'
   
   template_root Thoth::Config.theme.view/:admin,
                 Thoth::VIEW_DIR/:admin
 
   def css(*args)
-    response.body = minify_css(process('css/' << args.join('/')))
+    path = 'css/' << args.join('/')
+    
+    if Thoth::Config.server.enable_cache
+      response.body = value_cache[path] ||
+          value_cache[path] = CSSMin.minify(process(path))
+    else
+      response.body = CSSMin.minify(process(path))
+    end
+    
+    response['Content-Type'] = 'text/css'
+
+    throw(:respond)
+  end
+  
+  def js(*args)
+    path = 'js/' << args.join('/')
+    
+    if Thoth::Config.server.enable_cache
+      response.body = value_cache[path] ||
+          value_cache[path] = JSMin.minify(process(path))
+    else
+      response.body = JSMin.minify(process(path))
+    end
+
+    response['Content-Type'] = 'text/javascript'
+
     throw(:respond)
   end
   

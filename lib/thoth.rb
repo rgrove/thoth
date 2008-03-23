@@ -34,6 +34,8 @@ require 'fileutils'
 
 require 'rubygems'
 require 'builder'
+require 'cssmin'
+require 'jsmin'
 require 'ramaze'
 require 'redcloth'
 require 'sequel'
