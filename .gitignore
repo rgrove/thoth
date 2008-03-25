@@ -1,0 +1,7 @@
+custom/
+db/
+pkg/
+._*
+.DS_Store
+error.log
+thoth.conf
