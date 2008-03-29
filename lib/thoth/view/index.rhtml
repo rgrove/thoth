@@ -1,6 +1,8 @@
-<% @posts.all do |post| %>
-  <%= render_template('post/compact', :post => post) %>
-<% end %>
+<div class="hfeed">
+  <% @posts.all do |post| %>
+    <%= render_template('post/compact', :post => post) %>
+  <% end %>
+</div>
 
 <%=
 render_template('util/pager',

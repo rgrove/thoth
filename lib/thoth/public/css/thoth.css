@@ -250,6 +250,9 @@ textarea { font: 100% Consolas, Monaco, 'Courier New'; }
 }
 
 /* -- Posts ----------------------------------------------------------------- */
+.post abbr.published { border: 0; }
+.post address.author { display: none; }
+
 .post {
   margin: 0 0 1.5em 0;
   padding-bottom: 1px;

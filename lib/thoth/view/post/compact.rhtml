@@ -1,18 +1,26 @@
-<div id="post-<%= @post.id %>" class="post">
+<div id="post-<%= @post.id %>" class="post hentry">
   <div class="hd">
-    <h2>
+    <h2 class="entry-title">
       <a href="<%= @post.url %>" rel="bookmark"
           title="Permalink for this article">
         <%= h(@post.title) %>
       </a>
     </h2>
     
+    <address class="vcard author">
+      <a class="email fn" href="mailto:<%= h(Thoth::Config.admin.email) %>">
+        <%= h(Thoth::Config.admin.name) %>
+      </a>
+    </address>
+
     <span class="date robots-nocontent">
-      <%= @post.created_at(Thoth::Config.timestamp.long) %>
+      <abbr class="published" title="<%= @post.created_at.xmlschema %>">
+        <%= @post.created_at(Thoth::Config.timestamp.long) %>
+      </abbr>
     </span>
   </div>
   
-  <div class="bd">
+  <div class="bd entry-content">
     <%= @post.body_rendered %>
   </div>
   
