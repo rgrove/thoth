@@ -1,6 +1,6 @@
 <div id="hd" class="robots-nocontent">
   <h1>
-    <a href="<%= R(MainController) %>">
+    <a href="<%= R(MainController) %>" rel="home">
       <%= h(Thoth::Config.site.name) %>
     </a>
   </h1>
@@ -11,7 +11,7 @@
     </div>
     
     <ul>
-      <li><%= A('Home',     :href => R(MainController)) %></li>
+      <li><%= A('Home',     :href => R(MainController), :rel => 'home') %></li>
       <li><%= A('Archives', :href => R(MainController, :archive, 2)) %></li>
       <li><%= A('Comments', :href => R(CommentController)) %></li>
     </ul>

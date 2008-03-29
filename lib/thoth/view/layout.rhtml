@@ -12,10 +12,10 @@
     <link rel="alternate" type="application/rss+xml"
         href="<%= R(MainController, :rss) %>" title="Posts (RSS)" />
     
+    <link rel="home" href="<%= Thoth::Config.site.url %>" />
     <% if @prev_url %>
       <link id="prev_url" rel="prev" href="<%= @prev_url %>" />
-    <% end %>
-    
+    <% end %>    
     <% if @next_url %>
       <link id="next_url" rel="next" href="<%= @next_url %>" />
     <% end %>
