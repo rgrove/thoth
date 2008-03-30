@@ -99,17 +99,17 @@ module Thoth
         trait[:mode] = :devel
       end
       
-      o.on('--log-sql [filename]',
-          'Log all SQL queries to the specified file.') do |filename|
-        trait[:sql_log] = File.expand_path(filename)
-      end
-      
       o.on('--import [module]',
            'Import content from another blog engine using the',
            'specified import module.') do |import_module|
         importer = import_module
       end
 
+      o.on('--log-sql [filename]',
+          'Log all SQL queries to the specified file.') do |filename|
+        trait[:sql_log] = File.expand_path(filename)
+      end
+      
       o.separator ''
       o.separator 'Info:'
 
