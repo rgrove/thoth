@@ -38,6 +38,7 @@ module Thoth
             name "Thoth"
             desc "Simple, elegant, awesome."
             url  "http://localhost:7000/"
+            enable_sitemap true
           }
 
           admin {

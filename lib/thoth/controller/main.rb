@@ -31,6 +31,8 @@ class MainController < Ramaze::Controller
   helper :admin, :cache, :error, :ysearch
   layout '/layout'
   
+  deny_layout :sitemap
+  
   template_root Thoth::Config.theme.view,
                 Thoth::VIEW_DIR
   
@@ -39,6 +41,7 @@ class MainController < Ramaze::Controller
       check_auth.to_s + (request[:type] || '')
     }
     cache :atom, :rss, :ttl => 60
+    cache :sitemap, :ttl => 3600
   end
 
   def index
@@ -53,7 +56,7 @@ class MainController < Ramaze::Controller
   end
   
   def atom
-    response.header['Content-Type'] = 'application/atom+xml'
+    response['Content-Type'] = 'application/atom+xml'
     
     x = Builder::XmlMarkup.new(:indent => 2)
     x.instruct!
@@ -91,7 +94,7 @@ class MainController < Ramaze::Controller
   end
   
   def rss
-    response.header['Content-Type'] = 'application/rss+xml'
+    response['Content-Type'] = 'application/rss+xml'
 
     x = Builder::XmlMarkup.new(:indent => 2)
     x.instruct!
@@ -124,6 +127,42 @@ class MainController < Ramaze::Controller
           }
         end
       }
+    }
+  end
+  
+  def sitemap
+    error_404 unless Thoth::Config.site.enable_sitemap
+
+    response['Content-Type'] = 'text/xml'
+    
+    x = Builder::XmlMarkup.new(:indent => 2)
+    x.instruct!
+    
+    x.urlset(:xmlns => 'http://www.sitemaps.org/schemas/sitemap/0.9') {
+      x.url {
+        x.loc        Thoth::Config.site.url
+        x.changefreq 'hourly'
+        x.priority   '1.0'
+      }
+      
+      Page.reverse_order(:updated_at).all do |page|
+        x.url {
+          x.loc        page.url
+          x.lastmod    page.updated_at.xmlschema
+          x.changefreq 'weekly'
+          x.priority   '0.6'
+        }
+      end
+      
+      now = Time.now
+      
+      Post.reverse_order(:updated_at).all do |post|
+        x.url {
+          x.loc        post.url
+          x.lastmod    post.updated_at.xmlschema
+          x.changefreq 'weekly'
+        }
+      end
     }
   end
   

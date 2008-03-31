@@ -3,6 +3,8 @@ Thoth History
 
 Version 0.1.3 (?)
   * Blog posts are now marked up using the hAtom microformat.
+  * Thoth will auto-generate an XML sitemap at http://yourblog.com/sitemap
+    (set site.enable_sitemap to false to disable).
 
 Version 0.1.2 (2008-03-22)
   * Add MinifyController to minify JavaScript and CSS on the fly.

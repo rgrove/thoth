@@ -35,6 +35,16 @@ Configuration.for("thoth_production") {
     # to construct links. Be sure to set this correctly or links may not work.
     #
     # url "http://localhost:7000/"
+    
+    # Whether or not you want to expose a sitemap for your blog. A sitemap is
+    # an XML file that gives search engines information about all the URLs on
+    # your site so they can index them more easily.
+    #
+    # If enabled, you'll be able to see your sitemap at
+    # http://yourdomain.com/sitemap and you can submit this URL to search
+    # engines to improve the indexing of your site (and possibly your PageRank).
+    #
+    # enable_sitemap true
 
   }
   
