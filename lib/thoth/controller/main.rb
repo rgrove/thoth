@@ -31,7 +31,7 @@ class MainController < Ramaze::Controller
   helper :admin, :cache, :error, :ysearch
   layout '/layout'
   
-  deny_layout :sitemap
+  deny_layout :atom, :rss, :sitemap
   
   template_root Thoth::Config.theme.view,
                 Thoth::VIEW_DIR
@@ -61,7 +61,7 @@ class MainController < Ramaze::Controller
     x = Builder::XmlMarkup.new(:indent => 2)
     x.instruct!
     
-    respond x.feed(:xmlns => 'http://www.w3.org/2005/Atom') {
+    x.feed(:xmlns => 'http://www.w3.org/2005/Atom') {
       x.id       Thoth::Config.site.url
       x.title    Thoth::Config.site.name
       x.subtitle Thoth::Config.site.desc
@@ -99,8 +99,8 @@ class MainController < Ramaze::Controller
     x = Builder::XmlMarkup.new(:indent => 2)
     x.instruct!
 
-    respond x.rss(:version     => '2.0',
-                  'xmlns:atom' => 'http://www.w3.org/2005/Atom') {
+    x.rss(:version     => '2.0',
+          'xmlns:atom' => 'http://www.w3.org/2005/Atom') {
       x.channel {
         x.title          Thoth::Config.site.name
         x.link           Thoth::Config.site.url
@@ -186,5 +186,5 @@ class MainController < Ramaze::Controller
   end
   
   alias_method 'recent-comments', :recent_comments
-  
+
 end

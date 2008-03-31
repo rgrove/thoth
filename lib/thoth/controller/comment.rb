@@ -30,6 +30,8 @@ class CommentController < Ramaze::Controller
   engine :Erubis
   helper :admin, :cache, :cookie, :error
   layout '/layout'
+  
+  deny_layout :atom, :rss
 
   template_root Thoth::Config.theme.view/:comment,
                 Thoth::VIEW_DIR/:comment
@@ -51,12 +53,12 @@ class CommentController < Ramaze::Controller
   end
   
   def atom
-    response.header['Content-Type'] = 'application/atom+xml'
+    response['Content-Type'] = 'application/atom+xml'
 
     x = Builder::XmlMarkup.new(:indent => 2)
     x.instruct!
 
-    respond x.feed(:xmlns => 'http://www.w3.org/2005/Atom') {
+    x.feed(:xmlns => 'http://www.w3.org/2005/Atom') {
       comments_url = Thoth::Config.site.url.chomp('/') + Rs()
       
       x.id       comments_url
@@ -177,14 +179,14 @@ class CommentController < Ramaze::Controller
   end
   
   def rss
-    response.header['Content-Type'] = 'application/rss+xml'
+    response['Content-Type'] = 'application/rss+xml'
 
     x = Builder::XmlMarkup.new(:indent => 2)
     x.instruct!
 
-    respond x.rss(:version     => '2.0',
-                  'xmlns:atom' => 'http://www.w3.org/2005/Atom',
-                  'xmlns:dc'   => 'http://purl.org/dc/elements/1.1/') {
+    x.rss(:version     => '2.0',
+          'xmlns:atom' => 'http://www.w3.org/2005/Atom',
+          'xmlns:dc'   => 'http://purl.org/dc/elements/1.1/') {
       x.channel {
         x.title          "#{Thoth::Config.site.name}: Recent Comments"
         x.link           Thoth::Config.site.url
