@@ -154,12 +154,7 @@ class Comment < Sequel::Model
 
   # URL for this comment.
   def url
-    if new?
-      '#'
-    else
-      Thoth::Config.site.url.chomp('/') + R(PostController, post_id) +
-          "#comment-#{id}"
-    end
+    new? ? '#' : post.url + "#comment-#{id}"
   end
 end
 
