@@ -79,7 +79,7 @@ class MainController < Ramaze::Controller
       Post.recent.all.each do |post|
         x.entry {
           x.id        post.url
-          x.title     post.title, :type => 'html'
+          x.title     post.title
           x.published post.created_at.xmlschema
           x.updated   post.updated_at.xmlschema
           x.link      :href => post.url, :rel => 'alternate'

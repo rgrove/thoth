@@ -72,7 +72,7 @@ class CommentController < Ramaze::Controller
       Comment.recent.all.each do |comment|
         x.entry {
           x.id        comment.url
-          x.title     comment.title, :type => 'html'
+          x.title     comment.title
           x.published comment.created_at.xmlschema
           x.updated   comment.updated_at.xmlschema
           x.link      :href => comment.url, :rel => 'alternate'

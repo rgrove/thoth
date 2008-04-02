@@ -7,6 +7,8 @@ Version 0.1.3 (?)
     (set site.enable_sitemap to false to disable).
   * Fixed a bug that prevented Atom and RSS feeds from being cached when
     server-side caching was enabled.
+  * Fixed entry titles in Atom feeds claiming to be type="html" when in fact
+    they weren't.
 
 Version 0.1.2 (2008-03-22)
   * Added MinifyController to minify JavaScript and CSS on the fly.
