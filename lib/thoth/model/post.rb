@@ -94,6 +94,11 @@ class Post < Sequel::Model
   # Instance Methods
   #++
 
+  # Gets the Atom feed URL for this post.
+  def atom_url
+    Thoth::Config.site.url.chomp('/') + R(PostController, :atom, name)
+  end
+
   def body=(body)
     self[:body]          = body.strip
     self[:body_rendered] = RedCloth.new(wiki_to_html(body.dup.strip)).to_html
@@ -208,7 +213,7 @@ class Post < Sequel::Model
       format ? self[:updated_at].strftime(format) : self[:updated_at]
     end
   end
-
+  
   # Gets the URL for this post.
   def url
     Thoth::Config.site.url.chomp('/') + R(PostController, name)

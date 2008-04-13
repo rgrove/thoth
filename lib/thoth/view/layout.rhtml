@@ -11,6 +11,10 @@
         href="<%= R(MainController, :atom) %>" title="Posts (Atom)" />
     <link rel="alternate" type="application/rss+xml"
         href="<%= R(MainController, :rss) %>" title="Posts (RSS)" />
+    <% if @feeds; @feeds.each do |feed| %>
+      <link rel="alternate" type="<%= feed[:type] %>"
+          href="<%= feed[:href] %>" title="<%= h(feed[:title]) %>" />
+    <% end; end %>
     
     <link rel="home" href="<%= Thoth::Config.site.url %>" />
     <% if @prev_url %>

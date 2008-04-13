@@ -31,15 +31,67 @@ class PostController < Ramaze::Controller
   helper :admin, :cache, :cookie, :error, :wiki
   layout '/layout'
   
+  deny_layout :atom
+  
   template_root Thoth::Config.theme.view/:post,
                 Thoth::VIEW_DIR/:post
   
+  if Thoth::Config.server.enable_cache
+    cache :atom, :ttl => 120
+  end
+
   def index(name = nil)
     error_404 unless name && @post = Post.get(name)
 
     @title      = @post.title
     @author     = cookie(:thoth_author, '')
     @author_url = cookie(:thoth_author_url, '')
+    
+    @feeds = [{
+      :href  => @post.atom_url,
+      :title => 'Comments on this post',
+      :type  => 'application/atom+xml'
+    }]
+  end
+  
+  def atom(name = nil)
+    error_404 unless name && post = Post.get(name)
+    
+    comments = post.comments.reverse_order.limit(20)
+    updated  = comments.count > 0 ? comments.last.created_at.xmlschema :
+        post.created_at.xmlschema
+
+    response['Content-Type'] = 'application/atom+xml'
+
+    x = Builder::XmlMarkup.new(:indent => 2)
+    x.instruct!
+
+    x.feed(:xmlns => 'http://www.w3.org/2005/Atom') {
+      x.id       post.url
+      x.title    "Comments on \"#{post.title}\" - #{Thoth::Config.site.name}"
+      x.updated  updated
+      x.link     :href => post.url
+      x.link     :href => post.atom_url, :rel => 'self'
+
+      comments.all do |comment|
+        x.entry {
+          x.id        comment.url
+          x.title     comment.title
+          x.published comment.created_at.xmlschema
+          x.updated   comment.updated_at.xmlschema
+          x.link      :href => comment.url, :rel => 'alternate'
+          x.content   comment.body_rendered, :type => 'html'
+
+          x.author {
+            x.name comment.author
+            
+            if comment.author_url && !comment.author_url.empty?
+              x.uri comment.author_url
+            end
+          }
+        }
+      end
+    }
   end
   
   def delete(id = nil)

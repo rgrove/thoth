@@ -2,11 +2,12 @@ Thoth History
 ================================================================================
 
 Version 0.1.3 (?)
-  * Blog posts are now marked up using the hAtom microformat.
-  * Thoth now auto-generates an XML sitemap at http://yourblog.com/sitemap
-    (set site.enable_sitemap to false to disable).
-  * Comment URLs are now built using the name of the post the comment is
-    attached to rather than the id.
+  * Individual blog posts provide Atom feeds for recent comments.
+  * Blog posts are marked up using the hAtom microformat.
+  * Thoth auto-generates an XML sitemap at http://yourblog.com/sitemap (set
+    site.enable_sitemap to false to disable).
+  * Comment URLs are built using the name of the post the comment is attached to
+    rather than the id.
   * Fixed a bug that prevented Atom and RSS feeds from being cached when
     server-side caching was enabled.
   * Fixed entry titles in Atom feeds claiming to be type="html" when in fact

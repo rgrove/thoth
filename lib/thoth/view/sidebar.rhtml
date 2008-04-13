@@ -13,16 +13,24 @@
 
     <dt>Feeds</dt>
     <dd>
-      <a href="<%= R(MainController, :atom) %>">
+      <a href="<%= R(MainController, :atom) %>" type="application/atom+xml">
         <span class="icon feed"></span>
-        Articles
+        Posts
       </a>
     </dd>
     <dd>
-      <a href="<%= R(CommentController, :atom) %>">
+      <a href="<%= R(CommentController, :atom) %>" type="application/atom+xml">
         <span class="icon feed"></span>
         Comments
       </a>
     </dd>
+    <% if @feeds; @feeds.each do |feed| %>
+      <dd>
+        <a href="<%= feed[:href] %>" rel="alternate" type="<%= feed[:type] %>">
+          <span class="icon feed"></span>
+          <%= h(feed[:title]) %>
+        </a>
+      </dd>
+    <% end; end %>
   </dl>
 </div>
