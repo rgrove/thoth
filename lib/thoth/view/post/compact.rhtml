@@ -1,4 +1,4 @@
-<div id="post-<%= @post.id %>" class="post hentry">
+<div id="post-<%= @post.id || 0 %>" class="post hentry">
   <div class="hd">
     <h2 class="entry-title">
       <a href="<%= @post.url %>" rel="bookmark"

@@ -4,8 +4,8 @@
   <div class="flash error"><%= @page_error %></div>
 <% end %>
 
-<%= render_template(:form, :form_action => @form_action, :page => @page) %>
-
 <% if @page %>
   <%= render_template(:index) %>
 <% end %>
+
+<%= render_template(:form, :form_action => @form_action, :page => @page) %>

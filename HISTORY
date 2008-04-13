@@ -2,7 +2,9 @@ Thoth History
 ================================================================================
 
 Version 0.1.3 (?)
-  * Blog post URLs now replace spaces with - rather than _ (this change will
+  * When creating or editing a blog post or page, the preview is displayed above
+    the edit form rather than below it.
+  * Spaces in blog post URLs are replaced with - rather than _ (this change will
     only affect new posts; existing post URLs will not be changed).
   * Blog posts provide Atom feeds for recent comments.
   * Tag pages provide Atom feeds for posts with that tag.
