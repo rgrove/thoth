@@ -177,9 +177,9 @@ class Post < Sequel::Model
       index = 1
 
       # Remove HTML entities and non-alphanumeric characters, replace spaces
-      # with underscores, and truncate the name at 64 characters.
+      # with hyphens, and truncate the name at 64 characters.
       name = title.strip.downcase.gsub(/&[^\s;]+;/, '_').
-          gsub(/[^\s0-9a-z-]/, '').gsub(/\s+/, '_')[0..63]
+          gsub(/[^\s0-9a-z-]/, '').gsub(/\s+/, '-')[0..63]
 
       # Strip off any trailing non-alphanumeric characters.
       name.gsub!(/[_-]+$/, '')

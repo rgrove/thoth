@@ -2,6 +2,8 @@ Thoth History
 ================================================================================
 
 Version 0.1.3 (?)
+  * Blog post URLs now replace spaces with - rather than _ (this change will
+    only affect new posts; existing post URLs will not be changed).
   * Blog posts provide Atom feeds for recent comments.
   * Tag pages provide Atom feeds for posts with that tag.
   * Blog posts are marked up using the hAtom microformat.
