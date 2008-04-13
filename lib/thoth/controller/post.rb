@@ -58,7 +58,7 @@ class PostController < Ramaze::Controller
     error_404 unless name && post = Post.get(name)
     
     comments = post.comments.reverse_order.limit(20)
-    updated  = comments.count > 0 ? comments.last.created_at.xmlschema :
+    updated  = comments.count > 0 ? comments.first.created_at.xmlschema :
         post.created_at.xmlschema
 
     response['Content-Type'] = 'application/atom+xml'

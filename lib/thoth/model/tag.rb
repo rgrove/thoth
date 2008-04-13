@@ -39,6 +39,12 @@ class Tag < Sequel::Model
     length_of :name, :maximum => 64
   end
   
+  # Gets the Atom feed URL for this tag.
+  def atom_url
+    Thoth::Config.site.url.chomp('/') + R(TagController, :atom,
+        CGI.escape(name))
+  end
+
   # Gets posts with this tag.
   def posts
     @posts ||= Post.join(:tags_posts_map, :post_id => :id).

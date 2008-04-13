@@ -30,16 +30,19 @@ class TagController < Ramaze::Controller
   engine :Erubis
   helper :admin, :cache, :error
   layout '/layout'
+  
+  deny_layout :atom
 
   template_root Thoth::Config.theme.view/:tag,
                 Thoth::VIEW_DIR/:tag
   
   if Thoth::Config.server.enable_cache
-    cache :index, :ttl => 60, :key => lambda { check_auth }
+    cache :index, :ttl => 120, :key => lambda { check_auth }
+    cache :atom, :ttl => 120
   end
 
-  def index(name, page = 1)
-    error_404 unless @tag = Tag[:name => name.strip.downcase]
+  def index(name = nil, page = 1)
+    error_404 unless name && @tag = Tag[:name => name.strip.downcase]
 
     page = page.to_i
     page = 1 unless page >= 1
@@ -51,11 +54,59 @@ class TagController < Ramaze::Controller
       @posts = @tag.posts.paginate(page, 10)
     end
 
-    @title      = "Posts with the tag '#{@tag.name}'"
+    @title      = "Posts tagged with \"#{@tag.name}\""
     @page_start = @posts.current_page_record_range.first
     @page_end   = @posts.current_page_record_range.last
     @prev_url   = @posts.prev_page ? Rs(@tag.name, @posts.prev_page) : nil
     @next_url   = @posts.next_page ? Rs(@tag.name, @posts.next_page) : nil
     @total      = @posts.pagination_record_count
+    
+    @feeds = [{
+      :href  => @tag.atom_url,
+      :title => 'Posts with this tag',
+      :type  => 'application/atom+xml'
+    }]
+  end
+
+  def atom(name = nil)
+    error_404 unless name && tag = Tag[:name => name.strip.downcase]
+
+    posts   = tag.posts.limit(10)
+    updated = posts.count > 0 ? posts.first.created_at.xmlschema :
+        Time.at(0).xmlschema
+
+    response['Content-Type'] = 'application/atom+xml'
+    
+    x = Builder::XmlMarkup.new(:indent => 2)
+    x.instruct!
+    
+    x.feed(:xmlns => 'http://www.w3.org/2005/Atom') {
+      x.id       tag.url
+      x.title    "Posts tagged with \"#{tag.name}\" - #{Thoth::Config.site.name}"
+      x.updated  updated
+      x.link     :href => tag.url
+      x.link     :href => tag.atom_url, :rel => 'self'
+      
+      x.author {
+        x.name  Thoth::Config.admin.name
+        x.email Thoth::Config.admin.email
+        x.uri   Thoth::Config.site.url
+      }
+      
+      posts.all do |post|
+        x.entry {
+          x.id        post.url
+          x.title     post.title
+          x.published post.created_at.xmlschema
+          x.updated   post.updated_at.xmlschema
+          x.link      :href => post.url, :rel => 'alternate'
+          x.content   post.body_rendered, :type => 'html'
+          
+          post.tags.each do |tag|
+            x.category :term => tag.name, :label => tag.name, :scheme => tag.url
+          end
+        }
+      end
+    }
   end
 end
