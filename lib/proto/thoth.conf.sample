@@ -1,12 +1,12 @@
 #
-# thoth.conf.sample - Thoth sample configuration file.
+# thoth.conf - Thoth configuration file.
 #
-# Rename this file to thoth.conf and customize it as desired. You must restart
-# Thoth before configuration changes will take effect.
+# Customize this file as desired. You only need to uncomment the settings you
+# want to change. You must restart Thoth before configuration changes will take
+# effect.
 #
 
-# Settings for production mode. You only need to uncomment the settings you want
-# to change.
+# Settings for production mode. 
 Configuration.for("thoth_production") {
   
   # Connection URI for the production database. Currently SQLite3 and MySQL are
@@ -29,7 +29,7 @@ Configuration.for("thoth_production") {
     
     # A brief description or subtitle for your blog.
     #
-    # desc "Thoth is awesome!"
+    # desc "Thoth is awesome."
     
     # Base URL of your site. This is necessary in order for Thoth to know how
     # to construct links. Be sure to set this correctly or links may not work.
@@ -82,13 +82,13 @@ Configuration.for("thoth_production") {
     # create your own customized Thoth theme. Any files in this directory will
     # override the corresponding default files.
     #
-    # public "#{Thoth::HOME_DIR}/custom/public"
+    # public "#{Thoth::HOME_DIR}/public"
   
     # Absolute path to a directory containing customized view templates. Any
     # templates in this directory will override the corresponding default
     # templates.
     #
-    # view "#{Thoth::HOME_DIR}/custom/view"
+    # view "#{Thoth::HOME_DIR}/view"
     
   }
   
@@ -96,7 +96,7 @@ Configuration.for("thoth_production") {
   # etc.) for your blog posts and pages should be stored. This directory needs
   # to be readable and writeable by the user running the Thoth server.
   #
-  # media "#{Thoth::HOME_DIR}/custom/media"
+  # media "#{Thoth::HOME_DIR}/media"
 
   timestamp {
 

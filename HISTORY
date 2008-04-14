@@ -1,6 +1,10 @@
 Thoth History
 ================================================================================
 
+Version 0.2.0 (?)
+  * Fixed incorrect default paths for the theme.public, theme.view, and media
+    config settings.
+
 Version 0.1.3 (2008-04-13)
   * When creating or editing a blog post or page, the preview is displayed above
     the edit form rather than below it.

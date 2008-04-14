@@ -35,8 +35,8 @@ module Thoth
           db "sqlite:///#{HOME_DIR}/db/#{env.to_s}.db"
   
           site {
-            name "Thoth"
-            desc "Simple, elegant, awesome."
+            name "New Thoth Blog"
+            desc "Thoth is awesome."
             url  "http://localhost:7000/"
             enable_sitemap true
           }
@@ -50,11 +50,11 @@ module Thoth
           }
     
           theme {
-            public HOME_DIR/:custom/:public
-            view   HOME_DIR/:custom/:view
+            public HOME_DIR/:public
+            view   HOME_DIR/:view
           }
         
-          media HOME_DIR/:custom/:media
+          media HOME_DIR/:media
   
           timestamp {
             long  "%A %B %d, %Y @ %I:%M %p (%Z)"
