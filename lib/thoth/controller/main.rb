@@ -176,8 +176,8 @@ class MainController < Ramaze::Controller
     redirect R(PostController, name), :status => 301
   end
   
-  # Legacy redirect to /comments.
-  def recent_comments
+  # Legacy redirect to /comment.
+  def comments
     if type = request[:type]
       redirect R(CommentController, type), :status => 301
     else
@@ -185,6 +185,6 @@ class MainController < Ramaze::Controller
     end  
   end
   
-  alias_method 'recent-comments', :recent_comments
+  alias_method 'recent-comments', :comments
 
 end

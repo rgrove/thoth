@@ -165,8 +165,6 @@ module Thoth
       acquire LIB_DIR/:controller/'*'
       acquire LIB_DIR/:model/'*'
 
-      R::Route[/\/comments\/?/] = '/comment'
-
       Config.plugins.each {|plugin| Plugin.load(plugin) }
 
       R.startup(
