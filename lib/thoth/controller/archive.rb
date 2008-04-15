@@ -31,8 +31,8 @@ class ArchiveController < Ramaze::Controller
   helper :admin, :cache
   layout '/layout'
 
-  template_root Thoth::Config.theme.view/:archive,
-                Thoth::VIEW_DIR/:archive
+  view_root Thoth::Config.theme.view/:archive,
+            Thoth::VIEW_DIR/:archive
   
   if Thoth::Config.server.enable_cache
     cache :index, :ttl => 120, :key => lambda { check_auth }

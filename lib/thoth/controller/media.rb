@@ -31,8 +31,8 @@ class MediaController < Ramaze::Controller
   helper :admin, :error
   layout '/layout'
   
-  template_root Thoth::Config.theme.view/:media,
-                Thoth::VIEW_DIR/:media
+  view_root Thoth::Config.theme.view/:media,
+            Thoth::VIEW_DIR/:media
   
   deny_layout :index
 

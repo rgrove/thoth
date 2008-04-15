@@ -31,14 +31,14 @@ class AdminController < Ramaze::Controller
   helper :admin, :error
   layout '/layout'
   
-  template_root Thoth::Config.theme.view/:admin,
-                Thoth::VIEW_DIR/:admin
+  view_root Thoth::Config.theme.view/:admin,
+            Thoth::VIEW_DIR/:admin
   
   def index
     if check_auth
-      @title         = 'Welcome to Thoth'
-      @public_root   = Thoth::PUBLIC_DIR
-      @template_root = Thoth::VIEW_DIR
+      @title       = 'Welcome to Thoth'
+      @public_root = Thoth::PUBLIC_DIR
+      @view_root   = Thoth::VIEW_DIR
     else
       @title = 'Login'
     end

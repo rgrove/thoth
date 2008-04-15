@@ -33,8 +33,8 @@ class CommentController < Ramaze::Controller
   
   deny_layout :atom, :rss
 
-  template_root Thoth::Config.theme.view/:comment,
-                Thoth::VIEW_DIR/:comment
+  view_root Thoth::Config.theme.view/:comment,
+            Thoth::VIEW_DIR/:comment
   
   if Thoth::Config.server.enable_cache
     cache :index, :ttl => 60, :key => lambda { check_auth }

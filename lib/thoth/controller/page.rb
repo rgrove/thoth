@@ -31,8 +31,8 @@ class PageController < Ramaze::Controller
   helper :admin, :cache, :error, :wiki
   layout '/layout'
   
-  template_root Thoth::Config.theme.view/:page,
-                Thoth::VIEW_DIR/:page
+  view_root Thoth::Config.theme.view/:page,
+            Thoth::VIEW_DIR/:page
   
   if Thoth::Config.server.enable_cache
     cache :index, :ttl => 60, :key => lambda { check_auth }

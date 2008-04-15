@@ -61,7 +61,7 @@ thoth_gemspec = Gem::Specification.new do |s|
 
   s.required_ruby_version = '>= 1.8.6'
 
-  s.add_dependency('ramaze',        '~> 0.3.9.1')
+  s.add_dependency('ramaze',        '~> 0.3.9.5')
   s.add_dependency('builder',       '>= 2.1.2')
   s.add_dependency('configuration', '>= 0.0.5')
   s.add_dependency('cssmin',        '~> 1.0.0')

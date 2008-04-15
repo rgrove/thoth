@@ -33,8 +33,8 @@ class TagController < Ramaze::Controller
   
   deny_layout :atom
 
-  template_root Thoth::Config.theme.view/:tag,
-                Thoth::VIEW_DIR/:tag
+  view_root Thoth::Config.theme.view/:tag,
+            Thoth::VIEW_DIR/:tag
   
   if Thoth::Config.server.enable_cache
     cache :index, :ttl => 120, :key => lambda { check_auth }

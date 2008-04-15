@@ -31,8 +31,8 @@ class SearchController < Ramaze::Controller
   helper :admin, :cache, :ysearch
   layout '/layout'
   
-  template_root Thoth::Config.theme.view/:search,
-                Thoth::VIEW_DIR/:search
+  view_root Thoth::Config.theme.view/:search,
+            Thoth::VIEW_DIR/:search
   
   if Thoth::Config.server.enable_cache
     cache :index, :ttl => 300, :key => lambda {

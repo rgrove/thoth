@@ -33,8 +33,8 @@ class MainController < Ramaze::Controller
   
   deny_layout :atom, :rss, :sitemap
   
-  template_root Thoth::Config.theme.view,
-                Thoth::VIEW_DIR
+  view_root Thoth::Config.theme.view,
+            Thoth::VIEW_DIR
   
   if Thoth::Config.server.enable_cache
     cache :index, :ttl => 60, :key => lambda {

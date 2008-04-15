@@ -33,8 +33,8 @@ class PostController < Ramaze::Controller
   
   deny_layout :atom
   
-  template_root Thoth::Config.theme.view/:post,
-                Thoth::VIEW_DIR/:post
+  view_root Thoth::Config.theme.view/:post,
+            Thoth::VIEW_DIR/:post
   
   if Thoth::Config.server.enable_cache
     cache :atom, :ttl => 120

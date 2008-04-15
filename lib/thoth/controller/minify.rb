@@ -31,8 +31,8 @@ class MinifyController < Ramaze::Controller
   helper :cache, :error
   layout '/layout'
   
-  template_root Thoth::Config.theme.view/:admin,
-                Thoth::VIEW_DIR/:admin
+  view_root Thoth::Config.theme.view/:admin,
+            Thoth::VIEW_DIR/:admin
 
   def css(*args)
     path = 'css/' << args.join('/')

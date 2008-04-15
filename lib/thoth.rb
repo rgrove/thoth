@@ -50,14 +50,14 @@ module Thoth
   VIEW_DIR   = LIB_DIR/:view unless const_defined?(:VIEW_DIR)
 end
 
-Ramaze::APPDIR.replace(Thoth::LIB_DIR)
-
 require 'thoth/config'
 require 'thoth/version'
 require 'thoth/plugin'
 require 'thoth/monkeypatch/dispatcher/file'
 
 module Thoth
+  R = Ramaze
+
   # Path to the config file.
   trait[:config_file] ||= ENV['THOTH_CONF'] || HOME_DIR/'thoth.conf'
   
@@ -123,53 +123,55 @@ module Thoth
 
     # Runs Thoth.
     def run
-      open_db
+      R::Global.root                 = LIB_DIR
+      R::Global.public_root          = PUBLIC_DIR
+      R::Global.view_root            = VIEW_DIR
+      R::Global.actionless_templates = false
 
-      acquire LIB_DIR/:helper/'*'
-      acquire LIB_DIR/:controller/'*'
-      acquire LIB_DIR/:model/'*'
-      
-      error = Ramaze::Dispatcher::Error
-      error::HANDLE_ERROR[Ramaze::Error::NoAction]     = 
-      error::HANDLE_ERROR[Ramaze::Error::NoController] = [404, 'error_404']
-
-      Ramaze::Global.actionless_templates = false
-      Ramaze::Global.public_root          = PUBLIC_DIR
-      Ramaze::Global.template_root        = VIEW_DIR
-
-      Ramaze::Route[/\/comments\/?/] = '/comment'
+      R::Dispatcher::Error::HANDLE_ERROR[R::Error::NoAction]     = [404, 'error_404']
+      R::Dispatcher::Error::HANDLE_ERROR[R::Error::NoController] = [404, 'error_404']
 
       case trait[:mode]
       when :devel
-        Ramaze::Global.benchmarking = true
+        R::Global.benchmarking = true
 
       when :production
-        Ramaze::Global.sourcereload = false
+        R::Global.sourcereload = false
       
         if Config.server.error_log.empty?
-          Ramaze::Log.loggers = []
+          R::Log.loggers = []
         else
-          Ramaze::Log.loggers = [
-            Ramaze::Informer.new(Config.server.error_log, [:error])
+          R::Log.loggers = [
+            R::Informer.new(Config.server.error_log, [:error])
           ]
         end
 
-        error::HANDLE_ERROR[ArgumentError] = [404, 'error_404']
-        error::HANDLE_ERROR[Exception]     = [500, 'error_500']
+        R::Dispatcher::Error::HANDLE_ERROR[ArgumentError] = [404, 'error_404']
+        R::Dispatcher::Error::HANDLE_ERROR[Exception]     = [500, 'error_500']
     
       else
         raise "Invalid mode: #{trait[:mode]}"
       end
       
-      Ramaze::Log.info "Thoth home: #{HOME_DIR}"
-      Ramaze::Log.info "Thoth lib : #{LIB_DIR}"
+      R::Log.info "Thoth home: #{HOME_DIR}"
+      R::Log.info "Thoth lib : #{LIB_DIR}"
       
+      open_db
+
+      acquire LIB_DIR/:helper/'*'
+      acquire LIB_DIR/:controller/'*'
+      acquire LIB_DIR/:model/'*'
+
+      R::Route[/\/comments\/?/] = '/comment'
+
       Config.plugins.each {|plugin| Plugin.load(plugin) }
-      
-      Ramaze.startup :adapter => :thin,
-          :force => true,
-          :host  => trait[:ip],
-          :port  => trait[:port]
+
+      R.startup(
+        :adapter => :thin,
+        :force   => true,
+        :host    => trait[:ip],
+        :port    => trait[:port]
+      )
     end
 
     # Starts Thoth as a daemon.
