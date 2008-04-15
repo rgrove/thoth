@@ -12,11 +12,11 @@ Configuration.for("thoth_production") {
   # Connection URI for the production database. Currently SQLite3 and MySQL are
   # supported. PostgreSQL may work, but hasn't been tested.
   #
-  # Sample SQLite3 connection string:
-  #   sqlite:////absolute/path/to/database.db
+  # Sample SQLite3 config:
+  #   db "sqlite:////absolute/path/to/database.db"
   #
-  # Sample MySQL connection string:
-  #   mysql://user:pass@hostname/database
+  # Sample MySQL config:
+  #   db "mysql://user:pass@hostname/database"
   #
   # db "sqlite:///#{Thoth::HOME_DIR}/db/production.db"
 
