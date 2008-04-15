@@ -225,29 +225,16 @@ unless Post.table_exists?
   Post.create(
     :title => 'Welcome to your new Thoth blog',
     :body  => %[
-      <p>
-        If you're reading this, you've successfully installed Thoth.
-        Congratulations!
-      </p>
+      If you're reading this, you've successfully installed Thoth.
+      Congratulations!
       
-      <p>
-        Now you'll probably want to get started tweaking and customizing. The
-        first thing to do, if you haven't already, is to rename
-        <code>thoth.conf.sample</code> to <code>thoth.conf</code> and edit
-        it to set up your blog. Be sure to change the administrator username and
-        password, and remember that you need to restart Thoth in order for
-        your changes to take effect.
-      </p>
+      Once you've 
+      <a href="txmt://open/?url=file://#{Thoth.trait[:config_file]}">edited the
+      config file</a> to your liking, you can <a href="/admin">login</a> and
+      begin creating blog posts and pages. You can also delete this post to make
+      way for your own glorious words.
       
-      <p>
-        Once you've edited the config file to your liking, you can
-        <a href="/admin">login</a> and begin creating blog posts and pages. You
-        can also delete this post to make way for your own glorious words.
-      </p>
-      
-      <p>
-        Enjoy!
-      </p>
+      Enjoy!
     ].unindent
   )
 end
