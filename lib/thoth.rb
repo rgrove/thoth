@@ -128,8 +128,12 @@ module Thoth
       R::Global.view_root            = VIEW_DIR
       R::Global.actionless_templates = false
 
-      R::Dispatcher::Error::HANDLE_ERROR[R::Error::NoAction]     = [404, 'error_404']
-      R::Dispatcher::Error::HANDLE_ERROR[R::Error::NoController] = [404, 'error_404']
+      # Display a 404 error for requests that don't map to a controller or
+      # action.
+      R::Dispatcher::Error::HANDLE_ERROR.update({
+        R::Error::NoAction     => [404, 'error_404'],
+        R::Error::NoController => [404, 'error_404']
+      })
 
       case trait[:mode]
       when :devel
@@ -137,17 +141,16 @@ module Thoth
 
       when :production
         R::Global.sourcereload = false
-      
-        if Config.server.error_log.empty?
-          R::Log.loggers = []
-        else
-          R::Log.loggers = [
-            R::Informer.new(Config.server.error_log, [:error])
-          ]
-        end
 
-        R::Dispatcher::Error::HANDLE_ERROR[ArgumentError] = [404, 'error_404']
-        R::Dispatcher::Error::HANDLE_ERROR[Exception]     = [500, 'error_500']
+        # Log all errors to the error log file if one is configured.
+        R::Log.loggers = Config.server.error_log.empty? ? [] :
+            [R::Informer.new(Config.server.error_log, [:error])]
+
+        # Don't expose argument errors or exceptions in production mode.
+        R::Dispatcher::Error::HANDLE_ERROR.update({
+          ArgumentError => [404, 'error_404'],
+          Exception     => [500, 'error_500']
+        })
     
       else
         raise "Invalid mode: #{trait[:mode]}"
@@ -176,7 +179,6 @@ module Thoth
 
     # Starts Thoth as a daemon.
     def start
-      # Check the pid file to see if Thoth is already running.
       if File.file?(trait[:pidfile])
         pid = File.read(trait[:pidfile], 20).strip
         abort("thoth already running? (pid=#{pid})")
@@ -184,26 +186,18 @@ module Thoth
   
       puts "Starting thoth."
   
-      # Fork off and die.
       fork do
         Process.setsid
         exit if fork
     
-        # Write PID file.
         File.open(trait[:pidfile], 'w') {|file| file << Process.pid }
-    
-        # Set working directory.
         Dir.chdir(HOME_DIR)
-    
-        # Reset umask.
         File.umask(0000)
     
-        # Disconnect file descriptors.
         STDIN.reopen('/dev/null')
         STDOUT.reopen('/dev/null', 'a')
         STDERR.reopen(STDOUT)
     
-        # Run Thoth.
         run
       end
     end
