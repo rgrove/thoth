@@ -27,7 +27,6 @@
 #++
 
 class CommentController < Ramaze::Controller
-  engine :Erubis
   helper :admin, :cache, :cookie, :error
   layout '/layout'
   

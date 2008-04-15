@@ -27,7 +27,6 @@
 #++
 
 class ArchiveController < Ramaze::Controller
-  engine :Erubis
   helper :admin, :cache
   layout '/layout'
 

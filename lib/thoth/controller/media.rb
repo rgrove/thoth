@@ -27,7 +27,6 @@
 #++
 
 class MediaController < Ramaze::Controller
-  engine :Erubis  
   helper :admin, :error
   layout '/layout'
   

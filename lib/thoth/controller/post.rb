@@ -27,7 +27,6 @@
 #++
 
 class PostController < Ramaze::Controller
-  engine :Erubis  
   helper :admin, :cache, :cookie, :error, :wiki
   layout '/layout'
   

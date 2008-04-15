@@ -27,7 +27,6 @@
 #++
 
 class MainController < Ramaze::Controller
-  engine :Erubis
   helper :admin, :cache, :error, :ysearch
   layout '/layout'
   

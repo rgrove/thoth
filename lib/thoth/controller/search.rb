@@ -27,7 +27,6 @@
 #++
 
 class SearchController < Ramaze::Controller
-  engine :Erubis
   helper :admin, :cache, :ysearch
   layout '/layout'
   

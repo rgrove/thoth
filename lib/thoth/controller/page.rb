@@ -27,7 +27,6 @@
 #++
 
 class PageController < Ramaze::Controller
-  engine :Erubis  
   helper :admin, :cache, :error, :wiki
   layout '/layout'
   

@@ -127,6 +127,9 @@ module Thoth
       R::Global.public_root          = PUBLIC_DIR
       R::Global.view_root            = VIEW_DIR
       R::Global.actionless_templates = false
+      
+      # Use Erubis as the template engine for all controllers.
+      R::Controller.trait[:engine] = R::Template::Erubis
 
       # Display a 404 error for requests that don't map to a controller or
       # action.

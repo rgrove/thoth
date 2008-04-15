@@ -27,7 +27,6 @@
 #++
 
 class AdminController < Ramaze::Controller
-  engine :Erubis
   helper :admin, :error
   layout '/layout'
   

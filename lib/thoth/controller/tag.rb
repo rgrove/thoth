@@ -27,7 +27,6 @@
 #++
 
 class TagController < Ramaze::Controller
-  engine :Erubis
   helper :admin, :cache, :error
   layout '/layout'
   

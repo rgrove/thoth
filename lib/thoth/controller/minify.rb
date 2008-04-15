@@ -27,7 +27,6 @@
 #++
 
 class MinifyController < Ramaze::Controller
-  engine :Erubis
   helper :cache, :error
   layout '/layout'
   
