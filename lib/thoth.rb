@@ -123,6 +123,9 @@ module Thoth
 
     # Runs Thoth.
     def run
+      trait[:ip]   ||= Config.server.address
+      trait[:port] ||= Config.server.port
+
       R::Global.setup(
         :root                 => LIB_DIR,
         :public_root          => PUBLIC_DIR,
