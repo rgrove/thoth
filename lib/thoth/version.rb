@@ -28,7 +28,7 @@
 
 module Thoth
   APP_NAME      = 'Thoth'
-  APP_VERSION   = '0.1.3'
+  APP_VERSION   = '0.1.4'
   APP_AUTHOR    = 'Ryan Grove'
   APP_EMAIL     = 'ryan@wonko.com'
   APP_URL       = 'http://thothblog.org/'
