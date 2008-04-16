@@ -1,15 +1,15 @@
 <div id="post-<%= @post.id || 0 %>" class="post hentry">
   <div class="hd">
     <h2 class="entry-title">
-      <a href="<%= @post.url %>" rel="bookmark"
+      <a href="<%== @post.url %>" rel="bookmark"
           title="Permalink for this article">
-        <%= h(@post.title) %>
+        <%== @post.title %>
       </a>
     </h2>
     
     <address class="vcard author">
-      <a class="email fn" href="mailto:<%= h(Thoth::Config.admin.email) %>">
-        <%= h(Thoth::Config.admin.name) %>
+      <a class="email fn" href="mailto:<%== Thoth::Config.admin.email %>">
+        <%== Thoth::Config.admin.name %>
       </a>
     </address>
 
@@ -31,7 +31,7 @@
         <ul>
           <% @post.tags.each do |tag| %>
             <li>
-              <a href="<%= tag.url %>" rel="tag"><%= h(tag.name) %></a>
+              <a href="<%== tag.url %>" rel="tag"><%== tag.name %></a>
             </li>
           <% end %>
         </ul>
@@ -41,7 +41,7 @@
     <div class="meta robots-nocontent">
       <span class="icon comments"></span>
       <% comment_count = @post.comments.count %>
-      <a href="<%= @post.url %>#comments">
+      <a href="<%== @post.url %>#comments">
         <%= comment_count %> comment<%= comment_count == 1 ? '' : 's' %>
       </a>
     </div>

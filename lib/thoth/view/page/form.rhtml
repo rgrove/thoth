@@ -1,4 +1,4 @@
-<form class="page" action="<%= @form_action %>" method="post">
+<form class="page" action="<%== @form_action %>" method="post">
   <table>
     <thead></thead>
     <tfoot>
@@ -17,7 +17,7 @@
         </th>
         <td>
           <input type="text" name="name" id="name" maxlength="64"
-              value="<%= @page ? h(@page.name) : '' %>" />
+              value="<%== @page ? @page.name : '' %>" />
         </td>
       </tr>
       
@@ -25,7 +25,7 @@
         <tr>
           <td></td>
           <td class="flash error">
-            <%= h(error) %>
+            <%== error %>
           </td>
         </tr>
       <% end; end %>
@@ -36,7 +36,7 @@
         </th>
         <td>
           <input type="text" name="title" id="title" maxlength="255"
-              value="<%= @page ? h(@page.title) : '' %>" />
+              value="<%== @page ? @page.title : '' %>" />
         </td>
       </tr>
       
@@ -44,7 +44,7 @@
         <tr>
           <td></td>
           <td class="flash error">
-            <%= h(error) %>
+            <%== error %>
           </td>
         </tr>
       <% end; end %>
@@ -54,7 +54,7 @@
           <label for="body">Body</label>
         </th>
         <td>
-          <textarea name="body" id="body" rows="20" cols="60"><%= @page ? h(@page.body) : '' %></textarea>
+          <textarea name="body" id="body" rows="20" cols="60"><%== @page ? @page.body : '' %></textarea>
         </td>
       </tr>
       
@@ -62,7 +62,7 @@
         <tr>
           <td></td>
           <td class="flash error">
-            <%= h(error) %>
+            <%== error %>
           </td>
         </tr>
       <% end; end %>

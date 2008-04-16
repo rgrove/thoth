@@ -1,6 +1,6 @@
 <div class="welcome">
   <h2>Welcome to Thoth!</h2>
-  <span class="version">Version <%= h(Thoth::APP_VERSION) %></span>
+  <span class="version">Version <%== Thoth::APP_VERSION %></span>
 
   <h4>Getting Started</h4>
 
@@ -25,14 +25,14 @@
 
   <dl class="customizing">
     <dt>Default Views</dt>
-    <dd><code><%= @view_root %></code></dd>
+    <dd><code><%== @view_root %></code></dd>
     <dt>Default CSS, JS, etc.</dt>
-    <dd><code><%= @public_root %></code></dd>
+    <dd><code><%== @public_root %></code></dd>
 
     <dt>Custom Views</dt>
-    <dd><code><%= Thoth::Config.theme.view %></code></dd>
+    <dd><code><%== Thoth::Config.theme.view %></code></dd>
     <dt>Custom CSS, JS, etc.</dt>
-    <dd><code><%= Thoth::Config.theme.public %></code></dd>
+    <dd><code><%== Thoth::Config.theme.public %></code></dd>
   </dl>
 
   <p>
@@ -51,7 +51,7 @@
   <h4>Useful Linkage</h4>
 
   <ul>
-    <li><a href="<%= Thoth::APP_URL %>">Thoth Website</a></li>
+    <li><a href="<%== Thoth::APP_URL %>">Thoth Website</a></li>
     <li><a href="http://code.google.com/p/thoth-blog/w/list">Thoth Wiki</a></li>
     <li><a href="http://code.google.com/p/thoth-blog/issues/list">Bugs &amp; Feature Requests</a></li>
     <li><a href="http://github.com/rgrove/thoth/tree/master">Source Code</a></li>

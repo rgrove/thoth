@@ -1,15 +1,15 @@
 <div id="post-<%= @post.id %>" class="post hentry">
   <div class="hd">
     <h1 class="entry-title">
-      <a href="<%= @post.url %>" rel="bookmark"
+      <a href="<%== @post.url %>" rel="bookmark"
           title="Permalink for this article">
-        <%= h(@post.title) %>
+        <%== @post.title %>
       </a>
     </h1>
     
     <address class="vcard author">
-      <a class="email fn" href="mailto:<%= h(Thoth::Config.admin.email) %>">
-        <%= h(Thoth::Config.admin.name) %>
+      <a class="email fn" href="mailto:<%== Thoth::Config.admin.email %>">
+        <%== Thoth::Config.admin.name %>
       </a>
     </address>
 
@@ -31,7 +31,7 @@
         <ul>
           <% @post.tags.each do |tag| %>
             <li>
-              <a href="<%= tag.url %>" rel="tag"><%= h(tag.name) %></a>
+              <a href="<%== tag.url %>" rel="tag"><%== tag.name %></a>
             </li>
           <% end %>
         </ul>
@@ -40,7 +40,7 @@
     
     <div class="meta robots-nocontent">
       <span class="icon comment-post"></span>
-      <a href="<%= @post.url %>#post-comment">Post a comment</a>
+      <a href="<%== @post.url %>#post-comment">Post a comment</a>
     </div>
   </div>
 </div>
@@ -68,13 +68,12 @@
     <p>
       <label for="author">Name</label>
       <input type="text" name="author" id="author" maxlength="32"
-          title="Enter your name"
-          value="<%= h(@author) %>" />
+          title="Enter your name" value="<%== @author %>" />
     </p>
     
     <% if @preview; @preview.errors.on(:author).each do |error| %>
       <div class="flash error">
-        <%= h(error) %>
+        <%== error %>
       </div>
     <% end; end %>
   
@@ -82,12 +81,12 @@
       <label for="author_url">URL</label>
       <input type="text" name="author_url" id="author_url" maxlength="255"
           title="Enter the URL of your website (optional)"
-          value="<%= h(@author_url) %>" />
+          value="<%== @author_url %>" />
     </p>
   
     <% if @preview; @preview.errors.on(:author_url).each do |error| %>
       <div class="flash error">
-        <%= h(error) %>
+        <%== error %>
       </div>
     <% end; end %>
   
@@ -95,22 +94,22 @@
       <label for="title">Title</label>
       <input type="text" class="long" name="title" id="title" maxlength="255"
           title="Enter a title for this comment"
-          value="<%= @preview && @preview.title ? h(@preview.title) : '' %>" />
+          value="<%== @preview && @preview.title ? @preview.title : '' %>" />
     </p>
   
     <% if @preview; @preview.errors.on(:title).each do |error| %>
       <div class="flash error">
-        <%= h(error) %>
+        <%== error %>
       </div>
     <% end; end %>
   
     <p>
-      <textarea name="body" rows="6" cols="60"><%= @preview && @preview.body ? h(@preview.body) : '' %></textarea>
+      <textarea name="body" rows="6" cols="60"><%== @preview && @preview.body ? @preview.body : '' %></textarea>
     </p>
   
     <% if @preview; @preview.errors.on(:body).each do |error| %>
       <div class="flash error">
-        <%= h(error) %>
+        <%== error %>
       </div>
     <% end; end %>
   
@@ -133,7 +132,7 @@
     </p>
     
     <% if @comment_error %>
-      <div class="flash error"><%= h(@comment_error) %></div>
+      <div class="flash error"><%== @comment_error %></div>
     <% end %>
 
     <p>

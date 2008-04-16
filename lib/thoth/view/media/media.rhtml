@@ -5,27 +5,27 @@
   <tbody>
     <tr class="filename">
       <th scope="row">Filename</th>
-      <td><%= h(@file.filename) %></td>
+      <td><%== @file.filename %></td>
     </tr>
     
     <tr class="path">
       <th scope="row">Server Path</th>
-      <td><%= h(@file.path) %></td>
+      <td><%== @file.path %></td>
     </tr>
     
     <tr class="url">
       <th scope="row">URL</th>
-      <td><a href="<%= h(@file.url) %>"><%= h(@file.url) %></a></td>
+      <td><a href="<%== @file.url %>"><%== @file.url %></a></td>
     </tr>
     
     <tr class="mimetype">
       <th scope="row">MIME Type</th>
-      <td><%= h(@file.mimetype) %></td>
+      <td><%== @file.mimetype %></td>
     </tr>
     
     <tr class="size">
       <th scope="row">Size</th>
-      <td><%= File.exist?(@file.path) ? File.size(@file.path).filesize_format : '?' %></td>
+      <td><%== File.exist?(@file.path) ? File.size(@file.path).filesize_format : '?' %></td>
     </tr>
   </tbody>
 </table>
@@ -33,12 +33,12 @@
 <% unless @delete %>
   <p>
     To link to this file in a blog post or page, use
-    <kbd>[[media:<%= h(@file.filename) %>]]</kbd> or
-    <kbd>[[media:<%= h(@file.filename) %>|link text]]</kbd>.
+    <kbd>[[media:<%== @file.filename %>]]</kbd> or
+    <kbd>[[media:<%== @file.filename %>|link text]]</kbd>.
   </p>
 
   <p>
     To insert only the URL of this file (for use in <code>&lt;img&gt;</code>,
-    for example), use <kbd>[[media_url:<%= h(@file.filename) %>]]</kbd>.
+    for example), use <kbd>[[media_url:<%== @file.filename %>]]</kbd>.
   </p>
 <% end %>

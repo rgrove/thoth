@@ -4,19 +4,19 @@
   <ul class="slick">
     <% @today.each do |comment| %>
       <li>
-        <a href="<%= comment.url %>"><%= h(comment.title) %></a> by
+        <a href="<%== comment.url %>"><%== comment.title %></a> by
         <% if comment.author_url.empty? %>
-          <%= h(comment.author) %>
+          <%== comment.author %>
         <% else %>
-          <a href="<%= h(comment.author_url) %>" rel="nofollow">
-            <%= h(comment.author) %>
+          <a href="<%== comment.author_url %>" rel="nofollow">
+            <%== comment.author %>
           </a>
         <% end %>
         on <%= comment.created_at(Thoth::Config.timestamp.short) %><br />
         <small>
           attached to 
-          <a href="<%= comment.post.url %>">
-            <%= h(comment.post.title) %>
+          <a href="<%== comment.post.url %>">
+            <%== comment.post.title %>
           </a>
         </small>
       </li>
@@ -30,19 +30,19 @@
   <ul class="slick">
     <% @ancient.each do |comment| %>
       <li>
-        <a href="<%= comment.url %>"><%= h(comment.title) %></a> by
+        <a href="<%== comment.url %>"><%== comment.title %></a> by
         <% if comment.author_url.empty? %>
-          <%= h(comment.author) %>
+          <%== comment.author %>
         <% else %>
-          <a href="<%= h(comment.author_url) %>" rel="nofollow">
-            <%= h(comment.author) %>
+          <a href="<%== comment.author_url %>" rel="nofollow">
+            <%== comment.author %>
           </a>
         <% end %>
         on <%= comment.created_at(Thoth::Config.timestamp.short) %><br />
         <small>
           attached to
-          <a href="<%= comment.post.url %>">
-            <%= h(comment.post.title) %>
+          <a href="<%== comment.post.url %>">
+            <%== comment.post.title %>
           </a>
         </small>
       </li>

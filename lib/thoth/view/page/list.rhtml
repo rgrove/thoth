@@ -9,9 +9,9 @@
     <% row = 'even' %>
     <% @pages.all do |page| %>
       <tr class="<%= row == 'even' ? row = 'odd' : row = 'even' %>">
-        <td class="name"><%= page.name %></td>
+        <td class="name"><%== page.name %></td>
         <td class="title">
-          <a href="<%= page.url %>"><%= h(page.title) %></a>
+          <a href="<%== page.url %>"><%== page.title %></a>
         </td>
         <td class="created">
           <%= page.created_at(Thoth::Config.timestamp.short) %>

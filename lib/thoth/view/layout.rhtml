@@ -2,8 +2,8 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title><%= h(@title ? @title : Thoth::Config.site.name) %></title>
-    <base href="<%= Thoth::Config.site.url %>" />
+    <title><%== @title ? @title : Thoth::Config.site.name %></title>
+    <base href="<%== Thoth::Config.site.url %>" />
 
     <%= render_template :css %>
 
@@ -12,16 +12,16 @@
     <link rel="alternate" type="application/rss+xml"
         href="<%= R(MainController, :rss) %>" title="Posts (RSS)" />
     <% if @feeds; @feeds.each do |feed| %>
-      <link rel="alternate" type="<%= feed[:type] %>"
-          href="<%= feed[:href] %>" title="<%= h(feed[:title]) %>" />
+      <link rel="alternate" type="<%== feed[:type] %>"
+          href="<%== feed[:href] %>" title="<%== feed[:title] %>" />
     <% end; end %>
     
-    <link rel="home" href="<%= Thoth::Config.site.url %>" />
+    <link rel="home" href="<%== Thoth::Config.site.url %>" />
     <% if @prev_url %>
-      <link id="prev_url" rel="prev" href="<%= @prev_url %>" />
+      <link id="prev_url" rel="prev" href="<%== @prev_url %>" />
     <% end %>    
     <% if @next_url %>
-      <link id="next_url" rel="next" href="<%= @next_url %>" />
+      <link id="next_url" rel="next" href="<%== @next_url %>" />
     <% end %>
   </head>
   <body>

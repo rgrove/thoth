@@ -2,18 +2,18 @@
 
 <div class="search">
   <% unless @error.nil? %>
-    <p><%= h(@error) %></p>
+    <p><%== @error %></p>
   <% end %>
 
   <% if @data[:results].empty? %>
-    <p>There were no results for the query <strong><%= h(@query) %></strong></p>
+    <p>There were no results for the query <strong><%== @query %></strong></p>
   <% else %>
     <p>
       Results
-      <strong><%= @data[:start] %></strong>-<strong><%= @data[:end] %></strong>
+      <strong><%== @data[:start] %></strong>-<strong><%== @data[:end] %></strong>
       of
-      <strong><%= @data[:available] %></strong> for
-      <strong><%= h(@query) %></strong>
+      <strong><%== @data[:available] %></strong> for
+      <strong><%== @query %></strong>
     </p>
 
     <%= 

@@ -11,15 +11,15 @@
       <tr class="<%= row == 'even' ? row = 'odd' : row = 'even' %>">
         <td class="id"><%= comment.id %></td>
         <td class="title">
-          <a href="<%= comment.url %>"><%= h(comment.title) %></a>
+          <a href="<%== comment.url %>"><%== comment.title %></a>
         </td>
         <td class="author">
           <% if comment.author_url && !comment.author_url.empty? %>
-            <a href="<%= h(comment.author_url) %>" rel="nofollow">
-              <%= h(comment.author) %>
+            <a href="<%== comment.author_url %>" rel="nofollow">
+              <%== comment.author %>
             </a>
           <% else %>
-            <%= h(comment.author) %>
+            <%== comment.author %>
           <% end %>
         </td>
         <td class="created">

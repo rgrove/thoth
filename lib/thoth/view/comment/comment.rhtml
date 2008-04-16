@@ -2,8 +2,8 @@
   <div class="hd">
     <h4>
       <span class="icon comment"></span>
-      <a href="<%= @comment.url %>" rel="bookmark"
-          title="Permalink for this comment"><%= h(@comment.title) %></a>
+      <a href="<%== @comment.url %>" rel="bookmark"
+          title="Permalink for this comment"><%== @comment.title %></a>
     </h4>
     
     <% if check_auth && !@comment.new? %>
@@ -31,10 +31,10 @@
     <span class="author">
       Posted by
       <% if @comment.author_url.empty? %>
-        <%= h(@comment.author) %>
+        <%== @comment.author %>
       <% else %>
-        <a href="<%= h(@comment.author_url) %>" rel="nofollow">
-          <%= h(@comment.author) %>
+        <a href="<%== @comment.author_url %>" rel="nofollow">
+          <%== @comment.author %>
         </a>
       <% end %>
     </span>

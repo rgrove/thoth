@@ -1,10 +1,10 @@
-<h2>Posts tagged with "<%= h(@tag.name) %>"</h2>
+<h2>Posts tagged with "<%== @tag.name %>"</h2>
 
 <div class="search">
   <p>
     Displaying posts
-    <strong><%= @page_start %></strong>-<strong><%= @page_end %></strong> of
-    <strong><%= @total %></strong>
+    <strong><%== @page_start %></strong>-<strong><%== @page_end %></strong> of
+    <strong><%== @total %></strong>
   </p>
 
   <%= 

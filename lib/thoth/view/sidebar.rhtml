@@ -6,7 +6,7 @@
           method="get">
         <p>
           <input type="text" id="search-query" name="q" maxlength="255"
-              value="<%= request[:q] ? h(request[:q]) : '' %>" />
+              value="<%== request[:q] ? request[:q] : '' %>" />
         </p>
       </form>
     </dd>
@@ -26,9 +26,9 @@
     </dd>
     <% if @feeds; @feeds.each do |feed| %>
       <dd>
-        <a href="<%= feed[:href] %>" rel="alternate" type="<%= feed[:type] %>">
+        <a href="<%== feed[:href] %>" rel="alternate" type="<%== feed[:type] %>">
           <span class="icon feed"></span>
-          <%= h(feed[:title]) %>
+          <%== feed[:title] %>
         </a>
       </dd>
     <% end; end %>
