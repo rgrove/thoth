@@ -6,9 +6,9 @@
 # effect.
 #
 
-# Settings for production mode. 
+# Settings for production mode.
 Configuration.for("thoth_production") {
-  
+
   # Connection URI for the production database. Currently SQLite3 and MySQL are
   # supported. PostgreSQL may work, but hasn't been tested.
   #
@@ -26,16 +26,16 @@ Configuration.for("thoth_production") {
     # index page and in your blog's feeds.
     #
     # name "New Thoth Blog"
-    
+
     # A brief description or subtitle for your blog.
     #
     # desc "Thoth is awesome."
-    
+
     # Base URL of your site. This is necessary in order for Thoth to know how
     # to construct links. Be sure to set this correctly or links may not work.
     #
     # url "http://localhost:7000/"
-    
+
     # Whether or not you want to expose a sitemap for your blog. A sitemap is
     # an XML file that gives search engines information about all the URLs on
     # your site so they can index them more easily.
@@ -47,7 +47,7 @@ Configuration.for("thoth_production") {
     # enable_sitemap true
 
   }
-  
+
   admin {
 
     # Your name. This will be displayed in the copyright notice at the bottom of
@@ -59,15 +59,15 @@ Configuration.for("thoth_production") {
     # displayed.
     #
     # email ""
-    
+
     # Administrator username. This is the name you'll use to log into Thoth.
     #
     # user "thoth"
-    
+
     # Administrator password.
     #
     # pass "thoth"
-    
+
     # String of random characters to add uniqueness to the admin auth cookie.
     # You should uncomment this now and fill it with nonsense.
     #
@@ -83,34 +83,29 @@ Configuration.for("thoth_production") {
     # override the corresponding default files.
     #
     # public "#{Thoth::HOME_DIR}/public"
-  
+
     # Absolute path to a directory containing customized view templates. Any
     # templates in this directory will override the corresponding default
     # templates.
     #
     # view "#{Thoth::HOME_DIR}/view"
-    
+
   }
-  
+
   # Absolute path to a directory where uploaded media files (images, videos,
   # etc.) for your blog posts and pages should be stored. This directory needs
   # to be readable and writeable by the user running the Thoth server.
   #
   # media "#{Thoth::HOME_DIR}/media"
 
-  timestamp {
-
-    # Format for long timestamps. For details, see:
-    # http://www.ruby-doc.org/core/classes/Time.html#M000297
-    #
-    # long "%A %B %d, %Y @ %I:%M %p (%Z)"
-    
-    # Format for short timestamps. For details, see:
-    # http://www.ruby-doc.org/core/classes/Time.html#M000297
-    #
-    # short "%Y-%m-%d %I:%M"
-
-  }
+  # Plugins that should be loaded when Thoth starts. Usually it's not
+  # necessary to load a plugin until the first time it's used, but some plugins
+  # alter core functionality and thus must be loaded at start time.
+  #
+  # Example:
+  #   plugins ['foo', 'bar', 'baz']
+  #
+  # plugins []
 
   server {
 
@@ -135,7 +130,7 @@ Configuration.for("thoth_production") {
     # enable_cache true
 
     # Whether or not to enable automatic, on the fly minification of your blog's
-    # external CSS and JavaScript files. Enabling minification will reduce 
+    # external CSS and JavaScript files. Enabling minification will reduce
     # pageweight and is a great way to improve performance, but you'll need to
     # restart Thoth in order for CSS and JS changes to take effect.
     #
@@ -147,31 +142,35 @@ Configuration.for("thoth_production") {
     # error_log "#{Thoth::HOME_DIR}/error.log"
 
   }
-  
-  # Plugins that should be loaded when Thoth starts. Usually it's not
-  # necessary to load a plugin until the first time it's used, but some plugins
-  # alter core functionality and thus must be loaded at start time.
-  #
-  # Example:
-  #   plugins ['foo', 'bar', 'baz']
-  #
-  # plugins []
+
+  timestamp {
+
+    # Format for long timestamps. For details, see:
+    # http://www.ruby-doc.org/core/classes/Time.html#M000297
+    #
+    # long "%A %B %d, %Y @ %I:%M %p (%Z)"
+
+    # Format for short timestamps. For details, see:
+    # http://www.ruby-doc.org/core/classes/Time.html#M000297
+    #
+    # short "%Y-%m-%d %I:%M"
+
+  }
 
 }
 
-# Settings for devel mode. All defaults except db are the same as production
-# mode unless you change them here.
+# Settings for devel mode. All the defaults are the same as production except
+# for the differences you see here.
 Configuration.for("thoth_devel") {
 
-  # Connection URI for the devel database. Currently SQLite3 and MySQL are
-  # supported. PostgreSQL may work, but hasn't been tested.
-  #
-  # Sample SQLite3 connection string:
-  #   sqlite:////absolute/path/to/database.db
-  #
-  # Sample MySQL connection string:
-  #   mysql://user:pass@hostname/database
-  #
   # db "sqlite:///#{Thoth::HOME_DIR}/db/devel.db"
+
+  # server {
+  # 
+  #   compile_views false
+  #   enable_cache false
+  #   enable_minify false
+  # 
+  # }
 
 }

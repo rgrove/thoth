@@ -56,21 +56,21 @@ module Thoth
         
           media HOME_DIR/:media
   
+          plugins []
+
+          server {
+            address       "0.0.0.0"
+            port          7000
+            compile_views env == :production
+            enable_cache  env == :production
+            enable_minify env == :production
+            error_log     HOME_DIR/"error.log"
+          }
+        
           timestamp {
             long  "%A %B %d, %Y @ %I:%M %p (%Z)"
             short "%Y-%m-%d %I:%M"
           }
-    
-          server {
-            address       "0.0.0.0"
-            port          7000
-            compile_views true
-            enable_cache  true
-            enable_minify true
-            error_log     HOME_DIR/"error.log"
-          }
-        
-          plugins []
         }
       end
     
