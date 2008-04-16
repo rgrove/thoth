@@ -131,9 +131,6 @@ module Thoth
         :compile              => Config.server.compile_views
       )
 
-      # Use Erubis as the template engine for all controllers.
-      R::Controller.trait[:engine] = R::Template::Erubis
-
       # Display a 404 error for requests that don't map to a controller or
       # action.
       R::Dispatcher::Error::HANDLE_ERROR.update({
@@ -171,6 +168,11 @@ module Thoth
       require LIB_DIR/:controller/:post # must be loaded first
       acquire LIB_DIR/:controller/'*'
       acquire LIB_DIR/:model/'*'
+
+      # Use Erubis as the template engine for all controllers.
+      R::Global.mapping.values.each do |controller|
+        controller.trait[:engine] = R::Template::Erubis
+      end
 
       # If minification is enabled, intercept CSS/JS requests and route them to
       # the MinifyController.
