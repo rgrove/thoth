@@ -37,7 +37,7 @@ class MainController < Ramaze::Controller
   
   if Thoth::Config.server.enable_cache
     cache :index, :ttl => 60, :key => lambda {
-      check_auth.to_s + (request[:type] || '') + flash.to_s
+      check_auth.to_s + (request[:type] || '') + flash.inspect
     }
     cache :atom, :rss, :ttl => 60
     cache :sitemap, :ttl => 3600
