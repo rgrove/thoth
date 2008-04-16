@@ -117,11 +117,17 @@ Configuration.for("thoth_production") {
     # IP address on which the Thoth server should listen for connections.
     #
     # address "0.0.0.0"
-    
+
     # Port on which the Thoth server should listen for connections.
     #
     # port 7000
-    
+
+    # Whether or not to compile view templates instead of re-parsing them on
+    # each request. This will improve performance, but you will need to restart
+    # Thoth in order for template changes to take effect.
+    #
+    # compile_views true
+
     # Whether or not to enable caching. Enabling caching will significantly
     # improve Thoth's performance under heavy traffic, but new comments and
     # other changes may take a minute or two to become visible.

@@ -4,6 +4,9 @@ Thoth History
 Version 0.2.0 (?)
   * Updated to work with bleeding-edge Ramaze (currently 0.3.9.5 in the Ramaze
     Darcs repo).
+  * Views are now compiled by default in production mode, which improves
+    performance significantly. To disable view compilation, set
+    server.compile_views to false.
   * Fixed incorrect default paths for the theme.public, theme.view, and media
     config settings.
 

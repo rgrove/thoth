@@ -35,6 +35,8 @@ class CommentController < Ramaze::Controller
   view_root Thoth::Config.theme.view/:comment,
             Thoth::VIEW_DIR/:comment
   
+  template :new, PostController, :index
+  
   if Thoth::Config.server.enable_cache
     cache :index, :ttl => 60, :key => lambda { check_auth }
     cache :atom, :rss, :ttl => 60
@@ -173,8 +175,6 @@ class CommentController < Ramaze::Controller
     @author     = comment.author
     @author_url = comment.author_url
     @preview    = comment
-
-    render_template('../post/index')
   end
   
   def rss

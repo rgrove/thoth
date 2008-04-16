@@ -123,11 +123,14 @@ module Thoth
 
     # Runs Thoth.
     def run
-      R::Global.root                 = LIB_DIR
-      R::Global.public_root          = PUBLIC_DIR
-      R::Global.view_root            = VIEW_DIR
-      R::Global.actionless_templates = false
-      
+      R::Global.setup(
+        :root                 => LIB_DIR,
+        :public_root          => PUBLIC_DIR,
+        :view_root            => VIEW_DIR,
+        :actionless_templates => false,
+        :compile              => Config.server.compile_views
+      )
+
       # Use Erubis as the template engine for all controllers.
       R::Controller.trait[:engine] = R::Template::Erubis
 
@@ -137,7 +140,7 @@ module Thoth
         R::Error::NoAction     => [404, 'error_404'],
         R::Error::NoController => [404, 'error_404']
       })
-
+      
       case trait[:mode]
       when :devel
         R::Global.benchmarking = true
@@ -164,6 +167,8 @@ module Thoth
       
       open_db
 
+      require LIB_DIR/:controller/:post # must be loaded first
+      
       acquire LIB_DIR/:helper/'*'
       acquire LIB_DIR/:controller/'*'
       acquire LIB_DIR/:model/'*'

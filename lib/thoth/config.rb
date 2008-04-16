@@ -62,10 +62,11 @@ module Thoth
           }
     
           server {
-            address      "0.0.0.0"
-            port         7000
-            enable_cache true
-            error_log    HOME_DIR/"error.log"
+            address       "0.0.0.0"
+            port          7000
+            compile_views true
+            enable_cache  true
+            error_log     HOME_DIR/"error.log"
           }
         
           plugins []
