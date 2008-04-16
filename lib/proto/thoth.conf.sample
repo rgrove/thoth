@@ -134,6 +134,13 @@ Configuration.for("thoth_production") {
     #
     # enable_cache true
 
+    # Whether or not to enable automatic, on the fly minification of your blog's
+    # external CSS and JavaScript files. Enabling minification will reduce 
+    # pageweight and is a great way to improve performance, but you'll need to
+    # restart Thoth in order for CSS and JS changes to take effect.
+    #
+    # enable_minify true
+
     # Filename to which errors should be logged when running in production mode,
     # or blank if you don't care about errors.
     #

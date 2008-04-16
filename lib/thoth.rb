@@ -167,11 +167,19 @@ module Thoth
       
       open_db
 
-      require LIB_DIR/:controller/:post # must be loaded first
-      
       acquire LIB_DIR/:helper/'*'
+      require LIB_DIR/:controller/:post # must be loaded first
       acquire LIB_DIR/:controller/'*'
       acquire LIB_DIR/:model/'*'
+
+      # If minification is enabled, intercept CSS/JS requests and route them to
+      # the MinifyController.
+      if Config.server.enable_minify
+        R::Dispatcher::FILTER.unshift(lambda {|path|
+          return unless path =~ /^\/(css|js)\/(.+)$/
+          R::Response.current.build(R::Controller.handle("/minify/#{$1}/#{$2}"))
+        })
+      end
 
       Config.plugins.each {|plugin| Plugin.load(plugin) }
 

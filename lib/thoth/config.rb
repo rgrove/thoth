@@ -66,6 +66,7 @@ module Thoth
             port          7000
             compile_views true
             enable_cache  true
+            enable_minify true
             error_log     HOME_DIR/"error.log"
           }
         

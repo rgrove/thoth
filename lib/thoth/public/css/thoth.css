@@ -9,7 +9,7 @@ body {font:13px/1.231 arial,helvetica,clean,sans-serif;*font-size:small;*font:x-
 
 /* -- Icons ----------------------------------------------------------------- */
 .icon {
-  background: url(/images/thoth-sprite.png) no-repeat;
+  background: url(../images/thoth-sprite.png) no-repeat;
   display: -moz-inline-box;
   display: inline-block;
   vertical-align: middle;
@@ -381,8 +381,8 @@ div.comment:hover {
   font-size: 93%;
   margin: 1em 0;
   padding: 2px 3px;
-  zoom: 1;
   text-align: right;
+  zoom: 1;
 }
 
 .pg:after {
