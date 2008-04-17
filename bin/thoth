@@ -28,6 +28,7 @@
 #++
 
 require 'optparse'
+
 require 'rubygems'
 require 'ramaze'
 
@@ -45,18 +46,18 @@ module Thoth
       o.separator ''
       o.separator 'Options:'
   
-      o.on('-c', '--config [filename]',
+      o.on('-c', '--config <filename>',
           'Use the specified configuration file.') do |filename|
         trait[:config_file] = File.expand_path(filename)
       end
   
-      o.on('-d', '--daemon [command]', [:start, :stop, :restart],
+      o.on('-d', '--daemon <command>', [:start, :stop, :restart],
           'Issue the specified daemon command (start, stop, or',
           'restart).') do |cmd|
         trait[:daemon] = cmd
       end
       
-      o.on('-H, --home [path]', 
+      o.on('-H, --home <path>', 
           'Use the specified home directory.') do |home|
         unless File.directory?(home)
           abort("Error: home directory not found or not a directory: #{home}")
@@ -65,19 +66,19 @@ module Thoth
         HOME_DIR = File.expand_path(home)
       end
   
-      o.on('-i', '--ip [address]',
+      o.on('-i', '--ip <address>',
           'Listen for connections on the specified IP address.') do |address|
         trait[:ip] = address
       end
   
-      o.on('-p', '--port [number]',
+      o.on('-p', '--port <number>',
           'Listen for connections on the specified port number.') do |port|
         trait[:port] = port.to_i
       end
       
       o.separator ''
   
-      o.on('--create [path]',
+      o.on('--create <path>',
           'Create a new Thoth home directory with a sample',
           'config file.') do |path|
         require 'thoth'
@@ -99,13 +100,13 @@ module Thoth
         trait[:mode] = :devel
       end
       
-      o.on('--import [module]',
+      o.on('--import <module>',
            'Import content from another blog engine using the',
            'specified import module.') do |import_module|
         importer = import_module
       end
 
-      o.on('--log-sql [filename]',
+      o.on('--log-sql <filename>',
           'Log all SQL queries to the specified file.') do |filename|
         trait[:sql_log] = File.expand_path(filename)
       end
