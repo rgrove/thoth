@@ -25,7 +25,7 @@
     
     <tr class="size">
       <th scope="row">Size</th>
-      <td><%== File.exist?(@file.path) ? File.size(@file.path).filesize_format : '?' %></td>
+      <td><%== @file.size.filesize_format %></td>
     </tr>
   </tbody>
 </table>

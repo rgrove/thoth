@@ -12,7 +12,7 @@
         <td class="filename">
           <a href="<%= Rs(:edit, file.id) %>"><%== file.filename %></a>
         </td>
-        <td class="size"><%== File.exist?(file.path) ? File.size(file.path).filesize_format : '?' %></td>
+        <td class="size"><%== file.size.filesize_format %></td>
         <td class="created">
           <%= file.created_at(Thoth::Config.timestamp.short) %>
         </td>
