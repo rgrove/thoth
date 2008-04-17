@@ -29,11 +29,6 @@
 class Tag < Sequel::Model
   include Ramaze::Helper::Link
   
-  set_schema do
-    primary_key :id
-    varchar :name, :null => false, :unique => true
-  end
-  
   validates do
     presence_of :name
     length_of :name, :maximum => 64
@@ -56,5 +51,3 @@ class Tag < Sequel::Model
     Thoth::Config.site.url.chomp('/') + R(TagController, CGI.escape(name))
   end
 end
-
-Tag.create_table unless Tag.table_exists?

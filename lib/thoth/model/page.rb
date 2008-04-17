@@ -30,17 +30,6 @@ class Page < Sequel::Model
   include Ramaze::Helper::Link
   include Ramaze::Helper::Wiki
   
-  set_schema do
-    primary_key :id
-    
-    varchar  :title,         :null => false, :unique => true
-    varchar  :name,          :null => false, :unique => true
-    text     :body,          :null => false
-    text     :body_rendered, :null => false
-    datetime :created_at,    :null => false
-    datetime :updated_at,    :null => false
-  end
-  
   validates do
     presence_of :title, :message => 'Please enter a title for this page.'
     presence_of :name, :message => 'Please enter a name for this page.'
@@ -103,5 +92,3 @@ class Page < Sequel::Model
     Thoth::Config.site.url.chomp('/') + R(PageController, name)
   end
 end
-
-Page.create_table unless Page.table_exists?

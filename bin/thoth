@@ -33,8 +33,9 @@ require 'rubygems'
 require 'ramaze'
 
 module Thoth
-  importer = nil
-  
+  cli_action = :server # :import, :migrate, or :server
+  cli_values = {}
+
   # Parse command-line options.
   begin
     OptionParser.new {|o|
@@ -101,9 +102,10 @@ module Thoth
       end
       
       o.on('--import <module>',
-           'Import content from another blog engine using the',
-           'specified import module.') do |import_module|
-        importer = import_module
+          'Import content from another blog engine using the',
+          'specified import module.') do |import_module|
+        cli_action = :import
+        cli_values[:importer] = import_module
       end
 
       o.on('--log-sql <filename>',
@@ -111,6 +113,13 @@ module Thoth
         trait[:sql_log] = File.expand_path(filename)
       end
       
+      o.on '--migrate [version]',
+          'Migrate the database to the specified schema version,',
+          'or to the latest version if not specified.' do |version|
+        cli_action = :migrate
+        cli_values[:schema_version] = version
+      end
+
       o.separator ''
       o.separator 'Info:'
 
@@ -146,24 +155,34 @@ module Thoth
   rescue => e
     abort("Error: #{e}")
   end
-  
+
   require 'thoth'
 
   Config.load(trait[:config_file])
 
-  if importer
+  case cli_action
+  when :import
     require 'thoth/importer'
-    
+
     begin
-      Importer.load_importer(importer).run
+      Importer.load_importer(cli_values[:importer]).run
     rescue LoadError => e
       abort("Error: #{e}")
     end
-  else
+
+  when :migrate
+    open_db
+    Sequel::Migrator.apply(@db, LIB_DIR/:migrate,
+        cli_values[:schema_version] ? cli_values[:schema_version].to_i : nil)
+
+  when :server
     trait[:ip]      ||= Config.server.address
     trait[:port]    ||= Config.server.port
     trait[:pidfile]   = HOME_DIR/"thoth_#{trait[:ip]}_#{trait[:port]}.pid"
 
     send(trait[:daemon] || :run)
+
+  else
+    abort("Error: unknown action: #{cli_action}")
   end
 end

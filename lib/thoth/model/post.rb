@@ -30,17 +30,6 @@ class Post < Sequel::Model
   include Ramaze::Helper::Link
   include Ramaze::Helper::Wiki
   
-  set_schema do
-    primary_key :id
-    
-    varchar  :title,         :null => false, :unique => true
-    varchar  :name,          :null => false, :unique => true
-    text     :body,          :null => false
-    text     :body_rendered, :null => false
-    datetime :created_at,    :null => false
-    datetime :updated_at,    :null => false
-  end
-  
   validates do
     presence_of :title, :message => 'Please enter a title for this post.'
     presence_of :body, :message => "What's the matter? Cat got your tongue?"
@@ -220,21 +209,20 @@ class Post < Sequel::Model
   end
 end
 
-unless Post.table_exists?
-  Post.create_table
+unless Post.count > 0
   Post.create(
     :title => 'Welcome to your new Thoth blog',
     :body  => %[
       If you're reading this, you've successfully installed Thoth.
       Congratulations!
-      
+    
       Once you've 
       <a href="txmt://open/?url=file://#{Thoth.trait[:config_file]}">edited the
       config file</a> to your liking, you can <a href="/admin">login</a> and
       begin creating blog posts and pages. You can also delete this post to make
       way for your own glorious words.
-      
+    
       Enjoy!
     ].unindent
-  )
+  )  
 end

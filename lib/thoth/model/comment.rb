@@ -33,22 +33,6 @@ class Comment < Sequel::Model
   include Ramaze::Helper::Link
   include Ramaze::Helper::Sanitize
   
-  set_schema do
-    primary_key :id
-    
-    varchar  :author,        :null => false
-    varchar  :author_url
-    varchar  :title,         :null => false
-    text     :body,          :default => ''
-    text     :body_rendered, :default => ''
-    varchar  :ip
-    datetime :created_at,    :null => false
-    datetime :updated_at,    :null => false
-
-    foreign_key :post_id, :table => :posts
-    index :post_id
-  end
-  
   validates do
     presence_of :author, :message => 'Please enter your name.'
     presence_of :title,  :message => 'Please enter a title for this comment.'
@@ -157,5 +141,3 @@ class Comment < Sequel::Model
     new? ? '#' : post.url + "#comment-#{id}"
   end
 end
-
-Comment.create_table unless Comment.table_exists?

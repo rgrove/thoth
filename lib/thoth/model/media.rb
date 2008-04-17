@@ -29,15 +29,6 @@
 class Media < Sequel::Model(:media)
   include Ramaze::Helper::Link
   
-  set_schema do
-    primary_key :id
-    
-    varchar  :filename,   :null => false, :unique => true
-    varchar  :mimetype,   :null => false
-    datetime :created_at, :null => false
-    datetime :updated_at, :null => false
-  end
-  
   before_create do
     self.created_at = Time.now
   end
@@ -84,5 +75,3 @@ class Media < Sequel::Model(:media)
     Thoth::Config.site.url.chomp('/') + R(MediaController, filename)
   end
 end
-
-Media.create_table unless Media.table_exists?

@@ -4,6 +4,8 @@ Thoth History
 Version 0.2.0 (?)
   * Updated to work with bleeding-edge Ramaze (currently 0.3.9.5 in the Ramaze
     Darcs repo).
+  * Added --migrate command line option to automatically upgrade or downgrade
+    a Thoth database schema.
   * Views are now compiled by default in production mode, which improves
     performance significantly. To disable view compilation, set
     server.compile_views to false.
