@@ -60,6 +60,14 @@ class Media < Sequel::Model(:media)
     Thoth::Config.media/filename[0].chr.downcase/filename
   end
   
+  def size
+    return self[:size] unless self[:size] == 0 && File.exist?(path)
+
+    self[:size] = File.size(path)
+    save
+    self[:size]
+  end
+
   # Gets the time this file was last updated. If _format_ is provided, the time
   # will be returned as a formatted String. See Time.strftime for details.
   def updated_at(format = nil)
