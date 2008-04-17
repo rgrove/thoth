@@ -40,10 +40,10 @@ class ArchiveController < Ramaze::Controller
   def index(page = 1)
     page = page.to_i
     page = 1 unless page >= 1
-  
+
     @posts = Post.recent(page, 10)
-  
-    if page > @posts.page_count
+
+    if page > @posts.page_count && @posts.page_count > 0
       page = @posts.page_count
       @posts = Post.recent(page, 10)
     end
