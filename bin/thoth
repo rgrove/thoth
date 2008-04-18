@@ -180,7 +180,11 @@ module Thoth
     trait[:port]    ||= Config.server.port
     trait[:pidfile]   = HOME_DIR/"thoth_#{trait[:ip]}_#{trait[:port]}.pid"
 
-    send(trait[:daemon] || :run)
+    begin
+      send(trait[:daemon] || :run)
+    rescue SchemaError => e
+      abort("Error: #{e}")
+    end
 
   else
     abort("Error: unknown action: #{cli_action}")

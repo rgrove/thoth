@@ -50,6 +50,7 @@ module Thoth
   VIEW_DIR   = LIB_DIR/:view unless const_defined?(:VIEW_DIR)
 end
 
+require 'thoth/errors'
 require 'thoth/config'
 require 'thoth/version'
 require 'thoth/plugin'
@@ -222,6 +223,11 @@ module Thoth
 
       open_db
 
+      unless @db.table_exists?(:posts)
+        raise SchemaError, "Database schema is missing or out of date. " <<
+            "Please run `thoth --migrate`."
+      end
+
       acquire LIB_DIR/:helper/'*'
       require LIB_DIR/:controller/:post # must be loaded first
       acquire LIB_DIR/:controller/'*'
@@ -244,5 +250,4 @@ module Thoth
       Config.plugins.each {|plugin| Plugin.load(plugin) }
     end
   end
-
 end
