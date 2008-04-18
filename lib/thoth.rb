@@ -148,13 +148,15 @@ module Thoth
         exit if fork
     
         File.open(trait[:pidfile], 'w') {|file| file << Process.pid }
+        at_exit { FileUtils.rm(trait[:pidfile]) }
+        
         Dir.chdir(HOME_DIR)
         File.umask(0000)
     
         STDIN.reopen('/dev/null')
         STDOUT.reopen('/dev/null', 'a')
         STDERR.reopen(STDOUT)
-    
+
         run
       end
     end
@@ -168,13 +170,11 @@ module Thoth
       puts "Stopping thoth."
   
       pid = File.read(trait[:pidfile], 20).strip
-      FileUtils.rm(trait[:pidfile])
-  
       pid && Process.kill('TERM', pid.to_i)
     end
 
     private
-
+    
     def init_ramaze
       R::Global.setup(
         :root                 => LIB_DIR,
