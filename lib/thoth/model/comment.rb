@@ -84,27 +84,21 @@ class Comment < Sequel::Model
   end
 
   def body=(body)
-    body          = sanitize_html(body.rstrip)
-    body_rendered = body.dup.strip
-    
-    # Autoformat the comment body if necessary.
-    unless body_rendered =~ /<p>/i || body_rendered =~ /(?:<br\s*\/?>\s*){2,}/i
-      body_rendered.gsub!(/\s*([\w\W]+?)(?:\n{2,}|(?:\r\n){2,}|\z)/) do |match|
-        if match =~ /<(?:address|blockquote|dl|h[1-6]|ol|pre|table|ul)>/i
-          match
-        else
-          "<p>#{match.strip}</p>"
-        end
-      end
-    end
+    redcloth = RedCloth.new(body, [:filter_styles])
 
-    redcloth = RedCloth.new(body_rendered)
-    
-    redcloth.filter_styles = true
-    redcloth.lite_mode     = true
-    
     self[:body]          = body
-    self[:body_rendered] = redcloth.to_html
+    self[:body_rendered] = sanitize_html(redcloth.to_html(
+      :refs_textile,
+      :block_textile_lists,
+      :inline_textile_link,
+      :inline_textile_code,
+      :glyphs_textile,
+      :inline_textile_span,
+      :refs_markdown,
+      :block_markdown_bq,
+      :block_markdown_lists,
+      :inline_markdown_link
+    ))
   end
   
   # Gets the creation time of this comment. If _format_ is provided, the time
