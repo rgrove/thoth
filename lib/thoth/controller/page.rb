@@ -34,7 +34,7 @@ class PageController < Ramaze::Controller
             Thoth::VIEW_DIR/:page
   
   if Thoth::Config.server.enable_cache
-    cache :index, :ttl => 60, :key => lambda { check_auth }
+    cache :index, :ttl => 60, :key => lambda { auth_key_valid? }
   end
   
   def index(name = nil)

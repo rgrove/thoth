@@ -35,7 +35,7 @@ class SearchController < Ramaze::Controller
   
   if Thoth::Config.server.enable_cache
     cache :index, :ttl => 300, :key => lambda {
-      check_auth.to_s + request[:q] + (request[:start] || '') +
+      auth_key_valid?.to_s + request[:q] + (request[:start] || '') +
           (request[:count] || '')
     }
   end

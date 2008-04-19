@@ -85,9 +85,9 @@ module Ramaze; module Helper
           Thoth::Config.admin.pass)
     end
     
-    # Checks the auth cookie and returns +true+ if the user is authenticated,
+    # Validates the auth cookie and returns +true+ if the user is authenticated,
     # +false+ otherwise.
-    def check_auth
+    def auth_key_valid?
       cookie(:thoth_auth) == auth_key
     end
 
@@ -107,7 +107,7 @@ module Ramaze; module Helper
     # Checks the auth cookie and redirects to the login page if the user is not
     # authenticated.
     def require_auth
-      redirect(R(AdminController)) unless check_auth
+      redirect(R(AdminController)) unless auth_key_valid?
     end
   end
   

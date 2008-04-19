@@ -34,7 +34,7 @@ class AdminController < Ramaze::Controller
             Thoth::VIEW_DIR/:admin
   
   def index
-    if check_auth
+    if auth_key_valid?
       @title       = 'Welcome to Thoth'
       @public_root = Thoth::PUBLIC_DIR
       @view_root   = Thoth::VIEW_DIR

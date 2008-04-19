@@ -1,1 +1,1 @@
-<%= render_template(check_auth ? :welcome : :login) %>
+<%= render_template(auth_key_valid? ? :welcome : :login) %>

@@ -6,7 +6,7 @@
           title="Permalink for this comment"><%== @comment.title %></a>
     </h4>
     
-    <% if check_auth && !@comment.new? %>
+    <% if auth_key_valid? && !@comment.new? %>
       <div class="toolbar mini">
         <ul>
           <li>

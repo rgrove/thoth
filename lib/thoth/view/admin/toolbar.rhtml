@@ -1,5 +1,5 @@
-<div id="adminToolbar" class="toolbar robots-nocontent<%= check_auth ? '' : ' hidden' %>">
-  <% if check_auth %>
+<div id="adminToolbar" class="toolbar robots-nocontent<%= auth_key_valid? ? '' : ' hidden' %>">
+  <% if auth_key_valid? %>
     <ul class="edit">
       <li>
         <a href="<%= R(PostController, :new) %>"

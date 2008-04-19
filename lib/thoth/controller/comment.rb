@@ -38,7 +38,7 @@ class CommentController < Ramaze::Controller
   template :new, PostController, :index
   
   if Thoth::Config.server.enable_cache
-    cache :index, :ttl => 60, :key => lambda { check_auth }
+    cache :index, :ttl => 60, :key => lambda { auth_key_valid? }
     cache :atom, :rss, :ttl => 60
   end
 
