@@ -1,6 +1,7 @@
 <form class="media" action="<%== @form_action %>" method="post"
     enctype="multipart/form-data">
   <p>
+    <input type="hidden" name="token" value="<%== form_token %>" />
     <input type="file" name="file" id="file" />
     <input type="submit" value="Upload" />
   </p>

@@ -8,6 +8,7 @@
 
 <form action="<%= Rs(:delete, @comment.id) %>" method="post">
   <p>
+    <input type="hidden" name="token" value="<%== form_token %>" />
     <button name="confirm" value="yes">Yes, delete this comment forever</button>
     <button name="confirm" value="no">No, do not delete this comment</button>
   </p>

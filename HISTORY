@@ -6,11 +6,13 @@ Version 0.2.0 (?)
     Darcs repo).
   * Added --migrate command line option to automatically upgrade or downgrade
     a Thoth database schema.
-  * Views are now compiled by default in production mode, which improves
-    performance significantly. To disable view compilation, set
-    server.compile_views to false.
+  * Views are compiled by default in production mode, which improves performance
+    significantly. To disable view compilation, set server.compile_views to
+    false.
   * Added server.enable_minify setting. When enabled, all CSS under /css and all
     JavaScript under /js will be minified on the fly.
+  * All admin forms validate a session-specific form token on submission to
+    prevent cross-site request forgery attacks.
   * Fixed incorrect default paths for the theme.public, theme.view, and media
     config settings.
 

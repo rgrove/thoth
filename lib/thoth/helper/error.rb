@@ -42,6 +42,16 @@ module Ramaze; module Helper
       super
     end
     
+    # Displays a "403 Forbidden" error message and returns a 403 response code.
+    def error_403
+      error_layout 403, '403 Forbidden', %[
+        <p>
+          You don't have permission to access
+          <code>#{h(request.REQUEST_URI)}</code> on this server.
+        </p>
+      ]
+    end
+    
     # Displays a "404 Not Found" error message and returns a 404 response code.
     def error_404
       error_layout 404, '404 Not Found', %[

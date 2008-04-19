@@ -49,6 +49,8 @@ class MediaController < Ramaze::Controller
     error_404 unless id && @file = Media[id]
 
     if request.post?
+      error_403 unless form_token_valid?
+
       if request[:confirm] == 'yes'
         @file.destroy
         flash[:success] = 'File deleted.'
@@ -70,6 +72,8 @@ class MediaController < Ramaze::Controller
     @form_action = Rs(:edit, id)
 
     if request.post?
+      error_403 unless form_token_valid?
+
       tempfile, filename, type = request[:file].values_at(
           :tempfile, :filename, :type)
           
@@ -119,6 +123,8 @@ class MediaController < Ramaze::Controller
     @form_action = Rs(:new)
     
     if request.post?
+      error_403 unless form_token_valid?
+
       tempfile, filename, type = request[:file].values_at(
           :tempfile, :filename, :type)
       

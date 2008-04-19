@@ -99,6 +99,8 @@ class PostController < Ramaze::Controller
     error_404 unless id && @post = Post[id]
 
     if request.post?
+      error_403 unless form_token_valid?
+
       if request[:confirm] == 'yes'
         @post.destroy
         action_cache.clear
@@ -121,6 +123,8 @@ class PostController < Ramaze::Controller
     end
     
     if request.post?
+      error_403 unless form_token_valid?
+      
       @post.title = request[:title]
       @post.body  = request[:body]
       @post.tags  = request[:tags]
@@ -171,6 +175,8 @@ class PostController < Ramaze::Controller
     @form_action = Rs(:new)
     
     if request.post?
+      error_403 unless form_token_valid?
+
       @post = Post.new do |p|
         p.title = request[:title]
         p.body  = request[:body]

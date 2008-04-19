@@ -97,6 +97,8 @@ class CommentController < Ramaze::Controller
     error_404 unless id && @comment = Comment[id]
     
     if request.post?
+      error_403 unless form_token_valid?
+
       comment_url = @comment.url
       
       if request[:confirm] == 'yes'

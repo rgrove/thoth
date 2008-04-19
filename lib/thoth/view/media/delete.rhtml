@@ -8,6 +8,7 @@
 
 <form action="<%= Rs(:delete, @file.id) %>" method="post">
   <p>
+    <input type="hidden" name="token" value="<%== form_token %>" />
     <button name="confirm" value="yes">Yes, delete this file forever</button>
     <button name="confirm" value="no">No, do not delete this file</button>
   </p>

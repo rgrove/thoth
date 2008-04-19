@@ -90,7 +90,20 @@ module Ramaze; module Helper
     def check_auth
       cookie(:thoth_auth) == auth_key
     end
-    
+
+    # Returns a String that can be included in a hidden form field and used on
+    # submission to verify that the form was not submitted by an unauthorized
+    # third party.
+    def form_token
+      Ramaze::Session.current.session_id
+    end
+
+    # Checks the form token specified by +name+ and returns +true+ if it's
+    # valid, +false+ otherwise.
+    def form_token_valid?(name = 'token')
+      request[name] == form_token
+    end
+
     # Checks the auth cookie and redirects to the login page if the user is not
     # authenticated.
     def require_auth
