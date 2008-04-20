@@ -33,52 +33,47 @@ module Thoth; module Plugin
 
   # Flickr plugin for Thoth.
   module Flickr
-    
     Configuration.for("thoth_#{Thoth.trait[:mode]}") do
       flickr {
 
         # Flickr API key. You can either use the default or replace this with
         # your own key.
         api_key '5b1d9919cb2d97585bd3d83e05af80b8' unless Send('respond_to?', :api_key)
-        
+
         # Time in seconds to cache results. It's a good idea to keep this nice
         # and high both to improve the performance of your site and to avoid
         # pounding on Flickr's servers. Default is 900 seconds (15 minutes).
         cache_ttl 900 unless Send('respond_to?', :cache_ttl)
-        
+
         # Request timeout in seconds.
         request_timeout 5 unless Send('respond_to?', :request_timeout)
 
       }
     end
-    
+
     class << self
       # Gets recent Flickr photos (up to _limit_) for the specified _username_.
       # The return value of this method is cached to improve performance and to
       # avoid abusing the Flickr API.
       def recent_photos(username, limit = 4)
-        @cache ||= {}
+        cache = Ramaze::Cache.value_cache
+        key   = "recent_photos_#{username}_#{limit}"
 
-        key = "recent_photos_#{username}_#{limit}"
-  
-        if cached = @cache[key]
-          return cached[:value] if cached[:expires] > Time.now
+        if value = cache[key]
+          return value
         end
 
         @flickr ||= Net::Flickr.new(Config.flickr.api_key)
-        
+
         begin
           Timeout.timeout(Config.flickr.request_timeout.to_i, StandardError) do
-            @cache[key] = {
-              :expires => Time.now + Config.flickr.cache_ttl.to_i,
-              :value   => @flickr.people.find_by_username(username).
-                  photos(:per_page => limit)
-            }
+            value = cache.store(key, @flickr.people.find_by_username(username).
+                photos(:per_page => limit), :ttl => Config.flickr.cache_ttl)
           end
         rescue => e
           return []
         else
-          @cache[key][:value]
+          value
         end
       end
 
