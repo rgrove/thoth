@@ -171,9 +171,15 @@ module Thoth
     end
 
   when :migrate
-    open_db
-    Sequel::Migrator.apply(@db, LIB_DIR/:migrate,
-        cli_values[:schema_version] ? cli_values[:schema_version].to_i : nil)
+    begin
+      open_db
+      Sequel::Migrator.apply(@db, LIB_DIR/:migrate,
+          cli_values[:schema_version] ? cli_values[:schema_version].to_i : nil)
+    rescue => e
+      abort("Error: #{e}")
+    else
+      puts "Migration complete."
+    end
 
   when :server
     trait[:ip]      ||= Config.server.address
