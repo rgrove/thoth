@@ -171,10 +171,21 @@ module Thoth
     end
 
   when :migrate
+    schema_version = cli_values[:schema_version]
+
+    if !schema_version.nil? && schema_version.to_i == 0
+      puts 'WARNING: Migrating to schema version 0 will delete your Thoth database. This'
+      puts 'action cannot be undone. Are you sure you want to continue? (y/n)'
+      print '> '
+
+      exit unless STDIN.gets.strip =~ /^y(?:es)?/i
+      puts
+    end
+
     begin
       open_db
-      Sequel::Migrator.apply(@db, LIB_DIR/:migrate,
-          cli_values[:schema_version] ? cli_values[:schema_version].to_i : nil)
+      Sequel::Migrator.apply(@db, LIB_DIR/:migrate, schema_version.nil? ? nil :
+          schema_version.to_i)
     rescue => e
       abort("Error: #{e}")
     else
