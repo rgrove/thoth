@@ -52,12 +52,13 @@ module Thoth
       def run
         # Bootstrap.
         Ramaze::Log.loggers = []
-        Thoth.open_db
 
-        acquire LIB_DIR/:helper/'*'
-        acquire LIB_DIR/:controller/'*'
-        acquire LIB_DIR/:model/'*'
-      
+        begin
+          Thoth.init_thoth
+        rescue => e
+          abort("Error: #{e}")
+        end
+
         # Disable model hooks.
         [Comment, Media, Page, Post].each do |klass|
           klass.class_eval('def before_create; end')
