@@ -101,6 +101,83 @@ module Thoth
       File.chmod(0640, path/'thoth.conf')
     end
 
+    # Initializes Ramaze (but doesn't actually start the server).
+    def init_ramaze
+      R::Global.setup(
+        :root                 => LIB_DIR,
+        :public_root          => PUBLIC_DIR,
+        :view_root            => VIEW_DIR,
+        :actionless_templates => false,
+        :compile              => Config.server.compile_views
+      )
+
+      # Display a 404 error for requests that don't map to a controller or
+      # action.
+      R::Dispatcher::Error::HANDLE_ERROR.update({
+        R::Error::NoAction     => [404, 'error_404'],
+        R::Error::NoController => [404, 'error_404']
+      })
+    
+      case trait[:mode]
+      when :devel
+        R::Global.benchmarking = true
+
+      when :production
+        R::Global.sourcereload = false
+
+        # Log all errors to the error log file if one is configured.
+        R::Log.loggers = Config.server.error_log.empty? ? [] :
+            [R::Informer.new(Config.server.error_log, [:error])]
+
+        # Don't expose argument errors or exceptions in production mode.
+        R::Dispatcher::Error::HANDLE_ERROR.update({
+          ArgumentError => [404, 'error_404'],
+          Exception     => [500, 'error_500']
+        })
+  
+      else
+        raise "Invalid mode: #{trait[:mode]}"
+      end
+    end
+
+    # Opens a connection to the Thoth database and loads helpers, controllers,
+    # models and plugins.
+    def init_thoth
+      trait[:ip]   ||= Config.server.address
+      trait[:port] ||= Config.server.port
+
+      R::Log.info "Thoth home: #{HOME_DIR}"
+      R::Log.info "Thoth lib : #{LIB_DIR}"
+
+      open_db
+
+      unless @db.table_exists?(:posts)
+        raise SchemaError, "Database schema is missing or out of date. " <<
+            "Please run `thoth --migrate`."
+      end
+
+      acquire LIB_DIR/:helper/'*'
+      require LIB_DIR/:controller/:post # must be loaded first
+      acquire LIB_DIR/:controller/'*'
+      acquire LIB_DIR/:model/'*'
+
+      # Use Erubis as the template engine for all controllers.
+      R::Global.mapping.values.each do |controller|
+        controller.trait[:engine] = R::Template::Erubis
+      end
+
+      # If minification is enabled, intercept CSS/JS requests and route them to
+      # the MinifyController.
+      if Config.server.enable_minify
+        R::Dispatcher::FILTER.unshift(lambda {|path|
+          return unless path =~ /^\/(css|js)\/(.+)$/
+          R::Response.current.build(R::Controller.handle("/minify/#{$1}/#{$2}"))
+        })
+      end
+
+      Config.plugins.each {|plugin| Plugin.load(plugin) }
+    end
+
     # Opens a Sequel database connection to the Thoth database.
     def open_db
       if Config.db =~ /^sqlite:\/{3}(.+)$/
@@ -172,82 +249,6 @@ module Thoth
   
       pid = File.read(trait[:pidfile], 20).strip
       pid && Process.kill('TERM', pid.to_i)
-    end
-
-    private
-    
-    def init_ramaze
-      R::Global.setup(
-        :root                 => LIB_DIR,
-        :public_root          => PUBLIC_DIR,
-        :view_root            => VIEW_DIR,
-        :actionless_templates => false,
-        :compile              => Config.server.compile_views
-      )
-
-      # Display a 404 error for requests that don't map to a controller or
-      # action.
-      R::Dispatcher::Error::HANDLE_ERROR.update({
-        R::Error::NoAction     => [404, 'error_404'],
-        R::Error::NoController => [404, 'error_404']
-      })
-    
-      case trait[:mode]
-      when :devel
-        R::Global.benchmarking = true
-
-      when :production
-        R::Global.sourcereload = false
-
-        # Log all errors to the error log file if one is configured.
-        R::Log.loggers = Config.server.error_log.empty? ? [] :
-            [R::Informer.new(Config.server.error_log, [:error])]
-
-        # Don't expose argument errors or exceptions in production mode.
-        R::Dispatcher::Error::HANDLE_ERROR.update({
-          ArgumentError => [404, 'error_404'],
-          Exception     => [500, 'error_500']
-        })
-  
-      else
-        raise "Invalid mode: #{trait[:mode]}"
-      end
-    end
-    
-    def init_thoth
-      trait[:ip]   ||= Config.server.address
-      trait[:port] ||= Config.server.port
-
-      R::Log.info "Thoth home: #{HOME_DIR}"
-      R::Log.info "Thoth lib : #{LIB_DIR}"
-
-      open_db
-
-      unless @db.table_exists?(:posts)
-        raise SchemaError, "Database schema is missing or out of date. " <<
-            "Please run `thoth --migrate`."
-      end
-
-      acquire LIB_DIR/:helper/'*'
-      require LIB_DIR/:controller/:post # must be loaded first
-      acquire LIB_DIR/:controller/'*'
-      acquire LIB_DIR/:model/'*'
-
-      # Use Erubis as the template engine for all controllers.
-      R::Global.mapping.values.each do |controller|
-        controller.trait[:engine] = R::Template::Erubis
-      end
-
-      # If minification is enabled, intercept CSS/JS requests and route them to
-      # the MinifyController.
-      if Config.server.enable_minify
-        R::Dispatcher::FILTER.unshift(lambda {|path|
-          return unless path =~ /^\/(css|js)\/(.+)$/
-          R::Response.current.build(R::Controller.handle("/minify/#{$1}/#{$2}"))
-        })
-      end
-
-      Config.plugins.each {|plugin| Plugin.load(plugin) }
     end
   end
 end
