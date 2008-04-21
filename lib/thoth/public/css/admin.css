@@ -150,8 +150,9 @@ table.list thead th {
   white-space: nowrap;
 }
 
-table.list tbody tr.odd { background: #fff; }
+table.list tbody tr.empty { font-style: italic; }
 table.list tbody tr.even { background: #e7f2ff; }
+table.list tbody tr.odd { background: #fff; }
 table.list tbody tr:hover { background: #d0dbf7; }
 
 table.list tbody td { border: 1px solid transparent; }

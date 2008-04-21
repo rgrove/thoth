@@ -21,6 +21,14 @@
         </td>
       </tr>
     <% end %>
+
+    <% if @posts.count == 0 %>
+      <tr class="empty">
+        <td colspan="4">
+          No blog posts to display.
+        </td>
+      </tr>
+    <% end %>
   </tbody>
 </table>
 

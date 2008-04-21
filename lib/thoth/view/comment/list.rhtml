@@ -27,6 +27,14 @@
         </td>
       </tr>
     <% end %>
+
+    <% if @comments.count == 0 %>
+      <tr class="empty">
+        <td colspan="4">
+          No comments to display.
+        </td>
+      </tr>
+    <% end %>
   </tbody>
 </table>
 
