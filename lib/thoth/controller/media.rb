@@ -60,16 +60,19 @@ class MediaController < Ramaze::Controller
       end
     end
     
-    @title  = "Delete File: #{@file.filename}"
-    @delete = true
+    @title          = "Delete File: #{@file.filename}"
+    @delete         = true
+    @show_file_edit = true
   end
   
   def edit(id = nil)
     require_auth
+
     redirect(Rs(:new)) unless id && @file = Media[id]
 
-    @title       = "Edit Media - #{@file.filename}"
-    @form_action = Rs(:edit, id)
+    @title          = "Edit Media - #{@file.filename}"
+    @form_action    = Rs(:edit, id)
+    @show_file_edit = true
 
     if request.post?
       error_403 unless form_token_valid?

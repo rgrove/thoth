@@ -39,7 +39,9 @@ class PageController < Ramaze::Controller
   
   def index(name = nil)
     error_404 unless name && @page = Page[:name => name.strip.downcase]
-    @title = @page.title
+
+    @title          = @page.title
+    @show_page_edit = true
   end
   
   def delete(id = nil)
@@ -59,8 +61,9 @@ class PageController < Ramaze::Controller
         redirect(@page.url)
       end
     end
-    
-    @title = "Delete Page: #{@page.title}"
+
+    @title          = "Delete Page: #{@page.title}"
+    @show_page_edit = true
   end
   
   def edit(id = nil)
@@ -91,8 +94,9 @@ class PageController < Ramaze::Controller
       end
     end
 
-    @title       = "Edit page - #{@page.title}"
-    @form_action = Rs(:edit, id)
+    @title          = "Edit page - #{@page.title}"
+    @form_action    = Rs(:edit, id)
+    @show_page_edit = true
   end
 
   def list(page = 1)

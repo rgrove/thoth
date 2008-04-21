@@ -1,4 +1,4 @@
-<div id="adminToolbar" class="toolbar robots-nocontent<%= auth_key_valid? ? '' : ' hidden' %>">
+<div id="adminToolbar" class="toolbar robots-nocontent<%= ' hidden' unless auth_key_valid? %>">
   <% if auth_key_valid? %>
     <ul class="edit">
       <li>
@@ -8,7 +8,7 @@
         </a>
       </li>
 
-      <% if @post && !@post.new? %>
+      <% if @show_post_edit && @post %>
         <li>
           <a href="<%= R(PostController, :edit, @post.id) %>"
               title="Edit this blog post">
@@ -31,7 +31,7 @@
         </a>
       </li>
 
-      <% if @page && !@page.new? %>
+      <% if @show_page_edit && @page %>
         <li>
           <a href="<%= R(PageController, :edit, @page.id) %>"
               title="Edit this page">
@@ -53,7 +53,7 @@
         </a>
       </li>
       
-      <% if @file && !@file.new? %>
+      <% if @show_file_edit && @file %>
         <li>
           <a href="<%= R(MediaController, :delete, @file.id) %>"
               title="Delete this file">

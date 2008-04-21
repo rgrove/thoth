@@ -45,12 +45,14 @@ class PostController < Ramaze::Controller
     @title      = @post.title
     @author     = cookie(:thoth_author, '')
     @author_url = cookie(:thoth_author_url, '')
-    
+
     @feeds = [{
       :href  => @post.atom_url,
       :title => 'Comments on this post',
       :type  => 'application/atom+xml'
     }]
+
+    @show_post_edit = true
   end
   
   def atom(name = nil)
@@ -111,7 +113,8 @@ class PostController < Ramaze::Controller
       end
     end
     
-    @title = "Delete Post: #{@post.title}"
+    @title          = "Delete Post: #{@post.title}"
+    @show_post_edit = true
   end
   
   def edit(id = nil)
@@ -144,8 +147,9 @@ class PostController < Ramaze::Controller
       end
     end
 
-    @title       = "Edit blog post - #{@post.title}"
-    @form_action = Rs(:edit, id)
+    @title          = "Edit blog post - #{@post.title}"
+    @form_action    = Rs(:edit, id)
+    @show_post_edit = true
   end
   
   def list(page = 1)
