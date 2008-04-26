@@ -196,6 +196,7 @@ module Thoth
     # Restarts the running Thoth daemon (if any).
     def restart
       stop
+      sleep(1)
       start
     end
 
@@ -226,7 +227,7 @@ module Thoth
         exit if fork
     
         File.open(trait[:pidfile], 'w') {|file| file << Process.pid }
-        at_exit { FileUtils.rm(trait[:pidfile]) }
+        at_exit {FileUtils.rm(trait[:pidfile]) if File.exist?(trait[:pidfile])}
         
         Dir.chdir(HOME_DIR)
         File.umask(0000)
@@ -248,6 +249,7 @@ module Thoth
       puts "Stopping thoth."
   
       pid = File.read(trait[:pidfile], 20).strip
+      FileUtils.rm(trait[:pidfile]) if File.exist?(trait[:pidfile])
       pid && Process.kill('TERM', pid.to_i)
     end
   end
