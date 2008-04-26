@@ -15,28 +15,31 @@
       <link rel="alternate" type="<%== feed[:type] %>"
           href="<%== feed[:href] %>" title="<%== feed[:title] %>" />
     <% end; end %>
-    
+
     <link rel="home" href="<%== Thoth::Config.site.url %>" />
-    <% if @prev_url %>
-      <link id="prev_url" rel="prev" href="<%== @prev_url %>" />
-    <% end %>    
-    <% if @next_url %>
-      <link id="next_url" rel="next" href="<%== @next_url %>" />
+
+    <% if @pager %>
+      <% if @pager.prev_url %>
+        <link id="prev_url" rel="prev" href="<%== @pager.prev_url %>" />
+      <% end %>
+      <% if @pager.next_url %>
+        <link id="next_url" rel="next" href="<%== @pager.next_url %>" />
+      <% end %>
     <% end %>
   </head>
   <body>
     <div id="doc">
       <%= render_template :header %>
-      
+
       <div id="bd">
         <%= render_template :sidebar %>
-      
+
         <div id="main">
           <%= flashbox('<div class="flash %key">%value</div>') %>
           <%= @content %>
         </div>
       </div>
-      
+
       <%= render_template :footer %>
     </div>
 
