@@ -27,7 +27,7 @@
 #++
 
 class PostController < Ramaze::Controller
-  helper :admin, :cache, :cookie, :error, :wiki
+  helper :admin, :cache, :cookie, :error, :pagination, :wiki
   layout '/layout'
   
   deny_layout :atom
@@ -165,11 +165,7 @@ class PostController < Ramaze::Controller
 
     @posts = Post.paginate(page, 20).order(@order == :desc ? @sort.desc : @sort)
     @title = "Blog Posts (page #{@page} of #{@posts.page_count})"
-
-    @prev_url  = @posts.prev_page ? Rs(:list, @posts.prev_page, :sort => @sort,
-        :order => @order) : nil
-    @next_url  = @posts.next_page ? Rs(:list, @posts.next_page, :sort => @sort,
-        :order => @order) : nil
+    @pager = pager(@posts, Rs(:list, '%s', :sort => @sort, :order => @order))
   end
   
   def new

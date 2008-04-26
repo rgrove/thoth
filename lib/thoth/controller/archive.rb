@@ -27,7 +27,7 @@
 #++
 
 class ArchiveController < Ramaze::Controller
-  helper :admin, :cache
+  helper :admin, :cache, :pagination
   layout '/layout'
 
   view_root Thoth::Config.theme.view/:archive,
@@ -48,11 +48,7 @@ class ArchiveController < Ramaze::Controller
       @posts = Post.recent(page, 10)
     end
 
-    @title      = Thoth::Config.site.name + ' Archives'
-    @page_start = @posts.current_page_record_range.first
-    @page_end   = @posts.current_page_record_range.last
-    @total      = @posts.pagination_record_count
-    @prev_url   = @posts.prev_page ? Rs(@posts.prev_page) : nil
-    @next_url   = @posts.next_page ? Rs(@posts.next_page) : nil
+    @title = Thoth::Config.site.name + ' Archives'
+    @pager = pager(@posts)
   end
 end

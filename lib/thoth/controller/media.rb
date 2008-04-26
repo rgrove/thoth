@@ -27,7 +27,7 @@
 #++
 
 class MediaController < Ramaze::Controller
-  helper :admin, :error
+  helper :admin, :error, :pagination
   layout '/layout'
   
   view_root Thoth::Config.theme.view/:media,
@@ -112,11 +112,7 @@ class MediaController < Ramaze::Controller
     
     @files = Media.paginate(page, 20).order(@order == :desc ? @sort.desc : @sort)
     @title = "Media (page #{page} of #{@files.page_count})"
-        
-    @prev_url = @files.prev_page ? Rs(:list, @files.prev_page, :sort => @sort,
-        :order => @order) : nil
-    @next_url = @files.next_page ? Rs(:list, @files.next_page, :sort => @sort,
-        :order => @order) : nil
+    @pager = pager(@files, Rs(:list, '%s', :sort => @sort, :order => @order))
   end
 
   def new

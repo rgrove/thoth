@@ -1,13 +1,21 @@
-<% if @prev_url || @next_url %>
+<% if @pager.navigation? %>
   <div class="pg robots-nocontent">
-    <% if @prev_url %>
-      <a rel="prev" class="prev" href="<%== @prev_url %>">
+    <% if @pager.prev_url %>
+      <a rel="prev" class="prev" href="<%== @pager.prev_url %>">
         <%= @prev_text || '&laquo; Previous' %>
       </a>
     <% end %>
-  
-    <% if @next_url %>
-      <a rel="next" class="next" href="<%== @next_url %>">
+
+    <% @pager.navigate do |page, url| %>
+      <% if page == @pager.current_page %>
+        <strong><%= page %></strong>
+      <% else %>
+        <a href="<%== url %>"><%= page %></a>
+      <% end %>
+    <% end %>
+
+    <% if @pager.next_url %>
+      <a rel="next" class="next" href="<%== @pager.next_url %>">
         <%= @next_text || 'Next &raquo;' %>
       </a>
     <% end %>

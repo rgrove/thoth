@@ -27,7 +27,7 @@
 #++
 
 class MainController < Ramaze::Controller
-  helper :admin, :cache, :error, :ysearch
+  helper :admin, :cache, :error, :pagination
   layout '/layout'
   
   deny_layout :atom, :rss, :sitemap
@@ -49,9 +49,9 @@ class MainController < Ramaze::Controller
       redirect Rs(type), :status => 301      
     end
     
-    @title    = Thoth::Config.site.name
-    @posts    = Post.recent
-    @next_url = @posts.next_page ? Rs(:archive, @posts.next_page) : nil
+    @title = Thoth::Config.site.name
+    @posts = Post.recent
+    @pager = pager(@posts, Rs(:archive, '%s'))
   end
   
   def atom

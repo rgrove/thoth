@@ -374,14 +374,9 @@ div.comment:hover {
 
 /* -- Pagination ------------------------------------------------------------ */
 .pg {
-  background: #f9f9f9;
-  border: 1px solid #efefef;
-  border-left: 0;
-  border-right: 0;
   font-size: 93%;
   margin: 1em 0;
-  padding: 2px 3px;
-  text-align: right;
+  text-align: center;
   zoom: 1;
 }
 
@@ -393,12 +388,28 @@ div.comment:hover {
   visibility: hidden;
 }
 
+.pg a,
+.pg strong {
+  border: 1px solid #c7dbff;
+  float: left;
+  margin: 1px;
+  padding: 2px 6px 1px 6px;
+}
+
+.pg a.prev,
+.pg a.next { font-weight: bold; }
+
 .pg a:hover {
-  font-weight: bold;
+  border: 1px solid #0066cc;
   text-decoration: none;
 }
 
-.pg a.prev { float: left; }
+.pg strong {
+  background: #2663cf;
+  border-color: #2663cf;
+  color: #fff;
+  font-weight: bold;
+}
 
 @media print {
   .pg { display: none; }

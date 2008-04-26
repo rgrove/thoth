@@ -6,6 +6,8 @@ Version 0.2.0 (?)
     Darcs repo).
   * Added --migrate command line option to automatically upgrade or downgrade
     a Thoth database schema.
+  * Pagination bars now include links to up to nine nearby result pages in
+    addition to the prev/next links.
   * Views are compiled by default in production mode, which improves performance
     significantly. To disable view compilation, set server.compile_views to
     false.

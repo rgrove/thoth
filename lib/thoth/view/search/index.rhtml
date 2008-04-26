@@ -10,14 +10,14 @@
   <% else %>
     <p>
       Results
-      <strong><%== @data[:start] %></strong>-<strong><%== @data[:end] %></strong>
-      of
+      <strong><%== @data[:start] %></strong> -
+      <strong><%== @data[:end] %></strong> of about
       <strong><%== @data[:available] %></strong> for
       <strong><%== @query %></strong>
     </p>
 
     <%= 
-    render_template('../util/pager',
+    render_template('../util/simple_pager',
         :prev_text => '&laquo; Prev',
         :next_text => 'Next &raquo;')
     %>
@@ -33,7 +33,7 @@
     </ul>
 
     <%= 
-    render_template('../util/pager',
+    render_template('../util/simple_pager',
         :prev_text => '&laquo; Prev',
         :next_text => 'Next &raquo;')
     %>

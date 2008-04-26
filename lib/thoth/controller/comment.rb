@@ -27,7 +27,7 @@
 #++
 
 class CommentController < Ramaze::Controller
-  helper :admin, :cache, :cookie, :error
+  helper :admin, :cache, :cookie, :pagination, :error
   layout '/layout'
   
   deny_layout :atom, :rss
@@ -128,11 +128,7 @@ class CommentController < Ramaze::Controller
     @comments = Comment.paginate(page, 20).order(@order == :desc ?
         @sort.desc : @sort)
     @title = "Comments (page #{page} of #{@comments.page_count})"
-    
-    @prev_url = @comments.prev_page ? Rs(:list, @comments.prev_page,
-        :sort => @sort, :order => @order) : nil
-    @next_url = @comments.next_page ? Rs(:list, @comments.next_page,
-        :sort => @sort, :order => @order) : nil
+    @pager = pager(@comments, Rs(:list, '%s', :sort => @sort, :order => @order))
   end
   
   def new(name)

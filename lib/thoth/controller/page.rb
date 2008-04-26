@@ -27,7 +27,7 @@
 #++
 
 class PageController < Ramaze::Controller
-  helper :admin, :cache, :error, :wiki
+  helper :admin, :cache, :error, :pagination, :wiki
   layout '/layout'
   
   view_root Thoth::Config.theme.view/:page,
@@ -112,11 +112,7 @@ class PageController < Ramaze::Controller
     
     @pages = Page.paginate(page, 20).order(@order == :desc ? @sort.desc : @sort)
     @title = "Pages (page #{page} of #{@pages.page_count})"
-    
-    @prev_url = @pages.prev_page ? Rs(:list, @pages.prev_page, :sort => @sort,
-        :order => @order) : nil
-    @next_url = @pages.next_page ? Rs(:list, @pages.next_page, :sort => @sort,
-        :order => @order) : nil
+    @pager = pager(@pages, Rs(:list, '%s', :sort => @sort, :order => @order))    
   end
   
   def new
