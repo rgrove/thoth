@@ -70,9 +70,9 @@ thoth_gemspec = Gem::Specification.new do |s|
   s.add_dependency('json_pure',     '>= 1.1.2')
   s.add_dependency('jsmin',         '~> 1.0.0')
   s.add_dependency('RedCloth',      '>= 3.0.4')
-  s.add_dependency('sequel',        '~> 1.4.0')
-  s.add_dependency('sequel_core',   '~> 1.4.0')
-  s.add_dependency('thin',          '~> 0.8.0')
+  s.add_dependency('sequel',        '~> 1.5.1')
+  s.add_dependency('sequel_core',   '~> 1.5.1')
+  s.add_dependency('thin',          '~> 0.8.1')
 end
 
 plugins = []
