@@ -27,7 +27,7 @@
 #++
 
 class TagController < Ramaze::Controller
-  helper :admin, :cache, :error
+  helper :admin, :cache, :error, :pagination
   layout '/layout'
   
   deny_layout :atom
@@ -53,12 +53,8 @@ class TagController < Ramaze::Controller
       @posts = @tag.posts.paginate(page, 10)
     end
 
-    @title      = "Posts tagged with \"#{@tag.name}\""
-    @page_start = @posts.current_page_record_range.first
-    @page_end   = @posts.current_page_record_range.last
-    @prev_url   = @posts.prev_page ? Rs(@tag.name, @posts.prev_page) : nil
-    @next_url   = @posts.next_page ? Rs(@tag.name, @posts.next_page) : nil
-    @total      = @posts.pagination_record_count
+    @title = "Posts tagged with \"#{@tag.name}\""
+    @pager = pager(@posts, Rs(name, '%s'))
     
     @feeds = [{
       :href  => @tag.atom_url,

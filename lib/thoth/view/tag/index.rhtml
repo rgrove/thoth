@@ -3,8 +3,9 @@
 <div class="search">
   <p>
     Displaying posts
-    <strong><%== @page_start %></strong>-<strong><%== @page_end %></strong> of
-    <strong><%== @total %></strong>
+    <strong><%== @pager.current_page_record_range.first %></strong> -
+    <strong><%== @pager.current_page_record_range.last %></strong> of
+    <strong><%== @pager.record_count %></strong>
   </p>
 
   <%= 
