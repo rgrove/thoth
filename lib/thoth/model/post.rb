@@ -58,19 +58,9 @@ class Post < Sequel::Model
   end
   
   #--
-  # Dataset Methods
-  #++
-
-  # Gets a paginated dataset of recent posts sorted in reverse order by creation
-  # time.
-  def dataset.recent(page = 1, limit = 10)
-    reverse_order(:created_at).paginate(page, limit)
-  end
-  
-  #--
   # Class Methods
   #++
-  
+
   # Gets the Post with the specified name, where _name_ can be either a name or
   # an id.
   def self.get(name)
@@ -78,7 +68,13 @@ class Post < Sequel::Model
     name = name.to_s.strip.downcase
     name =~ /^\d+$/ ? Post[name] : Post[:name => name]
   end
-  
+
+  # Gets a paginated dataset of recent posts sorted in reverse order by creation
+  # time.
+  def self.recent(page = 1, limit = 10)
+    reverse_order(:created_at).paginate(page, limit)
+  end
+
   #--
   # Instance Methods
   #++

@@ -55,17 +55,17 @@ class Comment < Sequel::Model
   before_save do
     self.updated_at = Time.now
   end
-  
+
   #--
-  # Dataset Methods
+  # Class Methods
   #++
-  
+
   # Recently-posted comments (up to _limit_) sorted in reverse order by creation
   # time.
-  def dataset.recent(page = 1, limit = 10)
+  def self.recent(page = 1, limit = 10)
     reverse_order(:created_at).paginate(page, limit)
   end
-  
+
   #--
   # Instance Methods
   #++
