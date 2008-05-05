@@ -3,17 +3,17 @@
 #
 
 class PoseidonImporter < Thoth::Importer
-  
+
   before_import do
     unless uri = ARGV.shift
       puts "Please enter a connection string for the Poseidon database you want to import."
       puts "Example: mysql://user:pass@localhost/dbname"
       print "> "
-      
+
       uri = STDIN.gets.strip
       puts
     end
-    
+
     begin
       @poseidon = Sequel.open(uri)
     rescue => e
@@ -24,7 +24,7 @@ class PoseidonImporter < Thoth::Importer
   import_comments do
     @poseidon[:comments].all do |row|
       user = @poseidon[:users].filter(:id => row[:userid]).first
-    
+
       Comment.create do |comment|
         comment.id         = row[:id]
         comment.author     = user[:username]
@@ -38,7 +38,7 @@ class PoseidonImporter < Thoth::Importer
       end
     end
   end
-  
+
   import_posts do
     @poseidon[:content].each do |row|
       Post.create do |post|
@@ -50,5 +50,5 @@ class PoseidonImporter < Thoth::Importer
       end
     end
   end
-  
+
 end

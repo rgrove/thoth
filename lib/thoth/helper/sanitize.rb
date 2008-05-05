@@ -29,7 +29,7 @@
 require 'hpricot'
 
 module Ramaze; module Helper
-  
+
   # The Sanitize helper module provides a method for stripping dangerous
   # elements and attributes from user-supplied HTML based on element and
   # attribute whitelists.
@@ -53,7 +53,7 @@ module Ramaze; module Helper
 
     # Valid protocols.
     PROTOCOLS = ['ftp', 'http', 'https', 'mailto']
-    
+
     # Uses Hpricot to sanitize HTML based on element and attribute whitelists.
     # This is a more strict version of the method at
     # http://rid.onkulo.us/archives/14-sanitizing-html-with-ruby-and-hpricot

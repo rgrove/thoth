@@ -29,10 +29,10 @@
 class AdminController < Ramaze::Controller
   helper :admin, :error
   layout '/layout'
-  
+
   view_root Thoth::Config.theme.view/:admin,
             Thoth::VIEW_DIR/:admin
-  
+
   def index
     if auth_key_valid?
       @title       = 'Welcome to Thoth'
@@ -41,5 +41,5 @@ class AdminController < Ramaze::Controller
     else
       @title = 'Login'
     end
-  end  
+  end
 end

@@ -27,12 +27,12 @@
 #++
 
 module Ramaze; module Helper
-  
+
   # The Cookie helper wraps access to Ramaze's request.cookies hash and returns
   # only the first cookie matching a specified name (rather than an array).
   module Cookie
     private
-    
+
     # Gets the first cookie matching the specified +name+. If not found, the
     # provided +default+ value will be returned.
     def cookie(name, default = nil)
@@ -41,5 +41,5 @@ module Ramaze; module Helper
       cookie
     end
   end
-  
+
 end; end

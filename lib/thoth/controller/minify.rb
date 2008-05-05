@@ -31,22 +31,22 @@ class MinifyController < Ramaze::Controller
 
   def css(*args)
     path = 'css/' << args.join('/')
-    
+
     if Thoth::Config.server.enable_cache
       response.body = value_cache[path] ||
           value_cache[path] = CSSMin.minify(process(path))
     else
       response.body = CSSMin.minify(process(path))
     end
-    
+
     response['Content-Type'] = 'text/css'
 
     throw(:respond)
   end
-  
+
   def js(*args)
     path = 'js/' << args.join('/')
-    
+
     if Thoth::Config.server.enable_cache
       response.body = value_cache[path] ||
           value_cache[path] = JSMin.minify(process(path))
@@ -58,17 +58,17 @@ class MinifyController < Ramaze::Controller
 
     throw(:respond)
   end
-  
+
   private
-  
+
   def process(path)
     error_404 unless file = Ramaze::Dispatcher::File.open_file(path)
-    
+
     if file == :NotModified
       response.build([], 304)
       throw(:respond)
     end
-    
+
     file
   end
 end

@@ -27,7 +27,7 @@
 #++
 
 module Thoth
-  class Importer 
+  class Importer
     class << self
 
       def after_import(&block)    trait[:after]    = block; end
@@ -37,7 +37,7 @@ module Thoth
       def import_pages(&block)    trait[:pages]    = block; end
       def import_posts(&block)    trait[:posts]    = block; end
       def import_tags(&block)     trait[:tags]     = block; end
-    
+
       def load_importer(name)
         importer = name.to_s.downcase.strip.gsub(/importer$/, '')
         files    = Dir["{#{HOME_DIR/:importer},#{LIB_DIR/:importer},#{$:.join(',')}}/#{importer}.rb"]
@@ -45,10 +45,10 @@ module Thoth
         unless (files.any? && require(files.first)) || require(importer)
           raise LoadError, "Importer #{name} not found"
         end
-      
+
         Kernel.const_get("#{importer.capitalize}Importer")
       end
-    
+
       def run
         # Bootstrap.
         Ramaze::Log.loggers = []
@@ -69,7 +69,7 @@ module Thoth
         puts "WARNING: Your existing Thoth database will be completely erased to make way"
         puts "for the imported content. Are you sure you want to continue? (y/n) "
         print "> "
-        
+
         exit unless STDIN.gets.strip =~ /^y(?:es)?/i
         puts
 
@@ -77,13 +77,13 @@ module Thoth
 
         if trait[:pages]
           puts 'Importing pages...'
-        
+
           Thoth.db.transaction do
             Page.delete
             trait[:pages].call
           end
         end
-      
+
         if trait[:posts]
           puts 'Importing blog posts...'
 
@@ -92,7 +92,7 @@ module Thoth
             trait[:posts].call
           end
         end
-      
+
         if trait[:tags]
           puts 'Importing tags...'
 
@@ -102,7 +102,7 @@ module Thoth
             trait[:tags].call
           end
         end
-      
+
         if trait[:comments]
           puts 'Importing comments...'
 
@@ -111,7 +111,7 @@ module Thoth
             trait[:comments].call
           end
         end
-      
+
         if trait[:media]
           puts 'Importing media...'
 
@@ -120,7 +120,7 @@ module Thoth
             trait[:media].call
           end
         end
-      
+
         trait[:after].call if trait[:after]
       end
 

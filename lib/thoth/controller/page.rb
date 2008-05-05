@@ -29,24 +29,24 @@
 class PageController < Ramaze::Controller
   helper :admin, :cache, :error, :pagination, :wiki
   layout '/layout'
-  
+
   view_root Thoth::Config.theme.view/:page,
             Thoth::VIEW_DIR/:page
-  
+
   if Thoth::Config.server.enable_cache
     cache :index, :ttl => 60, :key => lambda { auth_key_valid? }
   end
-  
+
   def index(name = nil)
     error_404 unless name && @page = Page[:name => name.strip.downcase]
 
     @title          = @page.title
     @show_page_edit = true
   end
-  
+
   def delete(id = nil)
     require_auth
-    
+
     error_404 unless id && @page = Page[id]
 
     if request.post?
@@ -65,7 +65,7 @@ class PageController < Ramaze::Controller
     @title          = "Delete Page: #{@page.title}"
     @show_page_edit = true
   end
-  
+
   def edit(id = nil)
     require_auth
 
@@ -73,14 +73,14 @@ class PageController < Ramaze::Controller
       flash[:error] = 'Invalid page id.'
       redirect(Rs(:new))
     end
-    
+
     if request.post?
       error_403 unless form_token_valid?
 
       @page.name  = request[:name]
       @page.title = request[:title]
       @page.body  = request[:body]
-      
+
       if @page.valid? && request[:action] == 'Post'
         begin
           raise unless @page.save
@@ -101,26 +101,26 @@ class PageController < Ramaze::Controller
 
   def list(page = 1)
     require_auth
-    
+
     page = page.to_i
-    
+
     @columns  = [:name, :title, :created_at, :updated_at]
     @order    = (request[:order] || :desc).to_sym
     @sort     = (request[:sort]  || :created_at).to_sym
     @sort     = :created_at unless @columns.include?(@sort)
     @sort_url = Rs(:list, page)
-    
+
     @pages = Page.paginate(page, 20).order(@order == :desc ? @sort.desc : @sort)
     @title = "Pages (page #{page} of #{@pages.page_count})"
-    @pager = pager(@pages, Rs(:list, '%s', :sort => @sort, :order => @order))    
+    @pager = pager(@pages, Rs(:list, '%s', :sort => @sort, :order => @order))
   end
-  
+
   def new
     require_auth
-    
+
     @title       = "New page - Untitled"
     @form_action = Rs(:new)
-    
+
     if request.post?
       error_403 unless form_token_valid?
 
@@ -129,7 +129,7 @@ class PageController < Ramaze::Controller
         p.title = request[:title]
         p.body  = request[:body]
       end
-      
+
       if @page.valid? && request[:action] == 'Post'
         begin
           raise unless @page.save
@@ -141,7 +141,7 @@ class PageController < Ramaze::Controller
           redirect(Rs(@page.name))
         end
       end
-      
+
       @title = "New page - #{@page.title}"
     end
   end

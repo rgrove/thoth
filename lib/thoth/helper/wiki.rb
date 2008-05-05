@@ -27,10 +27,10 @@
 #++
 
 module Ramaze; module Helper
-  
+
   module Wiki
     private
-    
+
     # Parse wiki-style markup into HTML markup.
     def wiki_to_html(string)
       # [[page_name|link text]]
@@ -54,7 +54,7 @@ module Ramaze; module Helper
       string.gsub!(/\[\[@(\d+|[0-9a-z_-]+)\]\]/i) do
         A($1, :href => R(PostController, $1.downcase))
       end
-      
+
       # [[media:filename|link text]]
       string.gsub!(/\[\[media:([^\]]+)\|(.+?)\]\]/i) do
         A($2, :href => R(MediaController, $1))
@@ -64,14 +64,14 @@ module Ramaze; module Helper
       string.gsub!(/\[\[media:([^\]]+)\]\]/i) do
         A($1, :href => R(MediaController, $1))
       end
-      
+
       # [[media_url:filename]]
       string.gsub!(/\[\[media_url:([^\]]+)\]\]/i) do
         R(MediaController, $1)
       end
-      
+
       string
     end
   end
-  
+
 end; end

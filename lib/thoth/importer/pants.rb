@@ -9,11 +9,11 @@ class PantsImporter < Thoth::Importer
       puts "Please enter a connection string for the Pants database you want to import."
       puts "Example: mysql://user:pass@localhost/dbname"
       print "> "
-      
+
       uri = STDIN.gets.strip
       puts
     end
-    
+
     begin
       @pants = Sequel.open(uri)
     rescue => e
@@ -35,7 +35,7 @@ class PantsImporter < Thoth::Importer
       end
     end
   end
-  
+
   import_pages do
     @pants[:pages].each do |row|
       Page.create do |page|
@@ -48,7 +48,7 @@ class PantsImporter < Thoth::Importer
       end
     end
   end
-  
+
   import_posts do
     @pants[:articles].each do |row|
       Post.create do |post|
@@ -60,7 +60,7 @@ class PantsImporter < Thoth::Importer
       end
     end
   end
-  
+
   import_tags do
     @pants[:tags].each do |tag|
       Thoth.db[:tags] << {
@@ -68,7 +68,7 @@ class PantsImporter < Thoth::Importer
         :name => tag[:name].downcase
       }
     end
-  
+
     @pants[:tags_articles_map].each do |tagmap|
       Thoth.db[:tags_posts_map] << {
         :id      => tagmap[:id],

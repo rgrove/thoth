@@ -32,7 +32,7 @@ class ArchiveController < Ramaze::Controller
 
   view_root Thoth::Config.theme.view/:archive,
             Thoth::VIEW_DIR/:archive
-  
+
   if Thoth::Config.server.enable_cache
     cache :index, :ttl => 120, :key => lambda { auth_key_valid? }
   end

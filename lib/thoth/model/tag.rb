@@ -28,12 +28,12 @@
 
 class Tag < Sequel::Model
   include Ramaze::Helper::Link
-  
+
   validates do
     presence_of :name
     length_of :name, :maximum => 64
   end
-  
+
   # Gets the Atom feed URL for this tag.
   def atom_url
     Thoth::Config.site.url.chomp('/') + R(TagController, :atom,
@@ -45,7 +45,7 @@ class Tag < Sequel::Model
     @posts ||= Post.join(:tags_posts_map, :post_id => :id).
         filter(:tags_posts_map__tag_id => id).reverse_order(:created_at)
   end
-  
+
   # URL for this tag.
   def url
     Thoth::Config.site.url.chomp('/') + R(TagController, CGI.escape(name))

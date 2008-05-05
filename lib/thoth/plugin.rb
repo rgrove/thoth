@@ -47,9 +47,9 @@ module Thoth
       unless (files.any? && require(files.first)) || require(plugin)
         raise LoadError, "Thoth::Plugin::#{name} not found"
       end
-      
+
       Ramaze::Log.info "Loaded plugin: #{plugin}"
-      
+
       true
     end
   end

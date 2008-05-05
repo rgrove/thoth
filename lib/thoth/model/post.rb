@@ -29,34 +29,34 @@
 class Post < Sequel::Model
   include Ramaze::Helper::Link
   include Ramaze::Helper::Wiki
-  
+
   validates do
     presence_of :title, :message => 'Please enter a title for this post.'
     presence_of :body, :message => "What's the matter? Cat got your tongue?"
-    
+
     length_of :title, :maximum => 255,
         :message => 'Please enter a title under 255 characters.'
     length_of :name, :maximum => 64,
         :message => 'Please enter a name under 64 characters.'
-    
+
     format_of :name, :with => /^[0-9a-z_-]+$/i,
         :message => 'Post names may only contain letters, numbers, ' +
                     'underscores, and dashes.'
   end
-  
+
   before_create do
     self.created_at = Time.now
   end
-  
+
   before_destroy do
     TagsPostsMap.filter(:post_id => id).delete
     Comment.filter(:post_id => id).delete
   end
-  
+
   before_save do
     self.updated_at = Time.now
   end
-  
+
   #--
   # Class Methods
   #++
@@ -88,12 +88,12 @@ class Post < Sequel::Model
     self[:body]          = body.strip
     self[:body_rendered] = RedCloth.new(wiki_to_html(body.dup.strip)).to_html
   end
-  
+
   # Gets a dataset of comments attached to this post, ordered by creation time.
   def comments
     @comments ||= Comment.filter(:post_id => id).order(:created_at)
   end
-  
+
   # Gets the creation time of this post. If _format_ is provided, the time will
   # be returned as a formatted String. See Time.strftime for details.
   def created_at(format = nil)
@@ -103,7 +103,7 @@ class Post < Sequel::Model
       format ? self[:created_at].strftime(format) : self[:created_at]
     end
   end
-  
+
   def name=(name)
     self[:name] = name.strip unless name.nil?
   end
@@ -117,14 +117,14 @@ class Post < Sequel::Model
           filter(:tags_posts_map__post_id => id).order(:name).all
     end
   end
-  
+
   def tags=(tag_names)
     if tag_names.is_a?(String)
       tag_names = tag_names.split(',', 64)
     elsif !tag_names.is_a?(Array)
       raise ArgumentError, "Expected String or Array, got #{tag_names.class}"
     end
-    
+
     tag_names = tag_names.map{|n| n.strip.downcase}.uniq.delete_if{|n| n.empty?}
 
     if new?
@@ -139,10 +139,10 @@ class Post < Sequel::Model
       return @fake_tags
     else
       real_tags = []
-      
+
       # First delete any existing tag mappings for this post.
       TagsPostsMap.filter(:post_id => id).delete
-      
+
       # Create new tags and new mappings.
       tag_names.each do |name|
         tag = Tag.find_or_create(:name => name)
@@ -153,10 +153,10 @@ class Post < Sequel::Model
       return real_tags
     end
   end
-  
+
   def title=(title)
     title.strip!
-    
+
     # Set the post's name if it isn't already set.
     if self[:name].nil? || self[:name].empty?
       index = 1
@@ -171,10 +171,10 @@ class Post < Sequel::Model
 
       # Ensure that the name doesn't conflict with any methods on the Post
       # controller and that no two posts have the same name.
-      while PostController.methods.include?(name) || 
+      while PostController.methods.include?(name) ||
             PostController.instance_methods.include?(name) ||
             Post[:name => name]
-        
+
         if name[-1] == index
           name[-1] = (index += 1).to_s
         else
@@ -188,7 +188,7 @@ class Post < Sequel::Model
 
     self[:title] = title
   end
-  
+
   # Gets the time this post was last updated. If _format_ is provided, the time
   # will be returned as a formatted String. See Time.strftime for details.
   def updated_at(format = nil)
@@ -198,7 +198,7 @@ class Post < Sequel::Model
       format ? self[:updated_at].strftime(format) : self[:updated_at]
     end
   end
-  
+
   # Gets the URL for this post.
   def url
     Thoth::Config.site.url.chomp('/') + R(PostController, name)
@@ -211,14 +211,14 @@ unless Post.count > 0
     :body  => %[
       If you're reading this, you've successfully installed Thoth.
       Congratulations!
-    
-      Once you've 
+
+      Once you've
       <a href="txmt://open/?url=file://#{Thoth.trait[:config_file]}">edited the
       config file</a> to your liking, you can <a href="/admin">login</a> and
       begin creating blog posts and pages. You can also delete this post to make
       way for your own glorious words.
-    
+
       Enjoy!
     ].unindent
-  )  
+  )
 end

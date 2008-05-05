@@ -33,7 +33,7 @@ module Thoth
       [:devel, :production].each do |env|
         Configuration.for("thoth_#{env.to_s}") {
           db "sqlite:///#{HOME_DIR}/db/#{env.to_s}.db"
-  
+
           site {
             name "New Thoth Blog"
             desc "Thoth is awesome."
@@ -48,14 +48,14 @@ module Thoth
             pass  "thoth"
             seed  "43c55@051a19a/4f88a3ff+355cd1418"
           }
-    
+
           theme {
             public HOME_DIR/:public
             view   HOME_DIR/:view
           }
-        
+
           media HOME_DIR/:media
-  
+
           plugins []
 
           server {
@@ -66,14 +66,14 @@ module Thoth
             enable_minify env == :production
             error_log     HOME_DIR/"error.log"
           }
-        
+
           timestamp {
             long  "%A %B %d, %Y @ %I:%M %p (%Z)"
             short "%Y-%m-%d %I:%M"
           }
         }
       end
-    
+
       def load(file)
         begin
           Kernel.load(file)
@@ -82,7 +82,7 @@ module Thoth
 
         @conf = Configuration.for("thoth_#{Thoth.trait[:mode].to_s}")
       end
-    
+
       def method_missing(name)
         @conf.__send__(name)
       end

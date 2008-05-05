@@ -32,7 +32,7 @@ require 'hpricot'
 class Comment < Sequel::Model
   include Ramaze::Helper::Link
   include Ramaze::Helper::Sanitize
-  
+
   validates do
     presence_of :author, :message => 'Please enter your name.'
     presence_of :title,  :message => 'Please enter a title for this comment.'
@@ -47,11 +47,11 @@ class Comment < Sequel::Model
     length_of :title, :maximum => 255,
         :message => 'Please enter a title shorter than 255 characters.'
   end
-  
+
   before_create do
     self.created_at = Time.now
   end
-  
+
   before_save do
     self.updated_at = Time.now
   end
@@ -69,11 +69,11 @@ class Comment < Sequel::Model
   #--
   # Instance Methods
   #++
-  
+
   def author=(author)
     self[:author] = author.strip unless author.nil?
   end
-  
+
   def author_url=(url)
     # Ensure that the URL begins with a valid protocol.
     unless url.nil? || url.empty? || url =~ /^(?:https?|mailto):\/\//i
@@ -100,7 +100,7 @@ class Comment < Sequel::Model
       :inline_markdown_link
     ))
   end
-  
+
   # Gets the creation time of this comment. If _format_ is provided, the time
   # will be returned as a formatted String. See Time.strftime for details.
   def created_at(format = nil)
@@ -110,16 +110,16 @@ class Comment < Sequel::Model
       format ? self[:created_at].strftime(format) : self[:created_at]
     end
   end
-  
+
   # Gets the post to which this comment is attached.
   def post
     @post ||= Post[post_id]
   end
-  
+
   def title=(title)
     self[:title] = title.strip unless title.nil?
   end
-  
+
   # Gets the time this comment was last updated. If _format_ is provided, the
   # time will be returned as a formatted String. See Time.strftime for details.
   def updated_at(format = nil)

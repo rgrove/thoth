@@ -86,7 +86,7 @@ class CreateSchema < Sequel::Migration
         datetime :updated_at,    :null => false
       end
     end
-    
+
     unless table_exists?(:tags)
       create_table :tags do
         primary_key :id

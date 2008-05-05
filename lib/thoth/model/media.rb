@@ -28,11 +28,11 @@
 
 class Media < Sequel::Model(:media)
   include Ramaze::Helper::Link
-  
+
   before_create do
     self.created_at = Time.now
   end
-  
+
   before_destroy do
     FileUtils.rm(path)
   end
@@ -50,16 +50,16 @@ class Media < Sequel::Model(:media)
       format ? self[:created_at].strftime(format) : self[:created_at]
     end
   end
-  
+
   def filename=(filename)
     self[:filename] = filename.strip unless filename.nil?
   end
-  
+
   # Gets the absolute path to this file.
   def path
     Thoth::Config.media/filename[0].chr.downcase/filename
   end
-  
+
   def size
     return self[:size] unless self[:size] == 0 && File.exist?(path)
 

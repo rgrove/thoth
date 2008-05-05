@@ -27,18 +27,18 @@
 #++
 
 module Ramaze; module Helper
-  
+
   # The Admin helper provides genric +login+ and +logout+ actions for handling
   # Thoth administrator logins and logouts, along with methods for checking
   # for or requiring authorization from within other actions and views.
   module Admin
     Helper::LOOKUP << self
-    
+
     # Include cookie helper.
     def self.included(klass)
       klass.send(:helper, :cookie)
     end
-    
+
     # Authenticates an admin login by checking the +username+ and +password+
     # request parameters against the ADMIN_USER and ADMIN_PASS values in the
     # Thoth config file.
@@ -49,20 +49,20 @@ module Ramaze; module Helper
     # be redirected to the referring URL without an auth cookie.
     def login
       username, password = request[:username, :password]
-      
+
       if username == Thoth::Config.admin.user &&
           password == Thoth::Config.admin.pass
         # Set an auth cookie that expires in two weeks.
         response.set_cookie('thoth_auth', :expires => Time.now + 1209600,
             :path => R(MainController), :value => auth_key)
-        
+
         redirect_referrer
       end
 
       flash[:error] = 'Invalid username or password.'
       redirect_referrer
     end
-    
+
     # Deletes the +thoth_auth+ cookie and redirects to the home page.
     def logout
       response.delete_cookie('thoth_auth', :path => R(MainController))
@@ -70,7 +70,7 @@ module Ramaze; module Helper
     end
 
     private
-    
+
     # Generates and returns an auth key suitable for storage in a client-side
     # auth cookie. The key is an SHA256 hash of the following elements:
     #
@@ -81,10 +81,10 @@ module Ramaze; module Helper
     #   - ADMIN_PASS from Thoth config
     def auth_key
       Digest::SHA256.hexdigest(Thoth::HOME_DIR + request.ip +
-          Thoth::Config.admin.seed + Thoth::Config.admin.user + 
+          Thoth::Config.admin.seed + Thoth::Config.admin.user +
           Thoth::Config.admin.pass)
     end
-    
+
     # Validates the auth cookie and returns +true+ if the user is authenticated,
     # +false+ otherwise.
     def auth_key_valid?
@@ -110,5 +110,5 @@ module Ramaze; module Helper
       redirect(R(AdminController)) unless auth_key_valid?
     end
   end
-  
+
 end; end

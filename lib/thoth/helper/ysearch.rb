@@ -31,18 +31,18 @@ require 'json'
 require 'open-uri'
 
 module Ramaze; module Helper
-  
+
   # The YSearch helper provides search results using the Yahoo! Search API.
   # Requires the json or json_pure gem.
   module Ysearch
     class SearchError < Ramaze::Error; end
-    
+
     # Yahoo! Developer API key. Feel free to replace this with your own key.
     API_ID = 'pNi6xQDV34FbvnO3QRfWKSByhmPFG.3fVS_R2KzOhMek3szHWKNBrTsdi1mob2vZgKjLoLuZ4A--'
 
     # Yahoo! Search API URL.
     API_URL = 'http://search.yahooapis.com/WebSearchService/V1/webSearch'
-    
+
     private
 
     # Performs a web search using the Yahoo! Search API and returns the results
@@ -51,12 +51,12 @@ module Ramaze; module Helper
     def yahoo_search(query, options = {})
       options = {:format => 'html'}.merge(options).collect{|key, val|
           "#{key.to_s}=#{::CGI.escape(val.to_s)}"}.join('&')
-      
+
       request = "#{API_URL}?appid=#{API_ID}&query=#{::CGI.escape(query)}&" +
           options + '&output=json'
-      
+
       r = JSON.parse(open(request).read)['ResultSet']
-      
+
       # Parse the response into a more Rubyish format.
       data = {
         :available => r['totalResultsAvailable'],
@@ -65,7 +65,7 @@ module Ramaze; module Helper
         :start     => r['firstResultPosition'],
         :returned  => r['totalResultsReturned']
       }
-      
+
       r['Result'].each do |result|
         data[:results] << {
           :cache_size => result['Cache'] ? result['Cache']['Size'].to_i : 0,
@@ -78,7 +78,7 @@ module Ramaze; module Helper
           :url        => result['Url']
         }
       end
-      
+
       return data
 
     rescue => e

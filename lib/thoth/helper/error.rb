@@ -27,13 +27,13 @@
 #++
 
 module Ramaze; module Helper
-  
+
   # The Error helper module provides methods for interrupting the current
   # request and responding with an error message and corresponding HTTP error
   # code.
   module Error
     Helper::LOOKUP << self
-    
+
     # Displays an error backtrace.
     def error
       error_500 unless Thoth.trait[:mode] == :devel
@@ -41,7 +41,7 @@ module Ramaze; module Helper
       Ramaze::Action.current.template ||= Thoth::VIEW_DIR/'error.rhtml'
       super
     end
-    
+
     # Displays a "403 Forbidden" error message and returns a 403 response code.
     def error_403
       error_layout 403, '403 Forbidden', %[
@@ -51,7 +51,7 @@ module Ramaze; module Helper
         </p>
       ]
     end
-    
+
     # Displays a "404 Not Found" error message and returns a 404 response code.
     def error_404
       error_layout 404, '404 Not Found', %[
@@ -61,7 +61,7 @@ module Ramaze; module Helper
         </p>
       ]
     end
-    
+
     # Displays a "500 Internal Server Error" error message and returns a 500
     # response code.
     def error_500
@@ -74,7 +74,7 @@ module Ramaze; module Helper
     end
 
     private
-    
+
     def error_layout(status, title, content = '')
       respond %[
         <html>
@@ -88,6 +88,6 @@ module Ramaze; module Helper
         </html>
       ].unindent, status
     end
-  end  
+  end
 
 end; end

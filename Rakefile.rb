@@ -162,3 +162,27 @@ task :plugins do
 
   end
 end
+
+desc "remove end-of-line whitespace"
+task 'strip-spaces' do
+  Dir['{bin,lib,plugin}/**/*.rb'].each do |file|
+    next if file =~ /^\./
+
+    original = File.readlines(file)
+    stripped = original.dup
+
+    original.each_with_index do |line, i|
+      if line =~ /\s+\n/
+        puts "fixing #{file}:#{i + 1}"
+        p line
+        stripped[i] = line.rstrip
+      end
+    end
+
+    unless stripped == original
+      File.open(file, 'w') do |f|
+        stripped.each {|line| f.puts(line) }
+      end
+    end
+  end
+end

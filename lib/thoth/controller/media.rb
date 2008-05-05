@@ -29,23 +29,23 @@
 class MediaController < Ramaze::Controller
   helper :admin, :error, :pagination
   layout '/layout'
-  
+
   view_root Thoth::Config.theme.view/:media,
             Thoth::VIEW_DIR/:media
-  
+
   deny_layout :index
 
   def index(filename = nil)
     unless filename && file = Media[:filename => filename.strip]
       error_404
     end
-    
+
     send_file(file.path)
   end
-  
+
   def delete(id = nil)
     require_auth
-    
+
     error_404 unless id && @file = Media[id]
 
     if request.post?
@@ -59,12 +59,12 @@ class MediaController < Ramaze::Controller
         redirect(Rs(:edit, id))
       end
     end
-    
+
     @title          = "Delete File: #{@file.filename}"
     @delete         = true
     @show_file_edit = true
   end
-  
+
   def edit(id = nil)
     require_auth
 
@@ -79,9 +79,9 @@ class MediaController < Ramaze::Controller
 
       tempfile, filename, type = request[:file].values_at(
           :tempfile, :filename, :type)
-          
+
       @file.mimetype = type || 'application/octet-stream'
-      
+
       begin
         unless File.directory?(File.dirname(@file.path))
           FileUtils.mkdir_p(File.dirname(@file.path))
@@ -89,7 +89,7 @@ class MediaController < Ramaze::Controller
 
         FileUtils.mv(tempfile.path, @file.path)
         @file.save
-        
+
         flash[:success] = 'File saved.'
         redirect(Rs(:edit, id))
       rescue => e
@@ -100,15 +100,15 @@ class MediaController < Ramaze::Controller
 
   def list(page = 1)
     require_auth
-    
+
     page = page.to_i
-    
+
     @columns  = [:filename, :size, :created_at, :updated_at]
     @order    = (request[:order] || :asc).to_sym
     @sort     = (request[:sort]  || :filename).to_sym
     @sort     = :created_at unless @columns.include?(@sort)
     @sort_url = Rs(:list, page)
-    
+
     @files = Media.paginate(page, 20).order(@order == :desc ? @sort.desc : @sort)
     @title = "Media (page #{page} of #{@files.page_count})"
     @pager = pager(@files, Rs(:list, '%s', :sort => @sort, :order => @order))
@@ -116,21 +116,21 @@ class MediaController < Ramaze::Controller
 
   def new
     require_auth
-    
+
     @title       = "Upload Media"
     @form_action = Rs(:new)
-    
+
     if request.post?
       error_403 unless form_token_valid?
 
       tempfile, filename, type = request[:file].values_at(
           :tempfile, :filename, :type)
-      
+
       file = Media.new do |f|
         f.filename = filename
         f.mimetype = type || 'application/octet-stream'
       end
-      
+
       begin
         unless File.directory?(File.dirname(file.path))
           FileUtils.mkdir_p(File.dirname(file.path))
@@ -138,7 +138,7 @@ class MediaController < Ramaze::Controller
 
         FileUtils.mv(tempfile.path, file.path)
         file.save
-        
+
         flash[:success] = 'File uploaded.'
         redirect(Rs(:edit, file.id))
       rescue => e
@@ -146,5 +146,5 @@ class MediaController < Ramaze::Controller
       end
     end
   end
-  
+
 end

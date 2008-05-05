@@ -61,38 +61,38 @@ module Thoth
 
   # Path to the config file.
   trait[:config_file] ||= ENV['THOTH_CONF'] || HOME_DIR/'thoth.conf'
-  
+
   # Daemon command to execute (:start, :stop, :restart) or nil.
   trait[:daemon] ||= nil
-  
+
   # IP address this Thoth instance should attach to.
   trait[:ip] ||= nil
-  
+
   # What mode we're running in (either :devel or :production).
   trait[:mode] ||= :production
 
   # Port number this Thoth instance should attach to.
   trait[:port] ||= nil
-  
+
   # Path to the daemon process id file.
   trait[:pidfile] ||= HOME_DIR/"thoth_#{trait[:ip]}_#{trait[:port]}.pid"
-  
+
   # Filename to which all SQL commands should be logged, or nil to disable
   # SQL logging.
   trait[:sql_log] ||= nil
 
   class << self
     attr_reader :db
-    
+
     # Creates a new Thoth home directory with a sample config file at the
     # specified path.
     def create(path)
       path = File.expand_path(path)
-      
+
       if File.exist?(path)
         raise "specified path already exists: #{path}"
       end
-      
+
       FileUtils.mkdir_p(path/:media)
       FileUtils.mkdir(path/:plugin)
       FileUtils.mkdir(path/:public)
@@ -117,7 +117,7 @@ module Thoth
         R::Error::NoAction     => [404, 'error_404'],
         R::Error::NoController => [404, 'error_404']
       })
-    
+
       case trait[:mode]
       when :devel
         R::Global.benchmarking = true
@@ -134,7 +134,7 @@ module Thoth
           ArgumentError => [404, 'error_404'],
           Exception     => [500, 'error_500']
         })
-  
+
       else
         raise "Invalid mode: #{trait[:mode]}"
       end
@@ -182,9 +182,9 @@ module Thoth
     def open_db
       if Config.db =~ /^sqlite:\/{3}(.+)$/
         dir = File.dirname($1)
-        FileUtils.mkdir_p(dir) unless File.directory?(dir) 
+        FileUtils.mkdir_p(dir) unless File.directory?(dir)
       end
-      
+
       @db = Sequel.open(Config.db)
 
       if trait[:sql_log]
@@ -192,7 +192,7 @@ module Thoth
         @db.logger = Logger.new(trait[:sql_log])
       end
     end
-    
+
     # Restarts the running Thoth daemon (if any).
     def restart
       stop
@@ -219,19 +219,19 @@ module Thoth
         pid = File.read(trait[:pidfile], 20).strip
         abort("thoth already running? (pid=#{pid})")
       end
-  
+
       puts "Starting thoth."
-  
+
       fork do
         Process.setsid
         exit if fork
-    
+
         File.open(trait[:pidfile], 'w') {|file| file << Process.pid }
         at_exit {FileUtils.rm(trait[:pidfile]) if File.exist?(trait[:pidfile])}
-        
+
         Dir.chdir(HOME_DIR)
         File.umask(0000)
-    
+
         STDIN.reopen('/dev/null')
         STDOUT.reopen('/dev/null', 'a')
         STDERR.reopen(STDOUT)
@@ -245,9 +245,9 @@ module Thoth
       unless File.file?(trait[:pidfile])
         abort("thoth not running? (check #{trait[:pidfile]}).")
       end
-  
+
       puts "Stopping thoth."
-  
+
       pid = File.read(trait[:pidfile], 20).strip
       FileUtils.rm(trait[:pidfile]) if File.exist?(trait[:pidfile])
       pid && Process.kill('TERM', pid.to_i)

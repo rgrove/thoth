@@ -29,12 +29,12 @@
 class PostController < Ramaze::Controller
   helper :admin, :cache, :cookie, :error, :pagination, :wiki
   layout '/layout'
-  
+
   deny_layout :atom
-  
+
   view_root Thoth::Config.theme.view/:post,
             Thoth::VIEW_DIR/:post
-  
+
   if Thoth::Config.server.enable_cache
     cache :atom, :ttl => 120
   end
@@ -54,10 +54,10 @@ class PostController < Ramaze::Controller
 
     @show_post_edit = true
   end
-  
+
   def atom(name = nil)
     error_404 unless name && post = Post.get(name)
-    
+
     comments = post.comments.reverse_order.limit(20)
     updated  = comments.count > 0 ? comments.first.created_at.xmlschema :
         post.created_at.xmlschema
@@ -85,7 +85,7 @@ class PostController < Ramaze::Controller
 
           x.author {
             x.name comment.author
-            
+
             if comment.author_url && !comment.author_url.empty?
               x.uri comment.author_url
             end
@@ -94,10 +94,10 @@ class PostController < Ramaze::Controller
       end
     }
   end
-  
+
   def delete(id = nil)
     require_auth
-    
+
     error_404 unless id && @post = Post[id]
 
     if request.post?
@@ -112,11 +112,11 @@ class PostController < Ramaze::Controller
         redirect(@post.url)
       end
     end
-    
+
     @title          = "Delete Post: #{@post.title}"
     @show_post_edit = true
   end
-  
+
   def edit(id = nil)
     require_auth
 
@@ -124,14 +124,14 @@ class PostController < Ramaze::Controller
       flash[:error] = 'Invalid post id.'
       redirect(Rs(:new))
     end
-    
+
     if request.post?
       error_403 unless form_token_valid?
-      
+
       @post.title = request[:title]
       @post.body  = request[:body]
       @post.tags  = request[:tags]
-      
+
       if @post.valid? && request[:action] == 'Post'
         begin
           Thoth.db.transaction do
@@ -151,12 +151,12 @@ class PostController < Ramaze::Controller
     @form_action    = Rs(:edit, id)
     @show_post_edit = true
   end
-  
+
   def list(page = 1)
     require_auth
-    
+
     page = page.to_i
-    
+
     @columns  = [:id, :title, :created_at, :updated_at]
     @order    = (request[:order] || :desc).to_sym
     @sort     = (request[:sort]  || :created_at).to_sym
@@ -167,13 +167,13 @@ class PostController < Ramaze::Controller
     @title = "Blog Posts (page #{@page} of #{@posts.page_count})"
     @pager = pager(@posts, Rs(:list, '%s', :sort => @sort, :order => @order))
   end
-  
+
   def new
     require_auth
 
     @title       = "New blog post - Untitled"
     @form_action = Rs(:new)
-    
+
     if request.post?
       error_403 unless form_token_valid?
 
@@ -182,7 +182,7 @@ class PostController < Ramaze::Controller
         p.body  = request[:body]
         p.tags  = request[:tags]
       end
-      
+
       if @post.valid? && request[:action] == 'Post'
         begin
           Thoth.db.transaction do

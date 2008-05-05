@@ -29,12 +29,12 @@
 class MainController < Ramaze::Controller
   helper :admin, :cache, :error, :pagination
   layout '/layout'
-  
+
   deny_layout :atom, :rss, :sitemap
-  
+
   view_root Thoth::Config.theme.view,
             Thoth::VIEW_DIR
-  
+
   if Thoth::Config.server.enable_cache
     cache :index, :ttl => 60, :key => lambda {
       auth_key_valid?.to_s + (request[:type] || '') + flash.inspect
@@ -46,20 +46,20 @@ class MainController < Ramaze::Controller
   def index
     # Check for legacy feed requests and redirect if necessary.
     if type = request[:type]
-      redirect Rs(type), :status => 301      
+      redirect Rs(type), :status => 301
     end
-    
+
     @title = Thoth::Config.site.name
     @posts = Post.recent
     @pager = pager(@posts, Rs(:archive, '%s'))
   end
-  
+
   def atom
     response['Content-Type'] = 'application/atom+xml'
-    
+
     x = Builder::XmlMarkup.new(:indent => 2)
     x.instruct!
-    
+
     x.feed(:xmlns => 'http://www.w3.org/2005/Atom') {
       x.id       Thoth::Config.site.url
       x.title    Thoth::Config.site.name
@@ -68,13 +68,13 @@ class MainController < Ramaze::Controller
       x.link     :href => Thoth::Config.site.url
       x.link     :href => Thoth::Config.site.url.chomp('/') + Rs(:atom),
                  :rel => 'self'
-      
+
       x.author {
         x.name  Thoth::Config.admin.name
         x.email Thoth::Config.admin.email
         x.uri   Thoth::Config.site.url
       }
-      
+
       Post.recent.all.each do |post|
         x.entry {
           x.id        post.url
@@ -83,7 +83,7 @@ class MainController < Ramaze::Controller
           x.updated   post.updated_at.xmlschema
           x.link      :href => post.url, :rel => 'alternate'
           x.content   post.body_rendered, :type => 'html'
-          
+
           post.tags.each do |tag|
             x.category :term => tag.name, :label => tag.name, :scheme => tag.url
           end
@@ -91,7 +91,7 @@ class MainController < Ramaze::Controller
       end
     }
   end
-  
+
   def rss
     response['Content-Type'] = 'application/rss+xml'
 
@@ -111,7 +111,7 @@ class MainController < Ramaze::Controller
         x.atom           :link, :rel => 'self', :type => 'application/rss+xml',
                          :href => Thoth::Config.site.url.chomp('/') +
                                   Rs(:rss)
-        
+
         Post.recent.all.each do |post|
           x.item {
             x.title       post.title
@@ -119,7 +119,7 @@ class MainController < Ramaze::Controller
             x.guid        post.url, :isPermaLink => 'true'
             x.pubDate     post.created_at.rfc2822
             x.description post.body_rendered
-            
+
             post.tags.each do |tag|
               x.category tag.name, :domain => tag.url
             end
@@ -128,22 +128,22 @@ class MainController < Ramaze::Controller
       }
     }
   end
-  
+
   def sitemap
     error_404 unless Thoth::Config.site.enable_sitemap
 
     response['Content-Type'] = 'text/xml'
-    
+
     x = Builder::XmlMarkup.new(:indent => 2)
     x.instruct!
-    
+
     x.urlset(:xmlns => 'http://www.sitemaps.org/schemas/sitemap/0.9') {
       x.url {
         x.loc        Thoth::Config.site.url
         x.changefreq 'hourly'
         x.priority   '1.0'
       }
-      
+
       Page.reverse_order(:updated_at).all do |page|
         x.url {
           x.loc        page.url
@@ -152,9 +152,9 @@ class MainController < Ramaze::Controller
           x.priority   '0.6'
         }
       end
-      
+
       now = Time.now
-      
+
       Post.reverse_order(:updated_at).all do |post|
         x.url {
           x.loc        post.url
@@ -164,26 +164,26 @@ class MainController < Ramaze::Controller
       end
     }
   end
-  
+
   # Legacy redirect to /archive/+page+.
   def archives(page = 1)
     redirect R(ArchiveController, page), :status => 301
   end
-  
+
   # Legacy redirect to /post/+name+.
   def article(name)
     redirect R(PostController, name), :status => 301
   end
-  
+
   # Legacy redirect to /comment.
   def comments
     if type = request[:type]
       redirect R(CommentController, type), :status => 301
     else
       redirect R(CommentController), :status => 301
-    end  
+    end
   end
-  
+
   alias_method 'recent-comments', :comments
 
 end
