@@ -104,9 +104,8 @@ class MediaController < Ramaze::Controller
     page = page.to_i
     
     @columns  = [:filename, :size, :created_at, :updated_at]
-    @nosort   = [:size]
-    @order    = (request[:order] || :desc).to_sym
-    @sort     = (request[:sort]  || :created_at).to_sym
+    @order    = (request[:order] || :asc).to_sym
+    @sort     = (request[:sort]  || :filename).to_sym
     @sort     = :created_at unless @columns.include?(@sort)
     @sort_url = Rs(:list, page)
     
