@@ -41,6 +41,9 @@ class MediaController < Ramaze::Controller
     end
 
     send_file(file.path)
+
+  rescue Errno::ENOENT => e
+    error_404
   end
 
   def delete(id = nil)
