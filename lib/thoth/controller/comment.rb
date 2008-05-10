@@ -27,7 +27,7 @@
 #++
 
 class CommentController < Ramaze::Controller
-  helper :admin, :cache, :cookie, :pagination, :error
+  helper :admin, :aspect, :cache, :cookie, :pagination, :error
   layout '/layout'
 
   deny_layout :atom, :rss
@@ -35,12 +35,12 @@ class CommentController < Ramaze::Controller
   view_root Thoth::Config.theme.view/:comment,
             Thoth::VIEW_DIR/:comment
 
-  template :new, PostController, :index
-
   if Thoth::Config.server.enable_cache
     cache :index, :ttl => 60, :key => lambda { auth_key_valid? }
     cache :atom, :rss, :ttl => 60
   end
+
+  before_all { error_404 unless Thoth::Config.site.enable_comments }
 
   def index
     now = Time.now.strftime('%Y%j')
@@ -129,50 +129,6 @@ class CommentController < Ramaze::Controller
         @sort.desc : @sort)
     @title = "Comments (page #{page} of #{@comments.page_count})"
     @pager = pager(@comments, Rs(:list, '%s', :sort => @sort, :order => @order))
-  end
-
-  def new(name)
-    redirect(R(PostController, name)) unless request.post?
-
-    error_404 unless @post = Post.get(name)
-
-    # Dump the request if the robot traps were triggered.
-    error_404 unless request['captcha'].empty? && request['comment'].empty?
-
-    # Create a new comment.
-    comment = Comment.new do |c|
-      c.post_id    = @post.id
-      c.author     = request[:author]
-      c.author_url = request[:author_url]
-      c.title      = request[:title]
-      c.body       = request[:body]
-      c.ip         = request.ip
-    end
-
-    # Set cookies.
-    expire = Time.now + 5184000 # two months from now
-
-    response.set_cookie(:thoth_author, :expires => expire, :path => '/',
-        :value => comment.author)
-    response.set_cookie(:thoth_author_url, :expires => expire, :path => '/',
-        :value => comment.author_url)
-
-    if comment.valid? && request[:action] == 'Post Comment'
-      begin
-        raise unless comment.save
-      rescue => e
-        @comment_error = 'There was an error posting your comment. Please ' +
-            'try again later.'
-      else
-        flash[:success] = 'Comment posted.'
-        redirect(R(PostController, @post.name) + "#comment-#{comment.id}")
-      end
-    end
-
-    @title      = @post.title
-    @author     = comment.author
-    @author_url = comment.author_url
-    @preview    = comment
   end
 
   def rss

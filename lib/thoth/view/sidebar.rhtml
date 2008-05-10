@@ -18,12 +18,14 @@
         Posts
       </a>
     </dd>
-    <dd>
-      <a href="<%= R(CommentController, :atom) %>" type="application/atom+xml">
-        <span class="icon feed"></span>
-        Comments
-      </a>
-    </dd>
+    <% if Thoth::Config.site.enable_comments %>
+      <dd>
+        <a href="<%= R(CommentController, :atom) %>" type="application/atom+xml">
+          <span class="icon feed"></span>
+          Comments
+        </a>
+      </dd>
+    <% end %>
     <% if @feeds; @feeds.each do |feed| %>
       <dd>
         <a href="<%== feed[:href] %>" rel="alternate" type="<%== feed[:type] %>">

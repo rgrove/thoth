@@ -38,13 +38,15 @@
       </div>
     <% end %>
     
-    <div class="meta robots-nocontent">
-      <span class="icon comments"></span>
-      <% comment_count = @post.comments.count %>
-      <a href="<%== @post.url %>#comments">
-        <%= comment_count %> comment<%= comment_count == 1 ? '' : 's' %>
-      </a>
-    </div>
+    <% if Thoth::Config.site.enable_comments %>
+      <div class="meta robots-nocontent">
+        <span class="icon comments"></span>
+        <% comment_count = @post.comments.count %>
+        <a href="<%== @post.url %>#comments">
+          <%= comment_count %> comment<%= comment_count == 1 ? '' : 's' %>
+        </a>
+      </div>
+    <% end %>
   </div>
   
 </div>

@@ -6,13 +6,15 @@ Version 0.2.0 (?)
     Darcs repo).
   * Added --migrate command line option to automatically upgrade or downgrade
     a Thoth database schema.
+  * Added site.enable_comments setting. Set this to false if you don't want
+    users to be able to post comments on your blog.
+  * Added server.enable_minify setting. When enabled, all CSS under /css and all
+    JavaScript under /js will be minified on the fly.
   * Pagination bars now include links to up to nine nearby result pages in
     addition to the prev/next links.
   * Views are compiled by default in production mode, which improves performance
     significantly. To disable view compilation, set server.compile_views to
     false.
-  * Added server.enable_minify setting. When enabled, all CSS under /css and all
-    JavaScript under /js will be minified on the fly.
   * All admin forms validate a session-specific form token on submission to
     prevent cross-site request forgery attacks.
   * The Flickr and Delicious plugins have been modified to take advantage of

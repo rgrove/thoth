@@ -15,7 +15,7 @@
             <span class="adminicon post-edit"></span>
           </a>
         </li>
-        
+
         <li>
           <a href="<%= R(PostController, :delete, @post.id) %>"
               title="Delete this blog post">
@@ -23,7 +23,7 @@
           </a>
         </li>
       <% end %>
-      
+
       <li>
         <a href="<%= R(PageController, :new) %>"
             title="Create a new page">
@@ -38,7 +38,7 @@
             <span class="adminicon page-edit"></span>
           </a>
         </li>
-        
+
         <li>
           <a href="<%= R(PageController, :delete, @page.id) %>"
               title="Delete this page">
@@ -46,13 +46,13 @@
           </a>
         </li>
       <% end %>
-      
+
       <li>
         <a href="<%= R(MediaController, :new) %>" title="Upload media">
           <span class="adminicon media-new"></span>
         </a>
       </li>
-      
+
       <% if @show_file_edit && @file %>
         <li>
           <a href="<%= R(MediaController, :delete, @file.id) %>"
@@ -62,33 +62,35 @@
         </li>
       <% end %>
     </ul>
-    
+
     <ul class="tools">
       <li>
         <a href="<%= R(PostController, :list) %>" title="List all blog posts">
           <span class="adminicon post-list"></span>
         </a>
       </li>
-      
+
       <li>
         <a href="<%= R(PageController, :list) %>" title="List all pages">
           <span class="adminicon page-list"></span>
         </a>
       </li>
-      
-      <li>
-        <a href="<%= R(CommentController, :list) %>" title="List all comments">
-          <span class="adminicon comment-list"></span>
-        </a>
-      </li>
-      
+
+      <% if Thoth::Config.site.enable_comments %>
+        <li>
+          <a href="<%= R(CommentController, :list) %>" title="List all comments">
+            <span class="adminicon comment-list"></span>
+          </a>
+        </li>
+      <% end %>
+
       <li>
         <a href="<%= R(MediaController, :list) %>" title="List all media">
           <span class="adminicon media-list"></span>
         </a>
       </li>
     </ul>
-    
+
     <ul class="tools">
       <li>
         <a href="<%= R(AdminController, :logout) %>" title="Log out">
@@ -96,18 +98,18 @@
         </a>
       </li>
     </ul>
-    
+
   <% else %>
     <form id="login" action="<%= R(AdminController, :login) %>" method="post">
       <div>
         <label for="username">Username:</label>
         <input type="text" id="username" name="username" maxlength="64"
             title="Enter your username" />
-      
+
         <label for="password">Password:</label>
         <input type="password" id="password" name="password" maxlength="64"
             title="Enter your password" />
-      
+
         <input type="submit" value="Login" />
       </div>
     </form>

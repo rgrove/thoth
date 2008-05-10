@@ -9,11 +9,13 @@
     <div class="subtitle">
       <%== Thoth::Config.site.desc %>
     </div>
-    
+
     <ul>
       <li><%= A('Home',     :href => R(MainController), :rel => 'home') %></li>
       <li><%= A('Archives', :href => R(MainController, :archive, 2)) %></li>
-      <li><%= A('Comments', :href => R(CommentController)) %></li>
+      <% if Thoth::Config.site.enable_comments %>
+        <li><%= A('Comments', :href => R(CommentController)) %></li>
+      <% end %>
     </ul>
   </div>
 

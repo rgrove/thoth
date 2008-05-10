@@ -42,15 +42,57 @@ class PostController < Ramaze::Controller
   def index(name = nil)
     error_404 unless name && @post = Post.get(name)
 
-    @title      = @post.title
-    @author     = cookie(:thoth_author, '')
-    @author_url = cookie(:thoth_author_url, '')
+    if request.post? && Thoth::Config.site.enable_comments
+      # Dump the request if the robot traps were triggered.
+      error_404 unless request['captcha'].empty? && request['comment'].empty?
 
-    @feeds = [{
-      :href  => @post.atom_url,
-      :title => 'Comments on this post',
-      :type  => 'application/atom+xml'
-    }]
+      # Create a new comment.
+      comment = Comment.new do |c|
+        c.post_id    = @post.id
+        c.author     = request[:author]
+        c.author_url = request[:author_url]
+        c.title      = request[:title]
+        c.body       = request[:body]
+        c.ip         = request.ip
+      end
+
+      # Set cookies.
+      expire = Time.now + 5184000 # two months from now
+
+      response.set_cookie(:thoth_author, :expires => expire, :path => '/',
+          :value => comment.author)
+      response.set_cookie(:thoth_author_url, :expires => expire, :path => '/',
+          :value => comment.author_url)
+
+      if comment.valid? && request[:action] == 'Post Comment'
+        begin
+          raise unless comment.save
+        rescue => e
+          @comment_error = 'There was an error posting your comment. Please ' +
+              'try again later.'
+        else
+          flash[:success] = 'Comment posted.'
+          redirect(Rs(@post.name) + "#comment-#{comment.id}")
+        end
+      end
+
+      @author     = comment.author
+      @author_url = comment.author_url
+      @preview    = comment
+    else
+      @author     = cookie(:thoth_author, '')
+      @author_url = cookie(:thoth_author_url, '')
+    end
+
+    @title = @post.title
+    
+    if Thoth::Config.site.enable_comments
+      @feeds = [{
+        :href  => @post.atom_url,
+        :title => 'Comments on this post',
+        :type  => 'application/atom+xml'
+      }]
+    end
 
     @show_post_edit = true
   end

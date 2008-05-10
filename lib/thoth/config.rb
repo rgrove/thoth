@@ -38,7 +38,8 @@ module Thoth
             name "New Thoth Blog"
             desc "Thoth is awesome."
             url  "http://localhost:7000/"
-            enable_sitemap true
+            enable_comments true
+            enable_sitemap  true
           }
 
           admin {

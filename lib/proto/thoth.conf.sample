@@ -36,6 +36,11 @@ Configuration.for("thoth_production") {
     #
     # url "http://localhost:7000/"
 
+    # Whether or not to allow visitors to post comments in response to blog
+    # posts.
+    #
+    # enable_comments true
+
     # Whether or not you want to expose a sitemap for your blog. A sitemap is
     # an XML file that gives search engines information about all the URLs on
     # your site so they can index them more easily.
