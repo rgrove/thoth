@@ -1,5 +1,6 @@
 custom/
 db/
+media/
 pkg/
 ._*
 .DS_Store
