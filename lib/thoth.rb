@@ -169,10 +169,7 @@ module Thoth
       # If minification is enabled, intercept CSS/JS requests and route them to
       # the MinifyController.
       if Config.server.enable_minify
-        R::Dispatcher::FILTER.unshift(lambda {|path|
-          return unless path =~ /^\/(css|js)\/(.+)$/
-          R::Response.current.build(R::Controller.handle("/minify/#{$1}/#{$2}"))
-        })
+        R::Rewrite[/^\/(css|js)\/(.+)$/] = '/minify/%s/%s'
       end
 
       Config.plugins.each {|plugin| Plugin.load(plugin) }
