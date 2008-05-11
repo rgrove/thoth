@@ -113,6 +113,9 @@ Configuration.for("thoth_production") {
   # plugins []
 
   server {
+    # Ramaze server adapter to use. This can be any adapter Ramaze supports.
+    #
+    # adapter :thin
 
     # IP address on which the Thoth server should listen for connections.
     #

@@ -59,6 +59,9 @@ require 'thoth/monkeypatch/dispatcher/file'
 module Thoth
   R = Ramaze
 
+  # Ramaze adapter to use.
+  trait[:adapter] ||= nil
+
   # Path to the config file.
   trait[:config_file] ||= ENV['THOTH_CONF'] || HOME_DIR/'thoth.conf'
 
@@ -203,8 +206,8 @@ module Thoth
       init_thoth
 
       R.startup(
-        :adapter => :thin,
         :force   => true,
+        :adapter => trait[:adapter],
         :host    => trait[:ip],
         :port    => trait[:port]
       )

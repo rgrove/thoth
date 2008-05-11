@@ -60,6 +60,7 @@ module Thoth
           plugins []
 
           server {
+            adapter       :thin
             address       "0.0.0.0"
             port          7000
             compile_views env == :production

@@ -43,22 +43,27 @@ module Thoth
       o.summary_width  = 24
       o.banner         = "Usage: thoth [options]\n" +
                          "       thoth [info]"
-  
+
       o.separator ''
       o.separator 'Options:'
-  
+
+      o.on('-a', '--adapter <adapter>',
+          'Use the specified Ramaze server adapter.') do |adapter|
+        trait[:adapter] = adapter
+      end
+
       o.on('-c', '--config <filename>',
           'Use the specified configuration file.') do |filename|
         trait[:config_file] = File.expand_path(filename)
       end
-  
+
       o.on('-d', '--daemon <command>', [:start, :stop, :restart],
           'Issue the specified daemon command (start, stop, or',
           'restart).') do |cmd|
         trait[:daemon] = cmd
       end
-      
-      o.on('-H, --home <path>', 
+
+      o.on('-H, --home <path>',
           'Use the specified home directory.') do |home|
         unless File.directory?(home)
           abort("Error: home directory not found or not a directory: #{home}")
@@ -66,41 +71,41 @@ module Thoth
 
         HOME_DIR = File.expand_path(home)
       end
-  
+
       o.on('-i', '--ip <address>',
           'Listen for connections on the specified IP address.') do |address|
         trait[:ip] = address
       end
-  
+
       o.on('-p', '--port <number>',
           'Listen for connections on the specified port number.') do |port|
         trait[:port] = port.to_i
       end
-      
+
       o.separator ''
-  
+
       o.on('--create <path>',
           'Create a new Thoth home directory with a sample',
           'config file.') do |path|
         require 'thoth'
-        
+
         begin
           create(path)
         rescue => e
           abort("Error: #{e}")
         end
-        
+
         puts 'Your new Thoth home directory has been created at ' <<
             File.expand_path(path)
 
         exit
       end
-      
+
       o.on('--devel',
           'Run Thoth in development mode.') do
         trait[:mode] = :devel
       end
-      
+
       o.on('--import <module>',
           'Import content from another blog engine using the',
           'specified import module.') do |import_module|
@@ -112,7 +117,7 @@ module Thoth
           'Log all SQL queries to the specified file.') do |filename|
         trait[:sql_log] = File.expand_path(filename)
       end
-      
+
       o.on '--migrate [version]',
           'Migrate the database to the specified schema version,',
           'or to the latest version if not specified.' do |version|
@@ -126,7 +131,7 @@ module Thoth
       o.on_tail('-h', '--help',
           'Display usage information (this message).') do
         require 'thoth'
-        
+
         puts "#{APP_NAME} v#{APP_VERSION} <#{APP_URL}>"
         puts "#{APP_COPYRIGHT}"
         puts
@@ -137,11 +142,11 @@ module Thoth
         puts "    view: #{VIEW_DIR}"
         exit
       end
-  
+
       o.on_tail('-v', '--version',
           'Display version information.') do
         require 'thoth'
-        
+
         puts "#{APP_NAME} v#{APP_VERSION} <#{APP_URL}>"
         puts "#{APP_COPYRIGHT}"
         puts
@@ -193,6 +198,7 @@ module Thoth
     end
 
   when :server
+    trait[:adapter] ||= Config.server.adapter
     trait[:ip]      ||= Config.server.address
     trait[:port]    ||= Config.server.port
     trait[:pidfile]   = HOME_DIR/"thoth_#{trait[:ip]}_#{trait[:port]}.pid"
