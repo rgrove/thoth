@@ -10,9 +10,9 @@
       <th>Method</th>
     </tr>
   </thead>
-  
+
   <tfoot></tfoot>
-  
+
   <tbody>
     <% @backtrace.each do |source, hash, file, line, method| %>
       <tr class="file" id="<%== hash %>">
@@ -27,11 +27,11 @@
               class="textmate">
             Open in TextMate
           </a>
-          
+
           <ol start="<%== source.first[0] %>">
             <% source.each do |lnum, lcode, lcurrent| %>
               <li<%== lcurrent ? ' class="current"' : '' %>>
-                <span><%== lcode.to_s.rstrip %></span>
+                <span><%== lcode.to_s.rstrip %>&nbsp;</span>
               </li>
             <% end %>
           </ol>
@@ -41,22 +41,22 @@
   </tbody>
 </table>
 
-<script type="text/javascript" src="http://yui.yahooapis.com/2.4.1/build/yahoo-dom-event/yahoo-dom-event.js"></script>
+<script type="text/javascript" src="http://yui.yahooapis.com/2.5.1/build/yahoo-dom-event/yahoo-dom-event.js"></script>
 <script type="text/javascript">
   (function () {
     var yud   = YAHOO.util.Dom,
         yue   = YAHOO.util.Event,
         files = yud.getElementsByClassName('file', 'tr');
-        
+
     yue.on(files, 'click', function (e) {
       var el = yue.getTarget(e);
-      
+
       while (el.nodeName != 'TR') {
         el = el.parentNode;
       }
-      
+
       var source = yud.get('source_' + el.id);
-      
+
       if (yud.hasClass(source, 'hidden')) {
         yud.removeClass(source, 'hidden');
       } else {
