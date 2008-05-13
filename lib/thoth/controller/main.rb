@@ -39,7 +39,7 @@ class MainController < Ramaze::Controller
     cache :index, :ttl => 60, :key => lambda {
       auth_key_valid?.to_s + (request[:type] || '') + flash.inspect
     }
-    cache :atom, :rss, :ttl => 60
+    cache :atom, :rss, :ttl => 300
     cache :sitemap, :ttl => 3600
   end
 
