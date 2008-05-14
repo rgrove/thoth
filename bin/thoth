@@ -63,7 +63,7 @@ module Thoth
         trait[:daemon] = cmd
       end
 
-      o.on('-H, --home <path>',
+      o.on('-H', '--home <path>',
           'Use the specified home directory.') do |home|
         unless File.directory?(home)
           abort("Error: home directory not found or not a directory: #{home}")

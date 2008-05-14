@@ -23,6 +23,7 @@ Version 0.2.0 (?)
     Ramaze's improved value cache rather than handling their own caching.
   * Fixed incorrect default paths for the theme.public, theme.view, and media
     config settings.
+  * Fixed the --home command line option.
 
 Version 0.1.4 (2008-04-15)
   * Fixed a nasty bug introduced in 0.1.3 that caused a memory leak and resulted
