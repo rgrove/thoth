@@ -41,7 +41,8 @@ module Thoth
     # <tt>/plugin</tt> directory, then as a gem.
     def self.load(name)
       plugin = "thoth_#{name.to_s.downcase.gsub(/^thoth_/, '')}"
-      files  = Dir["{#{HOME_DIR/:plugin},#{$:.join(',')}}/#{plugin}.rb"]
+      files  = Dir["{#{HOME_DIR/:plugin},#{LIB_DIR/:plugin}," <<
+          "#{$:.join(',')}}/#{plugin}.rb"]
 
       # First try to load a local copy of the plugin, then try the gem.
       unless (files.any? && require(files.first)) || require(plugin)

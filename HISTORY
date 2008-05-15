@@ -19,6 +19,7 @@ Version 0.2.0 (?)
     false.
   * All admin forms validate a session-specific form token on submission to
     prevent cross-site request forgery attacks.
+  * The Flickr and Delicious plugins are now included in the main Thoth gem.
   * The Flickr and Delicious plugins have been modified to take advantage of
     Ramaze's improved value cache rather than handling their own caching.
   * Fixed incorrect default paths for the theme.public, theme.view, and media

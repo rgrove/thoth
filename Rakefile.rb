@@ -75,48 +75,6 @@ thoth_gemspec = Gem::Specification.new do |s|
   s.add_dependency('thin',          '~> 0.8.1')
 end
 
-plugins = []
-
-# del.icio.us plugin
-plugins << Gem::Specification.new do |s|
-  s.rubyforge_project = 'thoth'
-
-  s.name     = 'thoth_delicious'
-  s.version  = Thoth::APP_VERSION
-  s.author   = Thoth::APP_AUTHOR
-  s.email    = Thoth::APP_EMAIL
-  s.homepage = Thoth::APP_URL
-  s.platform = Gem::Platform::RUBY
-  s.summary  = 'del.icio.us plugin for the Thoth blog engine.'
-
-  s.files        = ['plugin/thoth_delicious.rb']
-  s.require_path = 'plugin'
-  s.has_rdoc     = true
-  
-  s.add_dependency('json_pure', '>= 1.1.2')
-  s.add_dependency('thoth',     "~> #{Thoth::APP_VERSION}")
-end
-
-# Flickr plugin
-plugins << Gem::Specification.new do |s|
-  s.rubyforge_project = 'thoth'
-
-  s.name     = 'thoth_flickr'
-  s.version  = Thoth::APP_VERSION
-  s.author   = Thoth::APP_AUTHOR
-  s.email    = Thoth::APP_EMAIL
-  s.homepage = Thoth::APP_URL
-  s.platform = Gem::Platform::RUBY
-  s.summary  = 'Flickr plugin for the Thoth blog engine.'
-
-  s.files        = ['plugin/thoth_flickr.rb']
-  s.require_path = 'plugin'
-  s.has_rdoc     = true
-  
-  s.add_dependency('net-flickr', '= 0.0.1')
-  s.add_dependency('thoth',      "~> #{Thoth::APP_VERSION}")
-end
-
 Rake::GemPackageTask.new(thoth_gemspec) do |p|
   p.need_tar_gz = true
 end
@@ -129,43 +87,14 @@ Rake::RDocTask.new do |rd|
   rd.rdoc_files.include('lib/**/*.rb')
 end
 
-Rake::RDocTask.new(:rdoc_delicious) do |rd|
-  rd.main     = 'Thoth::Plugin::Delicious'
-  rd.title    = 'Thoth::Plugin::Delicious'
-  rd.rdoc_dir = 'doc/delicious'
-  
-  rd.rdoc_files.include('plugin/thoth_delicious.rb')
-end
-
-Rake::RDocTask.new(:rdoc_flickr) do |rd|
-  rd.main     = 'Thoth::Plugin::Flickr'
-  rd.title    = 'Thoth::Plugin::Delicious'
-  rd.rdoc_dir = 'doc/flickr'
-  
-  rd.rdoc_files.include('plugin/thoth_flickr.rb')
-end
-
 desc "install Thoth"
 task :install => :gem do
   sh "gem install pkg/thoth-#{Thoth::APP_VERSION}.gem"
 end
 
-desc "create plugin gems"
-task :plugins do
-  plugins.each do |spec|
-    gem_file = "#{spec.name}-#{spec.version}.gem"
-    
-    Gem::Builder.new(spec).build
-    verbose(true) {
-      mv gem_file, "pkg/#{gem_file}"
-    }
-
-  end
-end
-
 desc "remove end-of-line whitespace"
 task 'strip-spaces' do
-  Dir['{bin,lib,plugin}/**/*.rb'].each do |file|
+  Dir['{bin,lib}/**/*.rb'].each do |file|
     next if file =~ /^\./
 
     original = File.readlines(file)
