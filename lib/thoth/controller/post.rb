@@ -85,7 +85,7 @@ class PostController < Ramaze::Controller
     end
 
     @title = @post.title
-    
+
     if Thoth::Config.site.enable_comments
       @feeds = [{
         :href  => @post.atom_url,

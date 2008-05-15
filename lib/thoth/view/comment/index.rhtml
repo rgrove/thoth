@@ -14,7 +14,7 @@
         <% end %>
         on <%= comment.created_at(Thoth::Config.timestamp.short) %><br />
         <small>
-          attached to 
+          attached to
           <a href="<%== comment.post.url %>">
             <%== comment.post.title %>
           </a>

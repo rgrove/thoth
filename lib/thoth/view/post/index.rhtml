@@ -6,7 +6,7 @@
         <%== @post.title %>
       </a>
     </h1>
-    
+
     <address class="vcard author">
       <a class="email fn" href="mailto:<%== Thoth::Config.admin.email %>">
         <%== Thoth::Config.admin.name %>
@@ -19,11 +19,11 @@
       </abbr>
     </span>
   </div>
-  
+
   <div class="bd entry-content">
     <%= @post.body_rendered %>
   </div>
-  
+
   <div class="ft">
     <% unless @post.tags.empty? %>
       <div class="tags">
@@ -37,7 +37,7 @@
         </ul>
       </div>
     <% end %>
-    
+
     <% if Thoth::Config.site.enable_comments %>
       <div class="meta robots-nocontent">
         <span class="icon comment-post"></span>

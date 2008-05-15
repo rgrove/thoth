@@ -94,7 +94,7 @@ end
 
 desc "remove end-of-line whitespace"
 task 'strip-spaces' do
-  Dir['{bin,lib}/**/*.rb'].each do |file|
+  Dir['lib/**/*.{css,js,rb,rhtml,sample}'].each do |file|
     next if file =~ /^\./
 
     original = File.readlines(file)

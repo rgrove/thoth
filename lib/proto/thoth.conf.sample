@@ -174,11 +174,11 @@ Configuration.for("thoth_devel") {
   # db "sqlite:///#{Thoth::HOME_DIR}/db/devel.db"
 
   # server {
-  # 
+  #
   #   compile_views false
   #   enable_cache false
   #   enable_minify false
-  # 
+  #
   # }
 
 }

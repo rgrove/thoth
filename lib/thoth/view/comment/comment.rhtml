@@ -5,7 +5,7 @@
       <a href="<%== @comment.url %>" rel="bookmark"
           title="Permalink for this comment"><%== @comment.title %></a>
     </h4>
-    
+
     <% if auth_key_valid? && !@comment.new? %>
       <div class="toolbar mini">
         <ul>

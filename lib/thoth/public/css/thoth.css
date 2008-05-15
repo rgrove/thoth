@@ -141,7 +141,7 @@ textarea { font: 100% Consolas, Monaco, 'Courier New'; }
   display: inline;
 }
 
-#toolbar ul li a { 
+#toolbar ul li a {
   color: #fff;
   display: block;
   float: left;
@@ -173,7 +173,7 @@ textarea { font: 100% Consolas, Monaco, 'Courier New'; }
   content: '.';
   display: block;
   height: 0;
-  visibility: hidden;  
+  visibility: hidden;
 }
 
 /* -- Footer ---------------------------------------------------------------- */
@@ -504,7 +504,7 @@ kbd {
   padding: 2px 3px 1px 3px;
 }
 
-img.icon { 
+img.icon {
   background: none;
   vertical-align: middle;
 }

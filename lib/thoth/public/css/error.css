@@ -17,7 +17,7 @@
 .backtrace ol li.current { background: #ffb7b7; }
 
 .backtrace ol li span,
-.backtrace td.method { 
+.backtrace td.method {
   font-family: Consolas, Monaco, 'Courier New';
   margin: 0;
   padding: 0;
