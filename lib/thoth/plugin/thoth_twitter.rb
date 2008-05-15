@@ -26,9 +26,11 @@
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #++
 
+require 'cgi'
 require 'json'
 require 'open-uri'
 require 'timeout'
+require 'uri'
 
 module Thoth; module Plugin
 
@@ -81,6 +83,19 @@ module Thoth; module Plugin
           tweets = JSON.parse(open(url).read)
         end
 
+        # Parse the tweets into an easier-to-use format.
+        tweets.map! do |tweet|
+          {
+            :created_at => Time.parse(tweet['created_at']),
+            :html       => parse_tweet(tweet),
+            :id         => tweet['id'],
+            :source     => tweet['source'],
+            :text       => tweet['text'],
+            :truncated  => tweet['truncated'],
+            :url        => "http://twitter.com/#{user}/statuses/#{tweet['id']}"
+          }
+        end
+
         @failures = 0
 
         return cache.store(url, tweets, :ttl => Config.twitter.cache_ttl)
@@ -88,14 +103,40 @@ module Thoth; module Plugin
       rescue => e
         @failures ||= 0
         @failures += 1
-
+      
         if @failures >= Config.twitter.failure_threshold
           @skip_until = Time.now + Config.twitter.failure_timeout
           Ramaze::Log.error("Twitter failed to respond #{@failures} times. " <<
               "Will retry after #{@skip_until}.")
         end
-
+      
         return []
+      end
+
+      private
+
+      # Parses a tweet and converts it into HTML. URLs will be turned into
+      # links; the original text of the tweet itself will be HTML-encoded.
+      def parse_tweet(tweet)
+        index = 0
+        text  = tweet['text'].dup
+        urls  = []
+
+        URI.extract(text.dup, ['ftp', 'ftps', 'git', 'http', 'https', 'mailto',
+            'scp', 'sftp', 'ssh', 'telnet']) do |url|
+          text.sub!(url, "__URL#{index}__")
+          urls << url
+          index += 1
+        end
+
+        html = CGI.escapeHTML(text)
+
+        urls.each_with_index do |url, index|
+          html.sub!("__URL#{index}__", "<a href=\"#{url}\">" <<
+              "#{url.length > 26 ? url[0..26] + '...' : url}</a>")
+        end
+
+        return html
       end
     end
 
