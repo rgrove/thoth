@@ -105,7 +105,7 @@ class Post < Sequel::Model
   end
 
   def name=(name)
-    self[:name] = name.strip unless name.nil?
+    self[:name] = name.strip.downcase unless name.nil?
   end
 
   # Gets an Array of tags attached to this post, ordered by name.

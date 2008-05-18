@@ -70,7 +70,7 @@ class Page < Sequel::Model
   end
 
   def name=(name)
-    self[:name] = name.strip unless name.nil?
+    self[:name] = name.strip.downcase unless name.nil?
   end
 
   def title=(title)
