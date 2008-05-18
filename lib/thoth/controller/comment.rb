@@ -127,7 +127,7 @@ class CommentController < Ramaze::Controller
 
     @comments = Comment.paginate(page, 20).order(@order == :desc ?
         @sort.desc : @sort)
-    @title = "Comments (page #{page} of #{@comments.page_count})"
+    @title = "Comments (page #{page} of #{[@comments.page_count, 1].max})"
     @pager = pager(@comments, Rs(:list, '%s', :sort => @sort, :order => @order))
   end
 

@@ -113,7 +113,7 @@ class MediaController < Ramaze::Controller
     @sort_url = Rs(:list, page)
 
     @files = Media.paginate(page, 20).order(@order == :desc ? @sort.desc : @sort)
-    @title = "Media (page #{page} of #{@files.page_count})"
+    @title = "Media (page #{page} of #{[@files.page_count, 1].max})"
     @pager = pager(@files, Rs(:list, '%s', :sort => @sort, :order => @order))
   end
 

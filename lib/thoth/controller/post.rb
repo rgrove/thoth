@@ -206,7 +206,7 @@ class PostController < Ramaze::Controller
     @sort_url = Rs(:list, page)
 
     @posts = Post.paginate(page, 20).order(@order == :desc ? @sort.desc : @sort)
-    @title = "Blog Posts (page #{page} of #{@posts.page_count})"
+    @title = "Blog Posts (page #{page} of #{[@posts.page_count, 1].max})"
     @pager = pager(@posts, Rs(:list, '%s', :sort => @sort, :order => @order))
   end
 

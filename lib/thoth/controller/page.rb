@@ -111,7 +111,7 @@ class PageController < Ramaze::Controller
     @sort_url = Rs(:list, page)
 
     @pages = Page.paginate(page, 20).order(@order == :desc ? @sort.desc : @sort)
-    @title = "Pages (page #{page} of #{@pages.page_count})"
+    @title = "Pages (page #{page} of #{[@pages.page_count, 1].max})"
     @pager = pager(@pages, Rs(:list, '%s', :sort => @sort, :order => @order))
   end
 
