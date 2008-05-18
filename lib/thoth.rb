@@ -96,11 +96,14 @@ module Thoth
         raise "specified path already exists: #{path}"
       end
 
-      FileUtils.mkdir_p(path/:media)
+      FileUtils.mkdir_p(path/:log)
+      FileUtils.mkdir(path/:media)
       FileUtils.mkdir(path/:plugin)
       FileUtils.mkdir(path/:public)
       FileUtils.mkdir(path/:view)
+
       FileUtils.cp(LIB_DIR/'..'/:proto/'thoth.conf.sample', path/'thoth.conf')
+      File.chmod(0750, path/:log)
       File.chmod(0640, path/'thoth.conf')
     end
 

@@ -66,7 +66,7 @@ module Thoth
             compile_views env == :production
             enable_cache  env == :production
             enable_minify env == :production
-            error_log     HOME_DIR/"error.log"
+            error_log     HOME_DIR/:log/"error.log"
           }
 
           timestamp {
