@@ -132,8 +132,17 @@ module Thoth
         R::Global.sourcereload = false
 
         # Log all errors to the error log file if one is configured.
-        R::Log.loggers = Config.server.error_log.empty? ? [] :
-            [R::Informer.new(Config.server.error_log, [:error])]
+        if Config.server.error_log.empty?
+          R::Log.loggers = []
+        else
+          unless File.directory?(File.dirname(Config.server.error_log))
+            FileUtils.mkdir_p(File.dirname(Config.server.error_log))
+          end
+
+          R::Log.loggers = [
+            R::Logging::Logger::Informer.new(Config.server.error_log, [:error])
+          ]
+        end
 
         # Don't expose argument errors or exceptions in production mode.
         R::Dispatcher::Error::HANDLE_ERROR.update({
