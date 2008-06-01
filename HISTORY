@@ -23,6 +23,7 @@ Version 0.2.0 (?)
   * The Flickr and Delicious plugins have been modified to take advantage of
     Ramaze's improved value cache rather than handling their own caching.
   * Added a Twitter plugin.
+  * Added a Tags plugin for displaying tag statistics.
   * Fixed incorrect default paths for the theme.public, theme.view, and media
     config settings.
   * Fixed the --home command line option.
