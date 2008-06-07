@@ -65,13 +65,13 @@ thoth_gemspec = Gem::Specification.new do |s|
   s.add_dependency('builder',       '~> 2.1.2')
   s.add_dependency('configuration', '~> 0.0.5')
   s.add_dependency('cssmin',        '~> 1.0.0')
-  s.add_dependency('erubis',        '>= 2.5.0')
+  s.add_dependency('erubis',        '>= 2.6.1')
   s.add_dependency('hpricot',       '~> 0.6')
   s.add_dependency('json_pure',     '>= 1.1.2')
   s.add_dependency('jsmin',         '~> 1.0.0')
   s.add_dependency('RedCloth',      '>= 3.0.4')
-  s.add_dependency('sequel',        '~> 1.5.1')
-  s.add_dependency('sequel_core',   '~> 1.5.1')
+  s.add_dependency('sequel',        '~> 2.0.1')
+  s.add_dependency('sequel_core',   '~> 2.0.1')
   s.add_dependency('thin',          '~> 0.8.1')
 end
 
