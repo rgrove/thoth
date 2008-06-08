@@ -122,6 +122,7 @@ module Thoth; module Plugin
         text  = tweet['text'].dup
         urls  = []
 
+        # Extract URLs and replace them with placeholders for later.
         URI.extract(text.dup, ['ftp', 'ftps', 'git', 'http', 'https', 'mailto',
             'scp', 'sftp', 'ssh', 'telnet']) do |url|
           text.sub!(url, "__URL#{index}__")
@@ -131,10 +132,15 @@ module Thoth; module Plugin
 
         html = CGI.escapeHTML(text)
 
+        # Replace URL placeholders with links.
         urls.each_with_index do |url, index|
           html.sub!("__URL#{index}__", "<a href=\"#{url}\">" <<
               "#{url.length > 26 ? url[0..26] + '...' : url}</a>")
         end
+
+        # Turn @username into a link to the specified user's Twitter profile.
+        html.gsub!(/(^|\s)@([a-zA-Z0-9_]{1,16})(\s|$)/,
+            '\1@<a href="http://twitter.com/\2">\2</a>\3')
 
         return html
       end
