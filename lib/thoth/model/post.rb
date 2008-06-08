@@ -65,7 +65,7 @@ class Post < Sequel::Model
   # an id.
   def self.get(name)
     return Post[name] if name.is_a?(Numeric)
-    name = name.to_s.strip.downcase
+    name = name.to_s.downcase
     name =~ /^\d+$/ ? Post[name] : Post[:name => name]
   end
 

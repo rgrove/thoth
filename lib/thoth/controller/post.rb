@@ -42,6 +42,10 @@ class PostController < Ramaze::Controller
   def index(name = nil)
     error_404 unless name && @post = Post.get(name)
 
+    # Permanently redirect id-based URLs to name-based URLs to reduce search
+    # result dupes and improve pagerank.
+    raw_redirect(@post.url, :status => 301) if name =~ /^\d+$/
+
     if request.post? && Thoth::Config.site.enable_comments
       # Dump the request if the robot traps were triggered.
       error_404 unless request['captcha'].empty? && request['comment'].empty?
@@ -99,6 +103,10 @@ class PostController < Ramaze::Controller
 
   def atom(name = nil)
     error_404 unless name && post = Post.get(name)
+
+    # Permanently redirect id-based URLs to name-based URLs to reduce search
+    # result dupes and improve pagerank.
+    raw_redirect(post.atom_url, :status => 301) if name =~ /^\d+$/
 
     comments = post.comments.reverse_order.limit(20)
     updated  = comments.count > 0 ? comments.first.created_at.xmlschema :
