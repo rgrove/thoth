@@ -135,8 +135,11 @@ module Thoth
         if Config.server.error_log.empty?
           R::Log.loggers = []
         else
-          unless File.directory?(File.dirname(Config.server.error_log))
-            FileUtils.mkdir_p(File.dirname(Config.server.error_log))
+          log_dir = File.dirname(Config.server.error_log)
+
+          unless File.directory?(log_dir)
+            FileUtils.mkdir_p(log_dir)
+            File.chmod(0750, log_dir)
           end
 
           R::Log.loggers = [
