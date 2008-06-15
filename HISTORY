@@ -1,9 +1,9 @@
 Thoth History
 ================================================================================
 
-Version 0.2.0 (?)
-  * Updated to work with bleeding-edge Ramaze (currently 0.3.9.5 in the Ramaze
-    git repo).
+Version 0.2.0 (2008-06-15)
+  * Requires Ramaze 2008.06.
+  * Requires Sequel 2.0.1.
   * Added --adapter command line option and server.adapter config option to
     specify a different Ramaze server adapter to use (the default is Thin).
   * Added --migrate command line option to automatically upgrade or downgrade
