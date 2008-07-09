@@ -47,6 +47,11 @@ module Ramaze; module Helper
       'a'   => ['href', 'title'],
       'pre' => ['class']
     }
+    
+    # Attributes to add to sanitized HTML elements.
+    ADD_ATTRIBUTES = {
+      'a' => {'rel' => 'nofollow'}
+    }
 
     # Attributes that should be checked for valid protocols.
     PROTOCOL_ATTRIBUTES = {'a' => ['href']}
@@ -69,27 +74,34 @@ module Ramaze; module Helper
         if el.elem?
           tag = el.name.downcase
 
-          if !ELEMENTS.include?(tag)
-            # Delete any element that isn't in the whitelist.
-            el.parent.replace_child(el, el.children)
-          elsif ATTRIBUTES.has_key?(tag)
-            # Delete any attribute that isn't in the whitelist for this
-            # particular element.
-            el.raw_attributes.delete_if do |key, val|
-              !ATTRIBUTES[tag].include?(key.downcase)
+          if ELEMENTS.include?(tag)
+            if ATTRIBUTES.has_key?(tag)
+              # Delete any attribute that isn't in the whitelist for this
+              # particular element.
+              el.raw_attributes.delete_if do |key, val|
+                !ATTRIBUTES[tag].include?(key.downcase)
+              end
+
+              # Check applicable attributes for valid protocols.
+              if PROTOCOL_ATTRIBUTES.has_key?(tag)
+                el.raw_attributes.delete_if do |key, val|
+                  PROTOCOL_ATTRIBUTES[tag].include?(key.downcase) &&
+                      (!(val.downcase =~ /^([^:]+)\:/) || !PROTOCOLS.include?($1))
+                end
+              end
+            else
+              # Delete all attributes from elements with no whitelisted
+              # attributes.
+              el.raw_attributes = {}
             end
 
-            # Check applicable attributes for valid protocols.
-            if PROTOCOL_ATTRIBUTES.has_key?(tag)
-              el.raw_attributes.delete_if do |key, val|
-                PROTOCOL_ATTRIBUTES[tag].include?(key.downcase) &&
-                    (!(val.downcase =~ /^([^:]+)\:/) || !PROTOCOLS.include?($1))
-              end
+            # Add required attributes.
+            if ADD_ATTRIBUTES.has_key?(tag)
+              el.raw_attributes.merge!(ADD_ATTRIBUTES[tag])
             end
           else
-            # Delete all attributes from elements with no whitelisted
-            # attributes.
-            el.raw_attributes = {}
+            # Delete any element that isn't in the whitelist.
+            el.parent.replace_child(el, el.children)
           end
         elsif el.comment?
           # Delete all comments, since it's possible to make IE execute JS
