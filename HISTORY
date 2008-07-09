@@ -1,6 +1,11 @@
 Thoth History
 ================================================================================
 
+Version 0.2.1 (?)
+  * Requires Sequel 2.2.x (this fixes an issue with SQLite and DateTime
+    objects).
+  * A rel="nofollow" attribute is now added to links in user comments.
+
 Version 0.2.0 (2008-06-15)
   * Requires Ramaze 2008.06.
   * Requires Sequel 2.0.1.
