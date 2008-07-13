@@ -10,7 +10,7 @@
 
       <% if @show_post_edit && @post %>
         <li>
-          <a href="<%= R(PostController, :edit, @post.id) %>"
+          <a href="<%= R(PostController, :edit, @post.id) %>#post-form"
               title="Edit this blog post">
             <span class="adminicon post-edit"></span>
           </a>
@@ -33,7 +33,7 @@
 
       <% if @show_page_edit && @page %>
         <li>
-          <a href="<%= R(PageController, :edit, @page.id) %>"
+          <a href="<%= R(PageController, :edit, @page.id) %>#page-form"
               title="Edit this page">
             <span class="adminicon page-edit"></span>
           </a>

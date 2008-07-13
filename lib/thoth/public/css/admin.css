@@ -125,9 +125,8 @@ form table tr.tip ul {
 
 form table tr.tip ul li { margin-bottom: 0.5em; }
 
-form table tfoot td {
+form table tfoot tr:first-child td {
   padding-top: 1em;
-  text-align: right;
 }
 
 #title,

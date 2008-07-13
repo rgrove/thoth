@@ -1,4 +1,4 @@
-<form class="post" action="<%== @form_action %>" method="post">
+<form id="post-form" class="post" action="<%== @form_action %>" method="post">
   <table>
     <thead></thead>
     <tfoot>
@@ -8,6 +8,36 @@
           <input type="hidden" name="token" value="<%== form_token %>" />
           <input type="submit" name="action" value="Preview" />
           <input type="submit" name="action" value="Post" />
+        </td>
+      </tr>
+
+      <tr class="tip">
+        <td></td>
+        <td>
+          <ul>
+            <li>
+              Separate multiple tags with commas (e.g., "monkeys, pirates,
+              pirate monkeys, ninjas").
+            </li>
+
+            <li>
+              To link to another page on this site, use wiki-style links like
+              <kbd>[[pagename]]</kbd> or <kbd>[[pagename|link text]]</kbd>.
+            </li>
+
+            <li>
+              To link to a blog post, use a link like
+              <kbd>[[@postname_or_id]]</kbd> or
+              <kbd>[[@postname_or_id|link text]]</kbd>.
+            </li>
+
+            <li>
+              You can use
+              <a href="http://hobix.com/textile/quick.html" target="_blank">Textile</a>,
+              <a href="http://daringfireball.net/projects/markdown/basics" target="_blank">Markdown</a>,
+              or XHTML for formatting.
+            </li>
+          </ul>
         </td>
       </tr>
     </tfoot>
@@ -67,36 +97,6 @@
           </td>
         </tr>
       <% end; end %>
-
-      <tr class="tip">
-        <td></td>
-        <td>
-          <ul>
-            <li>
-              Separate multiple tags with commas (e.g., "monkeys, pirates,
-              pirate monkeys, ninjas").
-            </li>
-
-            <li>
-              To link to another page on this site, use wiki-style links like
-              <kbd>[[pagename]]</kbd> or <kbd>[[pagename|link text]]</kbd>.
-            </li>
-
-            <li>
-              To link to a blog post, use a link like
-              <kbd>[[@postname_or_id]]</kbd> or
-              <kbd>[[@postname_or_id|link text]]</kbd>.
-            </li>
-
-            <li>
-              You can use
-              <a href="http://hobix.com/textile/quick.html" target="_blank">Textile</a>,
-              <a href="http://daringfireball.net/projects/markdown/basics" target="_blank">Markdown</a>,
-              or XHTML for formatting.
-            </li>
-          </ul>
-        </td>
-      </tr>
     </tbody>
   </table>
 </form>
