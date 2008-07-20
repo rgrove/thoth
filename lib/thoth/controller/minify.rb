@@ -31,12 +31,15 @@ class MinifyController < Ramaze::Controller
 
   def css(*args)
     path = 'css/' << args.join('/')
+    file = process(path)
+
+    Ramaze::Session.current.drop! if Ramaze::Session.current
 
     if Thoth::Config.server.enable_cache
       response.body = value_cache[path] ||
-          value_cache[path] = CSSMin.minify(process(path))
+          value_cache[path] = CSSMin.minify(File.open(file, 'rb'))
     else
-      response.body = CSSMin.minify(process(path))
+      response.body = CSSMin.minify(File.open(file, 'rb'))
     end
 
     response['Content-Type'] = 'text/css'
@@ -46,12 +49,15 @@ class MinifyController < Ramaze::Controller
 
   def js(*args)
     path = 'js/' << args.join('/')
+    file = process(path)
+
+    Ramaze::Session.current.drop! if Ramaze::Session.current
 
     if Thoth::Config.server.enable_cache
       response.body = value_cache[path] ||
-          value_cache[path] = JSMin.minify(process(path))
+          value_cache[path] = JSMin.minify(File.open(file, 'rb'))
     else
-      response.body = JSMin.minify(process(path))
+      response.body = JSMin.minify(File.open(file, 'rb'))
     end
 
     response['Content-Type'] = 'text/javascript'
@@ -62,11 +68,26 @@ class MinifyController < Ramaze::Controller
   private
 
   def process(path)
-    error_404 unless file = Ramaze::Dispatcher::File.open_file(path)
+    rdf  = Ramaze::Dispatcher::File
+    file = rdf::resolve_path(path)
 
-    if file == :NotModified
-      response.build([], 304)
-      throw(:respond)
+    error_404 unless File.file?(file) && rdf::in_public?(file)
+
+    mtime = File.mtime(file)
+
+    response['Last-Modified'] = mtime.httpdate
+    response['ETag'] = Digest::MD5.hexdigest(file + mtime.to_s).inspect
+
+    if modified_since = request.env['HTTP_IF_MODIFIED_SINCE']
+      unless Time.parse(modified_since) < mtime
+        response.build([], 304)
+        throw(:respond)
+      end
+    elsif match = request.env['HTTP_IF_NONE_MATCH']
+      if response['ETag'] == match
+        response.build([], 304)
+        throw(:respond)
+      end
     end
 
     file

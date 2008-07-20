@@ -8,6 +8,8 @@ Version 0.2.1 (?)
     when creating or editing a blog post.
   * A rel="nofollow" attribute is now automatically added to links in user
     comments.
+  * Fixed a bug that prevented client-side caching of CSS and JS when
+    server-side caching and minification were enabled.
 
 Version 0.2.0 (2008-06-15)
   * Requires Ramaze 2008.06.
