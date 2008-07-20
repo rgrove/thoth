@@ -129,6 +129,21 @@ form table tfoot tr:first-child td {
   padding-top: 1em;
 }
 
+ol.suggested-tags {
+  list-style: none;
+  margin:  0.5em 0;
+  padding: 0;
+}
+
+ol.suggested-tags li {
+  float: left;
+  margin-right: 0.3em;
+  white-space: nowrap;
+}
+
+ol.suggested-tags li:after { content: ', '; }
+ol.suggested-tags li:last-child:after { content: ''; }
+
 #title,
 #body,
 #tags { width:100%; }

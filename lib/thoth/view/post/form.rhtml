@@ -84,7 +84,7 @@
           <label for="tags">Tags</label>
         </th>
         <td>
-          <input type="text" name="tags" id="tags" maxlength="255"
+          <input type="text" name="tags" id="tags" class="tags-input" maxlength="255"
               value="<%== @post ? @post.tags.collect{|i| i.name }.join(', ') : '' %>" />
         </td>
       </tr>

@@ -42,6 +42,28 @@ module Ramaze; module Helper
       super
     end
 
+    # Displays a "400 Bad Request" error message and returns a 400 response
+    # code.
+    def error_400(message = nil)
+      if message
+        error_layout 400, '400 Bad Request', %[
+          <p>
+            Your browser sent a request that this server could not understand.
+          </p>
+          
+          <p>
+            #{message}
+          </p>
+        ]
+      else
+        error_layout 400, '400 Bad Request', %[
+          <p>
+            Your browser sent a request that this server could not understand.
+          </p>
+        ]
+      end
+    end
+
     # Displays a "403 Forbidden" error message and returns a 403 response code.
     def error_403
       error_layout 403, '403 Forbidden', %[

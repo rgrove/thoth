@@ -26,49 +26,35 @@
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #++
 
-class Tag < Sequel::Model
-  include Ramaze::Helper::Link
+class TagApiController < Ramaze::Controller
+  map '/api/tag'
+  helper :admin, :cache, :cookie, :error
 
-  validates do
-    presence_of :name
-    length_of :name, :maximum => 64
-  end
+  # if Thoth::Config.server.enable_cache
+  # end
 
-  #--
-  # Class Methods
-  #++
+  # Returns a JSON array of existing tag names and usage counts for tags that
+  # begin with the specified query string.
+  #
+  # ==== Query Parameters
+  #
+  # q::     query string
+  # limit:: (optional) maximum number of tags to return
+  #
+  # ==== Sample Response
+  #
+  #   [["foo",15],["foobar",11],["foosball",2]]
+  def suggest
+    error_403 unless auth_key_valid?
 
-  # Gets an array of tag names and post counts for tags with names that begin
-  # with the specified query string.
-  def self.suggest(query, limit = 1000)
-    tags = []
-
-    self.dataset.grep(:name, "#{query}%").all do |tag|
-      tags << [tag.name, tag.posts.count]
+    unless request[:q]
+      error_400('Missing required parameter: q')
     end
 
-    tags.sort!{|a, b| b[1] <=> a[1] }
-    tags[0, limit]
-  end
+    query = request[:q].lstrip
+    limit = request[:limit] ? request[:limit].to_i : 1000
 
-  #--
-  # Instance Methods
-  #++
-
-  # Gets the Atom feed URL for this tag.
-  def atom_url
-    Thoth::Config.site.url.chomp('/') + R(TagController, :atom,
-        CGI.escape(name))
-  end
-
-  # Gets posts with this tag.
-  def posts
-    @posts ||= Post.join(:tags_posts_map, :post_id => :id).
-        filter(:tags_posts_map__tag_id => id).reverse_order(:created_at)
-  end
-
-  # URL for this tag.
-  def url
-    Thoth::Config.site.url.chomp('/') + R(TagController, CGI.escape(name))
+    response['Content-Type'] = 'application/json'
+    JSON.generate(Tag.suggest(query, limit))
   end
 end

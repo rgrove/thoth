@@ -39,6 +39,7 @@ gem 'ramaze', '=2008.06'
 require 'builder'
 require 'cssmin'
 require 'jsmin'
+require 'json'
 require 'ramaze'
 require 'redcloth'
 require 'sequel'
@@ -180,6 +181,7 @@ module Thoth
       acquire LIB_DIR/:helper/'*'
       require LIB_DIR/:controller/:post # must be loaded first
       acquire LIB_DIR/:controller/'*'
+      acquire LIB_DIR/:controller/:api/'*'
       acquire LIB_DIR/:model/'*'
 
       # Use Erubis as the template engine for all controllers.
