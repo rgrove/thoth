@@ -28,10 +28,7 @@
 
 class TagApiController < Ramaze::Controller
   map '/api/tag'
-  helper :admin, :cache, :cookie, :error
-
-  # if Thoth::Config.server.enable_cache
-  # end
+  helper :admin, :error
 
   # Returns a JSON array of existing tag names and usage counts for tags that
   # begin with the specified query string.
