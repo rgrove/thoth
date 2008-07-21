@@ -138,11 +138,12 @@ ol.suggested-tags {
 ol.suggested-tags li {
   float: left;
   margin-right: 0.3em;
-  white-space: nowrap;
 }
 
 ol.suggested-tags li:after { content: ', '; }
 ol.suggested-tags li:last-child:after { content: ''; }
+
+ol.suggested-tags li a { white-space: nowrap; }
 
 #title,
 #body,
