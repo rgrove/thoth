@@ -1,6 +1,6 @@
 <link rel="stylesheet" href="/css/error.css" />
 
-<h1><%== @title %></h1>
+<h1><%= @title %></h1>
 
 <table class="backtrace">
   <thead>
@@ -30,7 +30,7 @@
 
           <ol start="<%== source.first[0] %>">
             <% source.each do |lnum, lcode, lcurrent| %>
-              <li<%== lcurrent ? ' class="current"' : '' %>>
+              <li<%= lcurrent ? ' class="current"' : '' %>>
                 <span><%== lcode.to_s.rstrip %>&nbsp;</span>
               </li>
             <% end %>
