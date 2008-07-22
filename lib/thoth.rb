@@ -75,6 +75,9 @@ module Thoth
   # IP address this Thoth instance should attach to.
   trait[:ip] ||= nil
 
+  # Whether or not to start Thoth within an IRB session.
+  trait[:irb] ||= false
+
   # What mode we're running in (either :devel or :production).
   trait[:mode] ||= :production
 
@@ -160,6 +163,8 @@ module Thoth
       else
         raise "Invalid mode: #{trait[:mode]}"
       end
+
+      R::Global.console = trait[:irb]
     end
 
     # Opens a connection to the Thoth database and loads helpers, controllers,

@@ -112,6 +112,11 @@ module Thoth
         cli_action = :import
         cli_values[:importer] = import_module
       end
+      
+      o.on('--irb',
+          'Start Thoth within an IRB session.') do
+        trait[:irb] = true
+      end
 
       o.on('--log-sql <filename>',
           'Log all SQL queries to the specified file.') do |filename|
@@ -164,6 +169,17 @@ module Thoth
   require 'thoth'
 
   Config.load(trait[:config_file])
+
+  if trait[:irb]
+    # Avoid passing args to IRB.
+    ARGV.clear
+
+    require 'irb'
+    require 'irb/completion'
+
+    ENV['IRBRC'] = '.irbrc' if File.exist?('.irbrc')
+    IRB.start
+  end
 
   case cli_action
   when :import
