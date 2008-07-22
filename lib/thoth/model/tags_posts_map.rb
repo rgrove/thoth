@@ -27,13 +27,6 @@
 #++
 
 class TagsPostsMap < Sequel::Model(:tags_posts_map)
-  # Gets the post associated with this mapping.
-  def post
-    Post[post_id]
-  end
-
-  # Gets the tag associated with this mapping.
-  def tag
-    Tag[tag_id]
-  end
+  many_to_one :tag
+  many_to_one :post
 end

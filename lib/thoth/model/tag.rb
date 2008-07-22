@@ -28,6 +28,9 @@
 
 class Tag < Sequel::Model
   include Ramaze::Helper::Link
+  
+  one_to_many :tags_posts_map
+  many_to_many :posts, :join_table => :tags_posts_map, :read_only => true
 
   validates do
     presence_of :name
@@ -63,8 +66,7 @@ class Tag < Sequel::Model
 
   # Gets posts with this tag.
   def posts
-    @posts ||= Post.join(:tags_posts_map, :post_id => :id).
-        filter(:tags_posts_map__tag_id => id).reverse_order(:created_at)
+    @posts ||= posts_dataset.reverse_order(:created_at)
   end
 
   # URL for this tag.

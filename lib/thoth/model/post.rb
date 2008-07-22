@@ -30,6 +30,9 @@ class Post < Sequel::Model
   include Ramaze::Helper::Link
   include Ramaze::Helper::Wiki
 
+  one_to_many :tags_posts_map
+  many_to_many :tags, :join_table => :tags_posts_map, :order => :name
+
   validates do
     presence_of :title, :message => 'Please enter a title for this post.'
     presence_of :body, :message => "What's the matter? Cat got your tongue?"
@@ -113,8 +116,7 @@ class Post < Sequel::Model
     if new?
       @fake_tags || []
     else
-      @tags ||= Tag.join(:tags_posts_map, :tag_id => :id).
-          filter(:tags_posts_map__post_id => id).order(:name).all
+      @tags ||= tags_dataset.all
     end
   end
 
