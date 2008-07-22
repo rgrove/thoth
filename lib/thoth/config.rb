@@ -80,6 +80,7 @@ module Thoth
         begin
           Kernel.load(file)
         rescue LoadError => e
+          raise Thoth::Error, "Unable to load config file: #{file}: #{e}"
         end
 
         @conf = Configuration.for("thoth_#{Thoth.trait[:mode].to_s}")
