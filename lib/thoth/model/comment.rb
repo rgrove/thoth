@@ -90,11 +90,7 @@ class Comment < Sequel::Model
       :inline_textile_link,
       :inline_textile_code,
       :glyphs_textile,
-      :inline_textile_span,
-      :refs_markdown,
-      :block_markdown_bq,
-      :block_markdown_lists,
-      :inline_markdown_link
+      :inline_textile_span
     ))
   end
 
