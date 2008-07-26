@@ -35,14 +35,21 @@ class MinifyController < Ramaze::Controller
 
     Ramaze::Session.current.drop! if Ramaze::Session.current
 
+    response['Content-Type'] = 'text/css'
+
+    # If the filename has a -min suffix, assume that it's already minified and
+    # serve it as is.
+    if (File.basename(path, '.css') =~ /-min$/)
+      response.body = File.open(file, 'rb')
+      throw(:respond)
+    end
+
     if Thoth::Config.server.enable_cache
       response.body = value_cache[path] ||
           value_cache[path] = CSSMin.minify(File.open(file, 'rb'))
     else
       response.body = CSSMin.minify(File.open(file, 'rb'))
     end
-
-    response['Content-Type'] = 'text/css'
 
     throw(:respond)
   end
@@ -53,14 +60,21 @@ class MinifyController < Ramaze::Controller
 
     Ramaze::Session.current.drop! if Ramaze::Session.current
 
+    response['Content-Type'] = 'text/javascript'
+
+    # If the filename has a -min suffix, assume that it's already minified and
+    # serve it as is.
+    if (File.basename(path, '.js') =~ /-min$/)
+      response.body = File.open(file, 'rb')
+      throw(:respond)
+    end
+
     if Thoth::Config.server.enable_cache
       response.body = value_cache[path] ||
           value_cache[path] = JSMin.minify(File.open(file, 'rb'))
     else
       response.body = JSMin.minify(File.open(file, 'rb'))
     end
-
-    response['Content-Type'] = 'text/javascript'
 
     throw(:respond)
   end

@@ -9,6 +9,9 @@ Version 0.2.1 (?)
     when creating or editing a blog post.
   * A rel="nofollow" attribute is now automatically added to links in user
     comments.
+  * When minification is enabled, filenames in the public /css and /js
+    directories that have names ending in "-min.css" or "-min.js" will be
+    served as is since they are presumably already minified.
   * Fixed a bug that prevented client-side caching of CSS and JS when
     server-side caching and minification were enabled.
 
