@@ -70,8 +70,7 @@ thoth_gemspec = Gem::Specification.new do |s|
   s.add_dependency('json_pure',     '>= 1.1.2')
   s.add_dependency('jsmin',         '~> 1.0.0')
   s.add_dependency('RedCloth',      '~> 4.0.1')
-  s.add_dependency('sequel',        '~> 2.2.0')
-  s.add_dependency('sequel_core',   '~> 2.2.0')
+  s.add_dependency('sequel',        '~> 2.3.0')
   s.add_dependency('thin',          '~> 0.8.2')
 end
 
