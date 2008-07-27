@@ -48,7 +48,7 @@ class TagController < Ramaze::Controller
 
     @posts = @tag.posts.paginate(page, 10)
 
-    if page > @posts.page_count
+    if page > @posts.page_count && @posts.page_count > 0
       page   = @posts.page_count
       @posts = @tag.posts.paginate(page, 10)
     end

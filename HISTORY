@@ -16,6 +16,8 @@ Version 0.2.1 (?)
     served as is since they are presumably already minified.
   * Fixed a bug that prevented client-side caching of CSS and JS when
     server-side caching and minification were enabled.
+  * Fixed internal server error when viewing a tag that isn't attached to any
+    posts.
 
 Version 0.2.0 (2008-06-15)
   * Requires Ramaze 2008.06.
