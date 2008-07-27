@@ -91,6 +91,19 @@ module Ramaze; module Helper
         </p>
       ]
     end
+    
+    # Displays a "405 Method Not Allowed" error message and returns a 405
+    # response code.
+    def error_405
+      Session.current.drop! if Session.current
+
+      error_layout 405, '405 Method Not Allowed', %[
+        <p>
+          The #{request.env['REQUEST_METHOD']} method is not allowed for the
+          requested URL.
+        </p>
+      ]
+    end
 
     # Displays a "500 Internal Server Error" error message and returns a 500
     # response code.
