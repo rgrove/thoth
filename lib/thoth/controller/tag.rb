@@ -53,7 +53,9 @@ class TagController < Ramaze::Controller
       @posts = @tag.posts.paginate(page, 10)
     end
 
-    @title = "Posts tagged with \"#{@tag.name}\""
+    @title = "Posts tagged with \"#{@tag.name}\" (page #{page} of " <<
+        "#{@posts.page_count > 0 ? @posts.page_count : 1})"
+
     @pager = pager(@posts, Rs(name, '%s'))
 
     @feeds = [{

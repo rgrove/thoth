@@ -48,7 +48,9 @@ class ArchiveController < Ramaze::Controller
       @posts = Post.recent(page, 10)
     end
 
-    @title = Thoth::Config.site.name + ' Archives'
+    @title = "#{Thoth::Config.site.name} Archives (page #{page} of " <<
+        "#{@posts.page_count > 0 ? @posts.page_count : 1})"
+
     @pager = pager(@posts)
   end
 end
