@@ -474,11 +474,12 @@ div.comment:hover {
 
 /* -- Misc ------------------------------------------------------------------ */
 blockquote {
-  border-left: 3px solid #efefef;
+  border: 1px solid #efefef;
+  border-left: 5px solid #efefef;
   font-size: 93%;
   line-height: 1.3em;
   margin-left: 1em;
-  padding-left: 7px;
+  padding: 5px;
 }
 
 blockquote blockquote {
@@ -521,9 +522,10 @@ img.right {
 }
 
 pre {
-  background: #f5f5f5;
-  border-left: 4px solid #dfdfdf;
-  font: 85% Consolas, Monaco, 'Courier New';
+  background: #f8f8f8;
+  border: 1px solid #dfdfdf;
+  border-left: 5px solid #dfdfdf;
+  font: 85% Consolas, Monaco, 'Courier New', fixed;
   overflow-x: auto;
   padding: 2px 5px;
   width: 99%;
