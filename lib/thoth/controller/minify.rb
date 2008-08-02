@@ -26,84 +26,89 @@
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #++
 
-class MinifyController < Ramaze::Controller
-  helper :cache, :error
+module Thoth
+  class MinifyController < Ramaze::Controller
+    map '/minify'
 
-  def css(*args)
-    path = 'css/' << args.join('/')
-    file = process(path)
+    helper :cache, :error
 
-    Ramaze::Session.current.drop! if Ramaze::Session.current
+    def css(*args)
+      path = 'css/' << args.join('/')
+      file = process(path)
 
-    response['Content-Type'] = 'text/css'
+      Ramaze::Session.current.drop! if Ramaze::Session.current
 
-    # If the filename has a -min suffix, assume that it's already minified and
-    # serve it as is.
-    if (File.basename(path, '.css') =~ /-min$/)
-      response.body = File.open(file, 'rb')
+      response['Content-Type'] = 'text/css'
+
+      # If the filename has a -min suffix, assume that it's already minified and
+      # serve it as is.
+      if (File.basename(path, '.css') =~ /-min$/)
+        response.body = File.open(file, 'rb')
+        throw(:respond)
+      end
+
+      if Config.server.enable_cache
+        response.body = value_cache[path] ||
+            value_cache[path] = CSSMin.minify(File.open(file, 'rb'))
+      else
+        response.body = CSSMin.minify(File.open(file, 'rb'))
+      end
+
       throw(:respond)
     end
 
-    if Thoth::Config.server.enable_cache
-      response.body = value_cache[path] ||
-          value_cache[path] = CSSMin.minify(File.open(file, 'rb'))
-    else
-      response.body = CSSMin.minify(File.open(file, 'rb'))
-    end
+    def js(*args)
+      path = 'js/' << args.join('/')
+      file = process(path)
 
-    throw(:respond)
-  end
+      Ramaze::Session.current.drop! if Ramaze::Session.current
 
-  def js(*args)
-    path = 'js/' << args.join('/')
-    file = process(path)
+      response['Content-Type'] = 'text/javascript'
 
-    Ramaze::Session.current.drop! if Ramaze::Session.current
+      # If the filename has a -min suffix, assume that it's already minified and
+      # serve it as is.
+      if (File.basename(path, '.js') =~ /-min$/)
+        response.body = File.open(file, 'rb')
+        throw(:respond)
+      end
 
-    response['Content-Type'] = 'text/javascript'
+      if Config.server.enable_cache
+        response.body = value_cache[path] ||
+            value_cache[path] = JSMin.minify(File.open(file, 'rb'))
+      else
+        response.body = JSMin.minify(File.open(file, 'rb'))
+      end
 
-    # If the filename has a -min suffix, assume that it's already minified and
-    # serve it as is.
-    if (File.basename(path, '.js') =~ /-min$/)
-      response.body = File.open(file, 'rb')
       throw(:respond)
     end
 
-    if Thoth::Config.server.enable_cache
-      response.body = value_cache[path] ||
-          value_cache[path] = JSMin.minify(File.open(file, 'rb'))
-    else
-      response.body = JSMin.minify(File.open(file, 'rb'))
-    end
+    private
 
-    throw(:respond)
-  end
+    def process(path)
+      file = Ramaze::Dispatcher::File.resolve_path(path)
 
-  private
-
-  def process(path)
-    rdf  = Ramaze::Dispatcher::File
-    file = rdf::resolve_path(path)
-
-    error_404 unless File.file?(file) && rdf::in_public?(file)
-
-    mtime = File.mtime(file)
-
-    response['Last-Modified'] = mtime.httpdate
-    response['ETag'] = Digest::MD5.hexdigest(file + mtime.to_s).inspect
-
-    if modified_since = request.env['HTTP_IF_MODIFIED_SINCE']
-      unless Time.parse(modified_since) < mtime
-        response.build([], 304)
-        throw(:respond)
+      unless File.file?(file) && Ramaze::Dispatcher::File.in_public?(file)
+        error_404
       end
-    elsif match = request.env['HTTP_IF_NONE_MATCH']
-      if response['ETag'] == match
-        response.build([], 304)
-        throw(:respond)
-      end
-    end
 
-    file
+      mtime = File.mtime(file)
+
+      response['Last-Modified'] = mtime.httpdate
+      response['ETag'] = Digest::MD5.hexdigest(file + mtime.to_s).inspect
+
+      if modified_since = request.env['HTTP_IF_MODIFIED_SINCE']
+        unless Time.parse(modified_since) < mtime
+          response.build([], 304)
+          throw(:respond)
+        end
+      elsif match = request.env['HTTP_IF_NONE_MATCH']
+        if response['ETag'] == match
+          response.build([], 304)
+          throw(:respond)
+        end
+      end
+
+      file
+    end
   end
 end

@@ -26,43 +26,47 @@
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #++
 
-class CommentApiController < Ramaze::Controller
-  map '/api/comment'
-  helper :admin, :cache, :error
+module Thoth
+  class CommentApiController < Ramaze::Controller
+    map '/api/comment'
 
-  # Deletes the specified comment. Returns an HTTP 200 response on success, an
-  # HTTP 500 response on failure, or an HTTP 404 response if the specified
-  # comment does not exist.
-  #
-  # ==== Query Parameters (POST only)
-  #
-  # id::    comment id
-  # token:: form token
-  #
-  # ==== Sample Response
-  #
-  # ===== Success
-  #
-  #   {"success":true}
-  #
-  # ===== Failure
-  #
-  #   {"error":"The comment could not be deleted due to an unknown database error."}
-  #
-  def delete
-    error_403 unless auth_key_valid? && form_token_valid?
-    error_405 unless request.post?
-    error_404 unless request[:id] && @comment = Comment[request[:id]]
+    helper :admin, :cache, :error
 
-    response['Content-Type'] = 'application/json'
+    # Deletes the specified comment. Returns an HTTP 200 response on success, an
+    # HTTP 500 response on failure, or an HTTP 404 response if the specified
+    # comment does not exist.
+    #
+    # ==== Query Parameters (POST only)
+    #
+    # id::    comment id
+    # token:: form token
+    #
+    # ==== Sample Response
+    #
+    # ===== Success
+    #
+    #   {"success":true}
+    #
+    # ===== Failure
+    #
+    #   {"error":"The comment could not be deleted due to an unknown database error."}
+    #
+    def delete
+      error_403 unless auth_key_valid? && form_token_valid?
+      error_405 unless request.post?
+      error_404 unless request[:id] && @comment = Comment[request[:id]]
 
-    if @comment.destroy
-      action_cache.clear
-      JSON.generate({:success => true})
-    else
-      respond(JSON.generate(
-          {:error => "The comment could not be deleted due to an unknown database error."},
-          500))
+      response['Content-Type'] = 'application/json'
+
+      if @comment.destroy
+        action_cache.clear
+        JSON.generate({:success => true})
+      else
+        respond(JSON.generate({
+          :error => 'The comment could not be deleted due to an unknown ' <<
+              'database error.'
+        }, 500))
+      end
     end
   end
 end

@@ -26,228 +26,231 @@
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #++
 
-class PostController < Ramaze::Controller
-  helper :admin, :cache, :cookie, :error, :pagination, :wiki
-  layout '/layout'
+module Thoth
+  class PostController < Ramaze::Controller
+    map       '/post'
+    layout    '/layout'
+    view_root Config.theme.view/:post, VIEW_DIR/:post
 
-  deny_layout :atom
+    helper      :admin, :cache, :cookie, :error, :pagination, :wiki
+    deny_layout :atom
 
-  view_root Thoth::Config.theme.view/:post,
-            Thoth::VIEW_DIR/:post
+    if Config.server.enable_cache
+      cache :atom, :ttl => 120
+    end
 
-  if Thoth::Config.server.enable_cache
-    cache :atom, :ttl => 120
-  end
+    def index(name = nil)
+      error_404 unless name && @post = Post.get(name)
 
-  def index(name = nil)
-    error_404 unless name && @post = Post.get(name)
+      # Permanently redirect id-based URLs to name-based URLs to reduce search
+      # result dupes and improve pagerank.
+      raw_redirect(@post.url, :status => 301) if name =~ /^\d+$/
 
-    # Permanently redirect id-based URLs to name-based URLs to reduce search
-    # result dupes and improve pagerank.
-    raw_redirect(@post.url, :status => 301) if name =~ /^\d+$/
+      if request.post? && Config.site.enable_comments
+        # Dump the request if the robot traps were triggered.
+        error_404 unless request['captcha'].empty? && request['comment'].empty?
 
-    if request.post? && Thoth::Config.site.enable_comments
-      # Dump the request if the robot traps were triggered.
-      error_404 unless request['captcha'].empty? && request['comment'].empty?
-
-      # Create a new comment.
-      comment = Comment.new do |c|
-        c.post_id    = @post.id
-        c.author     = request[:author]
-        c.author_url = request[:author_url]
-        c.title      = request[:title]
-        c.body       = request[:body]
-        c.ip         = request.ip
-      end
-
-      # Set cookies.
-      expire = Time.now + 5184000 # two months from now
-
-      response.set_cookie(:thoth_author, :expires => expire, :path => '/',
-          :value => comment.author)
-      response.set_cookie(:thoth_author_url, :expires => expire, :path => '/',
-          :value => comment.author_url)
-
-      if comment.valid? && request[:action] == 'Post Comment'
-        begin
-          raise unless comment.save
-        rescue => e
-          @comment_error = 'There was an error posting your comment. Please ' +
-              'try again later.'
-        else
-          flash[:success] = 'Comment posted.'
-          redirect(Rs(@post.name) + "#comment-#{comment.id}")
+        # Create a new comment.
+        comment = Comment.new do |c|
+          c.post_id    = @post.id
+          c.author     = request[:author]
+          c.author_url = request[:author_url]
+          c.title      = request[:title]
+          c.body       = request[:body]
+          c.ip         = request.ip
         end
-      end
 
-      @author     = comment.author
-      @author_url = comment.author_url
-      @preview    = comment
-    else
-      @author     = cookie(:thoth_author, '')
-      @author_url = cookie(:thoth_author_url, '')
-    end
+        # Set cookies.
+        expire = Time.now + 5184000 # two months from now
 
-    @title = @post.title
+        response.set_cookie(:thoth_author, :expires => expire, :path => '/',
+            :value => comment.author)
+        response.set_cookie(:thoth_author_url, :expires => expire, :path => '/',
+            :value => comment.author_url)
 
-    if Thoth::Config.site.enable_comments
-      @feeds = [{
-        :href  => @post.atom_url,
-        :title => 'Comments on this post',
-        :type  => 'application/atom+xml'
-      }]
-    end
+        if comment.valid? && request[:action] == 'Post Comment'
+          begin
+            raise unless comment.save
+          rescue => e
+            @comment_error = 'There was an error posting your comment. ' <<
+                'Please try again later.'
+          else
+            flash[:success] = 'Comment posted.'
+            redirect(Rs(@post.name) + "#comment-#{comment.id}")
+          end
+        end
 
-    @show_post_edit = true
-  end
-
-  def atom(name = nil)
-    error_404 unless name && post = Post.get(name)
-
-    # Permanently redirect id-based URLs to name-based URLs to reduce search
-    # result dupes and improve pagerank.
-    raw_redirect(post.atom_url, :status => 301) if name =~ /^\d+$/
-
-    comments = post.comments.reverse_order.limit(20)
-    updated  = comments.count > 0 ? comments.first.created_at.xmlschema :
-        post.created_at.xmlschema
-
-    response['Content-Type'] = 'application/atom+xml'
-
-    x = Builder::XmlMarkup.new(:indent => 2)
-    x.instruct!
-
-    x.feed(:xmlns => 'http://www.w3.org/2005/Atom') {
-      x.id       post.url
-      x.title    "Comments on \"#{post.title}\" - #{Thoth::Config.site.name}"
-      x.updated  updated
-      x.link     :href => post.url
-      x.link     :href => post.atom_url, :rel => 'self'
-
-      comments.all do |comment|
-        x.entry {
-          x.id        comment.url
-          x.title     comment.title
-          x.published comment.created_at.xmlschema
-          x.updated   comment.updated_at.xmlschema
-          x.link      :href => comment.url, :rel => 'alternate'
-          x.content   comment.body_rendered, :type => 'html'
-
-          x.author {
-            x.name comment.author
-
-            if comment.author_url && !comment.author_url.empty?
-              x.uri comment.author_url
-            end
-          }
-        }
-      end
-    }
-  end
-
-  def delete(id = nil)
-    require_auth
-
-    error_404 unless id && @post = Post[id]
-
-    if request.post?
-      error_403 unless form_token_valid?
-
-      if request[:confirm] == 'yes'
-        @post.destroy
-        action_cache.clear
-        flash[:success] = 'Blog post deleted.'
-        redirect(R(MainController))
+        @author     = comment.author
+        @author_url = comment.author_url
+        @preview    = comment
       else
-        redirect(@post.url)
+        @author     = cookie(:thoth_author, '')
+        @author_url = cookie(:thoth_author_url, '')
       end
+
+      @title = @post.title
+
+      if Config.site.enable_comments
+        @feeds = [{
+          :href  => @post.atom_url,
+          :title => 'Comments on this post',
+          :type  => 'application/atom+xml'
+        }]
+      end
+
+      @show_post_edit = true
     end
 
-    @title          = "Delete Post: #{@post.title}"
-    @show_post_edit = true
-  end
+    def atom(name = nil)
+      error_404 unless name && post = Post.get(name)
 
-  def edit(id = nil)
-    require_auth
+      # Permanently redirect id-based URLs to name-based URLs to reduce search
+      # result dupes and improve pagerank.
+      raw_redirect(post.atom_url, :status => 301) if name =~ /^\d+$/
 
-    unless @post = Post[id]
-      flash[:error] = 'Invalid post id.'
-      redirect(Rs(:new))
-    end
+      comments = post.comments.reverse_order.limit(20)
+      updated  = comments.count > 0 ? comments.first.created_at.xmlschema :
+          post.created_at.xmlschema
 
-    if request.post?
-      error_403 unless form_token_valid?
+      response['Content-Type'] = 'application/atom+xml'
 
-      @post.title = request[:title]
-      @post.body  = request[:body]
-      @post.tags  = request[:tags]
+      x = Builder::XmlMarkup.new(:indent => 2)
+      x.instruct!
 
-      if @post.valid? && request[:action] == 'Post'
-        begin
-          Thoth.db.transaction do
-            raise unless @post.save && @post.tags = request[:tags]
-          end
-        rescue => e
-          @post_error = "There was an error saving your post: #{e}"
-        else
-          action_cache.clear
-          flash[:success] = 'Blog post saved.'
-          redirect(Rs(@post.name))
+      x.feed(:xmlns => 'http://www.w3.org/2005/Atom') {
+        x.id       post.url
+        x.title    "Comments on \"#{post.title}\" - #{Config.site.name}"
+        x.updated  updated
+        x.link     :href => post.url
+        x.link     :href => post.atom_url, :rel => 'self'
+
+        comments.all do |comment|
+          x.entry {
+            x.id        comment.url
+            x.title     comment.title
+            x.published comment.created_at.xmlschema
+            x.updated   comment.updated_at.xmlschema
+            x.link      :href => comment.url, :rel => 'alternate'
+            x.content   comment.body_rendered, :type => 'html'
+
+            x.author {
+              x.name comment.author
+
+              if comment.author_url && !comment.author_url.empty?
+                x.uri comment.author_url
+              end
+            }
+          }
         end
-      end
+      }
     end
 
-    @title          = "Edit blog post - #{@post.title}"
-    @form_action    = Rs(:edit, id)
-    @show_post_edit = true
-  end
+    def delete(id = nil)
+      require_auth
 
-  def list(page = 1)
-    require_auth
+      error_404 unless id && @post = Post[id]
 
-    page = page.to_i
+      if request.post?
+        error_403 unless form_token_valid?
 
-    @columns  = [:id, :title, :created_at, :updated_at]
-    @order    = (request[:order] || :desc).to_sym
-    @sort     = (request[:sort]  || :created_at).to_sym
-    @sort     = :created_at unless @columns.include?(@sort)
-    @sort_url = Rs(:list, page)
-
-    @posts = Post.paginate(page, 20).order(@order == :desc ? @sort.desc : @sort)
-    @title = "Blog Posts (page #{page} of #{[@posts.page_count, 1].max})"
-    @pager = pager(@posts, Rs(:list, '%s', :sort => @sort, :order => @order))
-  end
-
-  def new
-    require_auth
-
-    @title       = "New blog post - Untitled"
-    @form_action = Rs(:new)
-
-    if request.post?
-      error_403 unless form_token_valid?
-
-      @post = Post.new do |p|
-        p.title = request[:title]
-        p.body  = request[:body]
-        p.tags  = request[:tags]
-      end
-
-      if @post.valid? && request[:action] == 'Post'
-        begin
-          Thoth.db.transaction do
-            raise unless @post.save && @post.tags = request[:tags]
-          end
-        rescue => e
-          @post_error = "There was an error saving your post: #{e}"
-        else
+        if request[:confirm] == 'yes'
+          @post.destroy
           action_cache.clear
-          flash[:success] = 'Blog post created.'
-          redirect(Rs(@post.name))
+          flash[:success] = 'Blog post deleted.'
+          redirect(R(MainController))
+        else
+          redirect(@post.url)
         end
       end
 
-      @title = "New blog post - #{@post.title}"
+      @title          = "Delete Post: #{@post.title}"
+      @show_post_edit = true
+    end
+
+    def edit(id = nil)
+      require_auth
+
+      unless @post = Post[id]
+        flash[:error] = 'Invalid post id.'
+        redirect(Rs(:new))
+      end
+
+      if request.post?
+        error_403 unless form_token_valid?
+
+        @post.title = request[:title]
+        @post.body  = request[:body]
+        @post.tags  = request[:tags]
+
+        if @post.valid? && request[:action] == 'Post'
+          begin
+            Thoth.db.transaction do
+              raise unless @post.save && @post.tags = request[:tags]
+            end
+          rescue => e
+            @post_error = "There was an error saving your post: #{e}"
+          else
+            action_cache.clear
+            flash[:success] = 'Blog post saved.'
+            redirect(Rs(@post.name))
+          end
+        end
+      end
+
+      @title          = "Edit blog post - #{@post.title}"
+      @form_action    = Rs(:edit, id)
+      @show_post_edit = true
+    end
+
+    def list(page = 1)
+      require_auth
+
+      page = page.to_i
+
+      @columns  = [:id, :title, :created_at, :updated_at]
+      @order    = (request[:order] || :desc).to_sym
+      @sort     = (request[:sort]  || :created_at).to_sym
+      @sort     = :created_at unless @columns.include?(@sort)
+      @sort_url = Rs(:list, page)
+
+      @posts = Post.paginate(page, 20).order(@order == :desc ? @sort.desc :
+          @sort)
+
+      @title = "Blog Posts (page #{page} of #{[@posts.page_count, 1].max})"
+      @pager = pager(@posts, Rs(:list, '%s', :sort => @sort, :order => @order))
+    end
+
+    def new
+      require_auth
+
+      @title       = "New blog post - Untitled"
+      @form_action = Rs(:new)
+
+      if request.post?
+        error_403 unless form_token_valid?
+
+        @post = Post.new do |p|
+          p.title = request[:title]
+          p.body  = request[:body]
+          p.tags  = request[:tags]
+        end
+
+        if @post.valid? && request[:action] == 'Post'
+          begin
+            Thoth.db.transaction do
+              raise unless @post.save && @post.tags = request[:tags]
+            end
+          rescue => e
+            @post_error = "There was an error saving your post: #{e}"
+          else
+            action_cache.clear
+            flash[:success] = 'Blog post created.'
+            redirect(Rs(@post.name))
+          end
+        end
+
+        @title = "New blog post - #{@post.title}"
+      end
     end
   end
 end

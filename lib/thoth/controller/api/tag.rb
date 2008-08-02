@@ -26,32 +26,35 @@
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #++
 
-class TagApiController < Ramaze::Controller
-  map '/api/tag'
-  helper :admin, :error
+module Thoth
+  class TagApiController < Ramaze::Controller
+    map '/api/tag'
 
-  # Returns a JSON array of existing tag names and usage counts for tags that
-  # begin with the specified query string.
-  #
-  # ==== Query Parameters
-  #
-  # q::     query string
-  # limit:: (optional) maximum number of tags to return
-  #
-  # ==== Sample Response
-  #
-  #   [["foo",15],["foobar",11],["foosball",2]]
-  def suggest
-    error_403 unless auth_key_valid?
+    helper :admin, :error
 
-    unless request[:q]
-      error_400('Missing required parameter: q')
+    # Returns a JSON array of existing tag names and usage counts for tags that
+    # begin with the specified query string.
+    #
+    # ==== Query Parameters
+    #
+    # q::     query string
+    # limit:: (optional) maximum number of tags to return
+    #
+    # ==== Sample Response
+    #
+    #   [["foo",15],["foobar",11],["foosball",2]]
+    def suggest
+      error_403 unless auth_key_valid?
+
+      unless request[:q]
+        error_400('Missing required parameter: q')
+      end
+
+      query = request[:q].lstrip
+      limit = request[:limit] ? request[:limit].to_i : 1000
+
+      response['Content-Type'] = 'application/json'
+      JSON.generate(Tag.suggest(query, limit))
     end
-
-    query = request[:q].lstrip
-    limit = request[:limit] ? request[:limit].to_i : 1000
-
-    response['Content-Type'] = 'application/json'
-    JSON.generate(Tag.suggest(query, limit))
   end
 end

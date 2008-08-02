@@ -35,39 +35,39 @@ module Ramaze; module Helper
     def wiki_to_html(string)
       # [[page_name|link text]]
       string.gsub!(/\[\[([0-9a-z_-]+)\|(.+?)\]\]/i) do
-        A($2, :href => R(PageController, $1.downcase))
+        A($2, :href => R(Thoth::PageController, $1.downcase))
       end
 
       # [[page_name]]
       string.gsub!(/\[\[([0-9a-z_-]+)\]\]/i) do
-        A($1, :href => R(PageController, $1.downcase))
+        A($1, :href => R(Thoth::PageController, $1.downcase))
       end
 
       # [[@post_name|link text]]
       # [[@123|link text]]
       string.gsub!(/\[\[@(\d+|[0-9a-z_-]+)\|(.+?)\]\]/i) do
-        A($2, :href => R(PostController, $1.downcase))
+        A($2, :href => R(Thoth::PostController, $1.downcase))
       end
 
       # [[@post_name]]
       # [[@123]]
       string.gsub!(/\[\[@(\d+|[0-9a-z_-]+)\]\]/i) do
-        A($1, :href => R(PostController, $1.downcase))
+        A($1, :href => R(Thoth::PostController, $1.downcase))
       end
 
       # [[media:filename|link text]]
       string.gsub!(/\[\[media:([^\]]+)\|(.+?)\]\]/i) do
-        A($2, :href => R(MediaController, $1))
+        A($2, :href => R(Thoth::MediaController, $1))
       end
 
       # [[media:filename]]
       string.gsub!(/\[\[media:([^\]]+)\]\]/i) do
-        A($1, :href => R(MediaController, $1))
+        A($1, :href => R(Thoth::MediaController, $1))
       end
 
       # [[media_url:filename]]
       string.gsub!(/\[\[media_url:([^\]]+)\]\]/i) do
-        R(MediaController, $1)
+        R(Thoth::MediaController, $1)
       end
 
       string

@@ -26,7 +26,9 @@
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #++
 
-class TagsPostsMap < Sequel::Model(:tags_posts_map)
-  many_to_one :tag
-  many_to_one :post
+module Thoth
+  class TagsPostsMap < Sequel::Model(:tags_posts_map)
+    many_to_one :tag, :class => 'Thoth::Tag'
+    many_to_one :post, :class => 'Thoth::Post'
+  end
 end

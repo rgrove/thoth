@@ -26,31 +26,33 @@
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #++
 
-class ArchiveController < Ramaze::Controller
-  helper :admin, :cache, :pagination
-  layout '/layout'
+module Thoth
+  class ArchiveController < Ramaze::Controller
+    map       '/archive'
+    layout    '/layout'
+    view_root Config.theme.view/:archive, VIEW_DIR/:archive
 
-  view_root Thoth::Config.theme.view/:archive,
-            Thoth::VIEW_DIR/:archive
+    helper :admin, :cache, :pagination
 
-  if Thoth::Config.server.enable_cache
-    cache :index, :ttl => 120, :key => lambda { auth_key_valid? }
-  end
-
-  def index(page = 1)
-    page = page.to_i
-    page = 1 unless page >= 1
-
-    @posts = Post.recent(page, 10)
-
-    if page > @posts.page_count && @posts.page_count > 0
-      page = @posts.page_count
-      @posts = Post.recent(page, 10)
+    if Config.server.enable_cache
+      cache :index, :ttl => 120, :key => lambda { auth_key_valid? }
     end
 
-    @title = "#{Thoth::Config.site.name} Archives (page #{page} of " <<
-        "#{@posts.page_count > 0 ? @posts.page_count : 1})"
+    def index(page = 1)
+      page = page.to_i
+      page = 1 unless page >= 1
 
-    @pager = pager(@posts)
+      @posts = Post.recent(page, 10)
+
+      if page > @posts.page_count && @posts.page_count > 0
+        page = @posts.page_count
+        @posts = Post.recent(page, 10)
+      end
+
+      @title = "#{Config.site.name} Archives (page #{page} of " <<
+          "#{@posts.page_count > 0 ? @posts.page_count : 1})"
+
+      @pager = pager(@posts)
+    end
   end
 end

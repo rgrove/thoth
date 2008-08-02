@@ -26,60 +26,62 @@
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #++
 
-class Media < Sequel::Model(:media)
-  include Ramaze::Helper::Link
+module Thoth
+  class Media < Sequel::Model(:media)
+    include Ramaze::Helper::Link
 
-  before_create do
-    self.created_at = Time.now
-  end
-
-  before_destroy do
-    FileUtils.rm(path)
-  end
-
-  before_save do
-    self.updated_at = Time.now
-  end
-
-  # Gets the creation time of this file. If _format_ is provided, the time will
-  # be returned as a formatted String. See Time.strftime for details.
-  def created_at(format = nil)
-    if new?
-      format ? Time.now.strftime(format) : Time.now
-    else
-      format ? self[:created_at].strftime(format) : self[:created_at]
+    before_create do
+      self.created_at = Time.now
     end
-  end
 
-  def filename=(filename)
-    self[:filename] = filename.strip unless filename.nil?
-  end
-
-  # Gets the absolute path to this file.
-  def path
-    Thoth::Config.media/filename[0].chr.downcase/filename
-  end
-
-  def size
-    return self[:size] unless self[:size] == 0 && File.exist?(path)
-
-    self[:size] = File.size(path)
-    save
-    self[:size]
-  end
-
-  # Gets the time this file was last updated. If _format_ is provided, the time
-  # will be returned as a formatted String. See Time.strftime for details.
-  def updated_at(format = nil)
-    if new?
-      format ? Time.now.strftime(format) : Time.now
-    else
-      format ? self[:updated_at].strftime(format) : self[:updated_at]
+    before_destroy do
+      FileUtils.rm(path)
     end
-  end
 
-  # URL for this file.
-  def url
-    Thoth::Config.site.url.chomp('/') + R(MediaController, filename)
+    before_save do
+      self.updated_at = Time.now
+    end
+
+    # Gets the creation time of this file. If _format_ is provided, the time
+    # will be returned as a formatted String. See Time.strftime for details.
+    def created_at(format = nil)
+      if new?
+        format ? Time.now.strftime(format) : Time.now
+      else
+        format ? self[:created_at].strftime(format) : self[:created_at]
+      end
+    end
+
+    def filename=(filename)
+      self[:filename] = filename.strip unless filename.nil?
+    end
+
+    # Gets the absolute path to this file.
+    def path
+      Config.media/filename[0].chr.downcase/filename
+    end
+
+    def size
+      return self[:size] unless self[:size] == 0 && File.exist?(path)
+
+      self[:size] = File.size(path)
+      save
+      self[:size]
+    end
+
+    # Gets the time this file was last updated. If _format_ is provided, the time
+    # will be returned as a formatted String. See Time.strftime for details.
+    def updated_at(format = nil)
+      if new?
+        format ? Time.now.strftime(format) : Time.now
+      else
+        format ? self[:updated_at].strftime(format) : self[:updated_at]
+      end
+    end
+
+    # URL for this file.
+    def url
+      Config.site.url.chomp('/') + R(MediaController, filename)
+    end
   end
 end

@@ -26,20 +26,22 @@
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #++
 
-class AdminController < Ramaze::Controller
-  helper :admin, :error
-  layout '/layout'
+module Thoth
+  class AdminController < Ramaze::Controller
+    map       '/admin'
+    layout    '/layout'
+    view_root Config.theme.view/:admin, VIEW_DIR/:admin
 
-  view_root Thoth::Config.theme.view/:admin,
-            Thoth::VIEW_DIR/:admin
+    helper :admin, :error
 
-  def index
-    if auth_key_valid?
-      @title       = 'Welcome to Thoth'
-      @public_root = Thoth::PUBLIC_DIR
-      @view_root   = Thoth::VIEW_DIR
-    else
-      @title = 'Login'
+    def index
+      if auth_key_valid?
+        @title       = 'Welcome to Thoth'
+        @public_root = PUBLIC_DIR
+        @view_root   = VIEW_DIR
+      else
+        @title = 'Login'
+      end
     end
   end
 end

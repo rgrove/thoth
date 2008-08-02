@@ -31,7 +31,6 @@ $:.unshift(File.dirname(File.expand_path(__FILE__)))
 $:.uniq!
 
 require 'fileutils'
-
 require 'rubygems'
 
 gem 'ramaze', '=2008.06'
@@ -61,8 +60,6 @@ require 'thoth/plugin'
 require 'thoth/monkeypatch/dispatcher/file'
 
 module Thoth
-  R = Ramaze
-
   # Ramaze adapter to use.
   trait[:adapter] ||= nil
 
@@ -116,7 +113,7 @@ module Thoth
 
     # Initializes Ramaze (but doesn't actually start the server).
     def init_ramaze
-      R::Global.setup(
+      Ramaze::Global.setup(
         :root                 => LIB_DIR,
         :public_root          => PUBLIC_DIR,
         :view_root            => VIEW_DIR,
@@ -126,21 +123,21 @@ module Thoth
 
       # Display a 404 error for requests that don't map to a controller or
       # action.
-      R::Dispatcher::Error::HANDLE_ERROR.update({
-        R::Error::NoAction     => [404, 'error_404'],
-        R::Error::NoController => [404, 'error_404']
+      Ramaze::Dispatcher::Error::HANDLE_ERROR.update({
+        Ramaze::Error::NoAction     => [404, 'error_404'],
+        Ramaze::Error::NoController => [404, 'error_404']
       })
 
       case trait[:mode]
       when :devel
-        R::Global.benchmarking = true
+        Ramaze::Global.benchmarking = true
 
       when :production
-        R::Global.sourcereload = false
+        Ramaze::Global.sourcereload = false
 
         # Log all errors to the error log file if one is configured.
         if Config.server.error_log.empty?
-          R::Log.loggers = []
+          Ramaze::Log.loggers = []
         else
           log_dir = File.dirname(Config.server.error_log)
 
@@ -149,13 +146,14 @@ module Thoth
             File.chmod(0750, log_dir)
           end
 
-          R::Log.loggers = [
-            R::Logging::Logger::Informer.new(Config.server.error_log, [:error])
+          Ramaze::Log.loggers = [
+            Ramaze::Logging::Logger::Informer.new(Config.server.error_log,
+                [:error])
           ]
         end
 
         # Don't expose argument errors or exceptions in production mode.
-        R::Dispatcher::Error::HANDLE_ERROR.update({
+        Ramaze::Dispatcher::Error::HANDLE_ERROR.update({
           ArgumentError => [404, 'error_404'],
           Exception     => [500, 'error_500']
         })
@@ -164,7 +162,7 @@ module Thoth
         raise "Invalid mode: #{trait[:mode]}"
       end
 
-      R::Global.console = trait[:irb]
+      Ramaze::Global.console = trait[:irb]
     end
 
     # Opens a connection to the Thoth database and loads helpers, controllers,
@@ -173,8 +171,8 @@ module Thoth
       trait[:ip]   ||= Config.server.address
       trait[:port] ||= Config.server.port
 
-      R::Log.info "Thoth home: #{HOME_DIR}"
-      R::Log.info "Thoth lib : #{LIB_DIR}"
+      Ramaze::Log.info "Thoth home: #{HOME_DIR}"
+      Ramaze::Log.info "Thoth lib : #{LIB_DIR}"
 
       open_db
 
@@ -190,17 +188,17 @@ module Thoth
       acquire LIB_DIR/:model/'*'
 
       # Use Erubis as the template engine for all controllers.
-      R::Global.mapping.values.each do |controller|
-        controller.trait[:engine] = R::Template::Erubis
+      Ramaze::Global.mapping.values.each do |controller|
+        controller.trait[:engine] = Ramaze::Template::Erubis
       end
 
       # If minification is enabled, intercept CSS/JS requests and route them to
       # the MinifyController.
       if Config.server.enable_minify
-        R::Rewrite[/^\/(css|js)\/(.+)$/] = '/minify/%s/%s'
+        Ramaze::Rewrite[/^\/(css|js)\/(.+)$/] = '/minify/%s/%s'
       end
 
-      Config.plugins.each {|plugin| Plugin.load(plugin) }
+      Config.plugins.each {|plugin| Plugin.load(plugin)}
     end
 
     # Opens a Sequel database connection to the Thoth database.
@@ -230,7 +228,7 @@ module Thoth
       init_ramaze
       init_thoth
 
-      R.startup(
+      Ramaze.startup(
         :force   => true,
         :adapter => trait[:adapter],
         :host    => trait[:ip],
@@ -251,7 +249,7 @@ module Thoth
         Process.setsid
         exit if fork
 
-        File.open(trait[:pidfile], 'w') {|file| file << Process.pid }
+        File.open(trait[:pidfile], 'w') {|file| file << Process.pid}
         at_exit {FileUtils.rm(trait[:pidfile]) if File.exist?(trait[:pidfile])}
 
         Dir.chdir(HOME_DIR)

@@ -26,51 +26,53 @@
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #++
 
-class Tag < Sequel::Model
-  include Ramaze::Helper::Link
+module Thoth
+  class Tag < Sequel::Model
+    include Ramaze::Helper::Link
   
-  one_to_many :tags_posts_map
-  many_to_many :posts, :join_table => :tags_posts_map, :read_only => true
+    one_to_many  :tags_posts_map, :class => 'Thoth::TagsPostsMap'
+    many_to_many :posts, :class => 'Thoth::Post',
+        :join_table => :tags_posts_map, :read_only => true
 
-  validates do
-    presence_of :name
-    length_of :name, :maximum => 64
-  end
-
-  #--
-  # Class Methods
-  #++
-
-  # Gets an array of tag names and post counts for tags with names that begin
-  # with the specified query string.
-  def self.suggest(query, limit = 1000)
-    tags = []
-
-    self.dataset.grep(:name, "#{query}%").all do |tag|
-      tags << [tag.name, tag.posts.count]
+    validates do
+      presence_of :name
+      length_of :name, :maximum => 64
     end
 
-    tags.sort!{|a, b| b[1] <=> a[1] }
-    tags[0, limit]
-  end
+    #--
+    # Class Methods
+    #++
 
-  #--
-  # Instance Methods
-  #++
+    # Gets an array of tag names and post counts for tags with names that begin
+    # with the specified query string.
+    def self.suggest(query, limit = 1000)
+      tags = []
 
-  # Gets the Atom feed URL for this tag.
-  def atom_url
-    Thoth::Config.site.url.chomp('/') + R(TagController, :atom,
-        CGI.escape(name))
-  end
+      self.dataset.grep(:name, "#{query}%").all do |tag|
+        tags << [tag.name, tag.posts.count]
+      end
 
-  # Gets posts with this tag.
-  def posts
-    @posts ||= posts_dataset.reverse_order(:created_at)
-  end
+      tags.sort!{|a, b| b[1] <=> a[1]}
+      tags[0, limit]
+    end
 
-  # URL for this tag.
-  def url
-    Thoth::Config.site.url.chomp('/') + R(TagController, CGI.escape(name))
+    #--
+    # Instance Methods
+    #++
+
+    # Gets the Atom feed URL for this tag.
+    def atom_url
+      Config.site.url.chomp('/') + R(TagController, :atom, CGI.escape(name))
+    end
+
+    # Gets posts with this tag.
+    def posts
+      @posts ||= posts_dataset.reverse_order(:created_at)
+    end
+
+    # URL for this tag.
+    def url
+      Config.site.url.chomp('/') + R(TagController, CGI.escape(name))
+    end
   end
 end

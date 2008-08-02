@@ -54,7 +54,7 @@ module Ramaze; module Helper
           password == Thoth::Config.admin.pass
         # Set an auth cookie that expires in two weeks.
         response.set_cookie('thoth_auth', :expires => Time.now + 1209600,
-            :path => R(MainController), :value => auth_key)
+            :path => R(Thoth::MainController), :value => auth_key)
 
         redirect_referrer
       end
@@ -65,8 +65,8 @@ module Ramaze; module Helper
 
     # Deletes the +thoth_auth+ cookie and redirects to the home page.
     def logout
-      response.delete_cookie('thoth_auth', :path => R(MainController))
-      redirect(R(MainController))
+      response.delete_cookie('thoth_auth', :path => R(Thoth::MainController))
+      redirect(R(Thoth::MainController))
     end
 
     private

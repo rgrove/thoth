@@ -26,69 +26,71 @@
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #++
 
-class Page < Sequel::Model
-  include Ramaze::Helper::Link
-  include Ramaze::Helper::Wiki
+module Thoth
+  class Page < Sequel::Model
+    include Ramaze::Helper::Link
+    include Ramaze::Helper::Wiki
 
-  validates do
-    presence_of :title, :message => 'Please enter a title for this page.'
-    presence_of :name, :message => 'Please enter a name for this page.'
-    presence_of :body,
-        :message => "Come on, I'm sure you can think of something to write."
+    validates do
+      presence_of :title, :message => 'Please enter a title for this page.'
+      presence_of :name, :message => 'Please enter a name for this page.'
+      presence_of :body,
+          :message => "Come on, I'm sure you can think of something to write."
 
-    length_of :title, :maximum => 255,
-        :message => 'Please enter a title under 255 characters.'
-    length_of :name,  :maximum => 64,
-        :message => 'Please enter a name under 64 characters.'
+      length_of :title, :maximum => 255,
+          :message => 'Please enter a title under 255 characters.'
+      length_of :name,  :maximum => 64,
+          :message => 'Please enter a name under 64 characters.'
 
-    format_of :name, :with => /^[0-9a-z_-]+$/i,
-        :message => 'Page names may only contain letters, numbers, ' +
-                    'underscores, and dashes.'
-  end
-
-  before_create do
-    self.created_at = Time.now
-  end
-
-  before_save do
-    self.updated_at = Time.now
-  end
-
-  def body=(body)
-    self[:body]          = body.strip
-    self[:body_rendered] = RedCloth.new(wiki_to_html(body.dup.strip)).to_html
-  end
-
-  # Gets the creation time of this page. If _format_ is provided, the time will
-  # be returned as a formatted String. See Time.strftime for details.
-  def created_at(format = nil)
-    if new?
-      format ? Time.now.strftime(format) : Time.now
-    else
-      format ? self[:created_at].strftime(format) : self[:created_at]
+      format_of :name, :with => /^[0-9a-z_-]+$/i,
+          :message => 'Page names may only contain letters, numbers, ' <<
+                      'underscores, and dashes.'
     end
-  end
 
-  def name=(name)
-    self[:name] = name.strip.downcase unless name.nil?
-  end
-
-  def title=(title)
-    self[:title] = title.strip unless title.nil?
-  end
-
-  # Gets the time this page was last updated. If _format_ is provided, the time
-  # will be returned as a formatted String. See Time.strftime for details.
-  def updated_at(format = nil)
-    if new?
-      format ? Time.now.strftime(format) : Time.now
-    else
-      format ? self[:updated_at].strftime(format) : self[:updated_at]
+    before_create do
+      self.created_at = Time.now
     end
-  end
 
-  # URL for this page.
-  def url
-    Thoth::Config.site.url.chomp('/') + R(PageController, name)
+    before_save do
+      self.updated_at = Time.now
+    end
+
+    def body=(body)
+      self[:body]          = body.strip
+      self[:body_rendered] = RedCloth.new(wiki_to_html(body.dup.strip)).to_html
+    end
+
+    # Gets the creation time of this page. If _format_ is provided, the time
+    # will be returned as a formatted String. See Time.strftime for details.
+    def created_at(format = nil)
+      if new?
+        format ? Time.now.strftime(format) : Time.now
+      else
+        format ? self[:created_at].strftime(format) : self[:created_at]
+      end
+    end
+
+    def name=(name)
+      self[:name] = name.strip.downcase unless name.nil?
+    end
+
+    def title=(title)
+      self[:title] = title.strip unless title.nil?
+    end
+
+    # Gets the time this page was last updated. If _format_ is provided, the time
+    # will be returned as a formatted String. See Time.strftime for details.
+    def updated_at(format = nil)
+      if new?
+        format ? Time.now.strftime(format) : Time.now
+      else
+        format ? self[:updated_at].strftime(format) : self[:updated_at]
+      end
+    end
+
+    # URL for this page.
+    def url
+      Config.site.url.chomp('/') + R(PageController, name)
+    end
   end
 end

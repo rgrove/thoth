@@ -2,7 +2,7 @@
   <dl>
     <dt>Search</dt>
     <dd>
-      <form id="search" action="<%= R(SearchController) %>"
+      <form id="search" action="<%= R(Thoth::SearchController) %>"
           method="get">
         <p>
           <input type="text" id="search-query" name="q" maxlength="255"
@@ -13,14 +13,14 @@
 
     <dt>Feeds</dt>
     <dd>
-      <a href="<%= R(MainController, :atom) %>" type="application/atom+xml">
+      <a href="<%= R(Thoth::MainController, :atom) %>" type="application/atom+xml">
         <span class="icon feed"></span>
         Posts
       </a>
     </dd>
     <% if Thoth::Config.site.enable_comments %>
       <dd>
-        <a href="<%= R(CommentController, :atom) %>" type="application/atom+xml">
+        <a href="<%= R(Thoth::CommentController, :atom) %>" type="application/atom+xml">
           <span class="icon feed"></span>
           Comments
         </a>

@@ -1,6 +1,6 @@
 <div id="hd" class="robots-nocontent">
   <h1>
-    <a href="<%= R(MainController) %>" rel="home">
+    <a href="<%= R(Thoth::MainController) %>" rel="home">
       <%== Thoth::Config.site.name %>
     </a>
   </h1>
@@ -11,10 +11,10 @@
     </div>
 
     <ul>
-      <li><%= A('Home',     :href => R(MainController), :rel => 'home') %></li>
-      <li><%= A('Archives', :href => R(MainController, :archive, 2)) %></li>
+      <li><%= A('Home',     :href => R(Thoth::MainController), :rel => 'home') %></li>
+      <li><%= A('Archives', :href => R(Thoth::MainController, :archive, 2)) %></li>
       <% if Thoth::Config.site.enable_comments %>
-        <li><%= A('Comments', :href => R(CommentController)) %></li>
+        <li><%= A('Comments', :href => R(Thoth::CommentController)) %></li>
       <% end %>
     </ul>
   </div>

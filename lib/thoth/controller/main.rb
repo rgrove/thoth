@@ -26,164 +26,165 @@
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #++
 
-class MainController < Ramaze::Controller
-  helper :admin, :cache, :error, :pagination
-  layout '/layout'
+module Thoth
+  class MainController < Ramaze::Controller
+    map       '/'
+    layout    '/layout'
+    view_root Config.theme.view, VIEW_DIR
 
-  deny_layout :atom, :rss, :sitemap
+    helper      :admin, :cache, :error, :pagination
+    deny_layout :atom, :rss, :sitemap
 
-  view_root Thoth::Config.theme.view,
-            Thoth::VIEW_DIR
-
-  if Thoth::Config.server.enable_cache
-    cache :index, :ttl => 60, :key => lambda {
-      auth_key_valid?.to_s + (request[:type] || '') + flash.inspect
-    }
-    cache :atom, :rss, :ttl => 300
-    cache :sitemap, :ttl => 3600
-  end
-
-  def index
-    # Check for legacy feed requests and redirect if necessary.
-    if type = request[:type]
-      redirect Rs(type), :status => 301
+    if Config.server.enable_cache
+      cache :index, :ttl => 60, :key => lambda {
+        auth_key_valid?.to_s + (request[:type] || '') + flash.inspect
+      }
+      cache :atom, :rss, :ttl => 300
+      cache :sitemap, :ttl => 3600
     end
 
-    @title = Thoth::Config.site.name
-    @posts = Post.recent
-    @pager = pager(@posts, Rs(:archive, '%s'))
-  end
-
-  def atom
-    response['Content-Type'] = 'application/atom+xml'
-
-    x = Builder::XmlMarkup.new(:indent => 2)
-    x.instruct!
-
-    x.feed(:xmlns => 'http://www.w3.org/2005/Atom') {
-      x.id       Thoth::Config.site.url
-      x.title    Thoth::Config.site.name
-      x.subtitle Thoth::Config.site.desc
-      x.updated  Time.now.xmlschema # TODO: use modification time of the last post
-      x.link     :href => Thoth::Config.site.url
-      x.link     :href => Thoth::Config.site.url.chomp('/') + Rs(:atom),
-                 :rel => 'self'
-
-      x.author {
-        x.name  Thoth::Config.admin.name
-        x.email Thoth::Config.admin.email
-        x.uri   Thoth::Config.site.url
-      }
-
-      Post.recent.all.each do |post|
-        x.entry {
-          x.id        post.url
-          x.title     post.title
-          x.published post.created_at.xmlschema
-          x.updated   post.updated_at.xmlschema
-          x.link      :href => post.url, :rel => 'alternate'
-          x.content   post.body_rendered, :type => 'html'
-
-          post.tags.each do |tag|
-            x.category :term => tag.name, :label => tag.name, :scheme => tag.url
-          end
-        }
+    def index
+      # Check for legacy feed requests and redirect if necessary.
+      if type = request[:type]
+        redirect Rs(type), :status => 301
       end
-    }
-  end
 
-  def rss
-    response['Content-Type'] = 'application/rss+xml'
+      @title = Config.site.name
+      @posts = Post.recent
+      @pager = pager(@posts, Rs(:archive, '%s'))
+    end
 
-    x = Builder::XmlMarkup.new(:indent => 2)
-    x.instruct!
+    def atom
+      response['Content-Type'] = 'application/atom+xml'
 
-    x.rss(:version     => '2.0',
-          'xmlns:atom' => 'http://www.w3.org/2005/Atom') {
-      x.channel {
-        x.title          Thoth::Config.site.name
-        x.link           Thoth::Config.site.url
-        x.description    Thoth::Config.site.desc
-        x.managingEditor "#{Thoth::Config.admin.email} (#{Thoth::Config.admin.name})"
-        x.webMaster      "#{Thoth::Config.admin.email} (#{Thoth::Config.admin.name})"
-        x.docs           'http://backend.userland.com/rss/'
-        x.ttl            60
-        x.atom           :link, :rel => 'self', :type => 'application/rss+xml',
-                         :href => Thoth::Config.site.url.chomp('/') +
-                                  Rs(:rss)
+      x = Builder::XmlMarkup.new(:indent => 2)
+      x.instruct!
+
+      x.feed(:xmlns => 'http://www.w3.org/2005/Atom') {
+        x.id       Config.site.url
+        x.title    Config.site.name
+        x.subtitle Config.site.desc
+        x.updated  Time.now.xmlschema # TODO: use modification time of the last post
+        x.link     :href => Config.site.url
+        x.link     :href => Config.site.url.chomp('/') + Rs(:atom),
+                   :rel => 'self'
+
+        x.author {
+          x.name  Config.admin.name
+          x.email Config.admin.email
+          x.uri   Config.site.url
+        }
 
         Post.recent.all.each do |post|
-          x.item {
-            x.title       post.title
-            x.link        post.url
-            x.guid        post.url, :isPermaLink => 'true'
-            x.pubDate     post.created_at.rfc2822
-            x.description post.body_rendered
+          x.entry {
+            x.id        post.url
+            x.title     post.title
+            x.published post.created_at.xmlschema
+            x.updated   post.updated_at.xmlschema
+            x.link      :href => post.url, :rel => 'alternate'
+            x.content   post.body_rendered, :type => 'html'
 
             post.tags.each do |tag|
-              x.category tag.name, :domain => tag.url
+              x.category :term => tag.name, :label => tag.name,
+                  :scheme => tag.url
             end
           }
         end
       }
-    }
-  end
-
-  def sitemap
-    error_404 unless Thoth::Config.site.enable_sitemap
-
-    response['Content-Type'] = 'text/xml'
-
-    x = Builder::XmlMarkup.new(:indent => 2)
-    x.instruct!
-
-    x.urlset(:xmlns => 'http://www.sitemaps.org/schemas/sitemap/0.9') {
-      x.url {
-        x.loc        Thoth::Config.site.url
-        x.changefreq 'hourly'
-        x.priority   '1.0'
-      }
-
-      Page.reverse_order(:updated_at).all do |page|
-        x.url {
-          x.loc        page.url
-          x.lastmod    page.updated_at.xmlschema
-          x.changefreq 'weekly'
-          x.priority   '0.6'
-        }
-      end
-
-      now = Time.now
-
-      Post.reverse_order(:updated_at).all do |post|
-        x.url {
-          x.loc        post.url
-          x.lastmod    post.updated_at.xmlschema
-          x.changefreq 'weekly'
-        }
-      end
-    }
-  end
-
-  # Legacy redirect to /archive/+page+.
-  def archives(page = 1)
-    redirect R(ArchiveController, page), :status => 301
-  end
-
-  # Legacy redirect to /post/+name+.
-  def article(name)
-    redirect R(PostController, name), :status => 301
-  end
-
-  # Legacy redirect to /comment.
-  def comments
-    if type = request[:type]
-      redirect R(CommentController, type), :status => 301
-    else
-      redirect R(CommentController), :status => 301
     end
+
+    def rss
+      response['Content-Type'] = 'application/rss+xml'
+
+      x = Builder::XmlMarkup.new(:indent => 2)
+      x.instruct!
+
+      x.rss(:version     => '2.0',
+            'xmlns:atom' => 'http://www.w3.org/2005/Atom') {
+        x.channel {
+          x.title          Config.site.name
+          x.link           Config.site.url
+          x.description    Config.site.desc
+          x.managingEditor "#{Config.admin.email} (#{Config.admin.name})"
+          x.webMaster      "#{Config.admin.email} (#{Config.admin.name})"
+          x.docs           'http://backend.userland.com/rss/'
+          x.ttl            60
+          x.atom           :link, :rel => 'self',
+                               :type => 'application/rss+xml',
+                               :href => Config.site.url.chomp('/') + Rs(:rss)
+
+          Post.recent.all.each do |post|
+            x.item {
+              x.title       post.title
+              x.link        post.url
+              x.guid        post.url, :isPermaLink => 'true'
+              x.pubDate     post.created_at.rfc2822
+              x.description post.body_rendered
+
+              post.tags.each do |tag|
+                x.category tag.name, :domain => tag.url
+              end
+            }
+          end
+        }
+      }
+    end
+
+    def sitemap
+      error_404 unless Config.site.enable_sitemap
+
+      response['Content-Type'] = 'text/xml'
+
+      x = Builder::XmlMarkup.new(:indent => 2)
+      x.instruct!
+
+      x.urlset(:xmlns => 'http://www.sitemaps.org/schemas/sitemap/0.9') {
+        x.url {
+          x.loc        Config.site.url
+          x.changefreq 'hourly'
+          x.priority   '1.0'
+        }
+
+        Page.reverse_order(:updated_at).all do |page|
+          x.url {
+            x.loc        page.url
+            x.lastmod    page.updated_at.xmlschema
+            x.changefreq 'weekly'
+            x.priority   '0.6'
+          }
+        end
+
+        now = Time.now
+
+        Post.reverse_order(:updated_at).all do |post|
+          x.url {
+            x.loc        post.url
+            x.lastmod    post.updated_at.xmlschema
+            x.changefreq 'weekly'
+          }
+        end
+      }
+    end
+
+    # Legacy redirect to /archive/+page+.
+    def archives(page = 1)
+      redirect R(ArchiveController, page), :status => 301
+    end
+
+    # Legacy redirect to /post/+name+.
+    def article(name)
+      redirect R(PostController, name), :status => 301
+    end
+
+    # Legacy redirect to /comment.
+    def comments
+      if type = request[:type]
+        redirect R(CommentController, type), :status => 301
+      else
+        redirect R(CommentController), :status => 301
+      end
+    end
+
+    alias_method 'recent-comments', :comments
   end
-
-  alias_method 'recent-comments', :comments
-
 end

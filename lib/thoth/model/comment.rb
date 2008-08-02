@@ -26,105 +26,107 @@
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #++
 
-class Comment < Sequel::Model
-  include Ramaze::Helper::Link
-  include Ramaze::Helper::Sanitize
+module Thoth
+  class Comment < Sequel::Model
+    include Ramaze::Helper::Link
+    include Ramaze::Helper::Sanitize
 
-  validates do
-    presence_of :author, :message => 'Please enter your name.'
-    presence_of :title,  :message => 'Please enter a title for this comment.'
+    validates do
+      presence_of :author, :message => 'Please enter your name.'
+      presence_of :title,  :message => 'Please enter a title for this comment.'
 
-    length_of :author, :maximum => 64,
-        :message => 'Please enter a name under 64 characters.'
-    length_of :author_url, :maximum => 255,
-        :message => 'Please enter a shorter URL.'
-    length_of :body, :maximum => 65536,
-        :message => 'You appear to be writing a novel. Please try to keep it ' +
-                    'under 64K.'
-    length_of :title, :maximum => 255,
-        :message => 'Please enter a title shorter than 255 characters.'
-  end
-
-  before_create do
-    self.created_at = Time.now
-  end
-
-  before_save do
-    self.updated_at = Time.now
-  end
-
-  #--
-  # Class Methods
-  #++
-
-  # Recently-posted comments (up to _limit_) sorted in reverse order by creation
-  # time.
-  def self.recent(page = 1, limit = 10)
-    reverse_order(:created_at).paginate(page, limit)
-  end
-
-  #--
-  # Instance Methods
-  #++
-
-  def author=(author)
-    self[:author] = author.strip unless author.nil?
-  end
-
-  def author_url=(url)
-    # Ensure that the URL begins with a valid protocol.
-    unless url.nil? || url.empty? || url =~ /^(?:https?|mailto):\/\//i
-      url = 'http://' + url
+      length_of :author, :maximum => 64,
+          :message => 'Please enter a name under 64 characters.'
+      length_of :author_url, :maximum => 255,
+          :message => 'Please enter a shorter URL.'
+      length_of :body, :maximum => 65536,
+          :message => 'You appear to be writing a novel. Please try to keep ' <<
+                      'it under 64K.'
+      length_of :title, :maximum => 255,
+          :message => 'Please enter a title shorter than 255 characters.'
     end
 
-    self[:author_url] = url.strip unless url.nil?
-  end
-
-  def body=(body)
-    redcloth = RedCloth.new(body, [:filter_styles])
-
-    self[:body]          = body
-    self[:body_rendered] = sanitize_html(redcloth.to_html(
-      :refs_textile,
-      :block_textile_lists,
-      :inline_textile_link,
-      :inline_textile_code,
-      :glyphs_textile,
-      :inline_textile_span
-    ))
-  end
-
-  # Gets the creation time of this comment. If _format_ is provided, the time
-  # will be returned as a formatted String. See Time.strftime for details.
-  def created_at(format = nil)
-    if new?
-      format ? Time.now.strftime(format) : Time.now
-    else
-      format ? self[:created_at].strftime(format) : self[:created_at]
+    before_create do
+      self.created_at = Time.now
     end
-  end
 
-  # Gets the post to which this comment is attached.
-  def post
-    @post ||= Post[post_id]
-  end
-
-  def title=(title)
-    self[:title] = title.strip unless title.nil?
-  end
-
-  # Gets the time this comment was last updated. If _format_ is provided, the
-  # time will be returned as a formatted String. See Time.strftime for details.
-  def updated_at(format = nil)
-    if new?
-      format ? Time.now.strftime(format) : Time.now
-    else
-      format ? self[:updated_at].strftime(format) : self[:updated_at]
+    before_save do
+      self.updated_at = Time.now
     end
-  end
 
-  # URL for this comment.
-  def url
-    new? ? '#' : post.url + "#comment-#{id}"
+    #--
+    # Class Methods
+    #++
+
+    # Recently-posted comments (up to _limit_) sorted in reverse order by creation
+    # time.
+    def self.recent(page = 1, limit = 10)
+      reverse_order(:created_at).paginate(page, limit)
+    end
+
+    #--
+    # Instance Methods
+    #++
+
+    def author=(author)
+      self[:author] = author.strip unless author.nil?
+    end
+
+    def author_url=(url)
+      # Ensure that the URL begins with a valid protocol.
+      unless url.nil? || url.empty? || url =~ /^(?:https?|mailto):\/\//i
+        url = 'http://' + url
+      end
+
+      self[:author_url] = url.strip unless url.nil?
+    end
+
+    def body=(body)
+      redcloth = RedCloth.new(body, [:filter_styles])
+
+      self[:body]          = body
+      self[:body_rendered] = sanitize_html(redcloth.to_html(
+        :refs_textile,
+        :block_textile_lists,
+        :inline_textile_link,
+        :inline_textile_code,
+        :glyphs_textile,
+        :inline_textile_span
+      ))
+    end
+
+    # Gets the creation time of this comment. If _format_ is provided, the time
+    # will be returned as a formatted String. See Time.strftime for details.
+    def created_at(format = nil)
+      if new?
+        format ? Time.now.strftime(format) : Time.now
+      else
+        format ? self[:created_at].strftime(format) : self[:created_at]
+      end
+    end
+
+    # Gets the post to which this comment is attached.
+    def post
+      @post ||= Post[post_id]
+    end
+
+    def title=(title)
+      self[:title] = title.strip unless title.nil?
+    end
+
+    # Gets the time this comment was last updated. If _format_ is provided, the
+    # time will be returned as a formatted String. See Time.strftime for details.
+    def updated_at(format = nil)
+      if new?
+        format ? Time.now.strftime(format) : Time.now
+      else
+        format ? self[:updated_at].strftime(format) : self[:updated_at]
+      end
+    end
+
+    # URL for this comment.
+    def url
+      new? ? '#' : post.url + "#comment-#{id}"
+    end
   end
 end
