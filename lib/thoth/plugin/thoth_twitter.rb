@@ -116,7 +116,7 @@ module Thoth; module Plugin
       private
 
       # Parses a tweet and converts it into HTML. URLs will be turned into
-      # links; the original text of the tweet itself will be HTML-encoded.
+      # links.
       def parse_tweet(tweet)
         index = 0
         text  = tweet['text'].dup
@@ -130,7 +130,7 @@ module Thoth; module Plugin
           index += 1
         end
 
-        html = CGI.escapeHTML(text)
+        html = text
 
         # Replace URL placeholders with links.
         urls.each_with_index do |url, index|
