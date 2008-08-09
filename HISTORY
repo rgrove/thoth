@@ -2,7 +2,7 @@ Thoth History
 ================================================================================
 
 Version 0.2.1 (?)
-  * Requires Sequel 2.3.x (this fixes an issue with SQLite and DateTime
+  * Requires Sequel 2.4.x (this fixes an issue with SQLite and DateTime
     objects).
   * Requires RedCloth 4.0.x. Markdown syntax is no longer supported as a result.
   * Names of existing tags are now suggested as you type in the "Tags" field
