@@ -521,6 +521,15 @@ img.right {
   margin: 5px 0 8px 8px;
 }
 
+p.footnote {
+  font-size: 85%;
+  margin: 0;
+}
+
+p.footnote:last-child { margin-bottom: 1em; }
+
+sup.footnote { line-height: 0.9em; }
+
 pre {
   background: #fcfcfc;
   border: 1px solid #dfdfdf;
