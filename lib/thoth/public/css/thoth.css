@@ -522,14 +522,13 @@ img.right {
 }
 
 pre {
-  background: #f8f8f8;
+  background: #fcfcfc;
   border: 1px solid #dfdfdf;
   border-left: 5px solid #dfdfdf;
-  font: 85% Consolas, Monaco, 'Courier New', fixed;
+  font: 77% Consolas, Monaco, 'Courier New', fixed;
   overflow-x: auto;
   padding: 2px 5px;
-  width: 99%;
-  *width: 98%;
+  width: 96%;
 }
 
 .alignLeft { text-align: left; }
