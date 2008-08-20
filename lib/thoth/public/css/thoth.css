@@ -414,6 +414,27 @@ div.comment:hover {
   .pg { display: none; }
 }
 
+/* -- Recent Comments ------------------------------------------------------- */
+ul.comments {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+ul.comments li {
+  background: #f9f9f9;
+  border: 1px solid #ddd;
+  margin-bottom: 0.5em;
+  padding: 3px;
+}
+
+ul.comments li:hover {
+  background: #fff5ef;
+  border: 1px solid #ffaf7f;
+}
+
+ul.comments li .meta { font-size: 85%; }
+
 /* -- Search Results -------------------------------------------------------- */
 .search h4 {
   font-size: 108%;
@@ -535,25 +556,6 @@ pre {
 .alignLeft { text-align: left; }
 .alignCenter { text-align: center; }
 .alignRight { text-align: right; }
-
-ul.slick {
-  list-style: none;
-  padding: 0;
-  margin-left: 0;
-}
-
-ul.slick li {
-  background: #f9f9f9;
-  border: 1px solid #ddd;
-  line-height: 1.1em;
-  margin-bottom: 0.5em;
-  padding: 3px;
-}
-
-ul.slick li:hover {
-  background: #fff5ef;
-  border: 1px solid #ffaf7f;
-}
 
 .noseeum, .hidden { display: none; }
 .spaced li { margin-bottom: 1em; }

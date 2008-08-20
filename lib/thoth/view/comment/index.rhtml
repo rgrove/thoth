@@ -1,24 +1,24 @@
 <% unless @today.empty? %>
   <h3>Today's Comments</h3>
 
-  <ul class="slick">
+  <ul class="comments today">
     <% @today.each do |comment| %>
       <li>
-        <a href="<%== comment.url %>"><%== comment.title %></a> by
-        <% if comment.author_url.empty? %>
-          <%== comment.author %>
-        <% else %>
-          <a href="<%== comment.author_url %>" rel="nofollow">
-            <%== comment.author %>
-          </a>
-        <% end %>
-        on <%= comment.created_at(Thoth::Config.timestamp.short) %><br />
-        <small>
-          attached to
-          <a href="<%== comment.post.url %>">
-            <%== comment.post.title %>
-          </a>
-        </small>
+        <a href="<%== comment.url %>"><%== comment.title %></a>
+        <div class="meta">
+          <span class="author">by
+            <% if comment.author_url.empty? %>
+              <%== comment.author %>
+            <% else %>
+              <a href="<%== comment.author_url %>" rel="nofollow">
+                <%== comment.author %>
+              </a>
+            <% end %>
+          </span>
+          <span class="post">
+            on <a href="<%== comment.post.url %>"><%== comment.post.title %></a>
+          </span>
+        </div>
       </li>
     <% end %>
   </ul>
@@ -27,24 +27,24 @@
 <% unless @ancient.empty? %>
   <h3>Ancient History</h3>
 
-  <ul class="slick">
+  <ul class="comments ancient">
     <% @ancient.each do |comment| %>
       <li>
-        <a href="<%== comment.url %>"><%== comment.title %></a> by
-        <% if comment.author_url.empty? %>
-          <%== comment.author %>
-        <% else %>
-          <a href="<%== comment.author_url %>" rel="nofollow">
-            <%== comment.author %>
-          </a>
-        <% end %>
-        on <%= comment.created_at(Thoth::Config.timestamp.short) %><br />
-        <small>
-          attached to
-          <a href="<%== comment.post.url %>">
-            <%== comment.post.title %>
-          </a>
-        </small>
+        <a href="<%== comment.url %>"><%== comment.title %></a>
+        <div class="meta">
+          <span class="author">by
+            <% if comment.author_url.empty? %>
+              <%== comment.author %>
+            <% else %>
+              <a href="<%== comment.author_url %>" rel="nofollow">
+                <%== comment.author %>
+              </a>
+            <% end %>
+          </span>
+          <span class="post">
+            on <a href="<%== comment.post.url %>"><%== comment.post.title %></a>
+          </span>
+        </div>
       </li>
     <% end %>
   </ul>
