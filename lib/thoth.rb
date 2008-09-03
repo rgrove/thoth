@@ -208,6 +208,8 @@ module Thoth
         FileUtils.mkdir_p(dir) unless File.directory?(dir)
       end
 
+      Sequel.datetime_class = Time
+
       @db = Sequel.open(Config.db)
 
       if trait[:sql_log]
