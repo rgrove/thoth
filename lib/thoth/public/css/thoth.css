@@ -510,6 +510,9 @@ blockquote blockquote {
   padding: 0;
 }
 
+blockquote p:first-child { margin-top: 0; }
+blockquote p:last-child { margin-bottom: 0; }
+
 fieldset {
   border: 1px solid #ccc;
   margin-top: 1.5em;
