@@ -110,24 +110,28 @@
 }
 
 /* -- Misc. Forms ----------------------------------------------------------- */
-form table th {
-  padding-right: 0.5em;
-  text-align: right;
+
+fieldset.default {
+  border: 0;
+  padding: 0;
 }
 
-form table tr { vertical-align: top; }
-form table tr.tip { font-size: 93%; }
-
-form table tr.tip ul {
-  margin-left: 1.3em;
-  padding-left: 0;
+form div.field { margin-bottom: 1em; }
+form div.field label {
+  display: block;
+  font-weight: bold;
 }
 
-form table tr.tip ul li { margin-bottom: 0.5em; }
+form p.buttons { margin: 0.5em 0 1em; }
 
-form table tfoot tr:first-child td {
-  padding-top: 1em;
-}
+form.post #title,
+form.post #body,
+form.post #tags,
+form.page #body,
+form.page #title { width: 99%; }
+
+form.post #name,
+form.page #name { width: 15em; }
 
 ol.suggested-tags {
   list-style: none;
@@ -142,14 +146,25 @@ ol.suggested-tags li {
 
 ol.suggested-tags li:after { content: ', '; }
 ol.suggested-tags li:last-child:after { content: ''; }
-
 ol.suggested-tags li a { white-space: nowrap; }
 
-#title,
-#body,
-#tags { width:100%; }
+.tips {
+  background: #eff7ff;
+  border: 1px solid #afd4ff;
+  margin-left: 0;
+  padding: 0.8em;
+  padding-left: 1.8em;
+}
 
-#name{ width: 20em; }
+.tips li { margin-bottom: 0.5em; }
+
+.tips kbd {
+  background: #f7f1d8;
+  border: 1px solid #efdb7f;
+  font-size: 85%;
+  padding: 0 3px 1px;
+  white-space: nowrap;
+}
 
 /* -- Lists ----------------------------------------------------------------- */
 table.list {
@@ -166,7 +181,7 @@ table.list thead th {
 }
 
 table.list tbody tr.empty { font-style: italic; }
-table.list tbody tr.even { background: #e7f2ff; }
+table.list tbody tr.even { background: #d7e6ff; }
 table.list tbody tr.odd { background: #fff; }
 table.list tbody tr:hover { background: #d0dbf7; }
 
@@ -181,9 +196,7 @@ table.pages td.name { white-space: nowrap; }
 table.media td.size { text-align: right; }
 
 /* -- Media ----------------------------------------------------------------- */
-fieldset.replace {
-  padding: 0.3em 1em;
-}
+fieldset.replace { padding: 0.3em 1em; }
 
 table.details th {
   font-weight: bold;

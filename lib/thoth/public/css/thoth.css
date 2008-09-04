@@ -86,7 +86,7 @@ h3 {
   font-weight: bold;
 }
 
-textarea { font: 100% Consolas, Monaco, 'Courier New'; }
+textarea { font: 93% Consolas, Monaco, 'Courier New'; }
 
 #doc {
   margin: 0 auto;
@@ -488,6 +488,8 @@ ul.comments li .meta { font-size: 85%; }
   border-color: #ff4747;
 }
 
+form .flash.error { margin: 0.2em 0 0; }
+
 .flash.success {
   background: #d4ffc7;
   border-color: #7bd75e;
@@ -520,13 +522,6 @@ fieldset {
 }
 
 fieldset legend { font-weight: bold; }
-
-kbd {
-  background: #ffeac7;
-  border: 1px solid #ffd07f;
-  font-size: 93%;
-  padding: 2px 3px 1px 3px;
-}
 
 img.icon {
   background: none;

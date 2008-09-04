@@ -47,6 +47,10 @@ module Thoth
       format_of :name, :with => /^[0-9a-z_-]+$/i,
           :message => 'Post names may only contain letters, numbers, ' <<
                       'underscores, and dashes.'
+
+      format_of :name, :with => /[a-z_-]/i,
+          :message => 'Post names must contain at least one non-numeric ' <<
+                      'character.'
     end
 
     before_create do
@@ -74,10 +78,48 @@ module Thoth
       name =~ /^\d+$/ ? Post[name] : Post[:name => name]
     end
 
+    # Returns true if the specified post name is already taken or is a reserved
+    # name.
+    def self.name_exist?(name)
+      PostController.methods.include?(name) ||
+          PostController.instance_methods.include?(name) ||
+          !!Post[:name => name.to_s.downcase]
+    end
+
     # Gets a paginated dataset of recent posts sorted in reverse order by
     # creation time.
     def self.recent(page = 1, limit = 10)
       reverse_order(:created_at).paginate(page, limit)
+    end
+
+    # Returns a valid, unused post name based on the specified title.
+    def self.suggest_name(title)
+      index = 1
+
+      # Remove HTML entities and non-alphanumeric characters, replace spaces
+      # with hyphens, and truncate the name at 64 characters.
+      name = title.to_s.strip.downcase.gsub(/&[^\s;]+;/, '_').
+          gsub(/[^\s0-9a-z-]/, '').gsub(/\s+/, '-')[0..63]
+
+      # Strip off any trailing non-alphanumeric characters.
+      name.gsub!(/[_-]+$/, '')
+
+      # If the name consists solely of numeric characters, add an alpha
+      # character to prevent name/id ambiguity.
+      name += 'a' unless name =~ /[a-z_-]/
+
+      # Ensure that the name doesn't conflict with any methods on the Post
+      # controller and that no two posts have the same name.
+      while Post.name_exist?(name)
+        if name[-1] == index
+          name[-1] = (index += 1).to_s
+        else
+          name = name[0..62] if name.size >= 64
+          name += (index += 1).to_s
+        end
+      end
+
+      return name
     end
 
     #--
@@ -111,7 +153,7 @@ module Thoth
     end
 
     def name=(name)
-      self[:name] = name.strip.downcase unless name.nil?
+      self[:name] = name.to_s.strip.downcase unless name.nil?
     end
 
     # Gets an Array of tags attached to this post, ordered by name.
@@ -165,31 +207,7 @@ module Thoth
 
       # Set the post's name if it isn't already set.
       if self[:name].nil? || self[:name].empty?
-        index = 1
-
-        # Remove HTML entities and non-alphanumeric characters, replace spaces
-        # with hyphens, and truncate the name at 64 characters.
-        name = title.strip.downcase.gsub(/&[^\s;]+;/, '_').
-            gsub(/[^\s0-9a-z-]/, '').gsub(/\s+/, '-')[0..63]
-
-        # Strip off any trailing non-alphanumeric characters.
-        name.gsub!(/[_-]+$/, '')
-
-        # Ensure that the name doesn't conflict with any methods on the Post
-        # controller and that no two posts have the same name.
-        while PostController.methods.include?(name) ||
-              PostController.instance_methods.include?(name) ||
-              Post[:name => name]
-
-          if name[-1] == index
-            name[-1] = (index += 1).to_s
-          else
-            name = name[0..62] if name.size >= 64
-            name += (index += 1).to_s
-          end
-        end
-
-        self[:name] = name
+        self[:name] = Post.suggest_name(title)
       end
 
       self[:title] = title
