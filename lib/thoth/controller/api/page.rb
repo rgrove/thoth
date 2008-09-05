@@ -27,8 +27,8 @@
 #++
 
 module Thoth
-  class TagApiController < Ramaze::Controller
-    map '/api/tag'
+  class PageApiController < Ramaze::Controller
+    map '/api/page'
 
     helper :admin, :aspect, :error
 
@@ -36,29 +36,56 @@ module Thoth
       Ramaze::Session.current.drop! if Ramaze::Session.current
     end
 
-    # Returns a JSON array of existing tag names and usage counts for tags that
-    # begin with the specified query string.
+    # Returns a response indicating whether the specified page name is valid and
+    # not already taken. Returns an HTTP 200 response on success or an HTTP 500
+    # response on error.
     #
     # ==== Query Parameters
     #
-    # q::     query string
-    # limit:: (optional) maximum number of tags to return
+    # name:: page name to check
     #
     # ==== Sample Response
     #
-    #   [["foo",15],["foobar",11],["foosball",2]]
-    def suggest
+    #   {"valid":true,"unique":true}
+    #
+    def check_name
       error_403 unless auth_key_valid?
 
-      unless request[:q]
-        error_400('Missing required parameter: q')
+      unless request[:name] && request[:name].length > 0
+        error_400('Missing required parameter: name')
       end
 
-      query = request[:q].lstrip
-      limit = request[:limit] ? request[:limit].to_i : 1000
+      response['Content-Type'] = 'application/json'
+
+      name = request[:name].to_s
+
+      JSON.generate({
+        :valid  => Page.name_valid?(name),
+        :unique => Page.name_unique?(name)
+      })
+    end
+
+    # Suggests a valid and unique name for the specified page title. Returns an
+    # HTTP 200 response on success or an HTTP 500 response on error.
+    #
+    # ==== Query Parameters
+    #
+    # title:: page title
+    #
+    # ==== Sample Response
+    #
+    #   {"name":"ninjas-are-awesome"}
+    #
+    def suggest_name
+      error_403 unless auth_key_valid?
+
+      unless request[:title] && request[:title].length > 0
+        error_400('Missing required parameter: title')
+      end
 
       response['Content-Type'] = 'application/json'
-      JSON.generate(Tag.suggest(query, limit))
+
+      JSON.generate({"name" => Page.suggest_name(request[:title])})
     end
   end
 end

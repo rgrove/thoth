@@ -55,6 +55,58 @@ module Thoth
       self.updated_at = Time.now
     end
 
+    #--
+    # Class Methods
+    #++
+
+    # Returns true if the specified page name is already taken or is a reserved
+    # name.
+    def self.name_unique?(name)
+      !PageController.methods.include?(name) &&
+          !PageController.instance_methods.include?(name) &&
+          !Page[:name => name.to_s.downcase]
+    end
+
+    # Returns true if the specified page name consists of valid characters and
+    # is not too long or too short.
+    def self.name_valid?(name)
+      !!(name =~ /^[0-9a-z_-]{1,64}$/i) && !(name =~ /^[0-9]+$/)
+    end
+
+    # Returns a valid, unique page name based on the specified title.
+    def self.suggest_name(title)
+      index = 1
+
+      # Remove HTML entities and non-alphanumeric characters, replace spaces
+      # with hyphens, and truncate the name at 64 characters.
+      name = title.to_s.strip.downcase.gsub(/&[^\s;]+;/, '_').
+          gsub(/[^\s0-9a-z-]/, '').gsub(/\s+/, '-')[0..63]
+
+      # Strip off any trailing non-alphanumeric characters.
+      name.gsub!(/[_-]+$/, '')
+
+      # If the name consists solely of numeric characters, add an alpha
+      # character to prevent name/id ambiguity.
+      name += 'a' unless name =~ /[a-z_-]/
+
+      # Ensure that the name doesn't conflict with any methods on the Page
+      # controller and that no two pages have the same name.
+      until self.name_unique?(name)
+        if name[-1] == index
+          name[-1] = (index += 1).to_s
+        else
+          name = name[0..62] if name.size >= 64
+          name += (index += 1).to_s
+        end
+      end
+
+      return name
+    end
+
+    #--
+    # Instance Methods
+    #++
+
     def body=(body)
       self[:body]          = body.strip
       self[:body_rendered] = RedCloth.new(wiki_to_html(body.dup.strip)).to_html
@@ -75,7 +127,14 @@ module Thoth
     end
 
     def title=(title)
-      self[:title] = title.strip unless title.nil?
+      title.strip!
+
+      # Set the page name if it isn't already set.
+      if self[:name].nil? || self[:name].empty?
+        self[:name] = Page.suggest_name(title)
+      end
+
+      self[:title] = title
     end
 
     # Gets the time this page was last updated. If _format_ is provided, the time

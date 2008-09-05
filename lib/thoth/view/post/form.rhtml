@@ -1,5 +1,15 @@
-<form id="post-form" class="post" action="<%== @form_action %>" method="post">
+<form id="post-form" action="<%== @form_action %>" method="post">
   <fieldset class="default">
+    <div class="field">
+      <label for="name">Name</label>
+      <input type="text" name="name" id="name" class="name-post"
+          maxlength="64" value="<%== @post ? @post.name : '' %>" />
+
+      <% if @post; @post.errors.on(:name).each do |error| %>
+        <p class="flash error"><%== error %></p>
+      <% end; end %>
+    </div>
+
     <div class="field">
       <label for="title">Title</label>
       <input type="text" name="title" id="title" maxlength="255"

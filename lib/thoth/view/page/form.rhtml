@@ -1,9 +1,9 @@
-<form id="page-form" class="page" action="<%== @form_action %>" method="post">
+<form id="page-form" action="<%== @form_action %>" method="post">
   <fieldset class="default">
     <div class="field">
       <label for="name">Name</label>
-      <input type="text" name="name" id="name" maxlength="64"
-          value="<%== @page ? @page.name : '' %>" />
+      <input type="text" name="name" id="name" class="name-page"
+          maxlength="64" value="<%== @page ? @page.name : '' %>" />
 
       <% if @page; @page.errors.on(:name).each do |error| %>
         <p class="flash error"><%== error %></p>
@@ -12,8 +12,8 @@
 
     <div class="field">
       <label for="title">Title</label>
-      <input type="text" name="title" id="title" maxlength="255"
-          value="<%== @page ? @page.title : '' %>" />
+      <input type="text" name="title" id="title" class="title-page"
+          maxlength="255" value="<%== @page ? @page.title : '' %>" />
 
       <% if @page; @page.errors.on(:title).each do |error| %>
         <p class="flash error"><%== error %></p>

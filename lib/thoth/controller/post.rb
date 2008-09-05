@@ -178,6 +178,7 @@ module Thoth
       if request.post?
         error_403 unless form_token_valid?
 
+        @post.name  = request[:name] if request[:name] && !request[:name].empty?
         @post.title = request[:title]
         @post.body  = request[:body]
         @post.tags  = request[:tags]
@@ -230,6 +231,7 @@ module Thoth
         error_403 unless form_token_valid?
 
         @post = Post.new do |p|
+          p.name  = request[:name] if request[:name] && !request[:name].empty?
           p.title = request[:title]
           p.body  = request[:body]
           p.tags  = request[:tags]

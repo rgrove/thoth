@@ -7,6 +7,9 @@ Version 0.2.1 (?)
   * Requires RedCloth 4.0.x. Markdown syntax is no longer supported as a result.
   * Names of existing tags are now suggested as you type in the "Tags" field
     when creating or editing a blog post.
+  * Blog post URL names can now be specified just like pages, and names are
+    automatically validated and checked for uniqueness via Ajax. If you don't
+    manually enter a name, one will be created automatically based on the title.
   * Comments are now deleted via Ajax when JavaScript is enabled, making it
     easier to delete multiple comments without having to reload the page.
   * A rel="nofollow" attribute is now automatically added to links in user

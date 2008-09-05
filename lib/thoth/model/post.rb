@@ -80,10 +80,16 @@ module Thoth
 
     # Returns true if the specified post name is already taken or is a reserved
     # name.
-    def self.name_exist?(name)
-      PostController.methods.include?(name) ||
-          PostController.instance_methods.include?(name) ||
-          !!Post[:name => name.to_s.downcase]
+    def self.name_unique?(name)
+      !PostController.methods.include?(name) &&
+          !PostController.instance_methods.include?(name) &&
+          !Post[:name => name.to_s.downcase]
+    end
+
+    # Returns true if the specified post name consists of valid characters and
+    # is not too long or too short.
+    def self.name_valid?(name)
+      !!(name =~ /^[0-9a-z_-]{1,64}$/i) && !(name =~ /^[0-9]+$/)
     end
 
     # Gets a paginated dataset of recent posts sorted in reverse order by
@@ -92,7 +98,7 @@ module Thoth
       reverse_order(:created_at).paginate(page, limit)
     end
 
-    # Returns a valid, unused post name based on the specified title.
+    # Returns a valid, unique post name based on the specified title.
     def self.suggest_name(title)
       index = 1
 
@@ -110,7 +116,7 @@ module Thoth
 
       # Ensure that the name doesn't conflict with any methods on the Post
       # controller and that no two posts have the same name.
-      while Post.name_exist?(name)
+      until self.name_unique?(name)
         if name[-1] == index
           name[-1] = (index += 1).to_s
         else

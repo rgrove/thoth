@@ -124,15 +124,6 @@ form div.field label {
 
 form p.buttons { margin: 0.5em 0 1em; }
 
-form.post #title,
-form.post #body,
-form.post #tags,
-form.page #body,
-form.page #title { width: 99%; }
-
-form.post #name,
-form.page #name { width: 15em; }
-
 ol.suggested-tags {
   list-style: none;
   margin:  0.5em 0;
@@ -147,6 +138,18 @@ ol.suggested-tags li {
 ol.suggested-tags li:after { content: ', '; }
 ol.suggested-tags li:last-child:after { content: ''; }
 ol.suggested-tags li a { white-space: nowrap; }
+
+#page-form,
+#post-form { margin-bottom: 2em; }
+
+#page-form #body,
+#page-form #title,
+#post-form #body,
+#post-form #title,
+#post-form #tags { width: 99%; }
+
+#page-form #name,
+#post-form #name { width: 15em; }
 
 .tips {
   background: #eff7ff;
