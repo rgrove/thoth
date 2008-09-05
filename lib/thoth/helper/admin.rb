@@ -107,7 +107,7 @@ module Ramaze; module Helper
     # Checks the auth cookie and redirects to the login page if the user is not
     # authenticated.
     def require_auth
-      redirect(R(AdminController)) unless auth_key_valid?
+      redirect(R(Thoth::AdminController)) unless auth_key_valid?
     end
   end
 
