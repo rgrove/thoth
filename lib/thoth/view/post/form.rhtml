@@ -12,8 +12,8 @@
 
     <div class="field">
       <label for="title">Title</label>
-      <input type="text" name="title" id="title" maxlength="255"
-          value="<%== @post ? @post.title : '' %>" />
+      <input type="text" name="title" id="title" class="title-post"
+          maxlength="255" value="<%== @post ? @post.title : '' %>" />
 
       <% if @post; @post.errors.on(:title).each do |error| %>
         <p class="flash error"><%== error %></p>
