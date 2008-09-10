@@ -33,7 +33,7 @@ $:.uniq!
 require 'fileutils'
 require 'rubygems'
 
-# gem 'manveru-ramaze', '=2008.08'
+gem 'manveru-ramaze', '=2008.09'
 
 require 'builder'
 require 'cssmin'
@@ -57,7 +57,8 @@ require 'thoth/errors'
 require 'thoth/config'
 require 'thoth/version'
 require 'thoth/plugin'
-require 'thoth/monkeypatch/dispatcher/file'
+require 'thoth/monkeypatch/ramaze/controller'
+require 'thoth/monkeypatch/ramaze/dispatcher/file'
 
 module Thoth
   # Ramaze adapter to use.
@@ -217,10 +218,19 @@ module Thoth
 
       @db = Sequel.open(Config.db)
 
+      unless @db.test_connection
+        Ramaze::Log.error('Unable to connect to database.')
+        abort
+      end
+
       if trait[:sql_log]
         require 'logger'
         @db.logger = Logger.new(trait[:sql_log])
       end
+
+    rescue => e
+      Ramaze::Log.error("Unable to connect to database: #{e}")
+      abort
     end
 
     # Restarts the running Thoth daemon (if any).
