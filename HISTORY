@@ -1,7 +1,7 @@
 Thoth History
 ================================================================================
 
-Version 0.2.1 (?)
+Version 0.2.1 (2008-09-09)
   * Requires Sequel 2.5.x (this fixes an issue with SQLite and DateTime
     objects).
   * Requires RedCloth 4.0.x. Markdown syntax is no longer supported as a result.

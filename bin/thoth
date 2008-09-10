@@ -28,8 +28,10 @@
 #++
 
 require 'optparse'
-
 require 'rubygems'
+
+gem 'ramaze', '=2008.06'
+
 require 'ramaze'
 
 module Thoth
