@@ -177,7 +177,10 @@ module Thoth
 
       open_db
 
-      unless @db.table_exists?(:posts)
+      # Ensure that the database schema is up to date.
+      unless Sequel::Migrator.get_current_migration_version(@db) ==
+          Sequel::Migrator.latest_migration_version(LIB_DIR/:migrate)
+
         if trait[:mode] == :production
           raise SchemaError, "Database schema is missing or out of date. " <<
               "Please run `thoth --migrate`."
