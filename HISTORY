@@ -1,6 +1,9 @@
 Thoth History
 ================================================================================
 
+Version 0.3.0 (?)
+  * Requires edge Ramaze from git (http://github.com/manveru/ramaze/).
+
 Version 0.2.1 (2008-09-09)
   * Requires Sequel 2.5.x (this fixes an issue with SQLite and DateTime
     objects).

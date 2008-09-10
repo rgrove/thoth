@@ -33,7 +33,7 @@ $:.uniq!
 require 'fileutils'
 require 'rubygems'
 
-gem 'ramaze', '=2008.06'
+# gem 'manveru-ramaze', '=2008.08'
 
 require 'builder'
 require 'cssmin'
@@ -147,7 +147,7 @@ module Thoth
           end
 
           Ramaze::Log.loggers = [
-            Ramaze::Logging::Logger::Informer.new(Config.server.error_log,
+            Ramaze::Logger::Informer.new(Config.server.error_log,
                 [:error])
           ]
         end
@@ -177,8 +177,13 @@ module Thoth
       open_db
 
       unless @db.table_exists?(:posts)
-        raise SchemaError, "Database schema is missing or out of date. " <<
-            "Please run `thoth --migrate`."
+        if trait[:mode] == :production
+          raise SchemaError, "Database schema is missing or out of date. " <<
+              "Please run `thoth --migrate`."
+        else
+          raise SchemaError, "Database schema is missing or out of date. " <<
+              "Please run `thoth --devel --migrate`."
+        end
       end
 
       acquire LIB_DIR/:helper/'*'
