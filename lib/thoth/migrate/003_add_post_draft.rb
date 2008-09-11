@@ -26,54 +26,13 @@
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #++
 
-module Thoth
-  class Tag < Sequel::Model
-    include Ramaze::Helper::Link
-  
-    one_to_many  :tags_posts_map, :class => 'Thoth::TagsPostsMap'
-    many_to_many :posts, :class => 'Thoth::Post',
-        :join_table => :tags_posts_map, :read_only => true
+class AddPostDraft < Sequel::Migration
+  def down
+    drop_column(:posts, :is_draft)
+  end
 
-    validates do
-      presence_of :name
-      length_of :name, :maximum => 64
-    end
-
-    #--
-    # Class Methods
-    #++
-
-    # Gets an array of tag names and post counts for tags with names that begin
-    # with the specified query string.
-    def self.suggest(query, limit = 1000)
-      tags = []
-
-      self.dataset.grep(:name, "#{query}%").all do |tag|
-        tags << [tag.name, tag.posts.count]
-      end
-
-      tags.sort!{|a, b| b[1] <=> a[1]}
-      tags[0, limit]
-    end
-
-    #--
-    # Instance Methods
-    #++
-
-    # Gets the Atom feed URL for this tag.
-    def atom_url
-      Config.site.url.chomp('/') + R(TagController, :atom, CGI.escape(name))
-    end
-
-    # Gets published posts with this tag.
-    def posts
-      @posts ||= posts_dataset.filter(:is_draft => false).reverse_order(
-          :created_at)
-    end
-
-    # URL for this tag.
-    def url
-      Config.site.url.chomp('/') + R(TagController, CGI.escape(name))
-    end
+  def up
+    add_column(:posts, :is_draft, :boolean, :null => false, :default => false)
+    add_index(:posts, :is_draft)
   end
 end

@@ -42,8 +42,13 @@
 
   <p class="buttons">
     <input type="hidden" name="token" value="<%== form_token %>" />
-    <input type="submit" name="action" value="Preview" />
-    <input type="submit" name="action" value="Post" />
+    <% if !@post || @post.is_draft %>
+      <input type="submit" name="action" value="Save &amp; Preview" />
+    <% else %>
+      <input type="submit" name="action" value="Preview" />
+      <input type="submit" name="action" value="Unpublish &amp; Save as Draft">
+    <% end %>
+    <input type="submit" name="action" value="Publish" />
   </p>
 </form>
 

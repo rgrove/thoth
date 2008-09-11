@@ -110,7 +110,6 @@
 }
 
 /* -- Misc. Forms ----------------------------------------------------------- */
-
 fieldset.default {
   border: 0;
   padding: 0;
@@ -171,11 +170,12 @@ ol.suggested-tags li a { white-space: nowrap; }
 
 /* -- Lists ----------------------------------------------------------------- */
 table.list {
+  border: 1px solid #dfdfdf;
   width: 100%;
 }
 
 table.list th,
-table.list td { padding: 1px 2px 1px 2px; }
+table.list td { padding: 1px 2px; }
 
 table.list thead th {
   font-weight: bold;
@@ -183,17 +183,17 @@ table.list thead th {
   white-space: nowrap;
 }
 
+table.list thead tr { background: #dfeeff; }
 table.list tbody tr.empty { font-style: italic; }
-table.list tbody tr.even { background: #d7e6ff; }
-table.list tbody tr.odd { background: #fff; }
+table.list tbody tr.even { background: #f7fbff; }
+table.list tbody tr.odd { background: none; }
 table.list tbody tr:hover { background: #d0dbf7; }
 
 table.list tbody td { border: 1px solid transparent; }
 table.list tbody tr:hover td { border: 1px solid #9ab3f7; }
 
 table.list td.created,
-table.list td.updated { white-space: nowrap; }
-
+table.list td.updated,
 table.pages td.name { white-space: nowrap; }
 
 table.media td.size { text-align: right; }

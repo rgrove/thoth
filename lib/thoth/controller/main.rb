@@ -150,17 +150,16 @@ module Thoth
             x.loc        page.url
             x.lastmod    page.updated_at.xmlschema
             x.changefreq 'weekly'
-            x.priority   '0.6'
+            x.priority   '0.7'
           }
         end
 
-        now = Time.now
-
-        Post.reverse_order(:updated_at).all do |post|
+        Post.filter(:is_draft => false).reverse_order(:updated_at).all do |post|
           x.url {
             x.loc        post.url
             x.lastmod    post.updated_at.xmlschema
             x.changefreq 'weekly'
+            x.priority   '0.6'
           }
         end
       }

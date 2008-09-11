@@ -178,12 +178,20 @@ module Thoth
       if request.post?
         error_403 unless form_token_valid?
 
-        @post.name  = request[:name] if request[:name] && !request[:name].empty?
+        if request[:name] && !request[:name].empty?
+          @post.name = request[:name]
+        end
+
         @post.title = request[:title]
         @post.body  = request[:body]
         @post.tags  = request[:tags]
 
-        if @post.valid? && request[:action] == 'Post'
+        @post.is_draft = @post.is_draft ? request[:action] != 'Publish' :
+            request[:action] == 'Unpublish & Save as Draft'
+
+        @post.created_at = Time.now if @post.is_draft
+
+        if @post.valid? && (@post.is_draft || request[:action] == 'Publish')
           begin
             Thoth.db.transaction do
               raise unless @post.save && @post.tags = request[:tags]
@@ -191,9 +199,14 @@ module Thoth
           rescue => e
             @post_error = "There was an error saving your post: #{e}"
           else
-            action_cache.clear
-            flash[:success] = 'Blog post saved.'
-            redirect(Rs(@post.name))
+            if @post.is_draft
+              flash[:success] = 'Draft saved.'
+              redirect(Rs(:edit, @post.id))
+            else
+              action_cache.clear
+              flash[:success] = 'Blog post published.'
+              redirect(Rs(@post.name))
+            end
           end
         end
       end
@@ -214,8 +227,13 @@ module Thoth
       @sort     = :created_at unless @columns.include?(@sort)
       @sort_url = Rs(:list, page)
 
-      @posts = Post.paginate(page, 20).order(@order == :desc ? @sort.desc :
-          @sort)
+      @posts = Post.filter(:is_draft => false).paginate(page, 20).order(
+          @order == :desc ? @sort.desc : @sort)
+
+      if page == 1
+        @drafts = Post.filter(:is_draft => true).order(
+            @order == :desc ? @sort.desc : @sort)
+      end
 
       @title = "Blog Posts (page #{page} of #{[@posts.page_count, 1].max})"
       @pager = pager(@posts, Rs(:list, '%s', :sort => @sort, :order => @order))
@@ -230,14 +248,20 @@ module Thoth
       if request.post?
         error_403 unless form_token_valid?
 
+        is_draft = request[:action] == 'Save & Preview'
+
         @post = Post.new do |p|
-          p.name  = request[:name] if request[:name] && !request[:name].empty?
-          p.title = request[:title]
-          p.body  = request[:body]
-          p.tags  = request[:tags]
+          if request[:name] && !request[:name].empty?
+            p.name = request[:name]
+          end
+
+          p.title    = request[:title]
+          p.body     = request[:body]
+          p.tags     = request[:tags]
+          p.is_draft = is_draft
         end
 
-        if @post.valid? && request[:action] == 'Post'
+        if @post.valid?
           begin
             Thoth.db.transaction do
               raise unless @post.save && @post.tags = request[:tags]
@@ -245,9 +269,14 @@ module Thoth
           rescue => e
             @post_error = "There was an error saving your post: #{e}"
           else
-            action_cache.clear
-            flash[:success] = 'Blog post created.'
-            redirect(Rs(@post.name))
+            if is_draft
+              flash[:success] = 'Draft saved.'
+              redirect(Rs(:edit, @post.id))
+            else
+              action_cache.clear
+              flash[:success] = 'Blog post published.'
+              redirect(Rs(@post.name))
+            end
           end
         end
 

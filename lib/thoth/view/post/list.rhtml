@@ -1,8 +1,34 @@
-<h2>Blog Posts</h2>
+<% if @drafts && @drafts.count %>
+  <h2>Draft Blog Posts</h2>
+
+  <table class="list posts drafts" summary="List of all draft blog posts">
+    <%= render_template('../util/table_sortheader') %>
+    <tfoot></tfoot>
+    <tbody>
+      <% row = 'even' %>
+      <% @drafts.all do |draft| %>
+        <tr class="<%= row == 'even' ? row = 'odd' : row = 'even' %>">
+          <td class="id"><%= draft.id %></td>
+          <td class="title">
+            <a href="<%== R(Thoth::PostController, :edit, draft.id) %>#post-form"><%== draft.title %></a>
+          </td>
+          <td class="created">
+            <%= draft.created_at(Thoth::Config.timestamp.short) %>
+          </td>
+          <td class="updated">
+            <%= draft.updated_at(Thoth::Config.timestamp.short) %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% end %>
+
+<h2>Published Blog Posts</h2>
 
 <%= render_template('../util/pager') %>
 
-<table class="list posts" summary="List of all blog posts">
+<table class="list posts" summary="List of all published blog posts">
   <%= render_template('../util/table_sortheader') %>
   <tfoot></tfoot>
   <tbody>

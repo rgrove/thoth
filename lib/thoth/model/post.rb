@@ -70,12 +70,14 @@ module Thoth
     # Class Methods
     #++
 
-    # Gets the Post with the specified name, where _name_ can be either a name
-    # or an id.
+    # Gets the published post with the specified name, where _name_ can be
+    # either a name or an id. Does not return drafts.
     def self.get(name)
-      return Post[name] if name.is_a?(Numeric)
+      return Post[:id => name, :is_draft => false] if name.is_a?(Numeric)
+
       name = name.to_s.downcase
-      name =~ /^\d+$/ ? Post[name] : Post[:name => name]
+      name =~ /^\d+$/ ? Post[:id => name, :is_draft => false] :
+          Post[:name => name, :is_draft => false]
     end
 
     # Returns true if the specified post name is already taken or is a reserved
@@ -92,10 +94,18 @@ module Thoth
       !!(name =~ /^[0-9a-z_-]{1,64}$/i) && !(name =~ /^[0-9]+$/)
     end
 
-    # Gets a paginated dataset of recent posts sorted in reverse order by
-    # creation time.
+    # Gets a paginated dataset of recent published posts sorted in reverse order
+    # by creation time. Does not return drafts.
     def self.recent(page = 1, limit = 10)
-      reverse_order(:created_at).paginate(page, limit)
+      filter(:is_draft => false).reverse_order(:created_at).paginate(page,
+          limit)
+    end
+
+    # Gets a paginated dataset of recent draft posts sorted in reverse order
+    # by creation time. Does not return published posts.
+    def self.recent_drafts(page = 1, limit = 10)
+      filter(:is_draft => true).reverse_order(:created_at).paginate(page,
+          limit)
     end
 
     # Returns a valid, unique post name based on the specified title.
