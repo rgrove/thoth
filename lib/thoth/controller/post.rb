@@ -248,8 +248,6 @@ module Thoth
       if request.post?
         error_403 unless form_token_valid?
 
-        is_draft = request[:action] == 'Save & Preview'
-
         @post = Post.new do |p|
           if request[:name] && !request[:name].empty?
             p.name = request[:name]
@@ -258,7 +256,7 @@ module Thoth
           p.title    = request[:title]
           p.body     = request[:body]
           p.tags     = request[:tags]
-          p.is_draft = is_draft
+          p.is_draft = request[:action] == 'Save & Preview'
         end
 
         if @post.valid?
@@ -267,9 +265,10 @@ module Thoth
               raise unless @post.save && @post.tags = request[:tags]
             end
           rescue => e
-            @post_error = "There was an error saving your post: #{e}"
+            @post.is_draft = true
+            @post_error    = "There was an error saving your post: #{e}"
           else
-            if is_draft
+            if @post.is_draft
               flash[:success] = 'Draft saved.'
               redirect(Rs(:edit, @post.id))
             else
@@ -278,6 +277,8 @@ module Thoth
               redirect(Rs(@post.name))
             end
           end
+        else
+          @post.is_draft = true
         end
 
         @title = "New blog post - #{@post.title}"
