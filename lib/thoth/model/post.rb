@@ -36,6 +36,7 @@ module Thoth
         :order => :name
 
     validates do
+      presence_of :name, :message => 'Please enter a name for this post.'
       presence_of :title, :message => 'Please enter a title for this post.'
       presence_of :body, :message => "What's the matter? Cat got your tongue?"
 
@@ -108,7 +109,9 @@ module Thoth
           limit)
     end
 
-    # Returns a valid, unique post name based on the specified title.
+    # Returns a valid, unique post name based on the specified title. If the
+    # title is empty or cannot be converted into a valid name, an empty string
+    # will be returned.
     def self.suggest_name(title)
       index = 1
 
@@ -120,9 +123,11 @@ module Thoth
       # Strip off any trailing non-alphanumeric characters.
       name.gsub!(/[_-]+$/, '')
 
+      return '' if name.empty?
+
       # If the name consists solely of numeric characters, add an alpha
       # character to prevent name/id ambiguity.
-      name += 'a' unless name =~ /[a-z_-]/
+      name += '_' unless name =~ /[a-z_-]/
 
       # Ensure that the name doesn't conflict with any methods on the Post
       # controller and that no two posts have the same name.

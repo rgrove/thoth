@@ -32,8 +32,8 @@ module Thoth
     include Ramaze::Helper::Wiki
 
     validates do
-      presence_of :title, :message => 'Please enter a title for this page.'
       presence_of :name, :message => 'Please enter a name for this page.'
+      presence_of :title, :message => 'Please enter a title for this page.'
       presence_of :body,
           :message => "Come on, I'm sure you can think of something to write."
 
@@ -70,10 +70,12 @@ module Thoth
     # Returns true if the specified page name consists of valid characters and
     # is not too long or too short.
     def self.name_valid?(name)
-      !!(name =~ /^[0-9a-z_-]{1,64}$/i) && !(name =~ /^[0-9]+$/)
+      !!(name =~ /^[0-9a-z_-]{1,64}$/i)
     end
 
-    # Returns a valid, unique page name based on the specified title.
+    # Returns a valid, unique page name based on the specified title. If the
+    # title is empty or cannot be converted into a valid name, an empty string
+    # will be returned.
     def self.suggest_name(title)
       index = 1
 
@@ -85,9 +87,7 @@ module Thoth
       # Strip off any trailing non-alphanumeric characters.
       name.gsub!(/[_-]+$/, '')
 
-      # If the name consists solely of numeric characters, add an alpha
-      # character to prevent name/id ambiguity.
-      name += 'a' unless name =~ /[a-z_-]/
+      return '' if name.empty?
 
       # Ensure that the name doesn't conflict with any methods on the Page
       # controller and that no two pages have the same name.
