@@ -61,17 +61,18 @@ thoth_gemspec = Gem::Specification.new do |s|
 
   s.required_ruby_version = '>= 1.8.6'
 
-  s.add_dependency('manveru-ramaze', '= 2008.09')
+  s.add_dependency('manveru-ramaze', '= 2008.10')
   s.add_dependency('builder',        '~> 2.1.2')
   s.add_dependency('configuration',  '~> 0.0.5')
   s.add_dependency('cssmin',         '~> 1.0.2')
+  s.add_dependency('echoe',          '~> 3.0.2') # required by RedCloth
   s.add_dependency('erubis',         '~> 2.6.2')
   s.add_dependency('hpricot',        '~> 0.6')
   s.add_dependency('json_pure',      '~> 1.1.3')
-  s.add_dependency('jsmin',          '~> 1.0.0')
-  s.add_dependency('RedCloth',       '~> 4.0.3')
-  s.add_dependency('sequel',         '~> 2.5.0')
-  s.add_dependency('thin',           '~> 0.8.2')
+  s.add_dependency('jsmin',          '~> 1.0.1')
+  s.add_dependency('RedCloth',       '~> 4.1.1')
+  s.add_dependency('sequel',         '~> 2.6.0')
+  s.add_dependency('thin',           '~> 1.0.0')
 end
 
 Rake::GemPackageTask.new(thoth_gemspec) do |p|

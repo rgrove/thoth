@@ -33,7 +33,7 @@ $:.uniq!
 require 'fileutils'
 require 'rubygems'
 
-gem 'manveru-ramaze', '=2008.09'
+gem 'manveru-ramaze', '=2008.10'
 
 require 'builder'
 require 'cssmin'

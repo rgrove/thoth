@@ -30,7 +30,7 @@
 require 'optparse'
 require 'rubygems'
 
-gem 'manveru-ramaze', '=2008.09'
+gem 'manveru-ramaze', '=2008.10'
 
 require 'ramaze'
 
