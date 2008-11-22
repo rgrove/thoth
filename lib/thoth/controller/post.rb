@@ -83,7 +83,7 @@ module Thoth
         @author     = comment.author
         @author_url = comment.author_url
         @preview    = comment
-      else
+      elsif Config.site.enable_comments
         @author     = cookie(:thoth_author, '')
         @author_url = cookie(:thoth_author_url, '')
       end
@@ -91,6 +91,8 @@ module Thoth
       @title = @post.title
 
       if Config.site.enable_comments
+        @comment_action = Rs(@post.name) + '#post-comment'
+
         @feeds = [{
           :href  => @post.atom_url,
           :title => 'Comments on this post',

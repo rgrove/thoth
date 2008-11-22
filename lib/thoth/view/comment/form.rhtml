@@ -1,0 +1,81 @@
+<form id="post-comment" class="robots-nocontent" method="post"
+    action="<%== @form_action %>">
+
+  <% if @comment && @comment.valid? %>
+    <fieldset>
+      <%= render_template('../comment/comment.rhtml') %>
+    </fieldset>
+  <% end %>
+
+  <fieldset>
+    <legend>Post a comment</legend>
+
+    <p>
+      <label for="author">Name</label>
+      <input type="text" name="author" id="author" maxlength="32"
+          title="Enter your name" value="<%== @author %>" />
+    </p>
+
+    <% if @comment; @comment.errors.on(:author).each do |error| %>
+      <div class="flash error"><%== error %></div>
+    <% end; end %>
+
+    <p>
+      <label for="author_url">URL</label>
+      <input type="text" name="author_url" id="author_url" maxlength="255"
+          title="Enter the URL of your website (optional)"
+          value="<%== @author_url %>" />
+    </p>
+
+    <% if @comment; @comment.errors.on(:author_url).each do |error| %>
+      <div class="flash error"><%== error %></div>
+    <% end; end %>
+
+    <p>
+      <label for="title">Title</label>
+      <input type="text" class="long" name="title" id="title" maxlength="255"
+          title="Enter a title for this comment"
+          value="<%== @comment && @comment.title ? @comment.title : '' %>" />
+    </p>
+
+    <% if @comment; @comment.errors.on(:title).each do |error| %>
+      <div class="flash error"><%== error %></div>
+    <% end; end %>
+
+    <p>
+      <textarea name="body" rows="6" cols="60"><%== @comment && @comment.body ? @comment.body : '' %></textarea>
+    </p>
+
+    <% if @comment; @comment.errors.on(:body).each do |error| %>
+      <div class="flash error"><%== error %></div>
+    <% end; end %>
+
+    <p class="tip">
+      Basic XHTML (including links) is allowed, just don't try anything fishy.
+      Your comment will be auto-formatted unless you use your own
+      <code>&lt;p&gt;</code> tags for formatting. You're also welcome to use
+      <a href="http://redcloth.org/textile" target="_blank">Textile</a>.
+    </p>
+
+    <p class="noseeum">
+      Don't type anything here unless you're an evil robot:<br />
+      <input type="text" id="captcha" name="captcha" maxlength="50" />
+
+      <br /><br />
+      And especially don't type anything here:<br />
+      <textarea name="comment" rows="6" cols="60"></textarea>
+    </p>
+
+    <% if @comment_error %>
+      <div class="flash error"><%== @comment_error %></div>
+    <% end %>
+
+    <p>
+      <input type="submit" name="action" value="Preview Comment" />
+      <input type="submit" name="action" value="Post Comment" />
+      <input type="hidden" name="post_id" value="<%== @post.id %>" />
+      <input type="hidden" name="comment_id"
+          value="<%== @comment && @comment.id ? @comment.id : '' %>" />
+    </p>
+  </fieldset>
+</form>
