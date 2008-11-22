@@ -40,10 +40,14 @@ module Thoth; module Plugin
     Configuration.for("thoth_#{Thoth.trait[:mode]}") do
       twitter {
 
+        # Whether or not to include replies. If this is false, the most recent
+        # non-reply tweets will be displayed.
+        include_replies false
+
         # Time in seconds to cache results. It's a good idea to keep this nice
         # and high both to improve the performance of your site and to avoid
-        # pounding on Twitter's servers. Default is 900 seconds (15 minutes).
-        cache_ttl 900 unless Send('respond_to?', :cache_ttl)
+        # pounding on Twitter's servers. Default is 600 seconds (10 minutes).
+        cache_ttl 600 unless Send('respond_to?', :cache_ttl)
 
         # Request timeout in seconds.
         request_timeout 3 unless Send('respond_to?', :request_timeout)
@@ -69,9 +73,13 @@ module Thoth; module Plugin
 
         cache   = Ramaze::Cache.value_cache
         options = {:count => 5}.merge(options)
+        count   = options[:count].to_i
+
+        count += 10 unless Config.twitter.include_replies
+        count = 200 if count > 200
 
         url = "http://twitter.com/statuses/user_timeline/#{user}.json?count=" <<
-            options[:count].to_s
+            count.to_s
 
         if value = cache[url]
           return value
@@ -81,6 +89,12 @@ module Thoth; module Plugin
 
         Timeout.timeout(Config.twitter.request_timeout, StandardError) do
           tweets = JSON.parse(open(url).read)
+        end
+
+        # Weed out replies if necessary.
+        unless Config.twitter.include_replies
+          tweets.delete_if {|tweet| !tweet['in_reply_to_status_id'].nil? }
+          tweets = tweets.slice(0, options[:count].to_i)
         end
 
         # Parse the tweets into an easier-to-use format.
