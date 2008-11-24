@@ -31,6 +31,8 @@ module Thoth
     include Ramaze::Helper::Link
     include Ramaze::Helper::Wiki
 
+    is :notnaughty
+
     one_to_many  :tags_posts_map, :class => 'Thoth::TagsPostsMap'
     many_to_many :tags, :class => 'Thoth::Tag', :join_table => :tags_posts_map,
         :order => :name

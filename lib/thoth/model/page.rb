@@ -31,6 +31,8 @@ module Thoth
     include Ramaze::Helper::Link
     include Ramaze::Helper::Wiki
 
+    is :notnaughty
+
     validates do
       presence_of :name, :message => 'Please enter a name for this page.'
       presence_of :title, :message => 'Please enter a title for this page.'

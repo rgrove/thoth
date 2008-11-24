@@ -30,6 +30,8 @@ module Thoth
   class Tag < Sequel::Model
     include Ramaze::Helper::Link
   
+    is :notnaughty
+
     one_to_many  :tags_posts_map, :class => 'Thoth::TagsPostsMap'
     many_to_many :posts, :class => 'Thoth::Post',
         :join_table => :tags_posts_map, :read_only => true

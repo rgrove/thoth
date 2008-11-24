@@ -31,6 +31,8 @@ module Thoth
     include Ramaze::Helper::Link
     include Ramaze::Helper::Sanitize
 
+    is :notnaughty
+
     validates do
       presence_of :author, :message => 'Please enter your name.'
       presence_of :title,  :message => 'Please enter a title for this comment.'
