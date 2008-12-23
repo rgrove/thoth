@@ -3,3 +3,7 @@
 <% if auth_key_valid? %>
   <link rel="stylesheet" type="text/css" href="/css/admin.css" />
 <% end %>
+
+<% Thoth::Config.theme.css.each do |url| %>
+  <link rel="stylesheet" type="text/css" href="<%== url %>" />
+<% end %>

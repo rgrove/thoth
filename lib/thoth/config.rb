@@ -53,6 +53,8 @@ module Thoth
           theme {
             public HOME_DIR/:public
             view   HOME_DIR/:view
+            css    []
+            js     []
           }
 
           media HOME_DIR/:media

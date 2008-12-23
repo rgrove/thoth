@@ -95,6 +95,23 @@ Configuration.for("thoth_production") {
     #
     # view "#{Thoth::HOME_DIR}/view"
 
+    # URLs of CSS files to load in addition to the default Thoth CSS. You can
+    # override Thoth's default styles by specifying your own CSS files here.
+    #
+    # Example:
+    #   css ['/css/foo.css', '/css/bar.css']
+    #
+    # css []
+
+    # URLs of JS files to load in addition to the default Thoth JS. You can
+    # extend or override Thoth's JS or add functionality by specifying your own
+    # JS files here.
+    #
+    # Example:
+    #   js ['/js/foo.js', '/js/bar.js']
+    #
+    # js []
+
   }
 
   # Absolute path to a directory where uploaded media files (images, videos,
