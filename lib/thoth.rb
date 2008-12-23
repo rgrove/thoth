@@ -33,7 +33,7 @@ $:.uniq!
 require 'fileutils'
 require 'rubygems'
 
-gem 'manveru-ramaze', '=2008.10'
+gem 'manveru-ramaze', '=2008.12'
 
 require 'builder'
 require 'cssmin'
@@ -48,9 +48,9 @@ require 'configuration'
 # The main Thoth namespace.
 module Thoth
   HOME_DIR   = ENV['THOTH_HOME'] || File.expand_path('.') unless const_defined?(:HOME_DIR)
-  LIB_DIR    = File.dirname(File.expand_path(__FILE__))/:thoth
-  PUBLIC_DIR = LIB_DIR/:public unless const_defined?(:PUBLIC_DIR)
-  VIEW_DIR   = LIB_DIR/:view unless const_defined?(:VIEW_DIR)
+  LIB_DIR    = File.join(File.dirname(File.expand_path(__FILE__)), 'thoth')
+  PUBLIC_DIR = File.join(LIB_DIR, 'public') unless const_defined?(:PUBLIC_DIR)
+  VIEW_DIR   = File.join(LIB_DIR, 'view') unless const_defined?(:VIEW_DIR)
 end
 
 require 'thoth/errors'
@@ -65,7 +65,7 @@ module Thoth
   trait[:adapter] ||= nil
 
   # Path to the config file.
-  trait[:config_file] ||= ENV['THOTH_CONF'] || HOME_DIR/'thoth.conf'
+  trait[:config_file] ||= ENV['THOTH_CONF'] || File.join(HOME_DIR, 'thoth.conf')
 
   # Daemon command to execute (:start, :stop, :restart) or nil.
   trait[:daemon] ||= nil
@@ -83,7 +83,7 @@ module Thoth
   trait[:port] ||= nil
 
   # Path to the daemon process id file.
-  trait[:pidfile] ||= HOME_DIR/"thoth_#{trait[:ip]}_#{trait[:port]}.pid"
+  trait[:pidfile] ||= File.join(HOME_DIR, "thoth_#{trait[:ip]}_#{trait[:port]}.pid")
 
   # Filename to which all SQL commands should be logged, or nil to disable
   # SQL logging.
@@ -101,15 +101,15 @@ module Thoth
         raise "specified path already exists: #{path}"
       end
 
-      FileUtils.mkdir_p(path/:log)
-      FileUtils.mkdir(path/:media)
-      FileUtils.mkdir(path/:plugin)
-      FileUtils.mkdir(path/:public)
-      FileUtils.mkdir(path/:view)
+      FileUtils.mkdir_p(File.join(path, 'log'))
+      FileUtils.mkdir(File.join(path, 'media'))
+      FileUtils.mkdir(File.join(path, 'plugin'))
+      FileUtils.mkdir(File.join(path, 'public'))
+      FileUtils.mkdir(File.join(path, 'view'))
 
-      FileUtils.cp(LIB_DIR/'..'/:proto/'thoth.conf.sample', path/'thoth.conf')
-      File.chmod(0750, path/:log)
-      File.chmod(0640, path/'thoth.conf')
+      FileUtils.cp(File.join(LIB_DIR, '..', 'proto', 'thoth.conf.sample'), File.join(path, 'thoth.conf'))
+      File.chmod(0750, File.join(path, 'log'))
+      File.chmod(0640, File.join(path, 'thoth.conf'))
     end
 
     # Initializes Ramaze (but doesn't actually start the server).
@@ -179,7 +179,7 @@ module Thoth
 
       # Ensure that the database schema is up to date.
       unless Sequel::Migrator.get_current_migration_version(@db) ==
-          Sequel::Migrator.latest_migration_version(LIB_DIR/:migrate)
+          Sequel::Migrator.latest_migration_version(File.join(LIB_DIR, 'migrate'))
 
         if trait[:mode] == :production
           raise SchemaError, "Database schema is missing or out of date. " <<
@@ -190,11 +190,11 @@ module Thoth
         end
       end
 
-      acquire LIB_DIR/:helper/'*'
-      require LIB_DIR/:controller/:post # must be loaded first
-      acquire LIB_DIR/:controller/'*'
-      acquire LIB_DIR/:controller/:api/'*'
-      acquire LIB_DIR/:model/'*'
+      Ramaze::acquire(File.join(LIB_DIR, 'helper', '*'))
+      require File.join(LIB_DIR, 'controller', 'post') # must be loaded first
+      Ramaze::acquire(File.join(LIB_DIR, 'controller', '*'))
+      Ramaze::acquire(File.join(LIB_DIR, 'controller', 'api', '*'))
+      Ramaze::acquire(File.join(LIB_DIR, 'model', '*'))
 
       # Use Erubis as the template engine for all controllers.
       Ramaze::Global.mapping.values.each do |controller|

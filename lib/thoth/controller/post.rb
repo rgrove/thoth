@@ -30,7 +30,8 @@ module Thoth
   class PostController < Ramaze::Controller
     map       '/post'
     layout    '/layout'
-    view_root Config.theme.view/:post, VIEW_DIR/:post
+    view_root File.join(Config.theme.view, 'post'),
+              File.join(VIEW_DIR, 'post')
 
     helper      :admin, :cache, :cookie, :error, :pagination, :wiki
     deny_layout :atom

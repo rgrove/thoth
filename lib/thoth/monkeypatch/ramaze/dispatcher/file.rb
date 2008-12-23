@@ -52,7 +52,7 @@ module Ramaze
           end
 
           if ::File.directory?(joined)
-            Dir[joined/"{#{INDICES.join(',')}}"].first || joined
+            Dir[::File.join(joined, "{#{INDICES.join(',')}}")].first || joined
           else
             joined
           end

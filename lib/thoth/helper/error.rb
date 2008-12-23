@@ -40,7 +40,7 @@ module Ramaze; module Helper
 
       error_500 unless Thoth.trait[:mode] == :devel
       response['Content-Type'] = 'text/html'
-      Ramaze::Action.current.template ||= Thoth::VIEW_DIR/'error.rhtml'
+      Ramaze::Action.current.template ||= File.join(Thoth::VIEW_DIR, 'error.rhtml')
       super
     end
 

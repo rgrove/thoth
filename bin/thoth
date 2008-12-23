@@ -30,7 +30,7 @@
 require 'optparse'
 require 'rubygems'
 
-gem 'manveru-ramaze', '=2008.10'
+gem 'manveru-ramaze', '=2008.12'
 
 require 'ramaze'
 
@@ -207,7 +207,7 @@ module Thoth
 
     begin
       open_db
-      Sequel::Migrator.apply(@db, LIB_DIR/:migrate, schema_version.nil? ? nil :
+      Sequel::Migrator.apply(@db, File.join(LIB_DIR, 'migrate'), schema_version.nil? ? nil :
           schema_version.to_i)
     rescue => e
       abort("Error: #{e}")
@@ -219,7 +219,7 @@ module Thoth
     trait[:adapter] ||= Config.server.adapter
     trait[:ip]      ||= Config.server.address
     trait[:port]    ||= Config.server.port
-    trait[:pidfile]   = HOME_DIR/"thoth_#{trait[:ip]}_#{trait[:port]}.pid"
+    trait[:pidfile]   = File.join(HOME_DIR, "thoth_#{trait[:ip]}_#{trait[:port]}.pid")
 
     begin
       send(trait[:daemon] || :run)

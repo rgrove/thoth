@@ -30,7 +30,8 @@ module Thoth
   class ArchiveController < Ramaze::Controller
     map       '/archive'
     layout    '/layout'
-    view_root Config.theme.view/:archive, VIEW_DIR/:archive
+    view_root File.join(Config.theme.view, 'archive'),
+              File.join(VIEW_DIR, 'archive')
 
     helper :admin, :cache, :pagination
 

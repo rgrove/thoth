@@ -58,7 +58,7 @@ module Thoth
 
     # Gets the absolute path to this file.
     def path
-      Config.media/filename[0].chr.downcase/filename
+      File.join(Config.media, filename[0].chr.downcase, filename)
     end
 
     def size

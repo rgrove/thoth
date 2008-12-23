@@ -30,7 +30,8 @@ module Thoth
   class SearchController < Ramaze::Controller
     map       '/search'
     layout    '/layout'
-    view_root Config.theme.view/:search, VIEW_DIR/:search
+    view_root File.join(Config.theme.view, 'search'),
+              File.join(VIEW_DIR, 'search')
 
     helper :admin, :cache, :ysearch
 

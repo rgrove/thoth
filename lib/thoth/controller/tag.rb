@@ -30,7 +30,8 @@ module Thoth
   class TagController < Ramaze::Controller
     map       '/tag'
     layout    '/layout'
-    view_root Config.theme.view/:tag, VIEW_DIR/:tag
+    view_root File.join(Config.theme.view, 'tag'),
+              File.join(VIEW_DIR, 'tag')
 
     helper      :admin, :cache, :error, :pagination
     deny_layout :atom

@@ -30,7 +30,8 @@ module Thoth
   class MediaController < Ramaze::Controller
     map       '/media'
     layout    '/layout'
-    view_root Config.theme.view/:media, VIEW_DIR/:media
+    view_root File.join(Config.theme.view, 'media'),
+              File.join(VIEW_DIR, 'media')
 
     helper      :admin, :error, :pagination
     deny_layout :index

@@ -30,7 +30,8 @@ module Thoth
   class CommentController < Ramaze::Controller
     map       '/comment'
     layout    '/layout'
-    view_root Config.theme.view/:comment, VIEW_DIR/:comment
+    view_root File.join(Config.theme.view, 'comment'),
+              File.join(VIEW_DIR, 'comment')
 
     helper      :admin, :aspect, :cache, :cookie, :pagination, :error
     deny_layout :atom, :rss

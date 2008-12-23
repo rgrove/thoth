@@ -30,7 +30,8 @@ module Thoth
   class AdminController < Ramaze::Controller
     map       '/admin'
     layout    '/layout'
-    view_root Config.theme.view/:admin, VIEW_DIR/:admin
+    view_root File.join(Config.theme.view, 'admin'),
+              File.join(VIEW_DIR, 'admin')
 
     helper :admin, :error
 

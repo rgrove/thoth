@@ -51,13 +51,13 @@ module Thoth
           }
 
           theme {
-            public HOME_DIR/:public
-            view   HOME_DIR/:view
+            public File.join(HOME_DIR, 'public')
+            view   File.join(HOME_DIR, 'view')
             css    []
             js     []
           }
 
-          media HOME_DIR/:media
+          media File.join(HOME_DIR, 'media')
 
           plugins []
 
@@ -68,7 +68,7 @@ module Thoth
             compile_views env == :production
             enable_cache  env == :production
             enable_minify env == :production
-            error_log     HOME_DIR/:log/"error.log"
+            error_log     File.join(HOME_DIR, 'log', 'error.log')
           }
 
           timestamp {
