@@ -55,6 +55,13 @@ module Thoth
             view   File.join(HOME_DIR, 'view')
             css    []
             js     []
+
+            gravatar {
+              enabled true
+              default "identicon"
+              rating  "g"
+              size    32
+            }
           }
 
           media File.join(HOME_DIR, 'media')

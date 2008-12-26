@@ -342,13 +342,36 @@ div.comment:hover {
   margin-bottom: 0.8em;
 }
 
-.comment .date {
-  float: right;
-  font-size: 85%;
-  text-align: right;
+.comment .ft:after {
+  clear: left;
+  content: '.';
+  display: block;
+  height: 0;
+  visibility: hidden;
 }
 
-.comment .author { font-size: 85%; }
+.comment .gravatar {
+  border: 1px solid #cfcfcf;
+  float: left;
+  margin: -2px 6px 6px 0;
+  padding: 1px;
+}
+
+.comment .gravatar:hover { border-color: #a0a0a0; }
+
+.comment .gravatar,
+.comment .gravatar img {
+  height: 32px;
+  width: 32px;
+}
+
+.comment .author {
+  margin-top: 5px;
+}
+
+.comment .date {
+  font-size: 85%;
+}
 
 /* -- Post Comment Form ----------------------------------------------------- */
 #post-comment { margin-top: 30px; }
@@ -363,8 +386,14 @@ div.comment:hover {
 #post-comment input#title { width: 80%; }
 #post-comment p { margin: 0.7em 0; }
 #post-comment p.tip { font-size: 93%; }
-#post-comment textarea { width: 100%; }
 
+#post-comment span.tip {
+  color: #666;
+  font-size: 93%;
+  margin-left: 0.5em;
+}
+
+#post-comment textarea { width: 100%; }
 #post-comment .error { font-size: 85%; }
 
 @media print {

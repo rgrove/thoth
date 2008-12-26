@@ -21,10 +21,22 @@
     <% end; end %>
 
     <p>
-      <label for="author_url">URL</label>
+      <label for="author_email">Email</label>
+      <input type="text" name="author_email" id="author_email" maxlength="255"
+          title="Enter your email address" value="<%== @author_email %>" />
+      <span class="tip">required, won't be displayed</span>
+    </p>
+
+    <% if @comment; @comment.errors.on(:author_email).each do |error| %>
+      <div class="flash error"><%== error %></div>
+    <% end; end %>
+
+    <p>
+      <label for="author_url">Website</label>
       <input type="text" name="author_url" id="author_url" maxlength="255"
           title="Enter the URL of your website (optional)"
           value="<%== @author_url %>" />
+      <span class="tip">optional</span>
     </p>
 
     <% if @comment; @comment.errors.on(:author_url).each do |error| %>

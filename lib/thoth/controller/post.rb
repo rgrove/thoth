@@ -53,12 +53,13 @@ module Thoth
 
         # Create a new comment.
         comment = Comment.new do |c|
-          c.post_id    = @post.id
-          c.author     = request[:author]
-          c.author_url = request[:author_url]
-          c.title      = request[:title]
-          c.body       = request[:body]
-          c.ip         = request.ip
+          c.post_id      = @post.id
+          c.author       = request[:author]
+          c.author_email = request[:author_email]
+          c.author_url   = request[:author_url]
+          c.title        = request[:title]
+          c.body         = request[:body]
+          c.ip           = request.ip
         end
 
         # Set cookies.
@@ -66,6 +67,8 @@ module Thoth
 
         response.set_cookie(:thoth_author, :expires => expire, :path => '/',
             :value => comment.author)
+        response.set_cookie(:thoth_author_email, :expires => expire,
+            :path => '/', :value => comment.author_email)
         response.set_cookie(:thoth_author_url, :expires => expire, :path => '/',
             :value => comment.author_url)
 
@@ -81,12 +84,14 @@ module Thoth
           end
         end
 
-        @author     = comment.author
-        @author_url = comment.author_url
-        @preview    = comment
+        @author       = comment.author
+        @author_email = comment.author_email
+        @author_url   = comment.author_url
+        @preview      = comment
       elsif Config.site.enable_comments
-        @author     = cookie(:thoth_author, '')
-        @author_url = cookie(:thoth_author_url, '')
+        @author       = cookie(:thoth_author, '')
+        @author_email = cookie(:thoth_author_email, '')
+        @author_url   = cookie(:thoth_author_url, '')
       end
 
       @title = @post.title

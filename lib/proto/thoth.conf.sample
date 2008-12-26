@@ -112,6 +112,37 @@ Configuration.for("thoth_production") {
     #
     # js []
 
+    gravatar {
+
+      # Whether or not to enable Gravatar images on comments. Gravatar is a free
+      # service that allows people to associate profile images with an email
+      # address so that their postings on blogs and other websites are easily
+      # identifiable. Learn more at http://www.gravatar.com/.
+      #
+      # enabled true
+
+      # Default icon set to use for users who don't have custom Gravatars. See
+      # gravatar.com for the latest options. As of this writing, the available
+      # choices are "identicon" (geometric shapes), "monsterids" (cutesy little
+      # monsters), and "wavatars" (cutesy geometric shapes).
+      #
+      # Alternatively, you can specify the URL of your own custom image here and
+      # that image will be used instead.
+      #
+      # default "identicon"
+
+      # Maximum Gravatar rating to allow. Available ratings are "g", "pg", "r",
+      # and "x". Just like with movies, "r" and "x"-rated Gravatars may contain
+      # adult content.
+      #
+      # rating "g"
+
+      # Gravatar size in pixels. This sets both the width and the height.
+      #
+      # size 32
+
+    }
+
   }
 
   # Absolute path to a directory where uploaded media files (images, videos,

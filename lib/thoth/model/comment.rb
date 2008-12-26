@@ -26,6 +26,8 @@
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #++
 
+require 'digest/md5'
+
 module Thoth
   class Comment < Sequel::Model
     include Ramaze::Helper::Link
@@ -49,18 +51,17 @@ module Thoth
     is :notnaughty
 
     validates do
-      presence_of :author, :message => 'Please enter your name.'
-      presence_of :title,  :message => 'Please enter a title for this comment.'
+      presence_of :author,       :message => 'Please enter your name.'
+      presence_of :title,        :message => 'Please enter a title for this comment.'
 
-      length_of :author, :maximum => 64,
-          :message => 'Please enter a name under 64 characters.'
-      length_of :author_url, :maximum => 255,
-          :message => 'Please enter a shorter URL.'
-      length_of :body, :maximum => 65536,
-          :message => 'You appear to be writing a novel. Please try to keep ' <<
-                      'it under 64K.'
-      length_of :title, :maximum => 255,
-          :message => 'Please enter a title shorter than 255 characters.'
+      length_of :author,       :maximum => 64,    :message => 'Please enter a name under 64 characters.'
+      length_of :author_email, :maximum => 255,   :message => 'Please enter a shorter email address.'
+      length_of :author_url,   :maximum => 255,   :message => 'Please enter a shorter URL.'
+      length_of :body,         :maximum => 65536, :message => 'You appear to be writing a novel. Please try to keep it under 64K.'
+      length_of :title,        :maximum => 255,   :message => 'Please enter a title shorter than 255 characters.'
+
+      format_of :author_email, :with => :email, :message => 'Please enter a valid email address.'
+      format_of :author_url,   :with => /^(?:$|https?:\/\/\S+\.\S+)/i, :message => 'Please enter a valid URL or leave the URL field blank.'
     end
 
     before_create do
@@ -89,12 +90,12 @@ module Thoth
       self[:author] = author.strip unless author.nil?
     end
 
-    def author_url=(url)
-      # Ensure that the URL begins with a valid protocol.
-      unless url.nil? || url.empty? || url =~ /^(?:https?|mailto):\/\//i
-        url = 'http://' + url
-      end
+    def author_email=(email)
+      @gravatar_url = nil
+      self[:author_email] = email.strip unless email.nil?
+    end
 
+    def author_url=(url)
       self[:author_url] = url.strip unless url.nil?
     end
 
@@ -120,6 +121,18 @@ module Thoth
       else
         format ? self[:created_at].strftime(format) : self[:created_at]
       end
+    end
+
+    # Gets the Gravatar URL for this comment.
+    def gravatar_url
+      return @gravatar_url if @gravatar_url
+
+      md5     = Digest::MD5.hexdigest(author_email || author)
+      default = CGI.escape(Config.theme.gravatar.default)
+      rating  = Config.theme.gravatar.rating
+      size    = Config.theme.gravatar.size
+
+      @gravatar_url = "http://www.gravatar.com/avatar/#{md5}.jpg?d=#{default}&r=#{rating}&s=#{size}"
     end
 
     # Gets the post to which this comment is attached.
