@@ -3,6 +3,7 @@ Thoth History
 
 Version 0.3.0 (?)
   * Requires Ramaze 2008.12.
+  * Requires Sequel 2.8.x.
   * Blog posts can now be saved as drafts, so you can save posts in progress
     without publishing them.
   * Twitter plugin now excludes replies by default.
@@ -10,6 +11,7 @@ Version 0.3.0 (?)
     and JS URLs that should be loaded in addition to the default Thoth CSS and
     JS. This way you don't have to override the CSS and JS templates to
     customize your theme.
+  * Comment HTML sanitization was separated out into a new gem, Sanitize.
 
 Version 0.2.1 (2008-09-09)
   * Requires Sequel 2.5.x (this fixes an issue with SQLite and DateTime

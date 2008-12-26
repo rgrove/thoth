@@ -29,7 +29,22 @@
 module Thoth
   class Comment < Sequel::Model
     include Ramaze::Helper::Link
-    include Ramaze::Helper::Sanitize
+
+    CONFIG_SANITIZE = {
+      :elements => [
+        'a', 'b', 'blockquote', 'br', 'code', 'dd', 'dl', 'dt', 'em', 'i',
+        'li', 'ol', 'p', 'pre', 'small', 'strike', 'strong', 'sub', 'sup',
+        'u', 'ul'
+      ],
+
+      :attributes => {
+        'a'   => ['href', 'title'],
+        'pre' => ['class']
+      },
+
+      :add_attributes => {'a' => {'rel' => 'nofollow'}},
+      :protocols => {'a' => {'href' => ['ftp', 'http', 'https', 'mailto']}}
+    }
 
     is :notnaughty
 
@@ -60,8 +75,8 @@ module Thoth
     # Class Methods
     #++
 
-    # Recently-posted comments (up to _limit_) sorted in reverse order by creation
-    # time.
+    # Recently-posted comments (up to _limit_) sorted in reverse order by
+    # creation time.
     def self.recent(page = 1, limit = 10)
       reverse_order(:created_at).paginate(page, limit)
     end
@@ -87,14 +102,14 @@ module Thoth
       redcloth = RedCloth.new(body, [:filter_styles])
 
       self[:body]          = body
-      self[:body_rendered] = sanitize_html(redcloth.to_html(
+      self[:body_rendered] = Sanitize.clean(redcloth.to_html(
         :refs_textile,
         :block_textile_lists,
         :inline_textile_link,
         :inline_textile_code,
         :glyphs_textile,
         :inline_textile_span
-      ))
+      ), CONFIG_SANITIZE)
     end
 
     # Gets the creation time of this comment. If _format_ is provided, the time

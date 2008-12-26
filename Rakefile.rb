@@ -57,7 +57,6 @@ thoth_gemspec = Gem::Specification.new do |s|
   s.files        = FileList['{bin,lib}/**/*', 'LICENSE'].to_a
   s.executables  = ['thoth']
   s.require_path = 'lib'
-  s.has_rdoc     = true
 
   s.required_ruby_version = '>= 1.8.6'
 
@@ -67,10 +66,10 @@ thoth_gemspec = Gem::Specification.new do |s|
   s.add_dependency('cssmin',            '~> 1.0.2')
   s.add_dependency('echoe',             '~> 3.0.2') # required by RedCloth
   s.add_dependency('erubis',            '~> 2.6.2')
-  s.add_dependency('hpricot',           '~> 0.6')
   s.add_dependency('json_pure',         '~> 1.1.3')
   s.add_dependency('jsmin',             '~> 1.0.1')
   s.add_dependency('RedCloth',          '~> 4.1.1')
+  s.add_dependency('sanitize',          '~> 1.0.0')
   s.add_dependency('sequel',            '~> 2.8.0')
   s.add_dependency('sequel_notnaughty', '~> 0.6.2')
   s.add_dependency('thin',              '~> 1.0.0')
