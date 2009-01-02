@@ -132,6 +132,14 @@ module Thoth
         tempfile, filename, type = request[:file].values_at(
             :tempfile, :filename, :type)
 
+        # Ensure that the filename is a name only and not a full path, since
+        # certain browsers are stupid (I'm looking at you, IE).
+        filename = filename[/([^\/\\]+)$/].strip
+
+        if filename.empty?
+          return @media_error = 'Error: Invalid filename.'
+        end
+
         file = Media.new do |f|
           f.filename = filename
           f.mimetype = type || 'application/octet-stream'
