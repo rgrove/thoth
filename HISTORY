@@ -2,7 +2,7 @@ Thoth History
 ================================================================================
 
 Version 0.3.0 (?)
-  * Requires Ramaze 2008.12.
+  * Requires Ramaze 2009.01.
   * Requires Sequel 2.8.x.
   * Blog posts can now be saved as drafts, so you can save posts in progress
     without publishing them.
