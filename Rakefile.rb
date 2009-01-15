@@ -70,7 +70,7 @@ thoth_gemspec = Gem::Specification.new do |s|
   s.add_dependency('jsmin',             '~> 1.0.1')
   s.add_dependency('RedCloth',          '~> 4.1.1')
   s.add_dependency('sanitize',          '~> 1.0.0')
-  s.add_dependency('sequel',            '~> 2.8.0')
+  s.add_dependency('sequel',            '~> 2.9.0')
   s.add_dependency('sequel_notnaughty', '~> 0.6.2')
   s.add_dependency('thin',              '~> 1.0.0')
 end
