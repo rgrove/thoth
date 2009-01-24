@@ -93,7 +93,11 @@ module Thoth; module Plugin
 
         # Weed out replies if necessary.
         unless Config.twitter.include_replies
-          tweets.delete_if {|tweet| !tweet['in_reply_to_status_id'].nil? }
+          tweets.delete_if do |tweet|
+            !tweet['in_reply_to_status_id'].nil? ||
+                !tweet['in_reply_to_user_id'].nil?
+          end
+
           tweets = tweets.slice(0, options[:count].to_i)
         end
 
