@@ -1,5 +1,5 @@
 #--
-# Copyright (c) 2008 Ryan Grove <ryan@wonko.com>
+# Copyright (c) 2009 Ryan Grove <ryan@wonko.com>
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
@@ -32,6 +32,6 @@ module Thoth
   APP_AUTHOR    = 'Ryan Grove'
   APP_EMAIL     = 'ryan@wonko.com'
   APP_URL       = 'http://thothblog.org/'
-  APP_COPYRIGHT = 'Copyright (c) 2008 Ryan Grove <ryan@wonko.com>. All ' <<
+  APP_COPYRIGHT = 'Copyright (c) 2009 Ryan Grove <ryan@wonko.com>. All ' <<
                   'rights reserved.'
 end
