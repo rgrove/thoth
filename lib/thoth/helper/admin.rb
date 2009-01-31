@@ -28,48 +28,14 @@
 
 module Ramaze; module Helper
 
-  # The Admin helper provides genric +login+ and +logout+ actions for handling
-  # Thoth administrator logins and logouts, along with methods for checking
-  # for or requiring authorization from within other actions and views.
+  # The Admin helper provides methods for checking for or requiring
+  # authorization from within other actions and views.
   module Admin
-    Helper::LOOKUP << self
 
     # Include cookie helper.
     def self.included(klass)
       klass.send(:helper, :cookie)
     end
-
-    # Authenticates an admin login by checking the +username+ and +password+
-    # request parameters against the ADMIN_USER and ADMIN_PASS values in the
-    # Thoth config file.
-    #
-    # On a successful login, an auth cookie named +thoth_auth+ will be set and
-    # the user will be redirected to the referring URL. On an unsuccessful login
-    # attempt, a flash message named +login_error+ will be set and the user will
-    # be redirected to the referring URL without an auth cookie.
-    def login
-      username, password = request[:username, :password]
-
-      if username == Thoth::Config.admin.user &&
-          password == Thoth::Config.admin.pass
-        # Set an auth cookie that expires in two weeks.
-        response.set_cookie('thoth_auth', :expires => Time.now + 1209600,
-            :path => R(Thoth::MainController), :value => auth_key)
-
-        redirect_referrer
-      end
-
-      flash[:error] = 'Invalid username or password.'
-      redirect_referrer
-    end
-
-    # Deletes the +thoth_auth+ cookie and redirects to the home page.
-    def logout
-      response.delete_cookie('thoth_auth', :path => R(Thoth::MainController))
-      redirect(R(Thoth::MainController))
-    end
-
-    private
 
     # Generates and returns an auth key suitable for storage in a client-side
     # auth cookie. The key is an SHA256 hash of the following elements:
@@ -98,7 +64,7 @@ module Ramaze; module Helper
       Ramaze::Session.current.session_id
     end
 
-    # Checks the form token specified by +name+ and returns +true+ if it's
+    # Checks the form token specified by _name_ and returns +true+ if it's
     # valid, +false+ otherwise.
     def form_token_valid?(name = 'token')
       request[name] == form_token

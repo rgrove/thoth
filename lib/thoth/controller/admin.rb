@@ -44,5 +44,36 @@ module Thoth
         @title = 'Login'
       end
     end
+
+    # Authenticates an admin login by checking the _username_ and _password_
+    # request parameters against the +ADMIN_USER+ and +ADMIN_PASS+ values in the
+    # Thoth config file.
+    #
+    # On a successful login, an auth cookie named <em>thoth_auth</em> will be
+    # set and the user will be redirected to the referring URL. On an
+    # unsuccessful login attempt, a flash message named <em>login_error</em>
+    # will be set and the user will be redirected to the referring URL without
+    # an auth cookie.
+    def login
+      username, password = request[:username, :password]
+
+      if username == Config.admin.user && password == Config.admin.pass
+        # Set an auth cookie that expires in two weeks.
+        response.set_cookie('thoth_auth', :expires => Time.now + 1209600,
+            :path => R(MainController), :value => auth_key)
+
+        redirect_referrer
+      end
+
+      flash[:error] = 'Invalid username or password.'
+      redirect_referrer
+    end
+
+    # Deletes the <em>thoth_auth</em> cookie and redirects to the home page.
+    def logout
+      response.delete_cookie('thoth_auth', :path => R(MainController))
+      redirect(R(MainController))
+    end
+
   end
 end
