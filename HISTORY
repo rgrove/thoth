@@ -16,6 +16,8 @@ Version 0.3.0 (?)
   * Twitter plugin now excludes replies by default.
   * Comment HTML sanitization was separated out into a new gem, Sanitize.
   * Comment titles are now limited to 100 characters instead of 255.
+  * Long unbroken runs of text without whitespace in comments are now broken up
+    with <wbr /> tags to make them wrap without breaking the site layout.
   * Fixed a bug that caused an invalid path to be used for media files uploaded
     via Internet Explorer.
 

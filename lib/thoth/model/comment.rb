@@ -27,6 +27,7 @@
 #++
 
 require 'digest/md5'
+require 'strscan'
 
 module Thoth
   class Comment < Sequel::Model
@@ -103,14 +104,14 @@ module Thoth
       redcloth = RedCloth.new(body, [:filter_styles])
 
       self[:body]          = body
-      self[:body_rendered] = Sanitize.clean(redcloth.to_html(
+      self[:body_rendered] = insert_breaks(Sanitize.clean(redcloth.to_html(
         :refs_textile,
         :block_textile_lists,
         :inline_textile_link,
         :inline_textile_code,
         :glyphs_textile,
         :inline_textile_span
-      ), CONFIG_SANITIZE)
+      ), CONFIG_SANITIZE))
     end
 
     # Gets the creation time of this comment. If _format_ is provided, the time
@@ -158,5 +159,47 @@ module Thoth
     def url
       new? ? '#' : post.url + "#comment-#{id}"
     end
+
+    protected
+
+    # Inserts <wbr /> tags in long strings without spaces, while being careful
+    # not to break HTML tags.
+    def insert_breaks(str, length = 30)
+      scanner = StringScanner.new(str)
+
+      char    = ''
+      count   = 0
+      in_tag  = 0
+      new_str = ''
+
+      while char = scanner.getch do
+        case char
+        when '<'
+          in_tag += 1
+
+        when '>'
+          in_tag -= 1
+          in_tag = 0 if in_tag < 0
+
+        when /\s/
+          count = 0 if in_tag == 0
+
+        else
+          if in_tag == 0
+            if count == length
+              new_str << '<wbr />'
+              count = 0
+            end
+
+            count += 1
+          end
+        end
+
+        new_str << char
+      end
+
+      return new_str
+    end
+
   end
 end
