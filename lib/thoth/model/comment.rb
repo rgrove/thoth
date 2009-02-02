@@ -58,7 +58,7 @@ module Thoth
       length_of :author_email, :maximum => 255,   :message => 'Please enter a shorter email address.'
       length_of :author_url,   :maximum => 255,   :message => 'Please enter a shorter URL.'
       length_of :body,         :maximum => 65536, :message => 'You appear to be writing a novel. Please try to keep it under 64K.'
-      length_of :title,        :maximum => 255,   :message => 'Please enter a title shorter than 255 characters.'
+      length_of :title,        :maximum => 100,   :message => 'Please enter a title shorter than 100 characters.'
 
       format_of :author_email, :with => :email, :message => 'Please enter a valid email address.'
       format_of :author_url,   :with => /^(?:$|https?:\/\/\S+\.\S+)/i, :message => 'Please enter a valid URL or leave the URL field blank.'
