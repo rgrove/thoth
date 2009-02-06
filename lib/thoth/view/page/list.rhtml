@@ -1,41 +1,49 @@
 <h2>Pages</h2>
 
 <%= render_template('../util/pager') %>
-<form action="<%= @form_action %>" method="post">
-	<table class="list pages" summary="List of all pages" id="page_list_table">
-	  <%= render_template('../util/table_sortheader') %>
-	  <tfoot></tfoot>
-	  <tbody>
-	    <% row = 'even' %>
-	    <% @pages.all do |page| %>
-	      <tr id="row_<%= page.id %>" class="<%= row == 'even' ? row = 'odd' : row = 'even' %>">
-			<td class="display"><input type="text" size="2" name="display_order[<%= page.id %>]" value="<%= page.display_order %>"/></td>
-	        <td class="name"><%== page.name %></td>
-	        <td class="title">
-	          <a href="<%== page.url %>"><%== page.title %></a>
-	        </td>
-	        <td class="created">
-	          <%= page.created_at(Thoth::Config.timestamp.short) %>
-	        </td>
-	        <td class="updated">
-	          <%= page.updated_at(Thoth::Config.timestamp.short) %>
-	        </td>
-	      </tr>
-	    <% end %>
 
-	    <% if @pager.record_count == 0 %>
-	      <tr class="empty">
-	        <td colspan="4">
-	          No pages to display.
-	        </td>
-	      </tr>
-	    <% end %>
-	  </tbody>
-	</table>
-	<p/>
-	<input type="hidden" name="order" value="<%= @order %>"/>
-	<input type="hidden" name="sort" value="<%= @sort %>"/>
-	<input type="submit" value="Save Display Ordering"/>
+<form action="<%= @form_action %>" method="post">
+  <table class="list pages" summary="List of all pages" id="page_list_table">
+    <%= render_template('../util/table_sortheader') %>
+    <tfoot></tfoot>
+    <tbody>
+      <% row = 'even' %>
+      <% @pages.all do |page| %>
+        <tr id="row_<%= page.id %>" class="<%= row == 'even' ? row = 'odd' : row = 'even' %>">
+          <td class="name"><%== page.name %></td>
+          <td class="title">
+            <a href="<%== page.url %>"><%== page.title %></a>
+          </td>
+          <td class="created">
+            <%= page.created_at(Thoth::Config.timestamp.short) %>
+          </td>
+          <td class="updated">
+            <%= page.updated_at(Thoth::Config.timestamp.short) %>
+          </td>
+          <td class="position">
+            <input type="text" size="2" name="position[<%= page.id %>]"
+                value="<%= page.position %>" maxlength="5" />
+          </td>
+        </tr>
+      <% end %>
+
+      <% if @pager.record_count == 0 %>
+        <tr class="empty">
+          <td colspan="5">
+            No pages to display.
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+
+  <p>
+    <input type="hidden" name="order" value="<%== @order %>" />
+    <input type="hidden" name="sort" value="<%== @sort %>" />
+    <input type="hidden" name="token" value="<%== form_token %>" />
+    <input type="submit" value="Save Positions" />
+  </p>
 </form>
+
 <%= render_template('../util/pager') %>
 

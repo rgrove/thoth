@@ -49,6 +49,10 @@ module Thoth
                       'underscores, and dashes.'
     end
 
+    after_destroy do
+      Page.normalize_positions
+    end
+
     before_create do
       self.created_at = Time.now
     end
@@ -56,6 +60,8 @@ module Thoth
     before_save do
       self.updated_at = Time.now
     end
+
+    set_restricted_columns :position
 
     #--
     # Class Methods
@@ -73,6 +79,49 @@ module Thoth
     # is not too long or too short.
     def self.name_valid?(name)
       !!(name =~ /^[0-9a-z_-]{1,64}$/i)
+    end
+
+    # Adjusts the position values of all pages, resolving duplicate positions
+    # and eliminating gaps.
+    def self.normalize_positions
+      db.transaction do
+        i = 1
+
+        order(:position).all do |page|
+          unless page.position == i
+            filter(:id => page.id).update(:position => i)
+          end
+
+          i += 1
+        end
+      end
+    end
+
+    # Sets the display position of the specified page, adjusting the position of
+    # other pages as necessary.
+    def self.set_position(page, pos)
+      unless page.is_a?(Page) || page = Page[page.to_i]
+        raise ArgumentError, "Invalid page id: #{page}"
+      end
+
+      pos     = pos.to_i
+      cur_pos = page.position
+
+      unless pos > 0
+        raise ArgumentError, "Invalid position: #{pos}"
+      end
+
+      db.transaction do
+        if pos < cur_pos
+          filter{:position >= pos && :position < cur_pos}.
+              update(:position => 'position + 1'.lit)
+        elsif pos > cur_pos
+          filter{:position > cur_pos && :position <= pos}.
+              update(:position => 'position - 1'.lit)
+        end
+
+        filter(:id => page.id).update(:position => pos)
+      end
     end
 
     # Returns a valid, unique page name based on the specified title. If the

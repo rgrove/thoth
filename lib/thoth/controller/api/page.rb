@@ -37,8 +37,7 @@ module Thoth
     end
 
     # Returns a response indicating whether the specified page name is valid and
-    # not already taken. Returns an HTTP 200 response on success or an HTTP 500
-    # response on error.
+    # not already taken. Returns an HTTP 200 response on success.
     #
     # ==== Query Parameters
     #
@@ -66,7 +65,7 @@ module Thoth
     end
 
     # Suggests a valid and unique name for the specified page title. Returns an
-    # HTTP 200 response on success or an HTTP 500 response on error.
+    # HTTP 200 response on success.
     #
     # ==== Query Parameters
     #
@@ -88,53 +87,52 @@ module Thoth
       JSON.generate({"name" => Page.suggest_name(request[:title])})
     end
 
-    # updates the display_order fields of two pages in response to a drop action.
-    # essentially just swaps the display_order values for two pages
-    # HTTP 200 on success, HTTP 500 on error.
+    # Sets the display position of the specified page. If the new position is
+    # already in use by another page, that page's position (and any others) will
+    # be adjusted as necessary. Returns an HTTP 200 response on success. This
+    # action only accepts POST requests.
     #
-    # ==== Query Parameters
-    # page_1:: id of first page
-    # page_2:: id of second page
-    # 
+    # ==== POST Parameters
+    #
+    # id::       page id
+    # position:: new display position
+    #
     # ==== Sample Response
     #
-    #   {"page_1": 2, "page_2": 1} // indicates that page with id 1 now has display_order of 2, etc.    
-    def update_display_order
+    # Indicates that the display position for page id 42 was successfully set to
+    # 3.
+    #
+    #   {"id":42,"position":3}
+    #
+    def set_position
       error_403 unless auth_key_valid?
-      
-      unless request[:page_1] && request[:page_1].length > 0
-        error_400('Missing required parameter: page_1')
+      error_405 unless request.post?
+
+      [:id, :position].each do |param|
+        unless request[param] && request[param].length > 0
+          error_400("Missing required parameter: #{param}")
+        end
       end
-      
-      unless request[:page_2] && request[:page_2].length > 0
-        error_400('Missing required parameter: page_2')
+
+      id       = request[:id].to_i
+      position = request[:position].to_i
+
+      unless page = Page[id]
+        error_400("Invalid page id: #{id}")
       end
-      
-      # find the relevant pages:
-      page1 = Page[:id => request[:page_1]]
-      page2 = Page[:id => request[:page_2]]
-      
-      if (page1.nil? or page2.nil?)
-        error_400('Invalid page ids...')
-      end
-      
-      temp_display_order = page1.display_order
-      page1.display_order = page2.display_order
-      page2.display_order = temp_display_order
-      
+
       begin
-        page1.save
-        page2.save
+        Page.normalize_positions
+        Page.set_position(page, position)
+
       rescue => e
-        error_400("Error saving page: #{e}")
+        error_400("Error setting page position: #{e}")
       end
-      
+
       JSON.generate({
-        :page_1  => page1.display_order,
-        :page_2 => page2.display_order
+        :id       => id,
+        :position => position
       })
-      
-      
     end
 
   end

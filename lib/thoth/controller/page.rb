@@ -82,7 +82,7 @@ module Thoth
         @page.name  = request[:name]
         @page.title = request[:title]
         @page.body  = request[:body]
-        
+
         if @page.valid? && request[:action] == 'Post'
           begin
             raise unless @page.save
@@ -104,29 +104,30 @@ module Thoth
     def list(page = 1)
       require_auth
 
+      # If this is a POST request, set page display positions.
+      if request.post? && !request[:position].nil? &&
+          request[:position].is_a?(Hash)
 
-      if request.post?
-        # If we're here on a post, that means that the user was trying to modify their pages'
-        # display ordering.
-        # Find each post in request[:display_order] and change its display_order accordingly-
-        # There's almost certainly a better way to do this, but my Sequel skills are almost
-        # nonexistent.
-        
-        if (not request[:display_order].nil?) and (request[:display_order].is_a? Hash)
-          request[:display_order].each_pair do |k,v|
-            p = Page[:id => k]
-            p.display_order = v
-            p.save
+        error_403 unless form_token_valid?
+
+        Page.normalize_positions
+
+        Page.order(:position).all do |p|
+          unless request[:position][p.id.to_s].nil? ||
+             request[:position][p.id.to_s].to_i == p.position
+            Page.set_position(p, request[:position][p.id.to_s].to_i)
           end
         end
+
+        Page.normalize_positions
       end
 
       page = page.to_i
 
-      @columns  = [:display_order, :name, :title, :created_at, :updated_at]
+      @columns  = [:name, :title, :created_at, :updated_at, :position]
       @order    = (request[:order] || :asc).to_sym
       @sort     = (request[:sort]  || :display_order).to_sym
-      @sort     = :display_order unless @columns.include?(@sort)
+      @sort     = :position unless @columns.include?(@sort)
       @sort_url = Rs(:list, page)
 
       @pages = Page.paginate(page, 20).order(@order == :desc ? @sort.desc :
@@ -147,13 +148,10 @@ module Thoth
         error_403 unless form_token_valid?
 
         @page = Page.new do |p|
-          p.name  = request[:name]
-          p.title = request[:title]
-          p.body  = request[:body]
-          
-          # calculate display order: should be max(existing display orders) + 1
-          p.display_order = Page.dataset.max(:display_order).to_i + 1
-          
+          p.name     = request[:name]
+          p.title    = request[:title]
+          p.body     = request[:body]
+          p.position = Page.dataset.max(:position).to_i + 1
         end
 
         if @page.valid? && request[:action] == 'Post'
