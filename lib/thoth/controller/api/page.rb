@@ -87,5 +87,55 @@ module Thoth
 
       JSON.generate({"name" => Page.suggest_name(request[:title])})
     end
+
+    # updates the display_order fields of two pages in response to a drop action.
+    # essentially just swaps the display_order values for two pages
+    # HTTP 200 on success, HTTP 500 on error.
+    #
+    # ==== Query Parameters
+    # page_1:: id of first page
+    # page_2:: id of second page
+    # 
+    # ==== Sample Response
+    #
+    #   {"page_1": 2, "page_2": 1} // indicates that page with id 1 now has display_order of 2, etc.    
+    def update_display_order
+      error_403 unless auth_key_valid?
+      
+      unless request[:page_1] && request[:page_1].length > 0
+        error_400('Missing required parameter: page_1')
+      end
+      
+      unless request[:page_2] && request[:page_2].length > 0
+        error_400('Missing required parameter: page_2')
+      end
+      
+      # find the relevant pages:
+      page1 = Page[:id => request[:page_1]]
+      page2 = Page[:id => request[:page_2]]
+      
+      if (page1.nil? or page2.nil?)
+        error_400('Invalid page ids...')
+      end
+      
+      temp_display_order = page1.display_order
+      page1.display_order = page2.display_order
+      page2.display_order = temp_display_order
+      
+      begin
+        page1.save
+        page2.save
+      rescue => e
+        error_400("Error saving page: #{e}")
+      end
+      
+      JSON.generate({
+        :page_1  => page1.display_order,
+        :page_2 => page2.display_order
+      })
+      
+      
+    end
+
   end
 end
