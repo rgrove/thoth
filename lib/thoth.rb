@@ -107,8 +107,11 @@ module Thoth
       FileUtils.mkdir(File.join(path, 'plugin'))
       FileUtils.mkdir(File.join(path, 'public'))
       FileUtils.mkdir(File.join(path, 'view'))
+      FileUtils.mkdir(File.join(path, 'tmp'))
 
+      FileUtils.cp(File.join(LIB_DIR, '..', 'proto', 'config.ru'), File.join(path, 'config.ru'))
       FileUtils.cp(File.join(LIB_DIR, '..', 'proto', 'thoth.conf.sample'), File.join(path, 'thoth.conf'))
+
       File.chmod(0750, File.join(path, 'log'))
       File.chmod(0640, File.join(path, 'thoth.conf'))
     end
