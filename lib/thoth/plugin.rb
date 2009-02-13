@@ -29,7 +29,7 @@
 module Thoth
 
   # Namespace for Thoth plugins. See
-  # http://code.google.com/p/thoth-blog/wiki/CreatingPlugins for more info on
+  # http://wiki.github.com/rgrove/thoth/creating-plugins for more info on
   # creating and using plugins.
   module Plugin
     def self.const_missing(name)
