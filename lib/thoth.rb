@@ -224,11 +224,7 @@ module Thoth
       Sequel.datetime_class = Time
 
       @db = Sequel.open(Config.db)
-
-      unless @db.test_connection
-        Ramaze::Log.error('Unable to connect to database.')
-        abort
-      end
+      @db.test_connection
 
       if trait[:sql_log]
         require 'logger'
@@ -237,7 +233,7 @@ module Thoth
 
     rescue => e
       Ramaze::Log.error("Unable to connect to database: #{e}")
-      abort
+      exit(1)
     end
 
     # Restarts the running Thoth daemon (if any).
