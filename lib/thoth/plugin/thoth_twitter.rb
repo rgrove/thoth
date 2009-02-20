@@ -65,6 +65,40 @@ module Thoth; module Plugin
     end
 
     class << self
+
+      # Parses a tweet and converts it into HTML. URLs will be turned into
+      # links.
+      def parse_tweet(tweet)
+        index = 0
+        text  = tweet['text'].dup
+        urls  = []
+
+        # Extract URLs and replace them with placeholders for later.
+        URI.extract(text.dup, ['ftp', 'ftps', 'git', 'http', 'https', 'mailto',
+            'scp', 'sftp', 'ssh', 'telnet']) do |url|
+          text.sub!(url, "__URL#{index}__")
+          urls << url
+          index += 1
+        end
+
+        html = text
+
+        # Replace URL placeholders with links.
+        urls.each_with_index do |url, index|
+          html.sub!("__URL#{index}__", "<a href=\"#{url}\">" <<
+              "#{url.length > 26 ? url[0..26] + '...' : url}</a>")
+        end
+
+        # Turn @username into a link to the specified user's Twitter profile.
+        html.gsub!(/(^|\s)@([a-zA-Z0-9_]{1,16})(\s|$)/,
+            '\1@<a href="http://twitter.com/\2">\2</a>\3')
+
+        return html
+      end
+
+      # Gets a Hash containing recent tweets for the specified _user_. The only
+      # valid option currently is <code>:count</code>, which specifies the
+      # maximum number of tweets that should be returned.
       def recent_tweets(user, options = {})
         if @skip_until
           return [] if @skip_until > Time.now
@@ -131,37 +165,6 @@ module Thoth; module Plugin
         return []
       end
 
-      private
-
-      # Parses a tweet and converts it into HTML. URLs will be turned into
-      # links.
-      def parse_tweet(tweet)
-        index = 0
-        text  = tweet['text'].dup
-        urls  = []
-
-        # Extract URLs and replace them with placeholders for later.
-        URI.extract(text.dup, ['ftp', 'ftps', 'git', 'http', 'https', 'mailto',
-            'scp', 'sftp', 'ssh', 'telnet']) do |url|
-          text.sub!(url, "__URL#{index}__")
-          urls << url
-          index += 1
-        end
-
-        html = text
-
-        # Replace URL placeholders with links.
-        urls.each_with_index do |url, index|
-          html.sub!("__URL#{index}__", "<a href=\"#{url}\">" <<
-              "#{url.length > 26 ? url[0..26] + '...' : url}</a>")
-        end
-
-        # Turn @username into a link to the specified user's Twitter profile.
-        html.gsub!(/(^|\s)@([a-zA-Z0-9_]{1,16})(\s|$)/,
-            '\1@<a href="http://twitter.com/\2">\2</a>\3')
-
-        return html
-      end
     end
 
   end
