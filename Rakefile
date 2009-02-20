@@ -87,6 +87,12 @@ Rake::RDocTask.new do |rd|
   rd.rdoc_files.include('lib/**/*.rb')
 end
 
+task :default => [:test]
+
+task :test do
+  sh 'bacon -a'
+end
+
 desc "install Thoth"
 task :install => :gem do
   sh "gem install pkg/thoth-#{Thoth::APP_VERSION}.gem"
