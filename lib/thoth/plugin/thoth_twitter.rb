@@ -66,22 +66,21 @@ module Thoth; module Plugin
 
     class << self
 
-      # Parses a tweet and converts it into HTML. URLs will be turned into
-      # links.
+      # Parses tweet text and converts it into HTML. Explicit URLs and @username
+      # or #hashtag references will be turned into links.
       def parse_tweet(tweet)
-        index = 0
-        text  = tweet['text'].dup
-        urls  = []
+        index     = 0
+        html      = tweet.dup
+        protocols = ['ftp', 'ftps', 'git', 'http', 'https', 'mailto', 'scp',
+                     'sftp', 'ssh', 'telnet']
+        urls      = []
 
         # Extract URLs and replace them with placeholders for later.
-        URI.extract(text.dup, ['ftp', 'ftps', 'git', 'http', 'https', 'mailto',
-            'scp', 'sftp', 'ssh', 'telnet']) do |url|
-          text.sub!(url, "__URL#{index}__")
+        URI.extract(html.dup, protocols) do |url|
+          html.sub!(url, "__URL#{index}__")
           urls << url
           index += 1
         end
-
-        html = text
 
         # Replace URL placeholders with links.
         urls.each_with_index do |url, index|
@@ -90,8 +89,12 @@ module Thoth; module Plugin
         end
 
         # Turn @username into a link to the specified user's Twitter profile.
-        html.gsub!(/(^|\s)@([a-zA-Z0-9_]{1,16})(\s|$)/,
-            '\1@<a href="http://twitter.com/\2">\2</a>\3')
+        html.gsub!(/@([a-zA-Z0-9_]{1,16})([^a-zA-Z0-9_])?/,
+            '@<a href="http://twitter.com/\1">\1</a>\2')
+
+        # Turn #hashtags into links.
+        html.gsub!(/#([a-zA-Z0-9_]{1,32})([^a-zA-Z0-9_])?/,
+            '<a href="http://search.twitter.com/search?q=%23\1">#\1</a>\2')
 
         return html
       end
@@ -139,7 +142,7 @@ module Thoth; module Plugin
         tweets.map! do |tweet|
           {
             :created_at => Time.parse(tweet['created_at']),
-            :html       => parse_tweet(tweet),
+            :html       => parse_tweet(tweet['text']),
             :id         => tweet['id'],
             :source     => tweet['source'],
             :text       => tweet['text'],
