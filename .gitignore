@@ -2,7 +2,9 @@ custom/
 db/
 media/
 pkg/
+tmp/
 ._*
 .DS_Store
 error.log
+sql.log
 thoth.conf
