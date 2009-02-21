@@ -1,10 +1,10 @@
 #--
 # Copyright (c) 2009 Ryan Grove <ryan@wonko.com>
 # All rights reserved.
-# 
+#
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions are met:
-# 
+#
 #   * Redistributions of source code must retain the above copyright notice,
 #     this list of conditions and the following disclaimer.
 #   * Redistributions in binary form must reproduce the above copyright notice,
@@ -13,7 +13,7 @@
 #   * Neither the name of this project nor the names of its contributors may be
 #     used to endorse or promote products derived from this software without
 #     specific prior written permission.
-# 
+#
 # THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
 # AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
 # IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
@@ -60,6 +60,7 @@ thoth_gemspec = Gem::Specification.new do |s|
 
   s.required_ruby_version = '>= 1.8.6'
 
+  # Runtime dependencies.
   s.add_dependency('ramaze',            '= 2009.02')
   s.add_dependency('builder',           '~> 2.1.2')
   s.add_dependency('configuration',     '~> 0.0.5')
@@ -72,7 +73,22 @@ thoth_gemspec = Gem::Specification.new do |s|
   s.add_dependency('sanitize',          '~> 1.0.5')
   s.add_dependency('sequel',            '~> 2.9.0')
   s.add_dependency('sequel_notnaughty', '~> 0.6.2')
-  s.add_dependency('thin',              '~> 1.0.0')
+
+  # Development dependencies.
+  s.add_development_dependency('bacon', '~> 1.1')
+  s.add_development_dependency('rake',  '~> 0.8')
+
+  s.post_install_message = <<POST_INSTALL
+================================================================================
+Thank you for installing Thoth. If you haven't already, you may want to install
+one or more of the following optional gems:
+
+  mysql        - If you want to use Thoth with a MySQL database
+  passenger    - If you want to run Thoth under Apache using Phusion Passenger
+  sqlite3-ruby - If you want to use Thoth with a SQLite database
+  thin         - If you want to run Thoth using Thin
+================================================================================
+POST_INSTALL
 end
 
 Rake::GemPackageTask.new(thoth_gemspec) do |p|

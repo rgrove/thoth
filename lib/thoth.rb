@@ -248,12 +248,17 @@ module Thoth
       init_ramaze
       init_thoth
 
-      Ramaze.startup(
-        :force   => true,
-        :adapter => trait[:adapter],
-        :host    => trait[:ip],
-        :port    => trait[:port]
-      )
+      begin
+        Ramaze.startup(
+          :force   => true,
+          :adapter => trait[:adapter],
+          :host    => trait[:ip],
+          :port    => trait[:port]
+        )
+      rescue LoadError => ex
+        Ramaze::Log.error("Unable to start Ramaze due to LoadError: #{ex}")
+        exit(1)
+      end
     end
 
     # Starts Thoth as a daemon.
