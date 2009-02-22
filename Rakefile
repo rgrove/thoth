@@ -65,11 +65,10 @@ thoth_gemspec = Gem::Specification.new do |s|
   s.add_dependency('builder',           '~> 2.1.2')
   s.add_dependency('configuration',     '~> 0.0.5')
   s.add_dependency('cssmin',            '~> 1.0.2')
-  s.add_dependency('echoe',             '~> 3.0.2') # required by RedCloth
   s.add_dependency('erubis',            '~> 2.6.2')
   s.add_dependency('json_pure',         '~> 1.1.3')
   s.add_dependency('jsmin',             '~> 1.0.1')
-  s.add_dependency('RedCloth',          '~> 4.1.1')
+  s.add_dependency('RedCloth',          '~> 4.1.9')
   s.add_dependency('sanitize',          '~> 1.0.5')
   s.add_dependency('sequel',            '~> 2.9.0')
   s.add_dependency('sequel_notnaughty', '~> 0.6.2')
