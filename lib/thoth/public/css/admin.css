@@ -21,7 +21,6 @@
 .adminicon.post-delete    { background-position: -32px 0;  }
 .adminicon.post-edit      { background-position: -16px 0;  }
 .adminicon.post-list      { background-position: -48px 0;  }
-.adminicon.post-new       {}
 
 .adminicon.sort {
   height: 5px;
@@ -48,7 +47,6 @@
 
 .toolbar ul {
   float: left;
-  list-style: none;
   margin: 0;
   padding: 0 6px;
 }
@@ -66,6 +64,7 @@
 
 .toolbar ul li {
   float: left;
+  list-style: none;
   margin-left: 1px;
 }
 
@@ -124,13 +123,13 @@ form div.field label {
 form p.buttons { margin: 0.5em 0 1em; }
 
 ol.suggested-tags {
-  list-style: none;
   margin:  0.5em 0;
   padding: 0;
 }
 
 ol.suggested-tags li {
   float: left;
+  list-style: none;
   margin-right: 0.3em;
 }
 

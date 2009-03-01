@@ -1,66 +1,48 @@
-/* -- YUI Fonts ------------------------------------------------------------- */
+/* -- YUI Reset, Base, and Fonts -------------------------------------------- */
+
 /*
-Copyright (c) 2009, Yahoo! Inc. All rights reserved.
+Copyright (c) 2008, Yahoo! Inc. All rights reserved.
 Code licensed under the BSD License:
 http://developer.yahoo.net/yui/license.txt
-version: 2.5.2
+version: 3.0.0pr2
 */
-body {font:13px/1.231 arial,helvetica,clean,sans-serif;*font-size:small;*font:x-small;}table {font-size:inherit;font:100%;}pre,code,kbd,samp,tt{font-family:monospace;*font-size:108%;line-height:100%;}
 
-/* -- Icons ----------------------------------------------------------------- */
-.icon {
-  background: url(../images/thoth-sprite.png) no-repeat;
-  display: -moz-inline-box;
-  display: inline-block;
-  vertical-align: middle;
-}
+/* reset */
+html{color:#000;background:#FFF;}body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,code,form,fieldset,legend,input,textarea,p,blockquote,th,td{margin:0;padding:0;}table{border-collapse:collapse;border-spacing:0;}fieldset,img{border:0;}address,caption,cite,code,dfn,em,strong,th,var{font-style:normal;font-weight:normal;}li{list-style:none;}caption,th{text-align:left;}h1,h2,h3,h4,h5,h6{font-size:100%;font-weight:normal;}q:before,q:after{content:'';}abbr,acronym{border:0;font-variant:normal;}sup{vertical-align:text-top;}sub{vertical-align:text-bottom;}input,textarea,select{font-family:inherit;font-size:inherit;font-weight:inherit;}input,textarea,select{*font-size:100%;}legend{color:#000;}
 
-.icon.comment {
-  background-position: -33px -1px;
-  height: 11px;
-  margin: 0 1px 1px 0;
-  width: 13px;
-  *margin-right: 3px;
-}
+/* base (slightly modified) */
+h1{font-size:138.5%;}h2{font-size:123.1%;}h3{font-size:108%;}h1,h2,h3{margin:1em 0;}h1,h2,h3,h4,h5,h6,strong{font-weight:bold;}abbr,acronym{border-bottom:1px dotted #000;cursor:help;}em{font-style:italic;}blockquote,ul,ol,dl{margin:1em;}dl{margin-left:0;}ol,ul{margin-left:2em;}ol li{list-style:decimal outside;}ul li{list-style:disc outside;}dl dd{margin-left:1em;}th,td{border:1px solid #000;padding:.5em;}th{font-weight:bold;text-align:center;}caption{margin-bottom:.5em;text-align:center;}p,fieldset,table,pre{margin-bottom:1em;}
 
-.icon.comment-post {
-  background-position: -17px -1px;
-  height: 14px;
-  width: 14px;
-  *margin-right: 3px;
-}
+/* fonts */
+body{font:13px/1.231 arial,helvetica,clean,sans-serif;*font-size:small;*font:x-small;}select,input,button,textarea{font:99% arial,helvetica,clean,sans-serif;}table{font-size:inherit;font:100%;}pre,code,kbd,samp,tt{font-family:monospace;*font-size:108%;line-height:100%;}
 
-.icon.comments {
-  background-position: -33px -1px;
-  height: 11px;
-  margin: 0 0 1px 0;
-  width: 13px;
-  *margin: 1px 4px 0 0;
-}
-
-.icon.feed {
-  background-position: -97px -1px;
-  height: 14px;
-  margin-bottom: 3px;
-  width: 14px;
-  *margin: 1px 3px 2px 0;
-}
-
-.icon.tag {
-  background-position: -79px -1px;
-  height: 15px;
-  width: 15px;
-}
-
-/* -- Layout ---------------------------------------------------------------- */
+/* -- Defaults -------------------------------------------------------------- */
 a {
   color: #0066cc;
   text-decoration: none;
 }
 
 a:hover { text-decoration: underline; }
-
 a img { border: 0; }
+
+blockquote {
+  border: 1px solid #efefef;
+  border-left: 5px solid #efefef;
+  font-size: 93%;
+  line-height: 1.3em;
+  margin-left: 1em;
+  padding: 5px;
+}
+
+blockquote blockquote {
+  border: none;
+  font-size: 100%;
+  margin-right: 0;
+  padding: 0;
+}
+
+blockquote p:first-child { margin-top: 0; }
+blockquote p:last-child { margin-bottom: 0; }
 
 body {
   background: #ededed;
@@ -69,13 +51,17 @@ body {
   padding: 0;
 }
 
-body,
-input { font-family: Helvetica, 'Bitstream Vera Sans'; }
+body, input { font-family: Helvetica, 'Bitstream Vera Sans'; }
 
-input { font-size: 100%; }
+fieldset {
+  border: 1px solid #ccc;
+  margin-top: 1.5em;
+  padding: 1.5em 1em;
+}
 
-h1,
-h2 {
+fieldset legend { font-weight: bold; }
+
+h1, h2 {
   border-bottom: 1px solid #cfcfcf;
   font-size: 123.1%;
   font-weight: bold;
@@ -86,8 +72,33 @@ h3 {
   font-weight: bold;
 }
 
+html { background: none; }
+input { font-size: 100%; }
+p { margin-top: 1em; }
+
+pre {
+  background: #fcfcfc;
+  border: 1px solid #dfdfdf;
+  border-left: 5px solid #dfdfdf;
+  font: 77% Consolas, Monaco, 'Courier New', fixed;
+  overflow-x: auto;
+  padding: 2px 5px;
+  width: 96%;
+}
+
+table {
+  border-collapse: separate;
+  border-spacing: 2px;
+}
+
+td, th {
+  border: 0;
+  padding: 0;
+}
+
 textarea { font: 93% Consolas, Monaco, 'Courier New'; }
 
+/* -- Layout ---------------------------------------------------------------- */
 #doc {
   margin: 0 auto;
   padding: 0;
@@ -95,9 +106,7 @@ textarea { font: 93% Consolas, Monaco, 'Courier New'; }
 }
 
 /* -- Header ---------------------------------------------------------------- */
-#hd {
-  color: #fff;
-}
+#hd { color: #fff; }
 
 #hd a {
   color: #fff;
@@ -133,12 +142,12 @@ textarea { font: 93% Consolas, Monaco, 'Courier New'; }
 
 #toolbar ul {
   float: right;
-  list-style: none;
   margin: 0;
 }
 
 #toolbar ul li {
   display: inline;
+  list-style: none;
 }
 
 #toolbar ul li a {
@@ -150,9 +159,7 @@ textarea { font: 93% Consolas, Monaco, 'Courier New'; }
   padding: 0.35em 0.5em 0 0.5em;
 }
 
-#toolbar ul li a:hover {
-  background: #474343;
-}
+#toolbar ul li a:hover { background: #474343; }
 
 @media print {
   #hd { display: none; }
@@ -215,13 +222,8 @@ textarea { font: 93% Consolas, Monaco, 'Courier New'; }
   text-decoration: none;
 }
 
-#sidebar a:hover {
-  font-weight: bold;
-}
-
-#sidebar dl {
-  margin: 0;
-}
+#sidebar a:hover { font-weight: bold; }
+#sidebar dl { margin: 0; }
 
 #sidebar dl dt {
   clear: both;
@@ -239,10 +241,7 @@ textarea { font: 93% Consolas, Monaco, 'Courier New'; }
 }
 
 #sidebar dl dd p { margin: 0; }
-
-#sidebar #search-query {
-  width: 150px;
-}
+#sidebar #search-query { width: 150px; }
 
 @media print {
   #sidebar { display: none; }
@@ -257,16 +256,14 @@ textarea { font: 93% Consolas, Monaco, 'Courier New'; }
   padding-bottom: 1px;
 }
 
-.post .hd h1,
-.post .hd h2 {
+.post .hd h1, .post .hd h2 {
   border-bottom: 1px dotted #cfcfcf;
   display: block;
   margin-bottom: 0;
   width: 100%;
 }
 
-.post .hd h1 a,
-.post .hd h2 a { color: #000; }
+.post .hd h1 a, .post .hd h2 a { color: #000; }
 
 .post .hd .date {
   color: #888;
@@ -294,13 +291,13 @@ textarea { font: 93% Consolas, Monaco, 'Courier New'; }
 .post .tags a { color: #73ade7; }
 
 .post .tags ul {
-  list-style: none;
   margin: 0;
   padding: 0 0 0 21px;
 }
 
 .post .tags ul li {
   display: inline;
+  list-style: none;
   margin-right: 0.3em;
   white-space: nowrap;
 }
@@ -359,19 +356,13 @@ div.comment:hover {
 
 .comment .gravatar:hover { border-color: #a0a0a0; }
 
-.comment .gravatar,
-.comment .gravatar img {
+.comment .gravatar, .comment .gravatar img {
   height: 32px;
   width: 32px;
 }
 
-.comment .author {
-  margin-top: 5px;
-}
-
-.comment .date {
-  font-size: 85%;
-}
+.comment .author { margin-top: 5px; }
+.comment .date { font-size: 85%; }
 
 /* -- Post Comment Form ----------------------------------------------------- */
 #post-comment { margin-top: 30px; }
@@ -416,16 +407,14 @@ div.comment:hover {
   visibility: hidden;
 }
 
-.pg a,
-.pg strong {
+.pg a, .pg strong {
   border: 1px solid #c7dbff;
   float: left;
   margin: 1px;
   padding: 2px 6px 1px 6px;
 }
 
-.pg a.prev,
-.pg a.next { font-weight: bold; }
+.pg a.prev, .pg a.next { font-weight: bold; }
 
 .pg a:hover {
   border: 1px solid #0066cc;
@@ -445,7 +434,6 @@ div.comment:hover {
 
 /* -- Recent Comments ------------------------------------------------------- */
 ul.comments {
-  list-style: none;
   padding: 0;
   margin: 0;
 }
@@ -453,6 +441,7 @@ ul.comments {
 ul.comments li {
   background: #f9f9f9;
   border: 1px solid #ddd;
+  list-style: none;
   margin-bottom: 0.5em;
   padding: 3px;
 }
@@ -471,15 +460,16 @@ ul.comments li .meta { font-size: 85%; }
 }
 
 .search ul {
-  list-style: none;
   margin-left: 0;
   padding-left: 0;
 }
 
-.search ul li { margin-bottom: 0.7em; }
+.search ul li {
+  list-style: none;
+  margin-bottom: 0.7em;
+}
 
-.search .date,
-.search .url {
+.search .date, .search .url {
   color: #888;
   font-size: 93%;
 }
@@ -524,34 +514,52 @@ form .flash.error { margin: 0.2em 0 0; }
   border-color: #7bd75e;
 }
 
+/* -- Icons ----------------------------------------------------------------- */
+.icon {
+  background: url(../images/thoth-sprite.png) no-repeat;
+  display: -moz-inline-box;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.icon.comment {
+  background-position: -33px -1px;
+  height: 11px;
+  margin: 0 1px 1px 0;
+  width: 13px;
+  *margin-right: 3px;
+}
+
+.icon.comment-post {
+  background-position: -17px -1px;
+  height: 14px;
+  width: 14px;
+  *margin-right: 3px;
+}
+
+.icon.comments {
+  background-position: -33px -1px;
+  height: 11px;
+  margin: 0 0 1px 0;
+  width: 13px;
+  *margin: 1px 4px 0 0;
+}
+
+.icon.feed {
+  background-position: -97px -1px;
+  height: 14px;
+  margin-bottom: 3px;
+  width: 14px;
+  *margin: 1px 3px 2px 0;
+}
+
+.icon.tag {
+  background-position: -79px -1px;
+  height: 15px;
+  width: 15px;
+}
+
 /* -- Misc ------------------------------------------------------------------ */
-blockquote {
-  border: 1px solid #efefef;
-  border-left: 5px solid #efefef;
-  font-size: 93%;
-  line-height: 1.3em;
-  margin-left: 1em;
-  padding: 5px;
-}
-
-blockquote blockquote {
-  border: none;
-  font-size: 100%;
-  margin-right: 0;
-  padding: 0;
-}
-
-blockquote p:first-child { margin-top: 0; }
-blockquote p:last-child { margin-bottom: 0; }
-
-fieldset {
-  border: 1px solid #ccc;
-  margin-top: 1.5em;
-  padding: 1.5em 1em;
-}
-
-fieldset legend { font-weight: bold; }
-
 img.icon {
   background: none;
   vertical-align: middle;
@@ -577,16 +585,6 @@ p.footnote {
 p.footnote:last-child { margin-bottom: 1em; }
 
 sup.footnote { line-height: 0.9em; }
-
-pre {
-  background: #fcfcfc;
-  border: 1px solid #dfdfdf;
-  border-left: 5px solid #dfdfdf;
-  font: 77% Consolas, Monaco, 'Courier New', fixed;
-  overflow-x: auto;
-  padding: 2px 5px;
-  width: 96%;
-}
 
 .alignLeft { text-align: left; }
 .alignCenter { text-align: center; }
