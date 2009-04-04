@@ -30,11 +30,9 @@ module Thoth
   class MediaController < Ramaze::Controller
     map       '/media'
     layout    '/layout'
-    view_root File.join(Config.theme.view, 'media'),
-              File.join(VIEW_DIR, 'media')
 
     helper      :admin, :error, :pagination
-    deny_layout :index
+    # deny_layout :index
 
     def index(filename = nil)
       unless filename && file = Media[:filename => filename.strip]

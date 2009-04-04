@@ -30,10 +30,9 @@ module Thoth
   class MainController < Ramaze::Controller
     map       '/'
     layout    '/layout'
-    view_root Config.theme.view, VIEW_DIR
 
     helper      :admin, :cache, :error, :pagination
-    deny_layout :atom, :rss, :sitemap
+    # deny_layout :atom, :rss, :sitemap
 
     if Config.server.enable_cache
       cache :index, :ttl => 60, :key => lambda {

@@ -33,7 +33,7 @@ $:.uniq!
 require 'fileutils'
 require 'rubygems'
 
-gem 'ramaze', '=2009.02'
+gem 'ramaze', '~>2009.04.03'
 
 require 'builder'
 require 'cssmin'
@@ -58,10 +58,12 @@ require 'thoth/errors'
 require 'thoth/config'
 require 'thoth/version'
 require 'thoth/plugin'
-require 'thoth/monkeypatch/ramaze/controller'
-require 'thoth/monkeypatch/ramaze/dispatcher/file'
+# require 'thoth/monkeypatch/ramaze/controller'
+# require 'thoth/monkeypatch/ramaze/dispatcher/file'
 
 module Thoth
+  include Innate::Traited
+
   # Ramaze adapter to use.
   trait[:adapter] ||= nil
 
@@ -118,56 +120,57 @@ module Thoth
 
     # Initializes Ramaze (but doesn't actually start the server).
     def init_ramaze
-      Ramaze::Global.setup(
-        :root                 => LIB_DIR,
-        :public_root          => PUBLIC_DIR,
-        :view_root            => VIEW_DIR,
-        :actionless_templates => false,
-        :compile              => Config.server.compile_views
+      Ramaze.options.merge!(
+        :mode    => trait[:mode] == :production ? :live : :dev,
+        :publics => [Config.theme.public, PUBLIC_DIR],
+        :roots   => [LIB_DIR],
+        :views   => [Config.theme.view, VIEW_DIR]
+        # :actionless_templates => false,
+        # :compile              => Config.server.compile_views
       )
 
       # Display a 404 error for requests that don't map to a controller or
       # action.
-      Ramaze::Dispatcher::Error::HANDLE_ERROR.update({
-        Ramaze::Error::NoAction     => [404, 'error_404'],
-        Ramaze::Error::NoController => [404, 'error_404']
-      })
+      # Ramaze::Dispatcher::Error::HANDLE_ERROR.update({
+      #   Ramaze::Error::NoAction     => [404, 'error_404'],
+      #   Ramaze::Error::NoController => [404, 'error_404']
+      # })
 
-      case trait[:mode]
-      when :devel
-        Ramaze::Global.benchmarking = true
+      # case trait[:mode]
+      # when :devel
+      #   # Ramaze::Global.benchmarking = true
+      # 
+      # when :production
+      #   # Ramaze::Global.sourcereload = false
+      # 
+      #   # Log all errors to the error log file if one is configured.
+      #   if Config.server.error_log.empty?
+      #     Ramaze::Log.loggers = []
+      #   else
+      #     log_dir = File.dirname(Config.server.error_log)
+      # 
+      #     unless File.directory?(log_dir)
+      #       FileUtils.mkdir_p(log_dir)
+      #       File.chmod(0750, log_dir)
+      #     end
+      # 
+      #     Ramaze::Log.loggers = [
+      #       Ramaze::Logger::Informer.new(Config.server.error_log,
+      #           [:error])
+      #     ]
+      #   end
+      # 
+      #   # Don't expose argument errors or exceptions in production mode.
+      #   Ramaze::Dispatcher::Error::HANDLE_ERROR.update({
+      #     ArgumentError => [404, 'error_404'],
+      #     Exception     => [500, 'error_500']
+      #   })
+      # 
+      # else
+      #   raise "Invalid mode: #{trait[:mode]}"
+      # end
 
-      when :production
-        Ramaze::Global.sourcereload = false
-
-        # Log all errors to the error log file if one is configured.
-        if Config.server.error_log.empty?
-          Ramaze::Log.loggers = []
-        else
-          log_dir = File.dirname(Config.server.error_log)
-
-          unless File.directory?(log_dir)
-            FileUtils.mkdir_p(log_dir)
-            File.chmod(0750, log_dir)
-          end
-
-          Ramaze::Log.loggers = [
-            Ramaze::Logger::Informer.new(Config.server.error_log,
-                [:error])
-          ]
-        end
-
-        # Don't expose argument errors or exceptions in production mode.
-        Ramaze::Dispatcher::Error::HANDLE_ERROR.update({
-          ArgumentError => [404, 'error_404'],
-          Exception     => [500, 'error_500']
-        })
-
-      else
-        raise "Invalid mode: #{trait[:mode]}"
-      end
-
-      Ramaze::Global.console = trait[:irb]
+      # Ramaze::Global.console = trait[:irb]
     end
 
     # Opens a connection to the Thoth database and loads helpers, controllers,
@@ -201,8 +204,8 @@ module Thoth
       Ramaze::acquire(File.join(LIB_DIR, 'model', '*'))
 
       # Use Erubis as the template engine for all controllers.
-      Ramaze::Global.mapping.values.each do |controller|
-        controller.trait[:engine] = Ramaze::Template::Erubis
+      Ramaze::Controller::CONTROLLER_LIST.each do |controller|
+        controller.trait[:engine] = :Erubis
       end
 
       # If minification is enabled, intercept CSS/JS requests and route them to
@@ -249,8 +252,8 @@ module Thoth
       init_thoth
 
       begin
-        Ramaze.startup(
-          :force   => true,
+        Ramaze.start(
+          # :force   => true,
           :adapter => trait[:adapter],
           :host    => trait[:ip],
           :port    => trait[:port]

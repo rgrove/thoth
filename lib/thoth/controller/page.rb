@@ -30,8 +30,6 @@ module Thoth
   class PageController < Ramaze::Controller
     map       '/page'
     layout    '/layout'
-    view_root File.join(Config.theme.view, 'page'),
-              File.join(VIEW_DIR, 'page')
 
     helper :admin, :cache, :error, :pagination, :wiki
 

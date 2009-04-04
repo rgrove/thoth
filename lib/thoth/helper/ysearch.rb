@@ -35,7 +35,7 @@ module Ramaze; module Helper
   # The YSearch helper provides search results using the Yahoo! Search API.
   # Requires the json or json_pure gem.
   module Ysearch
-    class SearchError < Ramaze::Error; end
+    class SearchError < Thoth::Error; end
 
     # Yahoo! Developer API key. Feel free to replace this with your own key.
     API_ID = 'pNi6xQDV34FbvnO3QRfWKSByhmPFG.3fVS_R2KzOhMek3szHWKNBrTsdi1mob2vZgKjLoLuZ4A--'

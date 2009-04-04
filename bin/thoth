@@ -30,11 +30,13 @@
 require 'optparse'
 require 'rubygems'
 
-gem 'ramaze', '=2009.02'
+gem 'ramaze', '~>2009.04.03'
 
 require 'ramaze'
 
 module Thoth
+  include Innate::Traited
+
   cli_action = :server # :import, :migrate, or :server
   cli_values = {}
 

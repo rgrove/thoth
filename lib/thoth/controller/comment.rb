@@ -30,11 +30,9 @@ module Thoth
   class CommentController < Ramaze::Controller
     map       '/comment'
     layout    '/layout'
-    view_root File.join(Config.theme.view, 'comment'),
-              File.join(VIEW_DIR, 'comment')
 
     helper      :admin, :aspect, :cache, :cookie, :pagination, :error
-    deny_layout :atom, :rss
+    # deny_layout :atom, :rss
 
     if Config.server.enable_cache
       cache :index, :ttl => 60, :key => lambda { auth_key_valid? }
