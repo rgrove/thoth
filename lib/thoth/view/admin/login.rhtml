@@ -4,7 +4,7 @@
   <div class="flash error"><%== flash[:login_error] %></div>
 <% end %>
 
-<form id="login_page" action="<%= R(Thoth::AdminController, :login) %>" method="post">
+<form id="login_page" action="<%= r(Thoth::AdminController, :login) %>" method="post">
   <p>
     <label for="username">Username</label><br />
     <input type="text" name="username" id="username" maxlength="255"

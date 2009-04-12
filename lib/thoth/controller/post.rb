@@ -78,7 +78,7 @@ module Thoth
                 'Please try again later.'
           else
             flash[:success] = 'Comment posted.'
-            redirect(Rs(@post.name) + "#comment-#{comment.id}")
+            redirect(rs(@post.name) + "#comment-#{comment.id}")
           end
         end
 
@@ -95,7 +95,7 @@ module Thoth
       @title = @post.title
 
       if Config.site.enable_comments
-        @comment_action = Rs(@post.name) + '#post-comment'
+        @comment_action = rs(@post.name) + '#post-comment'
 
         @feeds = [{
           :href  => @post.atom_url,
@@ -163,7 +163,7 @@ module Thoth
           @post.destroy
           action_cache.clear
           flash[:success] = 'Blog post deleted.'
-          redirect(R(MainController))
+          redirect(r(MainController))
         else
           redirect(@post.url)
         end
@@ -178,7 +178,7 @@ module Thoth
 
       unless @post = Post[id]
         flash[:error] = 'Invalid post id.'
-        redirect(Rs(:new))
+        redirect(rs(:new))
       end
 
       if request.post?
@@ -207,18 +207,18 @@ module Thoth
           else
             if @post.is_draft
               flash[:success] = 'Draft saved.'
-              redirect(Rs(:edit, @post.id))
+              redirect(rs(:edit, @post.id))
             else
               action_cache.clear
               flash[:success] = 'Blog post published.'
-              redirect(Rs(@post.name))
+              redirect(rs(@post.name))
             end
           end
         end
       end
 
       @title          = "Edit blog post - #{@post.title}"
-      @form_action    = Rs(:edit, id)
+      @form_action    = rs(:edit, id)
       @show_post_edit = true
     end
 
@@ -231,7 +231,7 @@ module Thoth
       @order    = (request[:order] || :desc).to_sym
       @sort     = (request[:sort]  || :created_at).to_sym
       @sort     = :created_at unless @columns.include?(@sort)
-      @sort_url = Rs(:list, page)
+      @sort_url = rs(:list, page)
 
       @posts = Post.filter(:is_draft => false).paginate(page, 20).order(
           @order == :desc ? @sort.desc : @sort)
@@ -242,14 +242,14 @@ module Thoth
       end
 
       @title = "Blog Posts (page #{page} of #{[@posts.page_count, 1].max})"
-      @pager = pager(@posts, Rs(:list, '%s', :sort => @sort, :order => @order))
+      @pager = pager(@posts, rs(:list, '__page__', :sort => @sort, :order => @order))
     end
 
     def new
       require_auth
 
       @title       = "New blog post - Untitled"
-      @form_action = Rs(:new)
+      @form_action = rs(:new)
 
       if request.post?
         error_403 unless form_token_valid?
@@ -276,11 +276,11 @@ module Thoth
           else
             if @post.is_draft
               flash[:success] = 'Draft saved.'
-              redirect(Rs(:edit, @post.id))
+              redirect(rs(:edit, @post.id))
             else
               action_cache.clear
               flash[:success] = 'Blog post published.'
-              redirect(Rs(@post.name))
+              redirect(rs(@post.name))
             end
           end
         else

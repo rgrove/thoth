@@ -81,7 +81,7 @@ module Thoth
 
     # URL for this file.
     def url
-      Config.site.url.chomp('/') + R(MediaController, filename)
+      Config.site.url.chomp('/') + r(MediaController, filename)
     end
   end
 end

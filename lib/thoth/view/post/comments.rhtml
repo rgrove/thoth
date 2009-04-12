@@ -2,11 +2,11 @@
   <h3>Comments</h3>
 
   <% @post.comments.all.each do |comment| %>
-    <%= render_template('../comment/comment.rhtml', :comment => comment) %>
+    <%= render_view('../comment/comment.rhtml', :comment => comment) %>
   <% end %>
 </div>
 
 <%=
-render_template('../comment/form.rhtml', :comment => @preview,
+render_view('../comment/form.rhtml', :comment => @preview,
     :form_action => @comment_action)
 %>

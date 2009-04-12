@@ -59,14 +59,14 @@ module Thoth
       x.instruct!
 
       x.feed(:xmlns => 'http://www.w3.org/2005/Atom') {
-        comments_url = Config.site.url.chomp('/') + Rs()
+        comments_url = Config.site.url.chomp('/') + rs()
 
         x.id       comments_url
         x.title    "#{Config.site.name}: Recent Comments"
         x.subtitle Config.site.desc
         x.updated  Time.now.xmlschema # TODO: use modification time of the last post
         x.link     :href => comments_url
-        x.link     :href => Config.site.url.chomp('/') + Rs(:atom),
+        x.link     :href => Config.site.url.chomp('/') + rs(:atom),
                        :rel => 'self'
 
         Comment.recent.all.each do |comment|
@@ -122,12 +122,12 @@ module Thoth
       @order    = (request[:order] || :desc).to_sym
       @sort     = (request[:sort]  || :created_at).to_sym
       @sort     = :created_at unless @columns.include?(@sort)
-      @sort_url = Rs(:list, page)
+      @sort_url = rs(:list, page)
 
       @comments = Comment.paginate(page, 20).order(@order == :desc ?
           @sort.desc : @sort)
       @title = "Comments (page #{page} of #{[@comments.page_count, 1].max})"
-      @pager = pager(@comments, Rs(:list, '%s', :sort => @sort, :order => @order))
+      @pager = pager(@comments, rs(:list, '__page__', :sort => @sort, :order => @order))
     end
 
     def rss
@@ -149,7 +149,7 @@ module Thoth
           x.ttl            30
           x.atom           :link, :rel => 'self',
                                :type => 'application/rss+xml',
-                               :href => Config.site.url.chomp('/') + Rs(:rss)
+                               :href => Config.site.url.chomp('/') + rs(:rss)
 
           Comment.recent.all.each do |comment|
             x.item {

@@ -27,11 +27,10 @@
 #++
 
 module Thoth
-  class MainController < Ramaze::Controller
-    map       '/'
-    layout    '/layout'
+  class MainController < Controller
+    map    '/'
 
-    helper      :admin, :cache, :error, :pagination
+    helper :admin, :cache, :error, :pagination
     # deny_layout :atom, :rss, :sitemap
 
     if Config.server.enable_cache
@@ -45,12 +44,13 @@ module Thoth
     def index
       # Check for legacy feed requests and redirect if necessary.
       if type = request[:type]
-        redirect Rs(type), :status => 301
+        redirect rs(type), :status => 301
       end
 
       @title = Config.site.name
       @posts = Post.recent
-      @pager = pager(@posts, Rs(:archive, '%s'))
+      @pager = pager(@posts, rs(:archive, '__page__'))
+      ''
     end
 
     def atom
@@ -65,7 +65,7 @@ module Thoth
         x.subtitle Config.site.desc
         x.updated  Time.now.xmlschema # TODO: use modification time of the last post
         x.link     :href => Config.site.url
-        x.link     :href => Config.site.url.chomp('/') + Rs(:atom),
+        x.link     :href => Config.site.url.chomp('/') + rs(:atom),
                    :rel => 'self'
 
         x.author {
@@ -110,7 +110,7 @@ module Thoth
           x.ttl            60
           x.atom           :link, :rel => 'self',
                                :type => 'application/rss+xml',
-                               :href => Config.site.url.chomp('/') + Rs(:rss)
+                               :href => Config.site.url.chomp('/') + rs(:rss)
 
           Post.recent.all.each do |post|
             x.item {
@@ -166,20 +166,20 @@ module Thoth
 
     # Legacy redirect to /archive/+page+.
     def archives(page = 1)
-      redirect R(ArchiveController, page), :status => 301
+      redirect r(ArchiveController, page), :status => 301
     end
 
     # Legacy redirect to /post/+name+.
     def article(name)
-      redirect R(PostController, name), :status => 301
+      redirect r(PostController, name), :status => 301
     end
 
     # Legacy redirect to /comment.
     def comments
       if type = request[:type]
-        redirect R(CommentController, type), :status => 301
+        redirect r(CommentController, type), :status => 301
       else
-        redirect R(CommentController), :status => 301
+        redirect r(CommentController), :status => 301
       end
     end
 

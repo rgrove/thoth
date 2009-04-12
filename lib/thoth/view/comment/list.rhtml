@@ -1,9 +1,9 @@
 <h2>Comments</h2>
 
-<%= render_template('../util/pager') %>
+<%= render_view('../util/pager') %>
 
 <table class="list comments" summary="List of all comments">
-  <%= render_template('../util/table_sortheader') %>
+  <%= render_view('../util/table_sortheader') %>
   <tfoot></tfoot>
   <tbody>
     <% row = 'even' %>
@@ -38,4 +38,4 @@
   </tbody>
 </table>
 
-<%= render_template('../util/pager') %>
+<%= render_view('../util/pager') %>

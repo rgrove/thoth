@@ -33,7 +33,7 @@ $:.uniq!
 require 'fileutils'
 require 'rubygems'
 
-gem 'ramaze', '~>2009.04.03'
+gem 'ramaze', '~>2009.04.12'
 
 require 'builder'
 require 'cssmin'
@@ -63,6 +63,11 @@ require 'thoth/plugin'
 
 module Thoth
   include Innate::Traited
+
+  # This is only here because assignments like trait[:foo] ||= :bar can fail if
+  # the trait hash hasn't been created yet. Yes, it's stupid, and yes, I
+  # submitted a patch, and yes, the patch was rejected.
+  trait(:traits_broken => true)
 
   # Ramaze adapter to use.
   trait[:adapter] ||= nil
@@ -124,11 +129,12 @@ module Thoth
         :mode    => trait[:mode] == :production ? :live : :dev,
         :publics => [Config.theme.public, PUBLIC_DIR],
         :roots   => [LIB_DIR],
-        :views   => [Config.theme.view, VIEW_DIR]
+        # :views   => [Config.theme.view, VIEW_DIR]
+        :views => [VIEW_DIR]
         # :actionless_templates => false,
         # :compile              => Config.server.compile_views
       )
-
+      
       # Display a 404 error for requests that don't map to a controller or
       # action.
       # Ramaze::Dispatcher::Error::HANDLE_ERROR.update({
@@ -198,15 +204,10 @@ module Thoth
       end
 
       Ramaze::acquire(File.join(LIB_DIR, 'helper', '*'))
-      require File.join(LIB_DIR, 'controller', 'post') # must be loaded first
-      Ramaze::acquire(File.join(LIB_DIR, 'controller', '*'))
-      Ramaze::acquire(File.join(LIB_DIR, 'controller', 'api', '*'))
-      Ramaze::acquire(File.join(LIB_DIR, 'model', '*'))
 
-      # Use Erubis as the template engine for all controllers.
-      Ramaze::Controller::CONTROLLER_LIST.each do |controller|
-        controller.trait[:engine] = :Erubis
-      end
+      require File.join(LIB_DIR, 'controller', 'init')
+
+      Ramaze::acquire(File.join(LIB_DIR, 'model', '*'))
 
       # If minification is enabled, intercept CSS/JS requests and route them to
       # the MinifyController.
@@ -256,7 +257,8 @@ module Thoth
           # :force   => true,
           :adapter => trait[:adapter],
           :host    => trait[:ip],
-          :port    => trait[:port]
+          :port    => trait[:port],
+          :root    => LIB_DIR
         )
       rescue LoadError => ex
         Ramaze::Log.error("Unable to start Ramaze due to LoadError: #{ex}")

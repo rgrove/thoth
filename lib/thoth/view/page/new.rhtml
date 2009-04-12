@@ -5,7 +5,7 @@
 <% end %>
 
 <% if @page %>
-  <%= render_template(:index) %>
+  <%= render_view(:index) %>
 <% end %>
 
-<%= render_template(:form, :form_action => @form_action, :page => @page) %>
+<%= render_view(:form, :form_action => @form_action, :page => @page) %>

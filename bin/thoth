@@ -30,7 +30,7 @@
 require 'optparse'
 require 'rubygems'
 
-gem 'ramaze', '~>2009.04.03'
+gem 'ramaze', '~>2009.04.12'
 
 require 'ramaze'
 
@@ -53,18 +53,18 @@ module Thoth
 
       o.on('-a', '--adapter <adapter>',
           'Use the specified Ramaze server adapter.') do |adapter|
-        trait[:adapter] = adapter
+        trait(:adapter => adapter)
       end
 
       o.on('-c', '--config <filename>',
           'Use the specified configuration file.') do |filename|
-        trait[:config_file] = File.expand_path(filename)
+        trait(:config_file => File.expand_path(filename))
       end
 
       o.on('-d', '--daemon <command>', [:start, :stop, :restart],
           'Issue the specified daemon command (start, stop, or',
           'restart).') do |cmd|
-        trait[:daemon] = cmd
+        trait(:daemon => cmd)
       end
 
       o.on('-H', '--home <path>',
@@ -78,12 +78,12 @@ module Thoth
 
       o.on('-i', '--ip <address>',
           'Listen for connections on the specified IP address.') do |address|
-        trait[:ip] = address
+        trait(:ip => address)
       end
 
       o.on('-p', '--port <number>',
           'Listen for connections on the specified port number.') do |port|
-        trait[:port] = port.to_i
+        trait(:port => port.to_i)
       end
 
       o.separator ''
@@ -107,7 +107,7 @@ module Thoth
 
       o.on('--devel',
           'Run Thoth in development mode.') do
-        trait[:mode] = :devel
+        trait(:mode => :devel)
       end
 
       o.on('--import <module>',
@@ -119,12 +119,12 @@ module Thoth
       
       o.on('--irb',
           'Start Thoth within an IRB session.') do
-        trait[:irb] = true
+        trait(:irb => true)
       end
 
       o.on('--log-sql <filename>',
           'Log all SQL queries to the specified file.') do |filename|
-        trait[:sql_log] = File.expand_path(filename)
+        trait(:sql_log => File.expand_path(filename))
       end
 
       o.on '--migrate [version]',
@@ -218,10 +218,11 @@ module Thoth
     end
 
   when :server
+    trait(:pidfile => File.join(HOME_DIR, "thoth_#{trait[:ip]}_#{trait[:port]}.pid"))
+
     trait[:adapter] ||= Config.server.adapter
     trait[:ip]      ||= Config.server.address
     trait[:port]    ||= Config.server.port
-    trait[:pidfile]   = File.join(HOME_DIR, "thoth_#{trait[:ip]}_#{trait[:port]}.pid")
 
     begin
       send(trait[:daemon] || :run)

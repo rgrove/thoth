@@ -55,7 +55,7 @@ module Thoth
       @title = "Posts tagged with \"#{@tag.name}\" (page #{page} of " <<
           "#{@posts.page_count > 0 ? @posts.page_count : 1})"
 
-      @pager = pager(@posts, Rs(name, '%s'))
+      @pager = pager(@posts, rs(name, '__page__'))
 
       @feeds = [{
         :href  => @tag.atom_url,

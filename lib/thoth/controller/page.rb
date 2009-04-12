@@ -56,7 +56,7 @@ module Thoth
           @page.destroy
           action_cache.clear
           flash[:success] = 'Page deleted.'
-          redirect(R(MainController))
+          redirect(r(MainController))
         else
           redirect(@page.url)
         end
@@ -71,7 +71,7 @@ module Thoth
 
       unless @page = Page[id]
         flash[:error] = 'Invalid page id.'
-        redirect(Rs(:new))
+        redirect(rs(:new))
       end
 
       if request.post?
@@ -89,13 +89,13 @@ module Thoth
           else
             action_cache.clear
             flash[:success] = 'Page saved.'
-            redirect(Rs(@page.name))
+            redirect(rs(@page.name))
           end
         end
       end
 
       @title          = "Edit page - #{@page.title}"
-      @form_action    = Rs(:edit, id)
+      @form_action    = rs(:edit, id)
       @show_page_edit = true
     end
 
@@ -126,21 +126,21 @@ module Thoth
       @order    = (request[:order] || :asc).to_sym
       @sort     = (request[:sort]  || :display_order).to_sym
       @sort     = :position unless @columns.include?(@sort)
-      @sort_url = Rs(:list, page)
+      @sort_url = rs(:list, page)
 
       @pages = Page.paginate(page, 20).order(@order == :desc ? @sort.desc :
          @sort)
 
       @title        = "Pages (page #{page} of #{[@pages.page_count, 1].max})"
-      @pager        = pager(@pages, Rs(:list, '%s', :sort => @sort, :order => @order))
-      @form_action  = Rs(:list)
+      @pager        = pager(@pages, rs(:list, '__page__', :sort => @sort, :order => @order))
+      @form_action  = rs(:list)
     end
 
     def new
       require_auth
 
       @title       = "New page - Untitled"
-      @form_action = Rs(:new)
+      @form_action = rs(:new)
 
       if request.post?
         error_403 unless form_token_valid?
@@ -160,7 +160,7 @@ module Thoth
           else
             action_cache.clear
             flash[:success] = 'Page created.'
-            redirect(Rs(@page.name))
+            redirect(rs(@page.name))
           end
         end
 

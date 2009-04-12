@@ -56,9 +56,9 @@ module Thoth
         if request[:confirm] == 'yes'
           @file.destroy
           flash[:success] = 'File deleted.'
-          redirect(Rs(:list))
+          redirect(rs(:list))
         else
-          redirect(Rs(:edit, id))
+          redirect(rs(:edit, id))
         end
       end
 
@@ -70,10 +70,10 @@ module Thoth
     def edit(id = nil)
       require_auth
 
-      redirect(Rs(:new)) unless id && @file = Media[id]
+      redirect(rs(:new)) unless id && @file = Media[id]
 
       @title          = "Edit Media - #{@file.filename}"
-      @form_action    = Rs(:edit, id)
+      @form_action    = rs(:edit, id)
       @show_file_edit = true
 
       if request.post?
@@ -93,7 +93,7 @@ module Thoth
           @file.save
 
           flash[:success] = 'File saved.'
-          redirect(Rs(:edit, id))
+          redirect(rs(:edit, id))
         rescue => e
           @media_error = "Error: #{e}"
         end
@@ -109,20 +109,20 @@ module Thoth
       @order    = (request[:order] || :asc).to_sym
       @sort     = (request[:sort]  || :filename).to_sym
       @sort     = :created_at unless @columns.include?(@sort)
-      @sort_url = Rs(:list, page)
+      @sort_url = rs(:list, page)
 
       @files = Media.paginate(page, 20).order(@order == :desc ? @sort.desc :
           @sort)
 
       @title = "Media (page #{page} of #{[@files.page_count, 1].max})"
-      @pager = pager(@files, Rs(:list, '%s', :sort => @sort, :order => @order))
+      @pager = pager(@files, rs(:list, '__page__', :sort => @sort, :order => @order))
     end
 
     def new
       require_auth
 
       @title       = "Upload Media"
-      @form_action = Rs(:new)
+      @form_action = rs(:new)
 
       if request.post?
         error_403 unless form_token_valid?
@@ -152,7 +152,7 @@ module Thoth
           file.save
 
           flash[:success] = 'File uploaded.'
-          redirect(Rs(:edit, file.id))
+          redirect(rs(:edit, file.id))
         rescue => e
           @media_error = "Error: #{e}"
         end

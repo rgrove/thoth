@@ -114,7 +114,7 @@ module Thoth
 
     # Returns the URL for the specified page number.
     def url(page)
-      sprintf(@url, page.to_i)
+      @url.to_s.gsub('__page__', page.to_i.to_s)
     end
 
   end
@@ -123,7 +123,7 @@ end
 module Ramaze; module Helper
   module Pagination
 
-    def pager(dataset, url = Rs('%s'))
+    def pager(dataset, url = rs('__page__'))
       Thoth::Pager.new(dataset, url)
     end
 

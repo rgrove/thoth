@@ -30,13 +30,13 @@ module Thoth
   class Importer
     class << self
 
-      def after_import(&block)    trait[:after]    = block; end
-      def before_import(&block)   trait[:before]   = block; end
-      def import_comments(&block) trait[:comments] = block; end
-      def import_media(&block)    trait[:media]    = block; end
-      def import_pages(&block)    trait[:pages]    = block; end
-      def import_posts(&block)    trait[:posts]    = block; end
-      def import_tags(&block)     trait[:tags]     = block; end
+      def after_import(&block)    trait(:after    => block); end
+      def before_import(&block)   trait(:before   => block); end
+      def import_comments(&block) trait(:comments => block); end
+      def import_media(&block)    trait(:media    => block); end
+      def import_pages(&block)    trait(:pages    => block); end
+      def import_posts(&block)    trait(:posts    => block); end
+      def import_tags(&block)     trait(:tags     => block); end
 
       def load_importer(name)
         importer = name.to_s.downcase.strip.gsub(/importer$/, '')

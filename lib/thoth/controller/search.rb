@@ -69,7 +69,7 @@ module Thoth
           prev_start = start - count
           prev_start = 1 if prev_start < 1
 
-          @prev_url = "#{Rs()}?q=#{u(@query)}&count=#{count}&start=" <<
+          @prev_url = "#{rs()}?q=#{u(@query)}&count=#{count}&start=" <<
               prev_start.to_s
         end
 
@@ -77,7 +77,7 @@ module Thoth
           next_start = start + @data[:returned]
           next_start = 1001 - count if next_start > (1001 - count)
 
-          @next_url = "#{Rs()}?q=#{u(@query)}&count=#{count}&start=" <<
+          @next_url = "#{rs()}?q=#{u(@query)}&count=#{count}&start=" <<
               next_start.to_s
         end
       end

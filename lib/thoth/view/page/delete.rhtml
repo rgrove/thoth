@@ -4,9 +4,9 @@
   Are you sure you want to permanently delete the following page?
 </p>
 
-<%= render_template(:index) %>
+<%= render_view(:index) %>
 
-<form action="<%= Rs(:delete, @page.id) %>" method="post">
+<form action="<%= rs(:delete, @page.id) %>" method="post">
   <p>
     <input type="hidden" name="token" value="<%== form_token %>" />
     <button name="confirm" value="yes">Yes, delete this page forever</button>

@@ -200,7 +200,7 @@ module Thoth
 
     # URL for this page.
     def url
-      Config.site.url.chomp('/') + R(PageController, name)
+      Config.site.url.chomp('/') + r(PageController, name)
     end
   end
 end
