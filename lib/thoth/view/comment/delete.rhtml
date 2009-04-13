@@ -4,7 +4,7 @@
   Are you sure you want to permanently delete the following comment?
 </p>
 
-<%= render_view(:comment, :comment => @comment) %>
+<%= render_template(:comment, :comment => @comment) %>
 
 <form action="<%= rs(:delete, @comment.id) %>" method="post">
   <p>

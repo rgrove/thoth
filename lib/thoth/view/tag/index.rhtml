@@ -12,7 +12,7 @@
     </p>
 
     <%=
-    render_view('../util/pager',
+    render_template('../util/pager',
         :prev_text => '&laquo; Newer stuff',
         :next_text => 'Older stuff &raquo;')
     %>
@@ -20,13 +20,13 @@
     <ul>
       <% @posts.all do |post| %>
         <li>
-          <%= render_view('../post/tiny', :post => post) %>
+          <%= render_template('../post/tiny', :post => post) %>
         </li>
       <% end %>
     </ul>
 
     <%=
-    render_view('../util/pager',
+    render_template('../util/pager',
         :prev_text => '&laquo; Newer stuff',
         :next_text => 'Older stuff &raquo;')
     %>

@@ -27,7 +27,7 @@
 #++
 
 module Thoth
-  class CommentController < Ramaze::Controller
+  class CommentController < Controller
     map       '/comment'
     layout    '/layout'
 

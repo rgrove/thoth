@@ -27,7 +27,7 @@
 #++
 
 module Thoth
-  class TagApiController < Ramaze::Controller
+  class TagApiController < Controller
     map '/api/tag'
 
     helper :admin, :aspect, :error

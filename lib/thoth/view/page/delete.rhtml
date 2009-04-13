@@ -4,7 +4,7 @@
   Are you sure you want to permanently delete the following page?
 </p>
 
-<%= render_view(:index) %>
+<%= render_template(:index) %>
 
 <form action="<%= rs(:delete, @page.id) %>" method="post">
   <p>

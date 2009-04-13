@@ -27,7 +27,7 @@
 #++
 
 module Thoth
-  class CommentApiController < Ramaze::Controller
+  class CommentApiController < Controller
     map '/api/comment'
 
     helper :admin, :cache, :error

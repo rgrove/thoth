@@ -27,7 +27,7 @@
 #++
 
 module Thoth
-  class MediaController < Ramaze::Controller
+  class MediaController < Controller
     map       '/media'
     layout    '/layout'
 

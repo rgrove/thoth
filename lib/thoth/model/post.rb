@@ -28,7 +28,6 @@
 
 module Thoth
   class Post < Sequel::Model
-    include Ramaze::Helper::Link
     include Ramaze::Helper::Wiki
 
     is :notnaughty
@@ -151,7 +150,7 @@ module Thoth
 
     # Gets the Atom feed URL for this post.
     def atom_url
-      Config.site.url.chomp('/') + r(PostController, :atom, name)
+      Config.site.url.chomp('/') + '/post/atom/' + CGI.escape(name) # FIXME: gotta be a better way to do this than hardcoding
     end
 
     def body=(body)
@@ -249,7 +248,7 @@ module Thoth
 
     # Gets the URL for this post.
     def url
-      Config.site.url.chomp('/') + r(PostController, name)
+      Config.site.url.chomp('/') + '/post/' + CGI.escape(name)
     end
   end
 

@@ -4,7 +4,7 @@
   Are you sure you want to permanently delete the following file?
 </p>
 
-<%= render_view(:media, :file => @file) %>
+<%= render_template(:media, :file => @file) %>
 
 <form action="<%= rs(:delete, @file.id) %>" method="post">
   <p>

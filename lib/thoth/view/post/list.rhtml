@@ -2,7 +2,7 @@
   <h2>Draft Blog Posts</h2>
 
   <table class="list posts drafts" summary="List of all draft blog posts">
-    <%= render_view('../util/table_sortheader') %>
+    <%= render_template('../util/table_sortheader') %>
     <tfoot></tfoot>
     <tbody>
       <% row = 'even' %>
@@ -26,10 +26,10 @@
 
 <h2>Published Blog Posts</h2>
 
-<%= render_view('../util/pager') %>
+<%= render_template('../util/pager') %>
 
 <table class="list posts" summary="List of all published blog posts">
-  <%= render_view('../util/table_sortheader') %>
+  <%= render_template('../util/table_sortheader') %>
   <tfoot></tfoot>
   <tbody>
     <% row = 'even' %>
@@ -58,4 +58,4 @@
   </tbody>
 </table>
 
-<%= render_view('../util/pager') %>
+<%= render_template('../util/pager') %>

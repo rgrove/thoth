@@ -5,7 +5,7 @@
 <% end %>
 
 <% if @post %>
-  <%= render_view(:compact, :post => @post) %>
+  <%= render_template(:compact, :post => @post) %>
 <% end %>
 
-<%= render_view(:form, :form_action => @form_action, :post => @post) %>
+<%= render_template(:form, :form_action => @form_action, :post => @post) %>

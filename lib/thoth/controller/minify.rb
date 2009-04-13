@@ -27,7 +27,7 @@
 #++
 
 module Thoth
-  class MinifyController < Ramaze::Controller
+  class MinifyController < Controller
     map '/minify'
 
     helper :cache, :error

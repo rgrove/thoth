@@ -28,8 +28,6 @@
 
 module Thoth
   class Tag < Sequel::Model
-    include Ramaze::Helper::Link
-  
     is :notnaughty
 
     one_to_many  :tags_posts_map, :class => 'Thoth::TagsPostsMap'
@@ -64,7 +62,7 @@ module Thoth
 
     # Gets the Atom feed URL for this tag.
     def atom_url
-      Config.site.url.chomp('/') + r(TagController, :atom, CGI.escape(name))
+      Config.site.url.chomp('/') + '/tag/atom/' + CGI.escape(name)
     end
 
     # Gets published posts with this tag.
@@ -75,7 +73,7 @@ module Thoth
 
     # URL for this tag.
     def url
-      Config.site.url.chomp('/') + r(TagController, CGI.escape(name))
+      Config.site.url.chomp('/') + '/tag/atom/' + CGI.escape(name)
     end
   end
 end

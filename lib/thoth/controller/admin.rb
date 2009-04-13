@@ -27,7 +27,7 @@
 #++
 
 module Thoth
-  class AdminController < Ramaze::Controller
+  class AdminController < Controller
     map       '/admin'
     layout    '/layout'
 

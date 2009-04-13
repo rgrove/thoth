@@ -64,9 +64,8 @@ require 'thoth/plugin'
 module Thoth
   include Innate::Traited
 
-  # This is only here because assignments like trait[:foo] ||= :bar can fail if
-  # the trait hash hasn't been created yet. Yes, it's stupid, and yes, I
-  # submitted a patch, and yes, the patch was rejected.
+  # This is only here because assignments like trait[:foo] ||= :bar will fail if
+  # the trait hash hasn't been created yet.
   trait(:traits_broken => true)
 
   # Ramaze adapter to use.
@@ -128,9 +127,9 @@ module Thoth
       Ramaze.options.merge!(
         :mode    => trait[:mode] == :production ? :live : :dev,
         :publics => [Config.theme.public, PUBLIC_DIR],
-        :roots   => [LIB_DIR],
+        :roots   => [LIB_DIR]
         # :views   => [Config.theme.view, VIEW_DIR]
-        :views => [VIEW_DIR]
+        # :views => [VIEW_DIR]
         # :actionless_templates => false,
         # :compile              => Config.server.compile_views
       )

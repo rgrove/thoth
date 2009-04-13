@@ -27,7 +27,7 @@
 #++
 
 module Thoth
-  class PostController < Ramaze::Controller
+  class PostController < Controller
     map       '/post'
     layout    '/layout'
 

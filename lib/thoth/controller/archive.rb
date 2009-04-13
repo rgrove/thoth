@@ -27,7 +27,7 @@
 #++
 
 module Thoth
-  class ArchiveController < Ramaze::Controller
+  class ArchiveController < Controller
     map       '/archive'
     layout    '/layout'
 

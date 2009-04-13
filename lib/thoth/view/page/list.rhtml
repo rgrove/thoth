@@ -1,10 +1,10 @@
 <h2>Pages</h2>
 
-<%= render_view('../util/pager') %>
+<%= render_template('../util/pager') %>
 
 <form action="<%= @form_action %>" method="post">
   <table class="list pages" summary="List of all pages" id="page_list_table">
-    <%= render_view('../util/table_sortheader') %>
+    <%= render_template('../util/table_sortheader') %>
     <tfoot></tfoot>
     <tbody>
       <% row = 'even' %>
@@ -45,5 +45,5 @@
   </p>
 </form>
 
-<%= render_view('../util/pager') %>
+<%= render_template('../util/pager') %>
 

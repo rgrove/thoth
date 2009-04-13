@@ -1,6 +1,6 @@
 <h2>Edit Media</h2>
 
-<%= render_view(:media, :file => @file) %>
+<%= render_template(:media, :file => @file) %>
 
 <% if @media_error %>
   <div class="flash error"><%== @media_error %></div>
@@ -8,5 +8,5 @@
 
 <fieldset class="replace">
   <legend>Replace File</legend>
-  <%= render_view(:form, :form_action => @form_action) %>
+  <%= render_template(:form, :form_action => @form_action) %>
 </fieldset>

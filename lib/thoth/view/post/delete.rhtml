@@ -4,7 +4,7 @@
   Are you sure you want to permanently delete the following blog post?
 </p>
 
-<%= render_view(:compact, :post => @post) %>
+<%= render_template(:compact, :post => @post) %>
 
 <form action="<%= rs(:delete, @post.id) %>" method="post">
   <p>

@@ -27,7 +27,7 @@
 #++
 
 module Thoth
-  class PageApiController < Ramaze::Controller
+  class PageApiController < Controller
     map '/api/page'
 
     helper :admin, :aspect, :error

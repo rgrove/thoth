@@ -27,7 +27,7 @@
 #++
 
 module Thoth
-  class PageController < Ramaze::Controller
+  class PageController < Controller
     map       '/page'
     layout    '/layout'
 

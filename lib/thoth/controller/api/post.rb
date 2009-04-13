@@ -27,7 +27,7 @@
 #++
 
 module Thoth
-  class PostApiController < Ramaze::Controller
+  class PostApiController < Controller
     map '/api/post'
 
     helper :admin, :aspect, :error

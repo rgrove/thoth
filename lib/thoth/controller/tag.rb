@@ -27,7 +27,7 @@
 #++
 
 module Thoth
-  class TagController < Ramaze::Controller
+  class TagController < Controller
     map       '/tag'
     layout    '/layout'
 

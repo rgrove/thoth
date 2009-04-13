@@ -29,6 +29,7 @@
 module Thoth
   class MainController < Controller
     map    '/'
+    # map_views '/'
 
     helper :admin, :cache, :error, :pagination
     # deny_layout :atom, :rss, :sitemap
@@ -50,7 +51,10 @@ module Thoth
       @title = Config.site.name
       @posts = Post.recent
       @pager = pager(@posts, rs(:archive, '__page__'))
-      ''
+      
+      # Ramaze::Log.info(view_mappings)
+      
+      # render_custom(:index)
     end
 
     def atom

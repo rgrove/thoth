@@ -27,7 +27,7 @@
 #++
 
 module Thoth
-  class SearchController < Ramaze::Controller
+  class SearchController < Controller
     map       '/search'
     layout    '/layout'
 

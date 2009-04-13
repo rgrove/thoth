@@ -8,17 +8,17 @@
 </p>
 
 <%=
-render_view('../util/pager',
+render_template('../util/pager',
     :prev_text => '&laquo; Newer stuff',
     :next_text => 'Older stuff &raquo;')
 %>
 
 <% @posts.all do |post| %>
-  <%= render_view('../post/compact.rhtml', :post => post) %>
+  <%= render_template('../post/compact.rhtml', :post => post) %>
 <% end %>
 
 <%=
-render_view('../util/pager',
+render_template('../util/pager',
     :prev_text => '&laquo; Newer stuff',
     :next_text => 'Older stuff &raquo;')
 %>
