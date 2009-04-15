@@ -28,10 +28,8 @@
 
 module Thoth
   class MediaController < Controller
-    map       '/media'
-    layout    '/layout'
-
-    helper      :admin, :error, :pagination
+    map '/media'
+    helper :admin, :error, :pagination
     # deny_layout :index
 
     def index(filename = nil)

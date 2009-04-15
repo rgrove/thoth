@@ -28,9 +28,7 @@
 
 module Thoth
   class PageController < Controller
-    map       '/page'
-    layout    '/layout'
-
+    map '/page'
     helper :admin, :cache, :error, :pagination, :wiki
 
     if Config.server.enable_cache

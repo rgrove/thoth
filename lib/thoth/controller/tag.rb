@@ -28,10 +28,8 @@
 
 module Thoth
   class TagController < Controller
-    map       '/tag'
-    layout    '/layout'
-
-    helper      :admin, :cache, :error, :pagination
+    map '/tag'
+    helper  :admin, :cache, :error, :pagination
     # deny_layout :atom
 
     if Config.server.enable_cache
@@ -55,7 +53,7 @@ module Thoth
       @title = "Posts tagged with \"#{@tag.name}\" (page #{page} of " <<
           "#{@posts.page_count > 0 ? @posts.page_count : 1})"
 
-      @pager = pager(@posts, rs(name, '__page__'))
+      @pager = pager(@posts, rs(:/, name, '__page__'))
 
       @feeds = [{
         :href  => @tag.atom_url,

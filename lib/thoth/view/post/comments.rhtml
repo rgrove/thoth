@@ -2,11 +2,12 @@
   <h3>Comments</h3>
 
   <% @post.comments.all.each do |comment| %>
-    <%= render_template('../comment/comment.rhtml', :comment => comment) %>
+    <%= Thoth::CommentController.render_view(:comment, :comment => comment) %>
   <% end %>
 </div>
 
 <%=
-render_template('../comment/form.rhtml', :comment => @preview,
+Thoth::CommentController.render_view(:form,
+    :comment     => @preview,
     :form_action => @comment_action)
 %>

@@ -28,8 +28,6 @@
 
 module Thoth
   class Media < Sequel::Model(:media)
-    include Ramaze::Helper::Link
-
     before_create do
       self.created_at = Time.now
     end
@@ -81,7 +79,7 @@ module Thoth
 
     # URL for this file.
     def url
-      Config.site.url.chomp('/') + r(MediaController, filename)
+      Config.site.url.chomp('/') + MediaController.r(:/, filename).to_s
     end
   end
 end

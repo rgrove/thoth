@@ -28,9 +28,7 @@
 
 module Thoth
   class AdminController < Controller
-    map       '/admin'
-    layout    '/layout'
-
+    map '/admin'
     helper :admin, :error
 
     def index
@@ -58,7 +56,7 @@ module Thoth
       if username == Config.admin.user && password == Config.admin.pass
         # Set an auth cookie that expires in two weeks.
         response.set_cookie('thoth_auth', :expires => Time.now + 1209600,
-            :path => r(MainController), :value => auth_key)
+            :path => MainController.r(), :value => auth_key)
 
         redirect_referrer
       end
@@ -69,7 +67,7 @@ module Thoth
 
     # Deletes the <em>thoth_auth</em> cookie and redirects to the home page.
     def logout
-      response.delete_cookie('thoth_auth', :path => r(MainController))
+      response.delete_cookie('thoth_auth', :path => MainController.r())
       redirect(r(MainController))
     end
 

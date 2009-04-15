@@ -1,15 +1,13 @@
 <div id="post-<%= @post.id || 0 %>" class="post hentry">
   <div class="hd">
     <h2 class="entry-title">
-      <a href="<%== @post.url %>" rel="bookmark"
-          title="Permalink for this post">
+      <a href="<%== @post.url %>" rel="bookmark" title="Permalink for this post">
         <%== @post.title %>
       </a>
     </h2>
 
     <address class="vcard author">
-      <a class="email fn"
-          href="mailto:<%== Thoth::Config.admin.email %>"><%== Thoth::Config.admin.name %></a>
+      <a class="email fn" href="mailto:<%== Thoth::Config.admin.email %>"><%== Thoth::Config.admin.name %></a>
     </address>
 
     <span class="date robots-nocontent">
@@ -47,5 +45,4 @@
       </div>
     <% end %>
   </div>
-
 </div>

@@ -2,7 +2,7 @@
   <% if auth_key_valid? %>
     <ul class="edit">
       <li>
-        <a href="<%= r(Thoth::PostController, :new) %>"
+        <a href="<%= Thoth::PostController.r(:new) %>"
             title="Create a new blog post">
           <span class="adminicon post-new"></span>
         </a>
@@ -10,14 +10,14 @@
 
       <% if @show_post_edit && @post %>
         <li>
-          <a href="<%= r(Thoth::PostController, :edit, @post.id) %>#post-form"
+          <a href="<%= Thoth::PostController.r(:edit, @post.id) %>#post-form"
               title="Edit this blog post">
             <span class="adminicon post-edit"></span>
           </a>
         </li>
 
         <li>
-          <a href="<%= r(Thoth::PostController, :delete, @post.id) %>"
+          <a href="<%= Thoth::PostController.r(:delete, @post.id) %>"
               title="Delete this blog post">
             <span class="adminicon post-delete"></span>
           </a>
@@ -25,7 +25,7 @@
       <% end %>
 
       <li>
-        <a href="<%= r(Thoth::PageController, :new) %>"
+        <a href="<%= Thoth::PostController.r(:new) %>"
             title="Create a new page">
           <span class="adminicon page-new"></span>
         </a>
@@ -33,14 +33,14 @@
 
       <% if @show_page_edit && @page %>
         <li>
-          <a href="<%= r(Thoth::PageController, :edit, @page.id) %>#page-form"
+          <a href="<%= Thoth::PageController.r(:edit, @page.id) %>#page-form"
               title="Edit this page">
             <span class="adminicon page-edit"></span>
           </a>
         </li>
 
         <li>
-          <a href="<%= r(Thoth::PageController, :delete, @page.id) %>"
+          <a href="<%= Thoth::PageController.r(:delete, @page.id) %>"
               title="Delete this page">
             <span class="adminicon page-delete"></span>
           </a>
@@ -48,14 +48,14 @@
       <% end %>
 
       <li>
-        <a href="<%= r(Thoth::MediaController, :new) %>" title="Upload media">
+        <a href="<%= Thoth::MediaController.r(:new) %>" title="Upload media">
           <span class="adminicon media-new"></span>
         </a>
       </li>
 
       <% if @show_file_edit && @file %>
         <li>
-          <a href="<%= r(Thoth::MediaController, :delete, @file.id) %>"
+          <a href="<%= Thoth::MediaController.r(:delete, @file.id) %>"
               title="Delete this file">
             <span class="adminicon media-delete"></span>
           </a>
@@ -65,27 +65,27 @@
 
     <ul class="tools">
       <li>
-        <a href="<%= r(Thoth::PostController, :list) %>" title="List all blog posts and drafts">
+        <a href="<%= Thoth::PostController.r(:list) %>" title="List all blog posts and drafts">
           <span class="adminicon post-list"></span>
         </a>
       </li>
 
       <li>
-        <a href="<%= r(Thoth::PageController, :list) %>" title="List all pages">
+        <a href="<%= Thoth::PageController.r(:list) %>" title="List all pages">
           <span class="adminicon page-list"></span>
         </a>
       </li>
 
       <% if Thoth::Config.site.enable_comments %>
         <li>
-          <a href="<%= r(Thoth::CommentController, :list) %>" title="List all comments">
+          <a href="<%= Thoth::CommentController.r(:list) %>" title="List all comments">
             <span class="adminicon comment-list"></span>
           </a>
         </li>
       <% end %>
 
       <li>
-        <a href="<%= r(Thoth::MediaController, :list) %>" title="List all media">
+        <a href="<%= Thoth::MediaController.r(:list) %>" title="List all media">
           <span class="adminicon media-list"></span>
         </a>
       </li>
@@ -93,14 +93,14 @@
 
     <ul class="tools">
       <li>
-        <a href="<%= r(Thoth::AdminController, :logout) %>" title="Log out">
+        <a href="<%= Thoth::AdminController.r(:logout) %>" title="Log out">
           <span class="adminicon logout"></span>
         </a>
       </li>
     </ul>
 
   <% else %>
-    <form id="login" action="<%= r(Thoth::AdminController, :login) %>" method="post">
+    <form id="login" action="<%= Thoth::AdminController.r(:login) %>" method="post">
       <div>
         <label for="username">Username:</label>
         <input type="text" id="username" name="username" maxlength="64"

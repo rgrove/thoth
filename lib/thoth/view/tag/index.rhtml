@@ -12,7 +12,7 @@
     </p>
 
     <%=
-    render_template('../util/pager',
+    Thoth::MainController.render_view('util/pager',
         :prev_text => '&laquo; Newer stuff',
         :next_text => 'Older stuff &raquo;')
     %>
@@ -20,13 +20,13 @@
     <ul>
       <% @posts.all do |post| %>
         <li>
-          <%= render_template('../post/tiny', :post => post) %>
+          <%= Thoth::PostController.render_view(:tiny, :post => post) %>
         </li>
       <% end %>
     </ul>
 
     <%=
-    render_template('../util/pager',
+    Thoth::MainController.render_view('util/pager',
         :prev_text => '&laquo; Newer stuff',
         :next_text => 'Older stuff &raquo;')
     %>

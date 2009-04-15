@@ -28,9 +28,6 @@
 
 module Thoth
   class MainController < Controller
-    map    '/'
-    # map_views '/'
-
     helper :admin, :cache, :error, :pagination
     # deny_layout :atom, :rss, :sitemap
 
@@ -51,10 +48,6 @@ module Thoth
       @title = Config.site.name
       @posts = Post.recent
       @pager = pager(@posts, rs(:archive, '__page__'))
-      
-      # Ramaze::Log.info(view_mappings)
-      
-      # render_custom(:index)
     end
 
     def atom
@@ -170,20 +163,20 @@ module Thoth
 
     # Legacy redirect to /archive/+page+.
     def archives(page = 1)
-      redirect r(ArchiveController, page), :status => 301
+      redirect ArchiveController.r(:/, page), :status => 301
     end
 
     # Legacy redirect to /post/+name+.
     def article(name)
-      redirect r(PostController, name), :status => 301
+      redirect PostController.r(:/, name), :status => 301
     end
 
     # Legacy redirect to /comment.
     def comments
       if type = request[:type]
-        redirect r(CommentController, type), :status => 301
+        redirect CommentController.r(:/, type), :status => 301
       else
-        redirect r(CommentController), :status => 301
+        redirect CommentController.r(), :status => 301
       end
     end
 

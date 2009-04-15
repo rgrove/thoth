@@ -5,7 +5,11 @@
 <% end %>
 
 <% if @page %>
-  <%= render_template(:index) %>
+  <%= Thoth::PageController.render_view(:index) %>
 <% end %>
 
-<%= render_template(:form, :form_action => @form_action, :page => @page) %>
+<%=
+Thoth::PageController.render_view(:form,
+    :form_action => @form_action,
+    :page        => @page)
+%>

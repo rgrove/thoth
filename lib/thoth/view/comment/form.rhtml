@@ -1,9 +1,8 @@
-<form id="post-comment" class="robots-nocontent" method="post"
-    action="<%== @form_action %>">
+<form id="post-comment" class="robots-nocontent" method="post" action="<%== @form_action %>">
 
   <% if @comment && @comment.valid? %>
     <fieldset>
-      <%= render_template('../comment/comment.rhtml') %>
+      <%= Thoth::CommentController.render_view(:comment) %>
     </fieldset>
   <% end %>
 

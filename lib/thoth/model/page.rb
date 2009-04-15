@@ -28,7 +28,6 @@
 
 module Thoth
   class Page < Sequel::Model
-    include Ramaze::Helper::Link
     include Ramaze::Helper::Wiki
 
     is :notnaughty
@@ -200,7 +199,7 @@ module Thoth
 
     # URL for this page.
     def url
-      Config.site.url.chomp('/') + r(PageController, name)
+      Config.site.url.chomp('/') + PageController.r(:/, name).to_s
     end
   end
 end

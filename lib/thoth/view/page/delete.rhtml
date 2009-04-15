@@ -4,9 +4,9 @@
   Are you sure you want to permanently delete the following page?
 </p>
 
-<%= render_template(:index) %>
+<%= Thoth::PageController.render_view(:index) %>
 
-<form action="<%= rs(:delete, @page.id) %>" method="post">
+<form action="<%= Thoth::PageController.r(:delete, @page.id) %>" method="post">
   <p>
     <input type="hidden" name="token" value="<%== form_token %>" />
     <button name="confirm" value="yes">Yes, delete this page forever</button>

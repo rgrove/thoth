@@ -28,10 +28,8 @@
 
 module Thoth
   class PostController < Controller
-    map       '/post'
-    layout    '/layout'
-
-    helper      :admin, :cache, :cookie, :error, :pagination, :wiki
+    map '/post'
+    helper :admin, :cache, :cookie, :error, :pagination, :wiki
     # deny_layout :atom
 
     if Config.server.enable_cache
@@ -95,7 +93,7 @@ module Thoth
       @title = @post.title
 
       if Config.site.enable_comments
-        @comment_action = rs(@post.name) + '#post-comment'
+        @comment_action = r(:/, @post.name).to_s + '#post-comment'
 
         @feeds = [{
           :href  => @post.atom_url,

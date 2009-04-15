@@ -125,13 +125,8 @@ module Thoth
     # Initializes Ramaze (but doesn't actually start the server).
     def init_ramaze
       Ramaze.options.merge!(
-        :mode    => trait[:mode] == :production ? :live : :dev,
-        :publics => [Config.theme.public, PUBLIC_DIR],
-        :roots   => [LIB_DIR]
-        # :views   => [Config.theme.view, VIEW_DIR]
-        # :views => [VIEW_DIR]
-        # :actionless_templates => false,
-        # :compile              => Config.server.compile_views
+        :mode   => trait[:mode] == :production ? :live : :dev,
+        :roots  => [LIB_DIR, HOME_DIR]
       )
       
       # Display a 404 error for requests that don't map to a controller or

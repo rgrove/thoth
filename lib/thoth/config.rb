@@ -51,8 +51,6 @@ module Thoth
           }
 
           theme {
-            public File.join(HOME_DIR, 'public')
-            view   File.join(HOME_DIR, 'view')
             css    []
             js     []
 

@@ -1,8 +1,7 @@
 <div id="post-<%= @post.id %>" class="post hentry">
   <div class="hd">
     <h1 class="entry-title">
-      <a href="<%== @post.url %>" rel="bookmark"
-          title="Permalink for this post">
+      <a href="<%== @post.url %>" rel="bookmark" title="Permalink for this post">
         <%== @post.title %>
       </a>
     </h1>
@@ -29,9 +28,7 @@
         <span class="icon tag"></span>
         <ul>
           <% @post.tags.each do |tag| %>
-            <li>
-              <a href="<%== tag.url %>" rel="tag"><%== tag.name %></a>
-            </li>
+            <li><a href="<%== tag.url %>" rel="tag"><%== tag.name %></a></li>
           <% end %>
         </ul>
       </div>
@@ -47,5 +44,5 @@
 </div>
 
 <% if Thoth::Config.site.enable_comments %>
-  <%= render_template('comments.rhtml') %>
+  <%= Thoth::PostController.render_view(:comments) %>
 <% end %>

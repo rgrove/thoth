@@ -62,7 +62,7 @@ module Thoth
 
     # Gets the Atom feed URL for this tag.
     def atom_url
-      Config.site.url.chomp('/') + '/tag/atom/' + CGI.escape(name)
+      Config.site.url.chomp('/') + TagController.r(:atom, name).to_s
     end
 
     # Gets published posts with this tag.
@@ -73,7 +73,7 @@ module Thoth
 
     # URL for this tag.
     def url
-      Config.site.url.chomp('/') + '/tag/atom/' + CGI.escape(name)
+      Config.site.url.chomp('/') + TagController.r(:/, name).to_s
     end
   end
 end

@@ -28,9 +28,7 @@
 
 module Thoth
   class ArchiveController < Controller
-    map       '/archive'
-    layout    '/layout'
-
+    map '/archive'
     helper :admin, :cache, :pagination
 
     if Config.server.enable_cache

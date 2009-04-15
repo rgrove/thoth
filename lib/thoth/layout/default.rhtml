@@ -4,12 +4,12 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title><%== @title ? @title : Thoth::Config.site.name %></title>
 
-    <!-- <= render_template :css %> -->
+    <%= Thoth::MainController.render_view :css %>
 
     <link rel="alternate" type="application/atom+xml"
-        href="<%= r(Thoth::MainController, :atom) %>" title="Posts (Atom)" />
+        href="<%= Thoth::MainController.r(:atom) %>" title="Posts (Atom)" />
     <link rel="alternate" type="application/rss+xml"
-        href="<%= r(Thoth::MainController, :rss) %>" title="Posts (RSS)" />
+        href="<%= Thoth::MainController.r(:rss) %>" title="Posts (RSS)" />
     <% if @feeds; @feeds.each do |feed| %>
       <link rel="alternate" type="<%== feed[:type] %>"
           href="<%== feed[:href] %>" title="<%== feed[:title] %>" />
@@ -19,19 +19,19 @@
 
     <% if @pager %>
       <% if @pager.prev_url %>
-        <!-- <link id="prev_url" rel="prev" href="<%== @pager.prev_url %>" /> -->
+        <link id="prev_url" rel="prev" href="<%== @pager.prev_url %>" />
       <% end %>
       <% if @pager.next_url %>
-        <!-- <link id="next_url" rel="next" href="<%== @pager.next_url %>" /> -->
+        <link id="next_url" rel="next" href="<%== @pager.next_url %>" />
       <% end %>
     <% end %>
   </head>
   <body>
     <div id="doc">
-      <!-- <= render_template :header %> -->
+      <%= Thoth::MainController.render_view :header %>
 
       <div id="bd">
-        <!-- <= render_template :sidebar %> -->
+        <%= Thoth::MainController.render_view :sidebar %>
 
         <div id="main">
           <%= flashbox('<div class="flash %key">%value</div>') %>
@@ -39,9 +39,9 @@
         </div>
       </div>
 
-      <!-- <= render_template :footer %> -->
+      <%= Thoth::MainController.render_view :footer %>
     </div>
 
-    <!-- <= render_template :js %> -->
+    <%= Thoth::MainController.render_view :js %>
   </body>
 </html>

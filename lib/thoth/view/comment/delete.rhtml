@@ -4,9 +4,9 @@
   Are you sure you want to permanently delete the following comment?
 </p>
 
-<%= render_template(:comment, :comment => @comment) %>
+<%= Thoth::CommentController.render_view(:comment, :comment => @comment) %>
 
-<form action="<%= rs(:delete, @comment.id) %>" method="post">
+<form action="<%= Thoth::CommentController.r(:delete, @comment.id) %>" method="post">
   <p>
     <input type="hidden" name="token" value="<%== form_token %>" />
     <button name="confirm" value="yes">Yes, delete this comment forever</button>

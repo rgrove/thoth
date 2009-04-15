@@ -1,1 +1,1 @@
-<%= render_template(auth_key_valid? ? :welcome : :login) %>
+<%= Thoth::AdminController.render_view(auth_key_valid? ? :welcome : :login) %>

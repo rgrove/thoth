@@ -28,10 +28,8 @@
 
 module Thoth
   class CommentController < Controller
-    map       '/comment'
-    layout    '/layout'
-
-    helper      :admin, :aspect, :cache, :cookie, :pagination, :error
+    map '/comment'
+    helper :admin, :aspect, :cache, :cookie, :pagination, :error
     # deny_layout :atom, :rss
 
     if Config.server.enable_cache

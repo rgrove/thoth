@@ -29,7 +29,6 @@
 module Thoth
   class MinifyController < Controller
     map '/minify'
-
     helper :cache, :error
 
     def css(*args)

@@ -1,11 +1,11 @@
 <div class="hfeed">
   <% @posts.all do |post| %>
-    <%= render_template('post/compact', :post => post) %>
+    <%= Thoth::PostController.render_view('compact', :post => post) %>
   <% end %>
 </div>
 
 <%=
-render_template('util/pager',
+Thoth::MainController.render_view('util/pager',
     :prev_text => '&laquo; Newer stuff',
     :next_text => 'Older stuff &raquo;')
 %>

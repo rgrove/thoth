@@ -28,9 +28,7 @@
 
 module Thoth
   class SearchController < Controller
-    map       '/search'
-    layout    '/layout'
-
+    map '/search'
     helper :admin, :cache, :ysearch
 
     if Config.server.enable_cache
