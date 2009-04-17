@@ -64,7 +64,7 @@ module Thoth; module Plugin
       #                   specified tags will be returned.
       #
       def recent_bookmarks(username, options = {})
-        cache   = Ramaze::Cache.value_cache
+        cache   = Ramaze::Cache.plugin
         options = {:count => 5}.merge(options)
         request = "#{FEED_URL}/#{::CGI.escape(username)}" <<
             (options[:tags] ? '/' << ::CGI.escape(options[:tags].join(' ')) : '') <<
@@ -95,6 +95,7 @@ module Thoth; module Plugin
         return cache.store(request, data, :ttl => Config.delicious.cache_ttl)
 
       rescue => e
+        Ramaze::Log.error "Thoth::Plugin::Delicious: #{e.message}"
         return []
       end
 

@@ -122,57 +122,6 @@ module Thoth
       File.chmod(0640, File.join(path, 'thoth.conf'))
     end
 
-    # Initializes Ramaze (but doesn't actually start the server).
-    def init_ramaze
-      Ramaze.options.merge!(
-        :mode   => trait[:mode] == :production ? :live : :dev,
-        :roots  => [LIB_DIR, HOME_DIR]
-      )
-      
-      # Display a 404 error for requests that don't map to a controller or
-      # action.
-      # Ramaze::Dispatcher::Error::HANDLE_ERROR.update({
-      #   Ramaze::Error::NoAction     => [404, 'error_404'],
-      #   Ramaze::Error::NoController => [404, 'error_404']
-      # })
-
-      # case trait[:mode]
-      # when :devel
-      #   # Ramaze::Global.benchmarking = true
-      # 
-      # when :production
-      #   # Ramaze::Global.sourcereload = false
-      # 
-      #   # Log all errors to the error log file if one is configured.
-      #   if Config.server.error_log.empty?
-      #     Ramaze::Log.loggers = []
-      #   else
-      #     log_dir = File.dirname(Config.server.error_log)
-      # 
-      #     unless File.directory?(log_dir)
-      #       FileUtils.mkdir_p(log_dir)
-      #       File.chmod(0750, log_dir)
-      #     end
-      # 
-      #     Ramaze::Log.loggers = [
-      #       Ramaze::Logger::Informer.new(Config.server.error_log,
-      #           [:error])
-      #     ]
-      #   end
-      # 
-      #   # Don't expose argument errors or exceptions in production mode.
-      #   Ramaze::Dispatcher::Error::HANDLE_ERROR.update({
-      #     ArgumentError => [404, 'error_404'],
-      #     Exception     => [500, 'error_500']
-      #   })
-      # 
-      # else
-      #   raise "Invalid mode: #{trait[:mode]}"
-      # end
-
-      # Ramaze::Global.console = trait[:irb]
-    end
-
     # Opens a connection to the Thoth database and loads helpers, controllers,
     # models and plugins.
     def init_thoth
@@ -243,12 +192,12 @@ module Thoth
 
     # Runs Thoth.
     def run
-      init_ramaze
       init_thoth
+
+      Ramaze.options.setup << self
 
       begin
         Ramaze.start(
-          # :force   => true,
           :adapter => trait[:adapter],
           :host    => trait[:ip],
           :port    => trait[:port],
@@ -258,6 +207,57 @@ module Thoth
         Ramaze::Log.error("Unable to start Ramaze due to LoadError: #{ex}")
         exit(1)
       end
+    end
+
+    # Initializes Ramaze.
+    def setup
+      Ramaze.options.merge!(
+        :mode  => trait[:mode] == :production ? :live : :dev,
+        :roots => [HOME_DIR, LIB_DIR]
+      )
+
+      Ramaze::Cache.add(:plugin)
+
+      # Display a 404 error for requests that don't map to a controller or
+      # action.
+      # Ramaze::Dispatcher::Error::HANDLE_ERROR.update({
+      #   Ramaze::Error::NoAction     => [404, 'error_404'],
+      #   Ramaze::Error::NoController => [404, 'error_404']
+      # })
+
+      # case trait[:mode]
+      # when :devel
+      #   # Ramaze::Global.benchmarking = true
+      # 
+      # when :production
+      #   # Ramaze::Global.sourcereload = false
+      # 
+      #   # Log all errors to the error log file if one is configured.
+      #   if Config.server.error_log.empty?
+      #     Ramaze::Log.loggers = []
+      #   else
+      #     log_dir = File.dirname(Config.server.error_log)
+      # 
+      #     unless File.directory?(log_dir)
+      #       FileUtils.mkdir_p(log_dir)
+      #       File.chmod(0750, log_dir)
+      #     end
+      # 
+      #     Ramaze::Log.loggers = [
+      #       Ramaze::Logger::Informer.new(Config.server.error_log,
+      #           [:error])
+      #     ]
+      #   end
+      # 
+      #   # Don't expose argument errors or exceptions in production mode.
+      #   Ramaze::Dispatcher::Error::HANDLE_ERROR.update({
+      #     ArgumentError => [404, 'error_404'],
+      #     Exception     => [500, 'error_500']
+      #   })
+      # 
+      # else
+      #   raise "Invalid mode: #{trait[:mode]}"
+      # end
     end
 
     # Starts Thoth as a daemon.

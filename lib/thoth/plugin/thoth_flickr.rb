@@ -52,11 +52,12 @@ module Thoth; module Plugin
     end
 
     class << self
+
       # Gets recent Flickr photos (up to _limit_) for the specified _username_.
       # The return value of this method is cached to improve performance and to
       # avoid abusing the Flickr API.
       def recent_photos(username, limit = 4)
-        cache = Ramaze::Cache.value_cache
+        cache = Ramaze::Cache.plugin
         key   = "recent_photos_#{username}_#{limit}"
 
         if value = cache[key]
@@ -71,6 +72,7 @@ module Thoth; module Plugin
                 photos(:per_page => limit), :ttl => Config.flickr.cache_ttl)
           end
         rescue => e
+          Ramaze::Log.error "Thoth::Plugin::Flickr: #{e.message}"
           return []
         else
           value

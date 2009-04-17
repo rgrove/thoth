@@ -108,7 +108,7 @@ module Thoth; module Plugin
           @skip_until = nil
         end
 
-        cache   = Ramaze::Cache.value_cache
+        cache   = Ramaze::Cache.plugin
         options = {:count => 5}.merge(options)
         count   = options[:count].to_i
 
@@ -156,15 +156,16 @@ module Thoth; module Plugin
         return cache.store(url, tweets, :ttl => Config.twitter.cache_ttl)
 
       rescue => e
+        Ramaze::Log.error "Thoth::Plugin::Twitter: #{e.message}"
+
         @failures ||= 0
         @failures += 1
-      
+
         if @failures >= Config.twitter.failure_threshold
           @skip_until = Time.now + Config.twitter.failure_timeout
-          Ramaze::Log.error("Twitter failed to respond #{@failures} times. " <<
-              "Will retry after #{@skip_until}.")
+          Ramaze::Log.error "Thoth::Plugin::Twitter: Twitter failed to respond #{@failures} times. Will retry after #{@skip_until}."
         end
-      
+
         return []
       end
 

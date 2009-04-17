@@ -42,11 +42,12 @@ module Thoth; module Plugin
     end
 
     class << self
+
       # Gets an Array of the most heavily-used tags. The first element of the
       # array is a Tag object, the second element is the number of times it's
       # used.
       def top_tags(limit = 10)
-        cache = Ramaze::Cache.value_cache
+        cache = Ramaze::Cache.plugin
 
         if tags = cache["top_tags_#{limit}"]
           return tags
@@ -59,6 +60,7 @@ module Thoth; module Plugin
         tag_ids.all {|row| tags << [Tag[row[:tag_id]], row[:count]] }
         cache.store("top_tags_#{limit}", tags, :ttl => Config.tags.cache_ttl)
       end
+
     end
   end
 
