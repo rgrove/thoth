@@ -4,7 +4,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title><%== @title ? @title : Thoth::Config.site.name %></title>
 
-    <%= Thoth::MainController.render_view :css %>
+    <%= Thoth::MainController.render_view(:css) %>
 
     <link rel="alternate" type="application/atom+xml"
         href="<%= Thoth::MainController.r(:atom) %>" title="Posts (Atom)" />
@@ -28,10 +28,10 @@
   </head>
   <body>
     <div id="doc">
-      <%= Thoth::MainController.render_view :header %>
+      <%= Thoth::MainController.render_view(:header) %>
 
       <div id="bd">
-        <%= Thoth::MainController.render_view :sidebar %>
+        <%= Thoth::MainController.render_view(:sidebar) %>
 
         <div id="main">
           <%= flashbox('<div class="flash %key">%value</div>') %>
@@ -39,9 +39,9 @@
         </div>
       </div>
 
-      <%= Thoth::MainController.render_view :footer %>
+      <%= Thoth::MainController.render_view(:footer) %>
     </div>
 
-    <%= Thoth::MainController.render_view :js %>
+    <%= Thoth::MainController.render_view(:js) %>
   </body>
 </html>
