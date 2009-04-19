@@ -33,8 +33,8 @@ module Ramaze; module Helper
   module Cookie
     private
 
-    # Gets the first cookie matching the specified +name+. If not found, the
-    # provided +default+ value will be returned.
+    # Gets the first cookie matching the specified _name_. If not found, the
+    # provided _default_ value will be returned.
     def cookie(name, default = nil)
       return default unless cookie = request.cookies[name.to_s]
       return cookie.first if cookie.is_a?(Array)

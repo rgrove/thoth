@@ -2,7 +2,7 @@
 
   <% if @comment && @comment.valid? %>
     <fieldset>
-      <%= Thoth::CommentController.render_view(:comment) %>
+      <%= Thoth::CommentController.render_view(:comment, :comment => @comment) %>
     </fieldset>
   <% end %>
 

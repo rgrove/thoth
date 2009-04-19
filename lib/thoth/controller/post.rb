@@ -75,7 +75,7 @@ module Thoth
                 'Please try again later.'
           else
             flash[:success] = 'Comment posted.'
-            redirect(rs(@post.name) + "#comment-#{comment.id}")
+            redirect(rs(@post.name).to_s + "#comment-#{comment.id}")
           end
         end
 
