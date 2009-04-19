@@ -29,7 +29,6 @@
 module Thoth
   class MainController < Controller
     helper :admin, :cache, :error, :pagination
-    # deny_layout :atom, :rss, :sitemap
 
     if Config.server.enable_cache
       cache :index, :ttl => 60, :key => lambda {
@@ -62,7 +61,7 @@ module Thoth
         x.subtitle Config.site.desc
         x.updated  Time.now.xmlschema # TODO: use modification time of the last post
         x.link     :href => Config.site.url
-        x.link     :href => Config.site.url.chomp('/') + rs(:atom),
+        x.link     :href => Config.site.url.chomp('/') + rs(:atom).to_s,
                    :rel => 'self'
 
         x.author {
@@ -87,6 +86,8 @@ module Thoth
           }
         end
       }
+
+      throw :respond, x.target!
     end
 
     def rss
@@ -107,7 +108,7 @@ module Thoth
           x.ttl            60
           x.atom           :link, :rel => 'self',
                                :type => 'application/rss+xml',
-                               :href => Config.site.url.chomp('/') + rs(:rss)
+                               :href => Config.site.url.chomp('/') + rs(:rss).to_s
 
           Post.recent.all.each do |post|
             x.item {
@@ -124,6 +125,8 @@ module Thoth
           end
         }
       }
+
+      throw :respond, x.target!
     end
 
     def sitemap
@@ -159,6 +162,8 @@ module Thoth
           }
         end
       }
+
+      throw :respond, x.target!
     end
 
     # Legacy redirect to /archive/+page+.

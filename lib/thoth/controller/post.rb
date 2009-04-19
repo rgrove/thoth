@@ -30,7 +30,6 @@ module Thoth
   class PostController < Controller
     map '/post'
     helper :admin, :cache, :cookie, :error, :pagination, :wiki
-    # deny_layout :atom
 
     if Config.server.enable_cache
       cache :atom, :ttl => 120
@@ -147,6 +146,8 @@ module Thoth
           }
         end
       }
+
+      throw :respond, x.target!
     end
 
     def delete(id = nil)

@@ -30,7 +30,6 @@ module Thoth
   class TagController < Controller
     map '/tag'
     helper  :admin, :cache, :error, :pagination
-    # deny_layout :atom
 
     if Config.server.enable_cache
       cache :index, :ttl => 120, :key => lambda { auth_key_valid? }
@@ -103,6 +102,8 @@ module Thoth
           }
         end
       }
+
+      throw :respond, x.target!
     end
   end
 end

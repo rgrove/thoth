@@ -30,7 +30,6 @@ module Thoth
   class CommentController < Controller
     map '/comment'
     helper :admin, :aspect, :cache, :cookie, :pagination, :error
-    # deny_layout :atom, :rss
 
     if Config.server.enable_cache
       cache :index, :ttl => 60, :key => lambda { auth_key_valid? }
@@ -57,14 +56,14 @@ module Thoth
       x.instruct!
 
       x.feed(:xmlns => 'http://www.w3.org/2005/Atom') {
-        comments_url = Config.site.url.chomp('/') + rs()
+        comments_url = Config.site.url.chomp('/') + rs().to_s
 
         x.id       comments_url
         x.title    "#{Config.site.name}: Recent Comments"
         x.subtitle Config.site.desc
         x.updated  Time.now.xmlschema # TODO: use modification time of the last post
         x.link     :href => comments_url
-        x.link     :href => Config.site.url.chomp('/') + rs(:atom),
+        x.link     :href => Config.site.url.chomp('/') + rs(:atom).to_s,
                        :rel => 'self'
 
         Comment.recent.all.each do |comment|
@@ -86,6 +85,8 @@ module Thoth
           }
         end
       }
+
+      throw :respond, x.target!
     end
 
     def delete(id = nil)
@@ -147,7 +148,7 @@ module Thoth
           x.ttl            30
           x.atom           :link, :rel => 'self',
                                :type => 'application/rss+xml',
-                               :href => Config.site.url.chomp('/') + rs(:rss)
+                               :href => Config.site.url.chomp('/') + rs(:rss).to_s
 
           Comment.recent.all.each do |comment|
             x.item {
@@ -161,6 +162,8 @@ module Thoth
           end
         }
       }
+
+      throw :respond, x.target!
     end
   end
 end
