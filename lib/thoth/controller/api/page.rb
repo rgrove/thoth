@@ -30,7 +30,7 @@ module Thoth
   class PageApiController < Controller
     map '/api/page'
 
-    helper :admin, :aspect, :error
+    helper :admin, :aspect
 
     before_all do
       Ramaze::Session.current.drop! if Ramaze::Session.current

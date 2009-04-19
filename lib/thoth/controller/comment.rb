@@ -29,7 +29,7 @@
 module Thoth
   class CommentController < Controller
     map '/comment'
-    helper :admin, :aspect, :cache, :cookie, :pagination, :error
+    helper :admin, :aspect, :cache, :cookie, :pagination
 
     if Config.server.enable_cache
       cache :index, :ttl => 60, :key => lambda { auth_key_valid? }

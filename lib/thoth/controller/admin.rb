@@ -29,7 +29,7 @@
 module Thoth
   class AdminController < Controller
     map '/admin'
-    helper :admin, :error
+    helper :admin
 
     def index
       if auth_key_valid?

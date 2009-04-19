@@ -218,13 +218,6 @@ module Thoth
 
       Ramaze::Cache.add(:plugin)
 
-      # Display a 404 error for requests that don't map to a controller or
-      # action.
-      # Ramaze::Dispatcher::Error::HANDLE_ERROR.update({
-      #   Ramaze::Error::NoAction     => [404, 'error_404'],
-      #   Ramaze::Error::NoController => [404, 'error_404']
-      # })
-
       # case trait[:mode]
       # when :devel
       #   # Ramaze::Global.benchmarking = true

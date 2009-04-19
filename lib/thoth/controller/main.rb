@@ -28,7 +28,7 @@
 
 module Thoth
   class MainController < Controller
-    helper :admin, :cache, :error, :pagination
+    helper :admin, :cache, :pagination
 
     if Config.server.enable_cache
       cache :index, :ttl => 60, :key => lambda {

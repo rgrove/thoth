@@ -30,7 +30,7 @@ module Thoth
   class CommentApiController < Controller
     map '/api/comment'
 
-    helper :admin, :cache, :error
+    helper :admin, :cache
 
     # Deletes the specified comment. Returns an HTTP 200 response on success, an
     # HTTP 500 response on failure, or an HTTP 404 response if the specified

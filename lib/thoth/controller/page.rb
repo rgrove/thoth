@@ -29,7 +29,7 @@
 module Thoth
   class PageController < Controller
     map '/page'
-    helper :admin, :cache, :error, :pagination, :wiki
+    helper :admin, :cache, :pagination, :wiki
 
     if Config.server.enable_cache
       cache :index, :ttl => 120, :key => lambda { auth_key_valid? }

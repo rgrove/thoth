@@ -29,7 +29,7 @@
 module Thoth
   class PostController < Controller
     map '/post'
-    helper :admin, :cache, :cookie, :error, :pagination, :wiki
+    helper :admin, :cache, :cookie, :pagination, :wiki
 
     if Config.server.enable_cache
       cache :atom, :ttl => 120
