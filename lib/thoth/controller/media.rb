@@ -30,14 +30,11 @@ module Thoth
   class MediaController < Controller
     map '/media'
     helper :admin, :error, :pagination
-    # deny_layout :index
 
     def index(filename = nil)
-      unless filename && file = Media[:filename => filename.strip]
-        error_404
-      end
+      error_404 unless filename && file = Media[:filename => filename.strip]
 
-      send_file(file.path)
+      send_media(file.path)
 
     rescue Errno::ENOENT => e
       error_404
@@ -71,7 +68,7 @@ module Thoth
       redirect(rs(:new)) unless id && @file = Media[id]
 
       @title          = "Edit Media - #{@file.filename}"
-      @form_action    = rs(:edit, id)
+      @form_action    = rs(:edit, id).to_s
       @show_file_edit = true
 
       if request.post?
@@ -120,7 +117,7 @@ module Thoth
       require_auth
 
       @title       = "Upload Media"
-      @form_action = rs(:new)
+      @form_action = rs(:new).to_s
 
       if request.post?
         error_403 unless form_token_valid?
@@ -156,5 +153,21 @@ module Thoth
         end
       end
     end
+  
+    private
+
+    # This should eventually be eliminated in favor of using the frontend server
+    # to send files directly without passing through Thoth/Ramaze.
+    def send_media(filename, content_type = nil)
+      content_type ||= Rack::Mime.mime_type(::File.extname(filename))
+
+      response.body = ::File.open(filename, 'rb')
+      response['Content-Length'] = ::File.size(filename).to_s
+      response['Content-Type'] = content_type
+      response.status = 200
+
+      throw(:respond, response)
+    end
+
   end
 end
