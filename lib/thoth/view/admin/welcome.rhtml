@@ -30,9 +30,9 @@
     <dd><code><%== @public_root %></code></dd>
 
     <dt>Custom Views</dt>
-    <dd><code><%== Thoth::Config.theme.view %></code></dd>
+    <dd><code><%== File.join(Thoth::HOME_DIR, 'view') %></code></dd>
     <dt>Custom CSS, JS, etc.</dt>
-    <dd><code><%== Thoth::Config.theme.public %></code></dd>
+    <dd><code><%== File.join(Thoth::HOME_DIR, 'public') %></code></dd>
   </dl>
 
   <p>

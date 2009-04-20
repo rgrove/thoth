@@ -29,7 +29,7 @@
 module Thoth
   class PostController < Controller
     map '/post'
-    helper :admin, :cache, :cookie, :pagination, :wiki
+    helper :pagination, :wiki
 
     if Config.server.enable_cache
       cache :atom, :ttl => 120
@@ -160,7 +160,7 @@ module Thoth
 
         if request[:confirm] == 'yes'
           @post.destroy
-          action_cache.clear
+          Ramaze::Cache.action.clear
           flash[:success] = 'Blog post deleted.'
           redirect(r(MainController))
         else
@@ -208,7 +208,7 @@ module Thoth
               flash[:success] = 'Draft saved.'
               redirect(rs(:edit, @post.id))
             else
-              action_cache.clear
+              Ramaze::Cache.action.clear
               flash[:success] = 'Blog post published.'
               redirect(rs(@post.name))
             end
@@ -277,7 +277,7 @@ module Thoth
               flash[:success] = 'Draft saved.'
               redirect(rs(:edit, @post.id))
             else
-              action_cache.clear
+              Ramaze::Cache.action.clear
               flash[:success] = 'Blog post published.'
               redirect(rs(@post.name))
             end

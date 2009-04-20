@@ -29,7 +29,6 @@
 module Thoth
   class MinifyController < Controller
     map '/minify'
-    helper :cache
 
     def css(*args)
       path = 'css/' << args.join('/')

@@ -29,7 +29,7 @@
 module Thoth
   class TagController < Controller
     map '/tag'
-    helper  :admin, :cache, :pagination
+    helper :pagination
 
     if Config.server.enable_cache
       cache :index, :ttl => 120, :key => lambda { auth_key_valid? }

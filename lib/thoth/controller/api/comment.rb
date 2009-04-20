@@ -29,8 +29,7 @@
 module Thoth
   class CommentApiController < Controller
     map '/api/comment'
-
-    helper :admin, :cache
+    layout nil
 
     # Deletes the specified comment. Returns an HTTP 200 response on success, an
     # HTTP 500 response on failure, or an HTTP 404 response if the specified
@@ -59,12 +58,11 @@ module Thoth
       response['Content-Type'] = 'application/json'
 
       if @comment.destroy
-        action_cache.clear
+        Ramaze::Cache.action.clear
         JSON.generate({:success => true})
       else
         respond(JSON.generate({
-          :error => 'The comment could not be deleted due to an unknown ' <<
-              'database error.'
+          :error => 'The comment could not be deleted due to a database error.'
         }, 500))
       end
     end

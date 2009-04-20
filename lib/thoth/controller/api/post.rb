@@ -29,12 +29,7 @@
 module Thoth
   class PostApiController < Controller
     map '/api/post'
-
-    helper :admin, :aspect
-
-    before_all do
-      Ramaze::Session.current.drop! if Ramaze::Session.current
-    end
+    layout nil
 
     # Returns a response indicating whether the specified post name is valid and
     # not already taken. Returns an HTTP 200 response on success or an HTTP 500
@@ -82,7 +77,7 @@ module Thoth
     #
     # ===== Failure
     #
-    #   {"error":"The comment could not be deleted due to an unknown database error."}
+    #   {"error":"The comment could not be deleted due to a database error."}
     #
     def delete
       error_403 unless auth_key_valid? && form_token_valid?
@@ -92,12 +87,11 @@ module Thoth
       response['Content-Type'] = 'application/json'
 
       if @comment.destroy
-        action_cache.clear
+        Ramaze::Cache.action.clear
         JSON.generate({:success => true})
       else
         respond(JSON.generate({
-          :error => 'The comment could not be deleted due to an unknown ' <<
-              'database error.'
+          :error => 'The comment could not be deleted due to a database error.'
         }, 500))
       end
     end

@@ -32,11 +32,6 @@ module Ramaze; module Helper
   # authorization from within other actions and views.
   module Admin
 
-    # Include cookie helper.
-    def self.included(klass)
-      klass.send(:helper, :cookie)
-    end
-
     # Generates and returns an auth key suitable for storage in a client-side
     # auth cookie. The key is an SHA256 hash of the following elements:
     #

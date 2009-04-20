@@ -29,12 +29,7 @@
 module Thoth
   class PageApiController < Controller
     map '/api/page'
-
-    helper :admin, :aspect
-
-    before_all do
-      Ramaze::Session.current.drop! if Ramaze::Session.current
-    end
+    layout nil
 
     # Returns a response indicating whether the specified page name is valid and
     # not already taken. Returns an HTTP 200 response on success.

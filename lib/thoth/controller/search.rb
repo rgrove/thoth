@@ -29,7 +29,7 @@
 module Thoth
   class SearchController < Controller
     map '/search'
-    helper :admin, :cache, :ysearch
+    helper :ysearch
 
     if Config.server.enable_cache
       cache :index, :ttl => 300, :key => lambda {

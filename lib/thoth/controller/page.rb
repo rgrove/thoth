@@ -29,7 +29,7 @@
 module Thoth
   class PageController < Controller
     map '/page'
-    helper :admin, :cache, :pagination, :wiki
+    helper :pagination, :wiki
 
     if Config.server.enable_cache
       cache :index, :ttl => 120, :key => lambda { auth_key_valid? }
@@ -52,7 +52,7 @@ module Thoth
 
         if request[:confirm] == 'yes'
           @page.destroy
-          action_cache.clear
+          Ramaze::Cache.action.clear
           flash[:success] = 'Page deleted.'
           redirect(r(MainController))
         else
@@ -85,7 +85,7 @@ module Thoth
           rescue => e
             @page_error = "There was an error saving your page: #{e}"
           else
-            action_cache.clear
+            Ramaze::Cache.action.clear
             flash[:success] = 'Page saved.'
             redirect(rs(@page.name))
           end
@@ -156,7 +156,7 @@ module Thoth
           rescue => e
             @page_error = "There was an error saving your page: #{e}"
           else
-            action_cache.clear
+            Ramaze::Cache.action.clear
             flash[:success] = 'Page created.'
             redirect(rs(@page.name))
           end

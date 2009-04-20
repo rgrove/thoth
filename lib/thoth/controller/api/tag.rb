@@ -29,12 +29,7 @@
 module Thoth
   class TagApiController < Controller
     map '/api/tag'
-
-    helper :admin, :aspect
-
-    before_all do
-      Ramaze::Session.current.drop! if Ramaze::Session.current
-    end
+    layout nil
 
     # Returns a JSON array of existing tag names and usage counts for tags that
     # begin with the specified query string.

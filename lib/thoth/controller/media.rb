@@ -29,7 +29,7 @@
 module Thoth
   class MediaController < Controller
     map '/media'
-    helper :admin, :pagination
+    helper :pagination
 
     def index(filename = nil)
       error_404 unless filename && file = Media[:filename => filename.strip]
