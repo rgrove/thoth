@@ -58,8 +58,6 @@ require 'thoth/errors'
 require 'thoth/config'
 require 'thoth/version'
 require 'thoth/plugin'
-# require 'thoth/monkeypatch/ramaze/controller'
-# require 'thoth/monkeypatch/ramaze/dispatcher/file'
 
 module Thoth
   include Innate::Traited
@@ -148,7 +146,7 @@ module Thoth
 
       Ramaze::acquire(File.join(LIB_DIR, 'helper', '*'))
 
-      require File.join(LIB_DIR, 'controller', 'init')
+      require File.join(LIB_DIR, 'controller')
 
       Ramaze::acquire(File.join(LIB_DIR, 'model', '*'))
 
