@@ -61,7 +61,7 @@ module Ramaze; module Helper
     # submission to verify that the form was not submitted by an unauthorized
     # third party.
     def form_token
-      Ramaze::Session.current.session_id
+      Ramaze::Current.session.sid
     end
 
     # Checks the form token specified by _name_ and returns +true+ if it's
@@ -73,7 +73,7 @@ module Ramaze; module Helper
     # Checks the auth cookie and redirects to the login page if the user is not
     # authenticated.
     def require_auth
-      redirect(r(Thoth::AdminController)) unless auth_key_valid?
+      redirect(Thoth::AdminController.r()) unless auth_key_valid?
     end
   end
 
