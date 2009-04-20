@@ -162,7 +162,7 @@ module Thoth
           @post.destroy
           Ramaze::Cache.action.clear
           flash[:success] = 'Blog post deleted.'
-          redirect(r(MainController))
+          redirect(MainController.r())
         else
           redirect(@post.url)
         end

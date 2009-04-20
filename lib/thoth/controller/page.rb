@@ -54,7 +54,7 @@ module Thoth
           @page.destroy
           Ramaze::Cache.action.clear
           flash[:success] = 'Page deleted.'
-          redirect(r(MainController))
+          redirect(MainController.r())
         else
           redirect(@page.url)
         end
