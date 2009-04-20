@@ -35,39 +35,39 @@ module Ramaze; module Helper
     def wiki_to_html(string)
       # [[page_name|link text]]
       string.gsub!(/\[\[([0-9a-z_-]+)\|(.+?)\]\]/i) do
-        A($2, :href => Thoth::PageController.r(:/, $1.downcase))
+        Thoth::PageController.a($2, :/, $1.downcase)
       end
 
       # [[page_name]]
       string.gsub!(/\[\[([0-9a-z_-]+)\]\]/i) do
-        A($1, :href => Thoth::PageController.r(:/, $1.downcase))
+        Thoth::PageController.a($1, :/, $1.downcase)
       end
 
       # [[@post_name|link text]]
       # [[@123|link text]]
       string.gsub!(/\[\[@(\d+|[0-9a-z_-]+)\|(.+?)\]\]/i) do
-        A($2, :href => Thoth::PostController.r(:/, $1.downcase))
+        Thoth::PostController.a($2, :/, $1.downcase)
       end
 
       # [[@post_name]]
       # [[@123]]
       string.gsub!(/\[\[@(\d+|[0-9a-z_-]+)\]\]/i) do
-        A($1, :href => Thoth::PostController.r(:/, $1.downcase))
+        Thoth::PostController.a($1, :/, $1.downcase)
       end
 
       # [[media:filename|link text]]
       string.gsub!(/\[\[media:([^\]]+)\|(.+?)\]\]/i) do
-        A($2, :href => Thoth::MediaController.r(:/, $1))
+        Thoth::MediaController.a($2, :/, $1)
       end
 
       # [[media:filename]]
       string.gsub!(/\[\[media:([^\]]+)\]\]/i) do
-        A($1, :href => Thoth::MediaController.r(:/, $1))
+        Thoth::MediaController.a($1, :/, $1)
       end
 
       # [[media_url:filename]]
       string.gsub!(/\[\[media_url:([^\]]+)\]\]/i) do
-        Thoth::MediaController.r(:/, $1)
+        Thoth::MediaController.r(:/, $1).to_s
       end
 
       string
