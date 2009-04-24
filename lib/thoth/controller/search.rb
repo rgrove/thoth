@@ -29,13 +29,13 @@
 module Thoth
   class SearchController < Controller
     map '/search'
-    helper :ysearch
+    helper :cache, :ysearch
 
     if Config.server.enable_cache
-      cache :index, :ttl => 300, :key => lambda {
+      cache_action(:method => :index, :ttl => 300) do
         auth_key_valid?.to_s + request[:q] + (request[:start] || '') +
             (request[:count] || '')
-      }
+      end
     end
 
     def index

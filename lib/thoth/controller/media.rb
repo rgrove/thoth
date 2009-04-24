@@ -153,12 +153,13 @@ module Thoth
         end
       end
     end
-  
+
     private
 
-    # This should eventually be eliminated in favor of using the frontend server
-    # to send files directly without passing through Thoth/Ramaze.
     def send_media(filename, content_type = nil)
+      # This should eventually be eliminated in favor of using the frontend
+      # server to send files directly without passing through Thoth/Ramaze.
+
       content_type ||= Rack::Mime.mime_type(::File.extname(filename))
 
       response.body = ::File.open(filename, 'rb')

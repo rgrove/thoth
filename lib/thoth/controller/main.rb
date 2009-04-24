@@ -28,14 +28,16 @@
 
 module Thoth
   class MainController < Controller
-    helper :pagination
+    helper :cache, :pagination
 
     if Config.server.enable_cache
-      cache :index, :ttl => 60, :key => lambda {
+      cache_action(:method => :index, :ttl => 60) do
         auth_key_valid?.to_s + (request[:type] || '') + flash.inspect
-      }
-      cache :atom, :rss, :ttl => 300
-      cache :sitemap, :ttl => 3600
+      end
+
+      cache_action(:method => :atom,    :ttl => 120)
+      cache_action(:method => :rss,     :ttl => 120)
+      cache_action(:method => :sitemap, :ttl => 3600)
     end
 
     def index
@@ -87,7 +89,7 @@ module Thoth
         end
       }
 
-      throw :respond, x.target!
+      throw(:respond, x.target!)
     end
 
     def rss
@@ -126,7 +128,7 @@ module Thoth
         }
       }
 
-      throw :respond, x.target!
+      throw(:respond, x.target!)
     end
 
     def sitemap
@@ -163,7 +165,7 @@ module Thoth
         end
       }
 
-      throw :respond, x.target!
+      throw(:respond, x.target!)
     end
 
     # Legacy redirect to /archive/+page+.

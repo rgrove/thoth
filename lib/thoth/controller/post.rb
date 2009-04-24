@@ -29,10 +29,10 @@
 module Thoth
   class PostController < Controller
     map '/post'
-    helper :pagination, :wiki
+    helper :cache, :pagination, :wiki
 
     if Config.server.enable_cache
-      cache :atom, :ttl => 120
+      cache_action(:method => :atom, :ttl => 120)
     end
 
     def index(name = nil)
@@ -111,11 +111,11 @@ module Thoth
       # result dupes and improve pagerank.
       raw_redirect(post.atom_url, :status => 301) if name =~ /^\d+$/
 
+      response['Content-Type'] = 'application/atom+xml'
+
       comments = post.comments.reverse_order.limit(20)
       updated  = comments.count > 0 ? comments.first.created_at.xmlschema :
           post.created_at.xmlschema
-
-      response['Content-Type'] = 'application/atom+xml'
 
       x = Builder::XmlMarkup.new(:indent => 2)
       x.instruct!
@@ -147,7 +147,7 @@ module Thoth
         end
       }
 
-      throw :respond, x.target!
+      throw(:respond, x.target!)
     end
 
     def delete(id = nil)

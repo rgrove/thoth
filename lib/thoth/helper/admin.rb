@@ -31,7 +31,6 @@ module Ramaze; module Helper
   # The Admin helper provides methods for checking for or requiring
   # authorization from within other actions and views.
   module Admin
-
     # Generates and returns an auth key suitable for storage in a client-side
     # auth cookie. The key is an SHA256 hash of the following elements:
     #

@@ -1,6 +1,6 @@
 module Thoth
   class Controller < Ramaze::Controller
-    helper :admin, :cache, :cookie, :error
+    helper :admin, :cookie, :error
 
     engine :Erubis
     layout :default

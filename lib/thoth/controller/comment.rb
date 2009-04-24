@@ -29,11 +29,12 @@
 module Thoth
   class CommentController < Controller
     map '/comment'
-    helper :aspect, :pagination
+    helper :aspect, :cache, :pagination
 
     if Config.server.enable_cache
-      cache :index, :ttl => 60, :key => lambda { auth_key_valid? }
-      cache :atom, :rss, :ttl => 60
+      cache_action(:method => :index, :ttl => 60) { auth_key_valid? }
+      cache_action(:method => :atom,  :ttl => 120)
+      cache_action(:method => :rss,   :ttl => 120)
     end
 
     before_all { error_404 unless Config.site.enable_comments }
@@ -86,7 +87,7 @@ module Thoth
         end
       }
 
-      throw :respond, x.target!
+      throw(:respond, x.target!)
     end
 
     def delete(id = nil)
@@ -163,7 +164,7 @@ module Thoth
         }
       }
 
-      throw :respond, x.target!
+      throw(:respond, x.target!)
     end
   end
 end

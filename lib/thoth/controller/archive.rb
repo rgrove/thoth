@@ -29,10 +29,10 @@
 module Thoth
   class ArchiveController < Controller
     map '/archive'
-    helper :pagination
+    helper :cache, :pagination
 
     if Config.server.enable_cache
-      cache :index, :ttl => 120, :key => lambda { auth_key_valid? }
+      cache_action(:method => :index, :ttl => 120) { auth_key_valid? }
     end
 
     def index(page = 1)

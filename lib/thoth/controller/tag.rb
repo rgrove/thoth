@@ -29,11 +29,11 @@
 module Thoth
   class TagController < Controller
     map '/tag'
-    helper :pagination
+    helper :cache, :pagination
 
     if Config.server.enable_cache
-      cache :index, :ttl => 120, :key => lambda { auth_key_valid? }
-      cache :atom, :ttl => 120
+      cache_action(:method => :index, :ttl => 120) { auth_key_valid? }
+      cache_action(:method => :atom,  :ttl => 120)
     end
 
     def index(name = nil, page = 1)
@@ -64,11 +64,11 @@ module Thoth
     def atom(name = nil)
       error_404 unless name && tag = Tag[:name => name.strip.downcase]
 
+      response['Content-Type'] = 'application/atom+xml'
+
       posts   = tag.posts.limit(10)
       updated = posts.count > 0 ? posts.first.created_at.xmlschema :
           Time.at(0).xmlschema
-
-      response['Content-Type'] = 'application/atom+xml'
 
       x = Builder::XmlMarkup.new(:indent => 2)
       x.instruct!
@@ -103,7 +103,7 @@ module Thoth
         end
       }
 
-      throw :respond, x.target!
+      throw(:respond, x.target!)
     end
   end
 end
