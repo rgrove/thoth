@@ -29,84 +29,71 @@
 module Thoth
   class MinifyController < Controller
     map '/minify'
+    helper :cache
 
     def css(*args)
       path = 'css/' << args.join('/')
       file = process(path)
-
-      Ramaze::Session.current.drop! if Ramaze::Session.current
 
       response['Content-Type'] = 'text/css'
 
       # If the filename has a -min suffix, assume that it's already minified and
       # serve it as is.
       if (File.basename(path, '.css') =~ /-min$/)
-        response.body = File.open(file, 'rb')
-        throw(:respond)
+        throw(:respond, File.open(file, 'rb'))
       end
 
       if Config.server.enable_cache
-        response.body = value_cache[path] ||
-            value_cache[path] = CSSMin.minify(File.open(file, 'rb'))
+        body = cache_value[path] ||= CSSMin.minify(File.open(file, 'rb'))
       else
-        response.body = CSSMin.minify(File.open(file, 'rb'))
+        body = CSSMin.minify(File.open(file, 'rb'))
       end
 
-      throw(:respond)
+      throw(:respond, body)
     end
 
     def js(*args)
       path = 'js/' << args.join('/')
       file = process(path)
 
-      Ramaze::Session.current.drop! if Ramaze::Session.current
-
-      response['Content-Type'] = 'text/javascript'
+      response['Content-Type'] = 'application/javascript'
 
       # If the filename has a -min suffix, assume that it's already minified and
       # serve it as is.
       if (File.basename(path, '.js') =~ /-min$/)
-        response.body = File.open(file, 'rb')
-        throw(:respond)
+        throw(:respond, File.open(file, 'rb'))
       end
 
       if Config.server.enable_cache
-        response.body = value_cache[path] ||
-            value_cache[path] = JSMin.minify(File.open(file, 'rb'))
+        body = cache_value[path] ||= JSMin.minify(File.open(file, 'rb'))
       else
-        response.body = JSMin.minify(File.open(file, 'rb'))
+        body = JSMin.minify(File.open(file, 'rb'))
       end
 
-      throw(:respond)
+      throw(:respond, body)
     end
 
     private
 
     def process(path)
-      file = Ramaze::Dispatcher::File.resolve_path(path)
+      error_404 unless file = resolve_path(path)
 
-      unless File.file?(file) && Ramaze::Dispatcher::File.in_public?(file)
-        error_404
-      end
-
-      mtime = File.mtime(file)
-
-      response['Last-Modified'] = mtime.httpdate
-      response['ETag'] = Digest::MD5.hexdigest(file + mtime.to_s).inspect
-
-      if modified_since = request.env['HTTP_IF_MODIFIED_SINCE']
-        unless Time.parse(modified_since) < mtime
-          response.build([], 304)
-          throw(:respond)
-        end
-      elsif match = request.env['HTTP_IF_NONE_MATCH']
-        if response['ETag'] == match
-          response.build([], 304)
-          throw(:respond)
-        end
-      end
+      response['Cache-Control'] = 'max-age=3600'
+      response['Last-Modified'] = File.mtime(file).httpdate
 
       file
     end
+
+    def resolve_path(path)
+      root_mappings.each do |root|
+        options.publics.each do |pub|
+          joined = File.join(root, pub, path)
+          return joined if File.file?(joined)
+        end
+      end
+
+      return false
+    end
+
   end
 end
