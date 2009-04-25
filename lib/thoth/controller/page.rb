@@ -31,7 +31,7 @@ module Thoth
     map '/page'
     helper :cache, :pagination, :wiki
 
-    if Config.server.enable_cache
+    if Config.server['enable_cache']
       cache_action(:method => :index, :ttl => 120) { auth_key_valid? }
     end
 

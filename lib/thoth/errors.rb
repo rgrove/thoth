@@ -29,6 +29,7 @@
 module Thoth
 
   class Error < StandardError; end
+  class ConfigError < Error; end
   class SchemaError < Error; end
 
 end

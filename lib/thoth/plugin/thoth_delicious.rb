@@ -76,7 +76,7 @@ module Thoth; module Plugin
 
         response = []
 
-        Timeout.timeout(Config.delicious.request_timeout, StandardError) do
+        Timeout.timeout(Config.delicious['request_timeout'], StandardError) do
           response = JSON.parse(open(request).read)
         end
 
@@ -92,7 +92,7 @@ module Thoth; module Plugin
           }
         end
 
-        return cache.store(request, data, :ttl => Config.delicious.cache_ttl)
+        return cache.store(request, data, :ttl => Config.delicious['cache_ttl'])
 
       rescue => e
         Ramaze::Log.error "Thoth::Plugin::Delicious: #{e.message}"

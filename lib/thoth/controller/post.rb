@@ -31,7 +31,7 @@ module Thoth
     map '/post'
     helper :cache, :pagination, :wiki
 
-    if Config.server.enable_cache
+    if Config.server['enable_cache']
       cache_action(:method => :atom, :ttl => 120)
     end
 
@@ -42,7 +42,7 @@ module Thoth
       # result dupes and improve pagerank.
       raw_redirect(@post.url, :status => 301) if name =~ /^\d+$/
 
-      if request.post? && Config.site.enable_comments
+      if request.post? && Config.site['enable_comments']
         # Dump the request if the robot traps were triggered.
         error_404 unless request['captcha'].empty? && request['comment'].empty?
 
@@ -83,7 +83,7 @@ module Thoth
         @author_email = comment.author_email
         @author_url   = comment.author_url
         @preview      = comment
-      elsif Config.site.enable_comments
+      elsif Config.site['enable_comments']
         @author       = cookie(:thoth_author, '')
         @author_email = cookie(:thoth_author_email, '')
         @author_url   = cookie(:thoth_author_url, '')
@@ -91,7 +91,7 @@ module Thoth
 
       @title = @post.title
 
-      if Config.site.enable_comments
+      if Config.site['enable_comments']
         @comment_action = r(:/, @post.name).to_s + '#post-comment'
 
         @feeds = [{
@@ -122,7 +122,7 @@ module Thoth
 
       x.feed(:xmlns => 'http://www.w3.org/2005/Atom') {
         x.id       post.url
-        x.title    "Comments on \"#{post.title}\" - #{Config.site.name}"
+        x.title    "Comments on \"#{post.title}\" - #{Config.site['name']}"
         x.updated  updated
         x.link     :href => post.url
         x.link     :href => post.atom_url, :rel => 'self'

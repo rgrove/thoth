@@ -30,7 +30,7 @@
 require 'optparse'
 require 'rubygems'
 
-gem 'ramaze', '~>2009.04.12'
+gem 'ramaze', '~>2009.04.23'
 
 require 'ramaze'
 
@@ -220,9 +220,9 @@ module Thoth
   when :server
     trait(:pidfile => File.join(HOME_DIR, "thoth_#{trait[:ip]}_#{trait[:port]}.pid"))
 
-    trait[:adapter] ||= Config.server.adapter
-    trait[:ip]      ||= Config.server.address
-    trait[:port]    ||= Config.server.port
+    trait[:adapter] ||= Config.server['adapter']
+    trait[:ip]      ||= Config.server['address']
+    trait[:port]    ||= Config.server['port']
 
     begin
       send(trait[:daemon] || :run)

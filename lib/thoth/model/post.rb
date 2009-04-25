@@ -150,7 +150,7 @@ module Thoth
 
     # Gets the Atom feed URL for this post.
     def atom_url
-      Config.site.url.chomp('/') + PostController.r(:atom, name).to_s
+      Config.site['url'].chomp('/') + PostController.r(:atom, name).to_s
     end
 
     def body=(body)
@@ -248,7 +248,7 @@ module Thoth
 
     # Gets the URL for this post.
     def url
-      Config.site.url.chomp('/') + PostController.r(:/, name).to_s
+      Config.site['url'].chomp('/') + PostController.r(:/, name).to_s
     end
   end
 

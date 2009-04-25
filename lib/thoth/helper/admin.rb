@@ -41,8 +41,8 @@ module Ramaze; module Helper
     #   - ADMIN_PASS from Thoth config
     def auth_key
       Digest::SHA256.hexdigest(Thoth::HOME_DIR + request.ip +
-          Thoth::Config.admin.seed + Thoth::Config.admin.user +
-          Thoth::Config.admin.pass)
+          Thoth::Config.admin['seed'] + Thoth::Config.admin['user'] +
+          Thoth::Config.admin['pass'])
     end
 
     # Validates the auth cookie and returns +true+ if the user is authenticated,

@@ -2,7 +2,7 @@
 <script type="text/javascript" src="/js/lazyload-min.js"></script>
 <script type="text/javascript" src="/js/thoth.js"></script>
 
-<% Thoth::Config.theme.js.each do |url| %>
+<% Thoth::Config.site['js'].each do |url| %>
   <script type="text/javascript" src="<%== url %>"></script>
 <% end %>
 

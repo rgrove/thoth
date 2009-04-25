@@ -14,10 +14,10 @@
         </td>
         <td class="size"><%== file.size.filesize_format %></td>
         <td class="created">
-          <%= file.created_at(Thoth::Config.timestamp.short) %>
+          <%= file.created_at(Thoth::Config.timestamp['short']) %>
         </td>
         <td class="updated">
-          <%= file.updated_at(Thoth::Config.timestamp.short) %>
+          <%= file.updated_at(Thoth::Config.timestamp['short']) %>
         </td>
       </tr>
     <% end %>

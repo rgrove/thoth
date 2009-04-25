@@ -31,13 +31,13 @@ module Thoth
     map '/comment'
     helper :aspect, :cache, :pagination
 
-    if Config.server.enable_cache
+    if Config.server['enable_cache']
       cache_action(:method => :index, :ttl => 60) { auth_key_valid? }
       cache_action(:method => :atom,  :ttl => 120)
       cache_action(:method => :rss,   :ttl => 120)
     end
 
-    before_all { error_404 unless Config.site.enable_comments }
+    before_all { error_404 unless Config.site['enable_comments'] }
 
     def index
       now = Time.now.strftime('%Y%j')
@@ -57,14 +57,14 @@ module Thoth
       x.instruct!
 
       x.feed(:xmlns => 'http://www.w3.org/2005/Atom') {
-        comments_url = Config.site.url.chomp('/') + rs().to_s
+        comments_url = Config.site['url'].chomp('/') + rs().to_s
 
         x.id       comments_url
-        x.title    "#{Config.site.name}: Recent Comments"
-        x.subtitle Config.site.desc
+        x.title    "#{Config.site['name']} Recent Comments"
+        x.subtitle Config.site['desc']
         x.updated  Time.now.xmlschema # TODO: use modification time of the last post
         x.link     :href => comments_url
-        x.link     :href => Config.site.url.chomp('/') + rs(:atom).to_s,
+        x.link     :href => Config.site['url'].chomp('/') + rs(:atom).to_s,
                        :rel => 'self'
 
         Comment.recent.all.each do |comment|
@@ -140,16 +140,16 @@ module Thoth
             'xmlns:atom' => 'http://www.w3.org/2005/Atom',
             'xmlns:dc'   => 'http://purl.org/dc/elements/1.1/') {
         x.channel {
-          x.title          "#{Config.site.name}: Recent Comments"
-          x.link           Config.site.url
-          x.description    Config.site.desc
-          x.managingEditor "#{Config.admin.email} (#{Config.admin.name})"
-          x.webMaster      "#{Config.admin.email} (#{Config.admin.name})"
+          x.title          "#{Config.site['name']} Recent Comments"
+          x.link           Config.site['url']
+          x.description    Config.site['desc']
+          x.managingEditor "#{Config.admin['email']} (#{Config.admin['name']})"
+          x.webMaster      "#{Config.admin['email']} (#{Config.admin['name']})"
           x.docs           'http://backend.userland.com/rss/'
           x.ttl            30
           x.atom           :link, :rel => 'self',
                                :type => 'application/rss+xml',
-                               :href => Config.site.url.chomp('/') + rs(:rss).to_s
+                               :href => Config.site['url'].chomp('/') + rs(:rss).to_s
 
           Comment.recent.all.each do |comment|
             x.item {

@@ -76,7 +76,7 @@
         </a>
       </li>
 
-      <% if Thoth::Config.site.enable_comments %>
+      <% if Thoth::Config.site['enable_comments'] %>
         <li>
           <a href="<%= Thoth::CommentController.r(:list) %>" title="List all comments">
             <span class="adminicon comment-list"></span>

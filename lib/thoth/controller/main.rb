@@ -30,7 +30,7 @@ module Thoth
   class MainController < Controller
     helper :cache, :pagination
 
-    if Config.server.enable_cache
+    if Config.server['enable_cache']
       cache_action(:method => :index, :ttl => 60) do
         auth_key_valid?.to_s + (request[:type] || '') + flash.inspect
       end
@@ -46,7 +46,7 @@ module Thoth
         redirect rs(type), :status => 301
       end
 
-      @title = Config.site.name
+      @title = Config.site['name']
       @posts = Post.recent
       @pager = pager(@posts, rs(:archive, '__page__'))
     end
@@ -58,18 +58,18 @@ module Thoth
       x.instruct!
 
       x.feed(:xmlns => 'http://www.w3.org/2005/Atom') {
-        x.id       Config.site.url
-        x.title    Config.site.name
-        x.subtitle Config.site.desc
+        x.id       Config.site['url']
+        x.title    Config.site['name']
+        x.subtitle Config.site['desc']
         x.updated  Time.now.xmlschema # TODO: use modification time of the last post
-        x.link     :href => Config.site.url
-        x.link     :href => Config.site.url.chomp('/') + rs(:atom).to_s,
+        x.link     :href => Config.site['url']
+        x.link     :href => Config.site['url'].chomp('/') + rs(:atom).to_s,
                    :rel => 'self'
 
         x.author {
-          x.name  Config.admin.name
-          x.email Config.admin.email
-          x.uri   Config.site.url
+          x.name  Config.admin['name']
+          x.email Config.admin['email']
+          x.uri   Config.site['url']
         }
 
         Post.recent.all.each do |post|
@@ -101,16 +101,16 @@ module Thoth
       x.rss(:version     => '2.0',
             'xmlns:atom' => 'http://www.w3.org/2005/Atom') {
         x.channel {
-          x.title          Config.site.name
-          x.link           Config.site.url
-          x.description    Config.site.desc
-          x.managingEditor "#{Config.admin.email} (#{Config.admin.name})"
-          x.webMaster      "#{Config.admin.email} (#{Config.admin.name})"
+          x.title          Config.site['name']
+          x.link           Config.site['url']
+          x.description    Config.site['desc']
+          x.managingEditor "#{Config.admin['email']} (#{Config.admin['name']})"
+          x.webMaster      "#{Config.admin['email']} (#{Config.admin['name']})"
           x.docs           'http://backend.userland.com/rss/'
           x.ttl            60
           x.atom           :link, :rel => 'self',
                                :type => 'application/rss+xml',
-                               :href => Config.site.url.chomp('/') + rs(:rss).to_s
+                               :href => Config.site['url'].chomp('/') + rs(:rss).to_s
 
           Post.recent.all.each do |post|
             x.item {
@@ -132,7 +132,7 @@ module Thoth
     end
 
     def sitemap
-      error_404 unless Config.site.enable_sitemap
+      error_404 unless Config.site['enable_sitemap']
 
       response['Content-Type'] = 'text/xml'
 
@@ -141,7 +141,7 @@ module Thoth
 
       x.urlset(:xmlns => 'http://www.sitemaps.org/schemas/sitemap/0.9') {
         x.url {
-          x.loc        Config.site.url
+          x.loc        Config.site['url']
           x.changefreq 'hourly'
           x.priority   '1.0'
         }

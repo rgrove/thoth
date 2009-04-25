@@ -31,7 +31,7 @@ module Thoth
     map '/archive'
     helper :cache, :pagination
 
-    if Config.server.enable_cache
+    if Config.server['enable_cache']
       cache_action(:method => :index, :ttl => 120) { auth_key_valid? }
     end
 
@@ -46,7 +46,7 @@ module Thoth
         @posts = Post.recent(page, 10)
       end
 
-      @title = "#{Config.site.name} Archives (page #{page} of " <<
+      @title = "#{Config.site['name']} Archives (page #{page} of " <<
           "#{@posts.page_count > 0 ? @posts.page_count : 1})"
 
       @pager = pager(@posts)

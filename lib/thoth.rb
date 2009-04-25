@@ -33,10 +33,11 @@ $:.uniq!
 require 'fileutils'
 require 'rubygems'
 
-gem 'ramaze', '~>2009.04.12'
+gem 'ramaze', '~>2009.04.23'
 
 require 'builder'
 require 'cssmin'
+require 'erubis'
 require 'jsmin'
 require 'json'
 require 'ramaze'
@@ -44,7 +45,7 @@ require 'redcloth'
 require 'sanitize'
 require 'sequel'
 require 'time'
-require 'configuration'
+require 'yaml'
 
 # The main Thoth namespace.
 module Thoth
@@ -117,14 +118,21 @@ module Thoth
       FileUtils.cp(File.join(LIB_DIR, '..', 'proto', 'thoth.conf.sample'), File.join(path, 'thoth.conf'))
 
       File.chmod(0750, File.join(path, 'log'))
+      File.chmod(0750, File.join(path, 'media'))
+      File.chmod(0750, File.join(path, 'plugin'))
+      File.chmod(0755, File.join(path, 'public'))
+      File.chmod(0750, File.join(path, 'view'))
+      File.chmod(0750, File.join(path, 'tmp'))
+
+      File.chmod(0640, File.join(path, 'config.ru'))
       File.chmod(0640, File.join(path, 'thoth.conf'))
     end
 
     # Opens a connection to the Thoth database and loads helpers, controllers,
     # models and plugins.
     def init_thoth
-      trait[:ip]   ||= Config.server.address
-      trait[:port] ||= Config.server.port
+      trait[:ip]   ||= Config.server['address']
+      trait[:port] ||= Config.server['port']
 
       Ramaze::Log.info "Thoth home: #{HOME_DIR}"
       Ramaze::Log.info "Thoth lib : #{LIB_DIR}"
@@ -152,7 +160,7 @@ module Thoth
 
       # If minification is enabled, intercept CSS/JS requests and route them to
       # the MinifyController.
-      if Config.server.enable_minify
+      if Config.server['enable_minify']
         Ramaze::Rewrite[/^\/(css|js)\/(.+)$/] = '/minify/%s/%s'
       end
 
@@ -224,10 +232,10 @@ module Thoth
       #   # Ramaze::Global.sourcereload = false
       # 
       #   # Log all errors to the error log file if one is configured.
-      #   if Config.server.error_log.empty?
+      #   if Config.server['error_log'].empty?
       #     Ramaze::Log.loggers = []
       #   else
-      #     log_dir = File.dirname(Config.server.error_log)
+      #     log_dir = File.dirname(Config.server['error_log'])
       # 
       #     unless File.directory?(log_dir)
       #       FileUtils.mkdir_p(log_dir)
@@ -235,7 +243,7 @@ module Thoth
       #     end
       # 
       #     Ramaze::Log.loggers = [
-      #       Ramaze::Logger::Informer.new(Config.server.error_log,
+      #       Ramaze::Logger::Informer.new(Config.server['error_log'],
       #           [:error])
       #     ]
       #   end

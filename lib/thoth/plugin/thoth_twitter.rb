@@ -112,7 +112,7 @@ module Thoth; module Plugin
         options = {:count => 5}.merge(options)
         count   = options[:count].to_i
 
-        count += 10 unless Config.twitter.include_replies
+        count += 10 unless Config.twitter['include_replies']
         count = 200 if count > 200
 
         url = "http://twitter.com/statuses/user_timeline/#{user}.json?count=" <<
@@ -124,12 +124,12 @@ module Thoth; module Plugin
 
         tweets = []
 
-        Timeout.timeout(Config.twitter.request_timeout, StandardError) do
+        Timeout.timeout(Config.twitter['request_timeout'], StandardError) do
           tweets = JSON.parse(open(url).read)
         end
 
         # Weed out replies if necessary.
-        unless Config.twitter.include_replies
+        unless Config.twitter['include_replies']
           tweets.delete_if do |tweet|
             !tweet['in_reply_to_status_id'].nil? ||
                 !tweet['in_reply_to_user_id'].nil?
@@ -153,7 +153,7 @@ module Thoth; module Plugin
 
         @failures = 0
 
-        return cache.store(url, tweets, :ttl => Config.twitter.cache_ttl)
+        return cache.store(url, tweets, :ttl => Config.twitter['cache_ttl'])
 
       rescue => e
         Ramaze::Log.error "Thoth::Plugin::Twitter: #{e.message}"
@@ -161,8 +161,8 @@ module Thoth; module Plugin
         @failures ||= 0
         @failures += 1
 
-        if @failures >= Config.twitter.failure_threshold
-          @skip_until = Time.now + Config.twitter.failure_timeout
+        if @failures >= Config.twitter['failure_threshold']
+          @skip_until = Time.now + Config.twitter['failure_timeout']
           Ramaze::Log.error "Thoth::Plugin::Twitter: Twitter failed to respond #{@failures} times. Will retry after #{@skip_until}."
         end
 

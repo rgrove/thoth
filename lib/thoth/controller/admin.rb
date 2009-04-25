@@ -52,7 +52,7 @@ module Thoth
     def login
       username, password = request[:username, :password]
 
-      if username == Config.admin.user && password == Config.admin.pass
+      if username == Config.admin['user'] && password == Config.admin['pass']
         # Set an auth cookie that expires in two weeks.
         response.set_cookie('thoth_auth', :expires => Time.now + 1209600,
             :path => MainController.r().to_s, :value => auth_key)

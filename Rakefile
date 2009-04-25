@@ -63,7 +63,6 @@ thoth_gemspec = Gem::Specification.new do |s|
   # Runtime dependencies.
   s.add_dependency('ramaze',            '= 2009.02')
   s.add_dependency('builder',           '~> 2.1.2')
-  s.add_dependency('configuration',     '~> 0.0.5')
   s.add_dependency('cssmin',            '~> 1.0.2')
   s.add_dependency('erubis',            '~> 2.6.2')
   s.add_dependency('json_pure',         '~> 1.1.3')

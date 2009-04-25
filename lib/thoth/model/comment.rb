@@ -129,9 +129,9 @@ module Thoth
       return @gravatar_url if @gravatar_url
 
       md5     = Digest::MD5.hexdigest((author_email || author).downcase)
-      default = CGI.escape(Config.theme.gravatar.default)
-      rating  = Config.theme.gravatar.rating
-      size    = Config.theme.gravatar.size
+      default = CGI.escape(Config.site['gravatar']['default'])
+      rating  = Config.site['gravatar']['rating']
+      size    = Config.site['gravatar']['size']
 
       @gravatar_url = "http://www.gravatar.com/avatar/#{md5}.jpg?d=#{default}&r=#{rating}&s=#{size}"
     end

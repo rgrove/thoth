@@ -15,10 +15,10 @@
             <a href="<%== page.url %>"><%== page.title %></a>
           </td>
           <td class="created">
-            <%= page.created_at(Thoth::Config.timestamp.short) %>
+            <%= page.created_at(Thoth::Config.timestamp['short']) %>
           </td>
           <td class="updated">
-            <%= page.updated_at(Thoth::Config.timestamp.short) %>
+            <%= page.updated_at(Thoth::Config.timestamp['short']) %>
           </td>
           <td class="position">
             <input type="text" size="2" name="position[<%= page.id %>]"

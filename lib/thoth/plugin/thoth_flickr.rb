@@ -64,12 +64,12 @@ module Thoth; module Plugin
           return value
         end
 
-        @flickr ||= Net::Flickr.new(Config.flickr.api_key)
+        @flickr ||= Net::Flickr.new(Config.flickr['api_key'])
 
         begin
-          Timeout.timeout(Config.flickr.request_timeout.to_i, StandardError) do
+          Timeout.timeout(Config.flickr['request_timeout'].to_i, StandardError) do
             value = cache.store(key, @flickr.people.find_by_username(username).
-                photos(:per_page => limit), :ttl => Config.flickr.cache_ttl)
+                photos(:per_page => limit), :ttl => Config.flickr['cache_ttl'])
           end
         rescue => e
           Ramaze::Log.error "Thoth::Plugin::Flickr: #{e.message}"

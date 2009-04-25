@@ -58,7 +58,7 @@ module Thoth; module Plugin
             :COUNT[:tag_id] => :count).reverse_order(:count).limit(limit)
 
         tag_ids.all {|row| tags << [Tag[row[:tag_id]], row[:count]] }
-        cache.store("top_tags_#{limit}", tags, :ttl => Config.tags.cache_ttl)
+        cache.store("top_tags_#{limit}", tags, :ttl => Config.tags['cache_ttl'])
       end
 
     end

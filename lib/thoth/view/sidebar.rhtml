@@ -17,7 +17,7 @@
         Posts
       </a>
     </dd>
-    <% if Thoth::Config.site.enable_comments %>
+    <% if Thoth::Config.site['enable_comments'] %>
       <dd>
         <a href="<%= Thoth::CommentController.r(:atom) %>" type="application/atom+xml">
           <span class="icon feed"></span>

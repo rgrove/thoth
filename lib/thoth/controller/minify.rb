@@ -43,7 +43,7 @@ module Thoth
         throw(:respond, File.open(file, 'rb'))
       end
 
-      if Config.server.enable_cache
+      if Config.server['enable_cache']
         body = cache_value[path] ||= CSSMin.minify(File.open(file, 'rb'))
       else
         body = CSSMin.minify(File.open(file, 'rb'))
@@ -64,7 +64,7 @@ module Thoth
         throw(:respond, File.open(file, 'rb'))
       end
 
-      if Config.server.enable_cache
+      if Config.server['enable_cache']
         body = cache_value[path] ||= JSMin.minify(File.open(file, 'rb'))
       else
         body = JSMin.minify(File.open(file, 'rb'))

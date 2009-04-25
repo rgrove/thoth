@@ -31,7 +31,7 @@ module Thoth
     map '/tag'
     helper :cache, :pagination
 
-    if Config.server.enable_cache
+    if Config.server['enable_cache']
       cache_action(:method => :index, :ttl => 120) { auth_key_valid? }
       cache_action(:method => :atom,  :ttl => 120)
     end
@@ -75,15 +75,15 @@ module Thoth
 
       x.feed(:xmlns => 'http://www.w3.org/2005/Atom') {
         x.id       tag.url
-        x.title    "Posts tagged with \"#{tag.name}\" - #{Config.site.name}"
+        x.title    "Posts tagged with \"#{tag.name}\" - #{Config.site['name']}"
         x.updated  updated
         x.link     :href => tag.url
         x.link     :href => tag.atom_url, :rel => 'self'
 
         x.author {
-          x.name  Config.admin.name
-          x.email Config.admin.email
-          x.uri   Config.site.url
+          x.name  Config.admin['name']
+          x.email Config.admin['email']
+          x.uri   Config.site['url']
         }
 
         posts.all do |post|

@@ -1,19 +1,19 @@
 <div id="hd">
   <h1>
     <a href="<%== Thoth::MainController.r() %>" rel="home">
-      <%== Thoth::Config.site.name %>
+      <%== Thoth::Config.site['name'] %>
     </a>
   </h1>
 
   <div id="toolbar">
     <div class="subtitle">
-      <%== Thoth::Config.site.desc %>
+      <%== Thoth::Config.site['desc'] %>
     </div>
 
     <ul class="robots-nocontent">
       <li><a href="<%== Thoth::MainController.r() %>" rel="home">Home</a></li>
       <li><a href="<%== Thoth::ArchiveController.r() %>">Archives</a></li>
-      <% if Thoth::Config.site.enable_comments %>
+      <% if Thoth::Config.site['enable_comments'] %>
         <li><a href="<%== Thoth::CommentController.r() %>">Comments</a></li>
       <% end %>
     </ul>

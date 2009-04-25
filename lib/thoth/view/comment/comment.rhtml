@@ -24,7 +24,7 @@
   </div>
 
   <div class="ft">
-    <% if Thoth::Config.theme.gravatar.enabled && @comment.gravatar_url %>
+    <% if Thoth::Config.site['gravatar']['enabled'] && @comment.gravatar_url %>
       <a class="gravatar" href="http://www.gravatar.com/" rel="nofollow"><img
           src="<%== @comment.gravatar_url %>" alt="Gravatar icon" /></a>
     <% end %>
@@ -38,7 +38,7 @@
       <% end %>
     </div>
     <div class="date robots-nocontent">
-      <%= @comment.created_at(Thoth::Config.timestamp.long) %>
+      <%= @comment.created_at(Thoth::Config.timestamp['long']) %>
     </div>
   </div>
 </div>

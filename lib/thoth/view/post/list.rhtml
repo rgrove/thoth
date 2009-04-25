@@ -13,10 +13,10 @@
             <a href="<%== Thoth::PostController.r(:edit, draft.id) %>#post-form"><%== draft.title %></a>
           </td>
           <td class="created">
-            <%= draft.created_at(Thoth::Config.timestamp.short) %>
+            <%= draft.created_at(Thoth::Config.timestamp['short']) %>
           </td>
           <td class="updated">
-            <%= draft.updated_at(Thoth::Config.timestamp.short) %>
+            <%= draft.updated_at(Thoth::Config.timestamp['short']) %>
           </td>
         </tr>
       <% end %>
@@ -40,10 +40,10 @@
           <a href="<%== post.url %>"><%== post.title %></a>
         </td>
         <td class="created">
-          <%= post.created_at(Thoth::Config.timestamp.short) %>
+          <%= post.created_at(Thoth::Config.timestamp['short']) %>
         </td>
         <td class="updated">
-          <%= post.updated_at(Thoth::Config.timestamp.short) %>
+          <%= post.updated_at(Thoth::Config.timestamp['short']) %>
         </td>
       </tr>
     <% end %>

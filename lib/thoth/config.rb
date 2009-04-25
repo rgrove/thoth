@@ -27,76 +27,116 @@
 #++
 
 module Thoth
-  module Config
 
-    class << self
-      [:devel, :production].each do |env|
-        Configuration.for("thoth_#{env.to_s}") {
-          db "sqlite:///#{HOME_DIR}/db/#{env.to_s}.db"
+  module Config; class << self
 
-          site {
-            name "New Thoth Blog"
-            desc "Thoth is awesome."
-            url  "http://localhost:7000/"
-            enable_comments true
-            enable_sitemap  true
+    # Adds the specified config Hash to Thoth's config lookup chain. Any
+    # configuration values in _config_ will be used as defaults unless they're
+    # specified earlier in the lookup chain (i.e. in Thoth's config file).
+    def <<(config)
+      raise ArgumentError, "config must be a Hash" unless config.is_a?(Hash)
+
+      @lookup ||= []
+      @lookup << config
+    end
+
+    # Loads the specified configuration file.
+    def load(file)
+      raise Thoth::Error, "Config file not found: #{file}" unless File.file?(file)
+
+      @dev = {
+        'db' => "sqlite:///#{HOME_DIR}/db/dev.db",
+
+        'site' => {
+          'name' => "New Thoth Blog",
+          'desc' => "Thoth is awesome.",
+          'url'  => "http://localhost:7000/",
+
+          'css' => [],
+          'js'  => [],
+
+          'enable_comments' => true,
+          'enable_sitemap'  => true,
+
+          'gravatar' => {
+            'enabled' => true,
+            'default' => "identicon",
+            'rating'  => "g",
+            'size'    => 32
           }
+        },
 
-          admin {
-            name  "John Doe"
-            email ""
-            user  "thoth"
-            pass  "thoth"
-            seed  "43c55@051a19a/4f88a3ff+355cd1418"
-          }
+        'admin' => {
+          'name'  => "John Doe",
+          'email' => "",
+          'user'  => "thoth",
+          'pass'  => "thoth",
+          'seed'  => "6d552ac197a862b82b85868d6c245feb"
+        },
 
-          theme {
-            css    []
-            js     []
+        'plugins' => [],
 
-            gravatar {
-              enabled true
-              default "identicon"
-              rating  "g"
-              size    32
-            }
-          }
+        'media' => File.join(HOME_DIR, 'media'),
 
-          media File.join(HOME_DIR, 'media')
+        'server' => {
+          'adapter'       => 'thin',
+          'address'       => '0.0.0.0',
+          'port'          => 7000,
+          'enable_cache'  => true,
+          'enable_minify' => false,
+          'error_log'     => File.join(HOME_DIR, 'log', 'error.log')
+        },
 
-          plugins []
-
-          server {
-            adapter       :thin
-            address       "0.0.0.0"
-            port          7000
-            compile_views env == :production
-            enable_cache  env == :production
-            enable_minify env == :production
-            error_log     File.join(HOME_DIR, 'log', 'error.log')
-          }
-
-          timestamp {
-            long  "%A %B %d, %Y @ %I:%M %p (%Z)"
-            short "%Y-%m-%d %I:%M"
-          }
+        'timestamp' => {
+          'long'  => "%A %B %d, %Y @ %I:%M %p (%Z)",
+          'short' => "%Y-%m-%d %I:%M"
         }
+      }
+
+      @live = {
+        'db' => "sqlite:///#{HOME_DIR}/db/live.db",
+
+        'server' => {
+          'enable_minify' => true
+        }
+      }
+
+      begin
+        config = YAML.load(Erubis::Eruby.new(File.read(file)).result(binding))
+      rescue => e
+        raise Thoth::ConfigError, "Config error in #{file}: #{e}"
       end
 
-      def load(file)
-        begin
-          Kernel.load(file)
-        rescue LoadError => e
-          raise Thoth::Error, "Unable to load config file: #{file}: #{e}"
-        end
-
-        @conf = Configuration.for("thoth_#{Thoth.trait[:mode].to_s}")
-      end
-
-      def method_missing(name)
-        @conf.__send__(name)
+      @lookup ||= if Thoth.trait[:mode] == :production
+          [config['live'] || {}, config['dev'] || {}, @live, @dev]
+      else
+        [config['dev'] || {}, @dev]
       end
     end
 
-  end
+    # Finds all configs with a top-level key matching _name_, then merges them
+    # such that configs earlier in the lookup chain override those later in
+    # the chain. Returns the result, or an empty hash if _name_ was not found.
+    #
+    # This chain merge currently only works to a depth of two (root->child),
+    # since anything more than that (root->child->child) seems excessive and
+    # currently isn't needed.
+    def method_missing(name)
+      result  = {}
+      matches = @lookup.select {|c| c.has_key?(name.to_s) }
+
+      matches.reverse.each do |match|
+        value = match[name.to_s]
+
+        if value.is_a?(Hash)
+          result.merge!(value)
+        else
+          result = value
+        end
+      end
+
+      return result
+    end
+
+  end; end
 end

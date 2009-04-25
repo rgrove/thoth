@@ -1,45 +1,61 @@
 #
-# thoth.conf - Thoth configuration file.
+# thoth.conf.yaml - Thoth configuration file.
 #
 # Customize this file as desired. You only need to uncomment the settings you
 # want to change. You must restart Thoth before configuration changes will take
 # effect.
 #
 
-# Settings for production mode.
-Configuration.for("thoth_production") {
+# Settings for development mode.
+dev:
 
-  # Connection URI for the production database. Currently SQLite3 and MySQL are
-  # supported. PostgreSQL may work, but hasn't been tested.
+  # Connection URI for the database. Currently SQLite3 and MySQL are supported.
+  # PostgreSQL may work, but hasn't been tested.
   #
   # Sample SQLite3 config:
-  #   db "sqlite:////absolute/path/to/database.db"
+  #   db: sqlite:////absolute/path/to/database.db
   #
   # Sample MySQL config:
-  #   db "mysql://user:pass@hostname/database"
-  #
-  # db "sqlite:///#{Thoth::HOME_DIR}/db/production.db"
+  #   db: mysql://user:pass@hostname/database
+  db: sqlite:///<%= Thoth::HOME_DIR %>/db/dev.db
 
-  site {
-
+  # General site settings.
+  site:
     # Name of your blog. This will be displayed as the title of your blog's
     # index page and in your blog's feeds.
-    #
-    # name "New Thoth Blog"
+    name: New Thoth Blog
 
     # A brief description or subtitle for your blog.
-    #
-    # desc "Thoth is awesome."
+    desc: Thoth is awesome.
 
     # Base URL of your site. This is necessary in order for Thoth to know how
     # to construct links. Be sure to set this correctly or links may not work.
+    url: http://localhost:7000/
+
+    # URLs of CSS files to load in addition to the default Thoth CSS. You can
+    # override Thoth's default styles by specifying your own CSS files here.
+    # These can be relative or absolute URLs.
     #
-    # url "http://localhost:7000/"
+    # Example:
+    #   css:
+    #     - /css/foo.css
+    #     - 'http://example.com/bar.css'
+    css: []
+
+    # URLs of JS files to load in addition to the default Thoth JS. You can
+    # extend or override Thoth's JS or add functionality by specifying your own
+    # JS files here. These can be relative or absolute URLs.
+    #
+    # Example:
+    #   js:
+    #     - /js/foo.js
+    #     - 'http://example.com/bar.js'
+    #
+    js: []
 
     # Whether or not to allow visitors to post comments in response to blog
     # posts.
-    #
-    # enable_comments true
+    enable_comments: true
 
     # Whether or not you want to expose a sitemap for your blog. A sitemap is
     # an XML file that gives search engines information about all the URLs on
@@ -48,78 +64,15 @@ Configuration.for("thoth_production") {
     # If enabled, you'll be able to see your sitemap at
     # http://yourdomain.com/sitemap and you can submit this URL to search
     # engines to improve the indexing of your site (and possibly your PageRank).
-    #
-    # enable_sitemap true
+    enable_sitemap: true
 
-  }
-
-  admin {
-
-    # Your name. This will be displayed in the copyright notice at the bottom of
-    # the page, and will be used as the author name for your site's feeds.
-    #
-    # name "John Doe"
-
-    # Your email address. If you leave this blank or comment it out, it won't be
-    # displayed.
-    #
-    # email ""
-
-    # Administrator username. This is the name you'll use to log into Thoth.
-    #
-    # user "thoth"
-
-    # Administrator password.
-    #
-    # pass "thoth"
-
-    # String of random characters to add uniqueness to the admin auth cookie.
-    # You should uncomment this now and fill it with nonsense.
-    #
-    # seed "43c55@051a19a/4f88a3ff+355cd1418"
-
-  }
-
-  theme {
-
-    # Absolute path to a directory containing customized static files such as
-    # CSS, JS, and images. Use this in conjunction with the "view" setting to
-    # create your own customized Thoth theme. Any files in this directory will
-    # override the corresponding default files.
-    #
-    # public "#{Thoth::HOME_DIR}/public"
-
-    # Absolute path to a directory containing customized view templates. Any
-    # templates in this directory will override the corresponding default
-    # templates.
-    #
-    # view "#{Thoth::HOME_DIR}/view"
-
-    # URLs of CSS files to load in addition to the default Thoth CSS. You can
-    # override Thoth's default styles by specifying your own CSS files here.
-    #
-    # Example:
-    #   css ['/css/foo.css', '/css/bar.css']
-    #
-    # css []
-
-    # URLs of JS files to load in addition to the default Thoth JS. You can
-    # extend or override Thoth's JS or add functionality by specifying your own
-    # JS files here.
-    #
-    # Example:
-    #   js ['/js/foo.js', '/js/bar.js']
-    #
-    # js []
-
-    gravatar {
-
+    # Gravatar settings.
+    gravatar:
       # Whether or not to enable Gravatar images on comments. Gravatar is a free
       # service that allows people to associate profile images with an email
       # address so that their postings on blogs and other websites are easily
       # identifiable. Learn more at http://www.gravatar.com/.
-      #
-      # enabled true
+      enabled: true
 
       # Default icon set to use for users who don't have custom Gravatars. See
       # gravatar.com for the latest options. As of this writing, the available
@@ -128,105 +81,93 @@ Configuration.for("thoth_production") {
       #
       # Alternatively, you can specify the URL of your own custom image here and
       # that image will be used instead.
-      #
-      # default "identicon"
+      default: identicon
 
       # Maximum Gravatar rating to allow. Available ratings are "g", "pg", "r",
       # and "x". Just like with movies, "r" and "x"-rated Gravatars may contain
       # adult content.
-      #
-      # rating "g"
+      rating: g
 
       # Gravatar size in pixels. This sets both the width and the height.
-      #
-      # size 32
+      size: 32
 
-    }
+  # Administrator settings.
+  admin:
+    # Your name. This will be displayed in the copyright notice at the bottom of
+    # the page, and will be used as the author name for your site's feeds.
+    name: John Doe
 
-  }
+    # Your email address. If you leave this blank or comment it out, it won't be
+    # displayed.
+    email: ''
 
-  # Absolute path to a directory where uploaded media files (images, videos,
-  # etc.) for your blog posts and pages should be stored. This directory needs
-  # to be readable and writeable by the user running the Thoth server.
-  #
-  # media "#{Thoth::HOME_DIR}/media"
+    # Administrator username. This is the name you'll use to log into Thoth.
+    user: thoth
+
+    # Administrator password.
+    pass: thoth
+
+    # String of random characters to add uniqueness to the admin auth cookie
+    # hash. Just fill this with some made-up nonsense.
+    seed: 6d552ac197a862b82b85868d6c245feb
 
   # Plugins that should be loaded when Thoth starts. Usually it's not
   # necessary to load a plugin until the first time it's used, but some plugins
   # alter core functionality and thus must be loaded at start time.
   #
   # Example:
-  #   plugins ['foo', 'bar', 'baz']
-  #
-  # plugins []
+  #   plugins:
+  #     - foo
+  #     - bar
+  #     - baz
+  plugins: []
 
-  server {
-    # Ramaze server adapter to use. This can be any adapter Ramaze supports.
-    #
-    # adapter :thin
+  # Absolute path to a directory where uploaded media files (images, videos,
+  # etc.) for your blog posts and pages should be stored. This directory needs
+  # to be readable and writeable by the user running the Thoth server.
+  media: <%= Thoth::HOME_DIR %>/media
 
-    # IP address on which the Thoth server should listen for connections.
-    #
-    # address "0.0.0.0"
+  # Server settings.
+  server:
+    # Server adapter to use. This can be any adapter Ramaze supports.
+    adapter: thin
+
+    # IP address on which Thoth should listen for connections. Specify 0.0.0.0
+    # if you want Thoth to listen on all addresses.
+    address: 0.0.0.0
 
     # Port on which the Thoth server should listen for connections.
-    #
-    # port 7000
-
-    # Whether or not to compile view templates instead of re-parsing them on
-    # each request. This will improve performance, but you will need to restart
-    # Thoth in order for template changes to take effect.
-    #
-    # compile_views true
+    port: 7000
 
     # Whether or not to enable caching. Enabling caching will significantly
     # improve Thoth's performance under heavy traffic, but new comments and
     # other changes may take a minute or two to become visible.
-    #
-    # enable_cache true
+    enable_cache: true
 
     # Whether or not to enable automatic, on the fly minification of your blog's
     # external CSS and JavaScript files. Enabling minification will reduce
-    # pageweight and is a great way to improve performance, but you'll need to
+    # page weight and is a great way to improve performance, but you'll need to
     # restart Thoth in order for CSS and JS changes to take effect.
-    #
-    # enable_minify true
+    enable_minify: false
 
     # Filename to which errors should be logged when running in production mode,
     # or blank if you don't care about errors.
-    #
-    # error_log "#{Thoth::HOME_DIR}/error.log"
+    error_log: <%= Thoth::HOME_DIR %>/log/error.log
 
-  }
-
-  timestamp {
-
+  # Timestamp formats.
+  timestamp:
     # Format for long timestamps. For details, see:
     # http://www.ruby-doc.org/core/classes/Time.html#M000297
-    #
-    # long "%A %B %d, %Y @ %I:%M %p (%Z)"
+    long: '%A %B %d, %Y @ %I:%M %p (%Z)'
 
     # Format for short timestamps. For details, see:
     # http://www.ruby-doc.org/core/classes/Time.html#M000297
-    #
-    # short "%Y-%m-%d %I:%M"
+    short: '%Y-%m-%d %I:%M'
 
-  }
+# Settings for live mode. Any setting that you don't explicitly specify here
+# will just inherit from dev mode.
+live:
+  db: sqlite:///<%= Thoth::HOME_DIR %>/db/live.db
 
-}
-
-# Settings for devel mode. All the defaults are the same as production except
-# for the differences you see here.
-Configuration.for("thoth_devel") {
-
-  # db "sqlite:///#{Thoth::HOME_DIR}/db/devel.db"
-
-  # server {
-  #
-  #   compile_views false
-  #   enable_cache false
-  #   enable_minify false
-  #
-  # }
-
-}
+  server:
+    enable_minify: true

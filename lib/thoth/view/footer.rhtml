@@ -1,11 +1,11 @@
 <div id="ft">
   Copyright &copy; <%= Time.now.year %>
 
-  <% if Thoth::Config.admin.email.empty? %>
-    <%== Thoth::Config.admin.name %>.
+  <% if Thoth::Config.admin['email'].empty? %>
+    <%== Thoth::Config.admin['name'] %>.
   <% else %>
-    <a href="mailto:<%== Thoth::Config.admin.email %>">
-      <%== Thoth::Config.admin.name %></a>.
+    <a href="mailto:<%== Thoth::Config.admin['email'] %>">
+      <%== Thoth::Config.admin['name'] %></a>.
   <% end %>
 
   All rights reserved.

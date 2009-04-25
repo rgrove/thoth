@@ -8,12 +8,12 @@
 
     <address class="vcard author">
       <a class="email fn"
-          href="mailto:<%== Thoth::Config.admin.email %>"><%== Thoth::Config.admin.name %></a>
+          href="mailto:<%== Thoth::Config.admin['email'] %>"><%== Thoth::Config.admin['name'] %></a>
     </address>
 
     <span class="date robots-nocontent">
       <abbr class="published" title="<%= @post.created_at.xmlschema %>">
-        <%= @post.created_at(Thoth::Config.timestamp.long) %>
+        <%= @post.created_at(Thoth::Config.timestamp['long']) %>
       </abbr>
     </span>
   </div>
@@ -34,7 +34,7 @@
       </div>
     <% end %>
 
-    <% if Thoth::Config.site.enable_comments %>
+    <% if Thoth::Config.site['enable_comments'] %>
       <div class="meta robots-nocontent">
         <span class="icon comment-post"></span>
         <a href="<%== @post.url %>#post-comment">Post a comment</a>
@@ -43,6 +43,6 @@
   </div>
 </div>
 
-<% if Thoth::Config.site.enable_comments %>
+<% if Thoth::Config.site['enable_comments'] %>
   <%= Thoth::PostController.render_view(:comments) %>
 <% end %>

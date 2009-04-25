@@ -23,7 +23,7 @@
           <% end %>
         </td>
         <td class="created">
-          <%= comment.created_at(Thoth::Config.timestamp.short) %>
+          <%= comment.created_at(Thoth::Config.timestamp['short']) %>
         </td>
       </tr>
     <% end %>
