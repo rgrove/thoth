@@ -206,6 +206,7 @@ module Thoth
         Ramaze.start(
           :adapter => trait[:adapter],
           :host    => trait[:ip],
+          :mode    => trait[:mode] == :production ? :live : :dev,
           :port    => trait[:port],
           :root    => LIB_DIR
         )
@@ -217,46 +218,41 @@ module Thoth
 
     # Initializes Ramaze.
     def setup
+      if trait[:mode] == :production
+        Ramaze.middleware!(:live) do |m|
+          m.use Rack::CommonLogger
+          m.use Rack::RouteExceptions
+          m.use Rack::Head
+          m.use Rack::ETag
+          m.use Rack::ConditionalGet
+          m.use Rack::ContentLength
+          m.run Ramaze::AppMap
+        end
+
+        # Ensure that exceptions result in an HTTP 500 response.
+        Rack::RouteExceptions.route(Exception, '/error_500')
+
+        # Log all errors to the error log file if one is configured.
+        if Config.server['error_log'].empty?
+          Ramaze::Log.loggers = []
+        else
+          log_dir = File.dirname(Config.server['error_log'])
+
+          unless File.directory?(log_dir)
+            FileUtils.mkdir_p(log_dir)
+            File.chmod(0750, log_dir)
+          end
+
+          Ramaze::Log.loggers = [Logger.new(Config.server['error_log'])]
+          Ramaze::Log.level = Logger::Severity::ERROR
+        end
+      end
+
       Ramaze.options.merge!(
-        :mode  => trait[:mode] == :production ? :live : :dev,
         :roots => [HOME_DIR, LIB_DIR]
       )
 
       Ramaze::Cache.add(:plugin)
-
-      # case trait[:mode]
-      # when :devel
-      #   # Ramaze::Global.benchmarking = true
-      # 
-      # when :production
-      #   # Ramaze::Global.sourcereload = false
-      # 
-      #   # Log all errors to the error log file if one is configured.
-      #   if Config.server['error_log'].empty?
-      #     Ramaze::Log.loggers = []
-      #   else
-      #     log_dir = File.dirname(Config.server['error_log'])
-      # 
-      #     unless File.directory?(log_dir)
-      #       FileUtils.mkdir_p(log_dir)
-      #       File.chmod(0750, log_dir)
-      #     end
-      # 
-      #     Ramaze::Log.loggers = [
-      #       Ramaze::Logger::Informer.new(Config.server['error_log'],
-      #           [:error])
-      #     ]
-      #   end
-      # 
-      #   # Don't expose argument errors or exceptions in production mode.
-      #   Ramaze::Dispatcher::Error::HANDLE_ERROR.update({
-      #     ArgumentError => [404, 'error_404'],
-      #     Exception     => [500, 'error_500']
-      #   })
-      # 
-      # else
-      #   raise "Invalid mode: #{trait[:mode]}"
-      # end
     end
 
     # Starts Thoth as a daemon.

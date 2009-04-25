@@ -90,6 +90,10 @@ module Ramaze; module Helper
     # Displays a "500 Internal Server Error" error message and returns a 500
     # response code.
     def error_500
+      if e = request.env[Rack::RouteExceptions::ROUTE_EXCEPTIONS_EXCEPTION]
+        Ramaze::Log.error e
+      end
+
       error_layout 500, '500 Internal Server Error', %[
         <p>
           The server encountered an internal error and was unable to complete
