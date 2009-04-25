@@ -44,8 +44,8 @@ module Thoth
     def load(file)
       raise Thoth::Error, "Config file not found: #{file}" unless File.file?(file)
 
-      @dev = {
-        'db' => "sqlite:///#{HOME_DIR}/db/dev.db",
+      @live = {
+        'db' => "sqlite:///#{HOME_DIR}/db/live.db",
 
         'site' => {
           'name' => "New Thoth Blog",
@@ -70,7 +70,7 @@ module Thoth
           'name'  => "John Doe",
           'email' => "",
           'user'  => "thoth",
-          'pass'  => "thoth",
+          'pass'  => rand.to_s,
           'seed'  => "6d552ac197a862b82b85868d6c245feb"
         },
 
@@ -79,7 +79,7 @@ module Thoth
         'media' => File.join(HOME_DIR, 'media'),
 
         'server' => {
-          'adapter'       => 'thin',
+          'adapter'       => 'webrick',
           'address'       => '0.0.0.0',
           'port'          => 7000,
           'enable_cache'  => true,
@@ -93,11 +93,16 @@ module Thoth
         }
       }
 
-      @live = {
-        'db' => "sqlite:///#{HOME_DIR}/db/live.db",
+      @dev = {
+        'db' => "sqlite:///#{HOME_DIR}/db/dev.db",
+
+        'admin' => {
+          'user' => "thoth",
+          'pass' => "thoth"
+        },
 
         'server' => {
-          'enable_minify' => true
+          'enable_minify' => false
         }
       }
 
@@ -108,9 +113,9 @@ module Thoth
       end
 
       @lookup ||= if Thoth.trait[:mode] == :production
-          [config['live'] || {}, config['dev'] || {}, @live, @dev]
+          [config['live'] || {}, @live]
       else
-        [config['dev'] || {}, @dev]
+        [config['dev'] || {}, config['live'] || {}, @dev, @live]
       end
     end
 

@@ -1,13 +1,15 @@
 #
-# thoth.conf.yaml - Thoth configuration file.
+# thoth.conf - Thoth configuration file.
 #
-# Customize this file as desired. You only need to uncomment the settings you
-# want to change. You must restart Thoth before configuration changes will take
-# effect.
+# Customize this file as desired. You must restart Thoth before configuration
+# changes will take effect.
+#
+# This file is YAML, but you may also use Erubis expressions to insert variables
+# or run Ruby code.
 #
 
-# Settings for development mode.
-dev:
+# Settings for live mode.
+live:
 
   # Connection URI for the database. Currently SQLite3 and MySQL are supported.
   # PostgreSQL may work, but hasn't been tested.
@@ -17,7 +19,7 @@ dev:
   #
   # Sample MySQL config:
   #   db: mysql://user:pass@hostname/database
-  db: sqlite:///<%= Thoth::HOME_DIR %>/db/dev.db
+  db: sqlite:///<%= Thoth::HOME_DIR %>/db/live.db
 
   # General site settings.
   site:
@@ -63,7 +65,7 @@ dev:
     #
     # If enabled, you'll be able to see your sitemap at
     # http://yourdomain.com/sitemap and you can submit this URL to search
-    # engines to improve the indexing of your site (and possibly your PageRank).
+    # engines to improve the indexing of your site (and possibly your pagerank).
     enable_sitemap: true
 
     # Gravatar settings.
@@ -104,8 +106,9 @@ dev:
     # Administrator username. This is the name you'll use to log into Thoth.
     user: thoth
 
-    # Administrator password.
-    pass: thoth
+    # Administrator password. By default this is a random number, so you won't
+    # be able to log in until you change this!
+    pass: <%= rand.to_s %>
 
     # String of random characters to add uniqueness to the admin auth cookie
     # hash. Just fill this with some made-up nonsense.
@@ -130,7 +133,7 @@ dev:
   # Server settings.
   server:
     # Server adapter to use. This can be any adapter Ramaze supports.
-    adapter: thin
+    adapter: webrick
 
     # IP address on which Thoth should listen for connections. Specify 0.0.0.0
     # if you want Thoth to listen on all addresses.
@@ -148,7 +151,7 @@ dev:
     # external CSS and JavaScript files. Enabling minification will reduce
     # page weight and is a great way to improve performance, but you'll need to
     # restart Thoth in order for CSS and JS changes to take effect.
-    enable_minify: false
+    enable_minify: true
 
     # Filename to which errors should be logged when running in production mode,
     # or blank if you don't care about errors.
@@ -164,10 +167,14 @@ dev:
     # http://www.ruby-doc.org/core/classes/Time.html#M000297
     short: '%Y-%m-%d %I:%M'
 
-# Settings for live mode. Any setting that you don't explicitly specify here
-# will just inherit from dev mode.
-live:
-  db: sqlite:///<%= Thoth::HOME_DIR %>/db/live.db
+# Settings for dev mode. Any setting that you don't explicitly specify here will
+# just inherit from live mode.
+dev:
+  db: sqlite:///<%= Thoth::HOME_DIR %>/db/dev.db
+
+  admin:
+    user: thoth
+    pass: thoth
 
   server:
-    enable_minify: true
+    enable_minify: false
