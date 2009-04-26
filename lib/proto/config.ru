@@ -10,11 +10,8 @@ module Thoth
 
   Config.load(trait[:config_file])
 
-  init_ramaze
   init_thoth
 end
 
-Ramaze.trait[:essentials].delete Ramaze::Adapter
-Ramaze.start!
-
-run Ramaze::Adapter::Base
+Ramaze.start(:file => __FILE__, :started => true)
+run Ramaze
