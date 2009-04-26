@@ -48,7 +48,8 @@ module Ramaze; module Helper
     # Validates the auth cookie and returns +true+ if the user is authenticated,
     # +false+ otherwise.
     def auth_key_valid?
-      cookie(:thoth_auth) == auth_key
+      return false unless thoth_auth = cookie(:thoth_auth)
+      thoth_auth == auth_key
     end
 
     # Returns a String that can be included in a hidden form field and used on
