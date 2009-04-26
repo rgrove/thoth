@@ -26,7 +26,7 @@
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #++
 
-# Append this file's directory to the include path if it's not there already.
+# Prepend this file's directory to the include path if it's not there already.
 $:.unshift(File.dirname(File.expand_path(__FILE__)))
 $:.uniq!
 

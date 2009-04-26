@@ -26,7 +26,7 @@
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #++
 
-# Append the Thoth /lib directory to the include path if it's not there
+# Prepend the Thoth /lib directory to the include path if it's not there
 # already.
 $:.unshift(File.join(File.dirname(__FILE__), 'lib'))
 $:.uniq!
