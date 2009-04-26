@@ -70,7 +70,7 @@ module Thoth
           'name'  => "John Doe",
           'email' => "",
           'user'  => "thoth",
-          'pass'  => rand.to_s,
+          'pass'  => "thoth",
           'seed'  => "6d552ac197a862b82b85868d6c245feb"
         },
 
@@ -95,11 +95,6 @@ module Thoth
 
       @dev = {
         'db' => "sqlite:///#{HOME_DIR}/db/dev.db",
-
-        'admin' => {
-          'user' => "thoth",
-          'pass' => "thoth"
-        },
 
         'server' => {
           'enable_minify' => false

@@ -134,9 +134,6 @@ module Thoth
       trait[:ip]   ||= Config.server['address']
       trait[:port] ||= Config.server['port']
 
-      Ramaze::Log.info "Thoth home: #{HOME_DIR}"
-      Ramaze::Log.info "Thoth lib : #{LIB_DIR}"
-
       open_db
 
       # Ensure that the database schema is up to date.
@@ -161,13 +158,22 @@ module Thoth
         Ramaze::Rewrite[/^\/(css|js)\/(.+)$/] = '/minify/%s/%s'
       end
 
+      # Load Thoth helpers.
       Ramaze::acquire(File.join(LIB_DIR, 'helper', '*'))
 
+      # Load Thoth controllers.
       require File.join(LIB_DIR, 'controller')
 
+      # Load Thoth models.
       Ramaze::acquire(File.join(LIB_DIR, 'model', '*'))
 
+      # Load startup plugins.
       Config.plugins.each {|plugin| Plugin.load(plugin)}
+
+      Ramaze::Log.info "Thoth home: #{HOME_DIR}"
+      Ramaze::Log.info "Thoth lib : #{LIB_DIR}"
+
+      Ramaze.options.setup << self
     end
 
     # Opens a Sequel database connection to the Thoth database.
@@ -203,13 +209,10 @@ module Thoth
     def run
       init_thoth
 
-      Ramaze.options.setup << self
-
       begin
         Ramaze.start(
           :adapter => trait[:adapter],
           :host    => trait[:ip],
-          :mode    => trait[:mode] == :production ? :live : :dev,
           :port    => trait[:port],
           :root    => LIB_DIR
         )
@@ -252,9 +255,11 @@ module Thoth
       end
 
       Ramaze.options.merge!(
+        :mode  => trait[:mode] == :production ? :live : :dev,
         :roots => [HOME_DIR, LIB_DIR]
       )
 
+      # Create a value cache for plugins to use.
       Ramaze::Cache.add(:plugin)
     end
 

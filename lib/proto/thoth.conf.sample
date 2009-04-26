@@ -108,7 +108,7 @@ live:
 
     # Administrator password. By default this is a random number, so you won't
     # be able to log in until you change this!
-    pass: <%= rand.to_s %>
+    pass: thoth
 
     # String of random characters to add uniqueness to the admin auth cookie
     # hash. Just fill this with some made-up nonsense.
@@ -171,10 +171,6 @@ live:
 # just inherit from live mode.
 dev:
   db: sqlite:///<%= Thoth::HOME_DIR %>/db/dev.db
-
-  admin:
-    user: thoth
-    pass: thoth
 
   server:
     enable_minify: false
