@@ -15,7 +15,7 @@
           title="Enter your name" value="<%== @author %>" />
     </p>
 
-    <% if @comment; @comment.errors.on(:author).each do |error| %>
+    <% if @comment; @comment.errors.on_field(:author).each do |error| %>
       <div class="flash error"><%== error %></div>
     <% end; end %>
 
@@ -26,7 +26,7 @@
       <span class="tip">required, won't be displayed</span>
     </p>
 
-    <% if @comment; @comment.errors.on(:author_email).each do |error| %>
+    <% if @comment; @comment.errors.on_field(:author_email).each do |error| %>
       <div class="flash error"><%== error %></div>
     <% end; end %>
 
@@ -38,7 +38,7 @@
       <span class="tip">optional</span>
     </p>
 
-    <% if @comment; @comment.errors.on(:author_url).each do |error| %>
+    <% if @comment; @comment.errors.on_field(:author_url).each do |error| %>
       <div class="flash error"><%== error %></div>
     <% end; end %>
 
@@ -49,7 +49,7 @@
           value="<%== @comment && @comment.title ? @comment.title : '' %>" />
     </p>
 
-    <% if @comment; @comment.errors.on(:title).each do |error| %>
+    <% if @comment; @comment.errors.on_field(:title).each do |error| %>
       <div class="flash error"><%== error %></div>
     <% end; end %>
 
@@ -57,7 +57,7 @@
       <textarea name="body" rows="6" cols="60"><%== @comment && @comment.body ? @comment.body : '' %></textarea>
     </p>
 
-    <% if @comment; @comment.errors.on(:body).each do |error| %>
+    <% if @comment; @comment.errors.on_field(:body).each do |error| %>
       <div class="flash error"><%== error %></div>
     <% end; end %>
 

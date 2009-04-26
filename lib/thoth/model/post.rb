@@ -30,30 +30,12 @@ module Thoth
   class Post < Sequel::Model
     include Ramaze::Helper::Wiki
 
-    is :notnaughty
+    plugin :hook_class_methods
+    plugin :validation_helpers
 
     one_to_many  :tags_posts_map, :class => 'Thoth::TagsPostsMap'
     many_to_many :tags, :class => 'Thoth::Tag', :join_table => :tags_posts_map,
         :order => :name
-
-    validates do
-      presence_of :name, :message => 'Please enter a name for this post.'
-      presence_of :title, :message => 'Please enter a title for this post.'
-      presence_of :body, :message => "What's the matter? Cat got your tongue?"
-
-      length_of :title, :maximum => 255,
-          :message => 'Please enter a title under 255 characters.'
-      length_of :name, :maximum => 64,
-          :message => 'Please enter a name under 64 characters.'
-
-      format_of :name, :with => /^[0-9a-z_-]+$/i,
-          :message => 'Post names may only contain letters, numbers, ' <<
-                      'underscores, and dashes.'
-
-      format_of :name, :with => /[a-z_-]/i,
-          :message => 'Post names must contain at least one non-numeric ' <<
-                      'character.'
-    end
 
     before_create do
       self.created_at = Time.now
@@ -250,6 +232,19 @@ module Thoth
     def url
       Config.site['url'].chomp('/') + PostController.r(:/, name).to_s
     end
+
+    def validate
+      validates_presence(:name,  :message => 'Please enter a name for this post.')
+      validates_presence(:title, :message => 'Please enter a title for this post.')
+      validates_presence(:body,  :message => "What's the matter? Cat got your tongue?")
+
+      validates_max_length(255, :title, :message => 'Please enter a title under 255 characters.')
+      validates_max_length(64,  :name,  :message => 'Please enter a name under 64 characters.')
+
+      validates_format(/^[0-9a-z_-]+$/i, :name, :message => 'Post names may only contain letters, numbers, underscores, and dashes.')
+      validates_format(/[a-z_-]/i,       :name, :message => 'Post names must contain at least one non-numeric character.')
+    end
+
   end
 
   unless Post.count > 0

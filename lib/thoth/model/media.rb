@@ -28,6 +28,8 @@
 
 module Thoth
   class Media < Sequel::Model(:media)
+    plugin :hook_class_methods
+
     before_create do
       self.created_at = Time.now
     end

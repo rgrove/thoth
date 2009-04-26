@@ -31,7 +31,8 @@ require 'strscan'
 
 module Thoth
   class Comment < Sequel::Model
-    include Ramaze::Helper::Link
+    plugin :hook_class_methods
+    plugin :validation_helpers
 
     CONFIG_SANITIZE = {
       :elements => [
@@ -48,22 +49,6 @@ module Thoth
       :add_attributes => {'a' => {'rel' => 'nofollow'}},
       :protocols => {'a' => {'href' => ['ftp', 'http', 'https', 'mailto']}}
     }
-
-    is :notnaughty
-
-    validates do
-      presence_of :author,       :message => 'Please enter your name.'
-      presence_of :title,        :message => 'Please enter a title for this comment.'
-
-      length_of :author,       :maximum => 64,    :message => 'Please enter a name under 64 characters.'
-      length_of :author_email, :maximum => 255,   :message => 'Please enter a shorter email address.'
-      length_of :author_url,   :maximum => 255,   :message => 'Please enter a shorter URL.'
-      length_of :body,         :maximum => 65536, :message => 'You appear to be writing a novel. Please try to keep it under 64K.'
-      length_of :title,        :maximum => 100,   :message => 'Please enter a title shorter than 100 characters.'
-
-      format_of :author_email, :with => :email, :message => 'Please enter a valid email address.'
-      format_of :author_url,   :with => /^(?:$|https?:\/\/\S+\.\S+)/i, :message => 'Please enter a valid URL or leave the URL field blank.'
-    end
 
     before_create do
       self.created_at = Time.now
@@ -158,6 +143,20 @@ module Thoth
     # URL for this comment.
     def url
       new? ? '#' : post.url + "#comment-#{id}"
+    end
+
+    def validate
+      validates_presence(:author, :message => 'Please enter your name.')
+      validates_presence(:title,  :message => 'Please enter a title for this comment.')
+
+      validates_max_length(64,    :author,       :message => 'Please enter a name under 64 characters.')
+      validates_max_length(255,   :author_email, :message => 'Please enter a shorter email address.')
+      validates_max_length(255,   :author_url,   :message => 'Please enter a shorter URL.')
+      validates_max_length(65536, :body,         :message => 'You appear to be writing a novel. Please try to keep it under 64K.')
+      validates_max_length(100,   :title,        :message => 'Please enter a title shorter than 100 characters.')
+
+      validates_format(/[^\s@]+@[^\s@]+\.[^\s@]+/,    :author_email, :message => 'Please enter a valid email address.')
+      validates_format(/^(?:$|https?:\/\/\S+\.\S+)/i, :author_url,   :message => 'Please enter a valid URL or leave the URL field blank.')
     end
 
     protected

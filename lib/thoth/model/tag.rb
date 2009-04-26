@@ -28,16 +28,11 @@
 
 module Thoth
   class Tag < Sequel::Model
-    is :notnaughty
+    plugin :validation_helpers
 
     one_to_many  :tags_posts_map, :class => 'Thoth::TagsPostsMap'
     many_to_many :posts, :class => 'Thoth::Post',
         :join_table => :tags_posts_map, :read_only => true
-
-    validates do
-      presence_of :name
-      length_of :name, :maximum => 64
-    end
 
     #--
     # Class Methods
@@ -75,5 +70,11 @@ module Thoth
     def url
       Config.site['url'].chomp('/') + TagController.r(:/, name).to_s
     end
+
+    def validate
+      validates_presence(:name)
+      validates_max_length(64, :name)
+    end
+
   end
 end

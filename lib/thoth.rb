@@ -44,6 +44,8 @@ require 'ramaze'
 require 'redcloth'
 require 'sanitize'
 require 'sequel'
+require 'sequel/extensions/migration'
+require 'sequel/extensions/pagination'
 require 'time'
 require 'yaml'
 
@@ -60,6 +62,7 @@ require 'thoth/config'
 require 'thoth/version'
 require 'thoth/plugin'
 require 'thoth/middleware/minify'
+require 'thoth/monkeypatch/sequel/model/errors'
 
 module Thoth
   include Innate::Traited
@@ -177,7 +180,7 @@ module Thoth
 
       Sequel.datetime_class = Time
 
-      @db = Sequel.open(Config.db)
+      @db = Sequel.connect(Config.db)
       @db.test_connection
 
       if trait[:sql_log]

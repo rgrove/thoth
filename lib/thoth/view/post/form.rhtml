@@ -5,7 +5,7 @@
       <input type="text" name="name" id="name" class="name-post"
           maxlength="64" value="<%== @post ? @post.name : '' %>" />
 
-      <% if @post; @post.errors.on(:name).each do |error| %>
+      <% if @post; @post.errors.on_field(:name).each do |error| %>
         <p class="flash error"><%== error %></p>
       <% end; end %>
     </div>
@@ -15,7 +15,7 @@
       <input type="text" name="title" id="title" class="title-post"
           maxlength="255" value="<%== @post ? @post.title : '' %>" />
 
-      <% if @post; @post.errors.on(:title).each do |error| %>
+      <% if @post; @post.errors.on_field(:title).each do |error| %>
         <p class="flash error"><%== error %></p>
       <% end; end %>
     </div>
@@ -24,7 +24,7 @@
       <label for="body">Body</label>
       <textarea name="body" id="body" rows="15" cols="60"><%== @post ? @post.body : '' %></textarea>
 
-      <% if @post; @post.errors.on(:body).each do |error| %>
+      <% if @post; @post.errors.on_field(:body).each do |error| %>
         <p class="flash error"><%== error %></p>
       <% end; end %>
     </div>
@@ -34,7 +34,7 @@
       <input type="text" name="tags" id="tags" class="tags-input"
           maxlength="255" value="<%== @post ? @post.tags.collect{|i| i.name }.join(', ') : '' %>" />
 
-      <% if @post; @post.errors.on(:tags).each do |error| %>
+      <% if @post; @post.errors.on_field(:tags).each do |error| %>
         <p class="flash error"><%== error %></p>
       <% end; end %>
     </div>

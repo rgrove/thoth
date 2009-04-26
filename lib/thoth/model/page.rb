@@ -30,23 +30,8 @@ module Thoth
   class Page < Sequel::Model
     include Ramaze::Helper::Wiki
 
-    is :notnaughty
-
-    validates do
-      presence_of :name, :message => 'Please enter a name for this page.'
-      presence_of :title, :message => 'Please enter a title for this page.'
-      presence_of :body,
-          :message => "Come on, I'm sure you can think of something to write."
-
-      length_of :title, :maximum => 255,
-          :message => 'Please enter a title under 255 characters.'
-      length_of :name,  :maximum => 64,
-          :message => 'Please enter a name under 64 characters.'
-
-      format_of :name, :with => /^[0-9a-z_-]+$/i,
-          :message => 'Page names may only contain letters, numbers, ' <<
-                      'underscores, and dashes.'
-    end
+    plugin :hook_class_methods
+    plugin :validation_helpers
 
     after_destroy do
       Page.normalize_positions
@@ -201,5 +186,17 @@ module Thoth
     def url
       Config.site['url'].chomp('/') + PageController.r(:/, name).to_s
     end
+
+    def validate
+      validates_presence(:name,  :message => 'Please enter a name for this page.')
+      validates_presence(:title, :message => 'Please enter a title for this page.')
+      validates_presence(:body,  :message => "Come on, I'm sure you can think of something to write.")
+
+      validates_max_length(255, :title, :message => 'Please enter a title under 255 characters.')
+      validates_max_length(64,  :name,  :message => 'Please enter a name under 64 characters.')
+
+      validates_format(/^[0-9a-z_-]+$/i, :name, :message => 'Page names may only contain letters, numbers, underscores, and dashes.')
+    end
+
   end
 end

@@ -5,7 +5,7 @@
       <input type="text" name="name" id="name" class="name-page"
           maxlength="64" value="<%== @page ? @page.name : '' %>" />
 
-      <% if @page; @page.errors.on(:name).each do |error| %>
+      <% if @page; @page.errors.on_field(:name).each do |error| %>
         <p class="flash error"><%== error %></p>
       <% end; end %>
     </div>
@@ -15,7 +15,7 @@
       <input type="text" name="title" id="title" class="title-page"
           maxlength="255" value="<%== @page ? @page.title : '' %>" />
 
-      <% if @page; @page.errors.on(:title).each do |error| %>
+      <% if @page; @page.errors.on_field(:title).each do |error| %>
         <p class="flash error"><%== error %></p>
       <% end; end %>
     </div>
@@ -24,7 +24,7 @@
       <label for="body">Body</label>
       <textarea name="body" id="body" rows="15" cols="60"><%== @page ? @page.body : '' %></textarea>
 
-      <% if @page; @page.errors.on(:body).each do |error| %>
+      <% if @page; @page.errors.on_field(:body).each do |error| %>
         <p class="flash error"><%== error %></p>
       <% end; end %>
     </div>
