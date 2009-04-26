@@ -52,7 +52,7 @@ thoth_gemspec = Gem::Specification.new do |s|
   s.email    = Thoth::APP_EMAIL
   s.homepage = Thoth::APP_URL
   s.platform = Gem::Platform::RUBY
-  s.summary  = 'A fast and simple blog engine based on Ramaze and Sequel.'
+  s.summary  = 'An awesome blog engine based on Ramaze and Sequel.'
 
   s.files        = FileList['{bin,lib}/**/*', 'LICENSE'].to_a
   s.executables  = ['thoth']
@@ -68,7 +68,7 @@ thoth_gemspec = Gem::Specification.new do |s|
   s.add_dependency('json_pure',         '~> 1.1.3')
   s.add_dependency('jsmin',             '~> 1.0.1')
   s.add_dependency('RedCloth',          '~> 4.1.9')
-  s.add_dependency('sanitize',          '~> 1.0.5')
+  s.add_dependency('sanitize',          '~> 1.0.8')
   s.add_dependency('sequel',            '~> 2.9.0')
   s.add_dependency('sequel_notnaughty', '~> 0.6.2')
 
@@ -78,8 +78,8 @@ thoth_gemspec = Gem::Specification.new do |s|
 
   s.post_install_message = <<POST_INSTALL
 ================================================================================
-Thank you for installing Thoth. If you haven't already, you may want to install
-one or more of the following optional gems:
+Thank you for installing Thoth. If you haven't already, you may need to install
+one or more of the following gems:
 
   mysql        - If you want to use Thoth with a MySQL database
   passenger    - If you want to run Thoth under Apache using Phusion Passenger
