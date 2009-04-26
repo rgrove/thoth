@@ -30,16 +30,17 @@ module Thoth; module Plugin
 
   # Tags plugin for Thoth.
   module Tags
-    Configuration.for("thoth_#{Thoth.trait[:mode]}") do
-      tags {
+
+    Config << {
+      'tags' => {
 
         # Time in seconds to cache tag data. It's a good idea to keep this nice
         # and high to improve the performance of your site. Default is 1800
         # seconds (30 minutes).
-        cache_ttl 1800 unless Send('respond_to?', :cache_ttl)
+        'cache_ttl' => 1800
 
       }
-    end
+    }
 
     class << self
 

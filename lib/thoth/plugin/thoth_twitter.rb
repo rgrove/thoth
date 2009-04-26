@@ -37,32 +37,32 @@ module Thoth; module Plugin
   # Twitter plugin for Thoth.
   module Twitter
 
-    Configuration.for("thoth_#{Thoth.trait[:mode]}") do
-      twitter {
+    Config << {
+      'twitter' => {
 
         # Whether or not to include replies. If this is false, the most recent
         # non-reply tweets will be displayed.
-        include_replies false
+        'include_replies' => false,
 
         # Time in seconds to cache results. It's a good idea to keep this nice
         # and high both to improve the performance of your site and to avoid
         # pounding on Twitter's servers. Default is 600 seconds (10 minutes).
-        cache_ttl 600 unless Send('respond_to?', :cache_ttl)
+        'cache_ttl' => 600,
 
         # Request timeout in seconds.
-        request_timeout 3 unless Send('respond_to?', :request_timeout)
+        'request_timeout' => 3,
 
         # If Twitter fails to respond at least this many times in a row, no new
         # requests will be sent until the failure_timeout expires in order to
         # avoid hindering your blog's performance.
-        failure_threshold 3 unless Send('respond_to?', :failure_threshold)
+        'failure_threshold' => 3,
 
         # After the failure_threshold is reached, the plugin will wait this many
         # seconds before trying again. Default is 600 seconds (10 minutes).
-        failure_timeout 600 unless Send('respond_to?', :failure_timeout)
+        'failure_timeout' => 600
 
       }
-    end
+    }
 
     class << self
 

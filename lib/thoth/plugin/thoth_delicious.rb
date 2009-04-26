@@ -37,20 +37,20 @@ module Thoth; module Plugin
   module Delicious
     FEED_URL = 'http://feeds.delicious.com/feeds/json'
 
-    Configuration.for("thoth_#{Thoth.trait[:mode]}") do
-      delicious {
+    Config << {
+      'delicious' => {
 
         # Time in seconds to cache results. It's a good idea to keep this nice
         # and high both to improve the performance of your site and to avoid
         # pounding on del.icio.us's servers. Default is 900 seconds (15
         # minutes).
-        cache_ttl 900 unless Send('respond_to?', :cache_ttl)
+        'cache_ttl' => 900,
 
         # Request timeout in seconds.
-        request_timeout 5 unless Send('respond_to?', :request_timeout)
+        'request_timeout' => 5
 
       }
-    end
+    }
 
     class << self
 

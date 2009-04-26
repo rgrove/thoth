@@ -33,23 +33,24 @@ module Thoth; module Plugin
 
   # Flickr plugin for Thoth.
   module Flickr
-    Configuration.for("thoth_#{Thoth.trait[:mode]}") do
-      flickr {
+
+    Config << {
+      'flickr' => {
 
         # Flickr API key. You can either use the default or replace this with
         # your own key.
-        api_key '5b1d9919cb2d97585bd3d83e05af80b8' unless Send('respond_to?', :api_key)
+        'api_key' => '5b1d9919cb2d97585bd3d83e05af80b8',
 
         # Time in seconds to cache results. It's a good idea to keep this nice
         # and high both to improve the performance of your site and to avoid
         # pounding on Flickr's servers. Default is 900 seconds (15 minutes).
-        cache_ttl 900 unless Send('respond_to?', :cache_ttl)
+        'cache_ttl' => 900,
 
         # Request timeout in seconds.
-        request_timeout 5 unless Send('respond_to?', :request_timeout)
+        'request_timeout' => 5
 
       }
-    end
+    }
 
     class << self
 
