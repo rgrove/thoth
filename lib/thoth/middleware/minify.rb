@@ -26,73 +26,62 @@
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #++
 
+require 'cssmin'
+require 'jsmin'
+
 module Thoth
-  class MinifyController < Controller
-    map '/minify'
-    helper :cache
 
-    def css(*args)
-      path = 'css/' << args.join('/')
-      file = process(path)
+  # Rack middleware that intercepts and minifies CSS and JavaScript responses,
+  # caching the minified content to speed up future requests.
+  class Minify
 
-      response['Content-Type'] = 'text/css'
+    MINIFIERS = {
+      'application/javascript' => JSMin,
+      'text/css'               => CSSMin,
+      'text/javascript'        => JSMin
+    }
 
-      # If the filename has a -min suffix, assume that it's already minified and
-      # serve it as is.
-      if (File.basename(path, '.css') =~ /-min$/)
-        throw(:respond, File.open(file, 'rb'))
-      end
+    EXCLUDE = [
+      /-min\.(?:css|js)$/i
+    ]
 
-      if Config.server['enable_cache']
-        body = cache_value[path] ||= CSSMin.minify(File.open(file, 'rb'))
-      else
-        body = CSSMin.minify(File.open(file, 'rb'))
-      end
-
-      throw(:respond, body)
-    end
-
-    def js(*args)
-      path = 'js/' << args.join('/')
-      file = process(path)
-
-      response['Content-Type'] = 'application/javascript'
-
-      # If the filename has a -min suffix, assume that it's already minified and
-      # serve it as is.
-      if (File.basename(path, '.js') =~ /-min$/)
-        throw(:respond, File.open(file, 'rb'))
-      end
+    def initialize(app)
+      @app = app
 
       if Config.server['enable_cache']
-        body = cache_value[path] ||= JSMin.minify(File.open(file, 'rb'))
+        Ramaze::Cache.add(:minify) unless Ramaze::Cache.respond_to?(:minify)
+        @cache = Ramaze::Cache.minify
+      end
+    end
+
+    def call(env)
+      @status, @headers, @body = @app.call(env)
+
+      unless @status == 200 && @minifier = MINIFIERS[@headers['Content-Type']]
+        return [@status, @headers, @body]
+      end
+
+      @path = Rack::Utils.unescape(env['PATH_INFO'])
+
+      EXCLUDE.each {|ex| return [@status, @headers, @body] if @path =~ ex }
+
+      @headers.delete('Content-Length')
+      @headers['Cache-Control'] = 'max-age=3600,public'
+
+      [@status, @headers, self]
+    end
+
+    def each
+      content = ''
+      @body.each {|part| content << part.to_s }
+
+      if Config.server['enable_cache']
+        @body = @cache["minify_#{@path}"] ||= @minifier.minify(content)
       else
-        body = JSMin.minify(File.open(file, 'rb'))
+        @body = @minifier.minify(content)
       end
 
-      throw(:respond, body)
-    end
-
-    private
-
-    def process(path)
-      error_404 unless file = resolve_path(path)
-
-      response['Cache-Control'] = 'max-age=3600'
-      response['Last-Modified'] = File.mtime(file).httpdate
-
-      file
-    end
-
-    def resolve_path(path)
-      root_mappings.each do |root|
-        options.publics.each do |pub|
-          joined = File.join(root, pub, path)
-          return joined if File.file?(joined)
-        end
-      end
-
-      return false
+      yield @body
     end
 
   end

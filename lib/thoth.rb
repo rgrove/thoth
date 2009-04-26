@@ -59,6 +59,7 @@ require 'thoth/errors'
 require 'thoth/config'
 require 'thoth/version'
 require 'thoth/plugin'
+require 'thoth/middleware/minify'
 
 module Thoth
   include Innate::Traited
@@ -149,15 +150,6 @@ module Thoth
         end
       end
 
-      # If minification is enabled, intercept CSS/JS requests and route them to
-      # the MinifyController.
-      #
-      # NOTE: This is currently broken due to a Ramaze bug:
-      # http://github.com/manveru/ramaze/issues#issue/1
-      if Config.server['enable_minify']
-        Ramaze::Rewrite[/^\/(css|js)\/(.+)$/] = '/minify/%s/%s'
-      end
-
       # Load Thoth helpers.
       Ramaze::acquire(File.join(LIB_DIR, 'helper', '*'))
 
@@ -224,7 +216,32 @@ module Thoth
 
     # Initializes Ramaze.
     def setup
-      if trait[:mode] == :production
+      Ramaze.options.merge!(
+        :mode  => trait[:mode] == :production ? :live : :dev,
+        :roots => [HOME_DIR, LIB_DIR]
+      )
+
+      # Create a value cache for plugins to use.
+      Ramaze::Cache.add(:plugin)
+
+      case trait[:mode]
+      when :devel
+        Ramaze.middleware!(:dev) do |m|
+          m.use Rack::Lint
+          m.use Rack::CommonLogger
+          m.use Ramaze::Reloader
+          m.use Rack::ShowStatus
+          m.use Rack::RouteExceptions
+          m.use Rack::ShowExceptions
+          m.use Rack::Head
+          m.use Rack::ETag
+          m.use Rack::ConditionalGet
+          m.use Rack::ContentLength
+          m.use Thoth::Minify if Config.server['enable_minify']
+          m.run Ramaze::AppMap
+        end
+
+      when :production
         Ramaze.middleware!(:live) do |m|
           m.use Rack::CommonLogger
           m.use Rack::RouteExceptions
@@ -232,6 +249,7 @@ module Thoth
           m.use Rack::ETag
           m.use Rack::ConditionalGet
           m.use Rack::ContentLength
+          m.use Thoth::Minify if Config.server['enable_minify']
           m.run Ramaze::AppMap
         end
 
@@ -253,14 +271,6 @@ module Thoth
           Ramaze::Log.level = Logger::Severity::ERROR
         end
       end
-
-      Ramaze.options.merge!(
-        :mode  => trait[:mode] == :production ? :live : :dev,
-        :roots => [HOME_DIR, LIB_DIR]
-      )
-
-      # Create a value cache for plugins to use.
-      Ramaze::Cache.add(:plugin)
     end
 
     # Starts Thoth as a daemon.
