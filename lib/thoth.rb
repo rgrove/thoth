@@ -152,17 +152,20 @@ module Thoth
         end
       end
 
+      # If minification is enabled, intercept CSS/JS requests and route them to
+      # the MinifyController.
+      #
+      # NOTE: This is currently broken due to a Ramaze bug:
+      # http://github.com/manveru/ramaze/issues#issue/1
+      if Config.server['enable_minify']
+        Ramaze::Rewrite[/^\/(css|js)\/(.+)$/] = '/minify/%s/%s'
+      end
+
       Ramaze::acquire(File.join(LIB_DIR, 'helper', '*'))
 
       require File.join(LIB_DIR, 'controller')
 
       Ramaze::acquire(File.join(LIB_DIR, 'model', '*'))
-
-      # If minification is enabled, intercept CSS/JS requests and route them to
-      # the MinifyController.
-      if Config.server['enable_minify']
-        Ramaze::Rewrite[/^\/(css|js)\/(.+)$/] = '/minify/%s/%s'
-      end
 
       Config.plugins.each {|plugin| Plugin.load(plugin)}
     end
