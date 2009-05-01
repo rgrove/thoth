@@ -75,7 +75,7 @@ module Ramaze; module Helper
         </p>
       ]
     end
-    
+
     # Displays a "405 Method Not Allowed" error message and returns a 405
     # response code.
     def error_405
