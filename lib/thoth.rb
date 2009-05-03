@@ -65,6 +65,9 @@ require 'thoth/config'
 require 'thoth/version'
 require 'thoth/plugin'
 require 'thoth/middleware/minify'
+
+# Monkeypatchery!
+require 'thoth/monkeypatch/innate/action'
 require 'thoth/monkeypatch/sequel/model/errors'
 
 module Thoth
