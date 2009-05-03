@@ -190,6 +190,7 @@ module Thoth
 
       Ramaze::Log.info "Thoth home: #{HOME_DIR}"
       Ramaze::Log.info "Thoth lib : #{LIB_DIR}"
+      Ramaze::Log.info "Running in #{trait[:mode] == :production ? 'live' : 'dev'} mode"
 
       Ramaze.options.setup << self
     end
