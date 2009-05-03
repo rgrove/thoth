@@ -84,7 +84,12 @@ module Thoth
           'port'          => 7000,
           'enable_cache'  => true,
           'enable_minify' => false,
-          'error_log'     => File.join(HOME_DIR, 'log', 'error.log')
+          'error_log'     => File.join(HOME_DIR, 'log', 'error.log'),
+
+          'memcache' => {
+            'enabled' => false,
+            'servers' => ['localhost:11211:1']
+          }
         },
 
         'timestamp' => {
@@ -117,25 +122,25 @@ module Thoth
     # Finds all configs with a top-level key matching _name_, then merges them
     # such that configs earlier in the lookup chain override those later in
     # the chain. Returns the result, or an empty hash if _name_ was not found.
-    #
-    # This chain merge currently only works to a depth of two (root->child),
-    # since anything more than that (root->child->child) seems excessive and
-    # currently isn't needed.
     def method_missing(name)
+      name    = name.to_s
       result  = {}
-      matches = @lookup.select {|c| c.has_key?(name.to_s) }
+      configs = @lookup.select {|c| c.has_key?(name) }.reverse
 
-      matches.reverse.each do |match|
-        value = match[name.to_s]
-
-        if value.is_a?(Hash)
-          result.merge!(value)
-        else
-          result = value
-        end
-      end
+      configs.each {|c| result = config_merge(result, c[name]) }
 
       return result
+    end
+
+    private
+
+    def config_merge(master, value)
+      if value.is_a?(Hash)
+        value.each {|k, v| master[k] = config_merge(master[k] || {}, v) }
+        return master
+      end
+
+      value
     end
 
   end; end

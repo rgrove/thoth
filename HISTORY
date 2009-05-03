@@ -15,11 +15,14 @@ Version 0.3.0 (?)
     and JS URLs that should be loaded in addition to the default Thoth CSS and
     JS. This way you don't have to override the CSS and JS templates to
     customize your theme.
+  * Added memcache support, disabled by default. Overkill for most blogs, but if
+    you've got a crazy high-traffic site and need to balance load across many
+    processes or servers, this is for you.
   * The "New comment" form now requires an email address.
   * Twitter plugin now excludes replies by default.
   * Twitter plugin now turns #hashtags into links.
   * Comment HTML sanitization was separated out into a new gem, Sanitize.
-  * Comment titles are now limited to 100 characters instead of 255.
+  * Comment titles are now limited to 150 characters instead of 255.
   * Long unbroken runs of text without whitespace in comments are now broken up
     with <wbr /> tags to make them wrap without breaking the site layout.
   * Fixed a bug that caused an invalid path to be used for media files uploaded

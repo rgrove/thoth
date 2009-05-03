@@ -42,6 +42,7 @@ live:
     #   css:
     #     - /css/foo.css
     #     - 'http://example.com/bar.css'
+    #
     css: []
 
     # URLs of JS files to load in addition to the default Thoth JS. You can
@@ -123,6 +124,7 @@ live:
   #     - foo
   #     - bar
   #     - baz
+  #
   plugins: []
 
   # Absolute path to a directory where uploaded media files (images, videos,
@@ -143,19 +145,44 @@ live:
     port: 7000
 
     # Whether or not to enable caching. Enabling caching will significantly
-    # improve Thoth's performance under heavy traffic, but new comments and
-    # other changes may take a minute or two to become visible.
+    # improve Thoth's performance under heavy traffic.
     enable_cache: true
 
     # Whether or not to enable automatic, on the fly minification of your blog's
     # external CSS and JavaScript files. Enabling minification will reduce
     # page weight and is a great way to improve performance, but you'll need to
     # restart Thoth in order for CSS and JS changes to take effect.
+    #
+    # Note: this setting will have no effect if you're running Thoth under
+    # Phusion Passenger or any other environment in which static file requests
+    # are handled by a frontend server without passing through Ramaze.
     enable_minify: true
 
     # Filename to which errors should be logged when running in production mode,
     # or blank if you don't care about errors.
     error_log: <%= Thoth::HOME_DIR %>/log/error.log
+
+    # Memcache settings.
+    memcache:
+      # Whether or not to enable memcache. When enabled along with the
+      # server.enable_cache setting above, Thoth will use memcache for all cache
+      # operations instead of the default per-process Hash-based cache.
+      #
+      # This may be beneficial if you have a very high-traffic blog and
+      # distribute load across multiple Ramaze processes or physical servers,
+      # but in most cases it's overkill.
+      enabled: false
+
+      # Memcache servers to use. Each entry in this list must contain at least
+      # a hostname, and optionally a port number and priority.
+      #
+      # Example:
+      #   servers:
+      #     - 'localhost:11211:1'
+      #     - 'foo.example.com:11211:2'
+      #
+      servers:
+        - 'localhost:11211:1'
 
   # Timestamp formats.
   timestamp:

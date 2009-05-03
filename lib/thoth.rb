@@ -161,7 +161,12 @@ module Thoth
 
       # If caching is disabled, replace the default cache store with a no-op
       # API.
-      unless Config.server['enable_cache']
+      if Config.server['enable_cache']
+        if Config.server['memcache']['enabled']
+          Ramaze::Cache::MemCache::OPTIONS[:servers] = Config.server['memcache']['servers']
+          Ramaze::Cache.options.default = Ramaze::Cache::MemCache
+        end
+      else
         require 'thoth/cache'
         Ramaze::Cache.options.default = Thoth::Cache::Noop
       end
