@@ -26,7 +26,7 @@
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #++
 
-module Ramaze; module Helper
+module Thoth; module Helper
 
   # The Cookie helper wraps access to Ramaze's request.cookies hash and returns
   # only the first cookie matching a specified name (rather than an array).

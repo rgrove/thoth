@@ -120,11 +120,11 @@ module Thoth
   end
 end
 
-module Ramaze; module Helper
+module Thoth; module Helper
   module Pagination
 
     def pager(dataset, url = rs(:/, '__page__'))
-      Thoth::Pager.new(dataset, url)
+      Pager.new(dataset, url)
     end
 
   end

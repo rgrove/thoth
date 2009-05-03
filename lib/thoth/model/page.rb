@@ -28,7 +28,7 @@
 
 module Thoth
   class Page < Sequel::Model
-    include Ramaze::Helper::Wiki
+    include Thoth::Helper::Wiki
 
     plugin :hook_class_methods
     plugin :validation_helpers

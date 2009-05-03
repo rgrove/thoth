@@ -30,7 +30,7 @@ require 'cgi'
 require 'json'
 require 'open-uri'
 
-module Ramaze; module Helper
+module Thoth; module Helper
 
   # The YSearch helper provides search results using the Yahoo! Search API.
   # Requires the json or json_pure gem.

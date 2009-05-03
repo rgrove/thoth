@@ -26,7 +26,7 @@
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #++
 
-module Ramaze; module Helper
+module Thoth; module Helper
 
   # The Admin helper provides methods for checking for or requiring
   # authorization from within other actions and views.
@@ -40,9 +40,8 @@ module Ramaze; module Helper
     #   - ADMIN_USER from Thoth config
     #   - ADMIN_PASS from Thoth config
     def auth_key
-      Digest::SHA256.hexdigest(Thoth::HOME_DIR + request.ip +
-          Thoth::Config.admin['seed'] + Thoth::Config.admin['user'] +
-          Thoth::Config.admin['pass'])
+      Digest::SHA256.hexdigest(HOME_DIR + request.ip + Config.admin['seed'] +
+          Config.admin['user'] + Config.admin['pass'])
     end
 
     # Validates the auth cookie and returns +true+ if the user is authenticated,
@@ -68,7 +67,7 @@ module Ramaze; module Helper
     # Checks the auth cookie and redirects to the login page if the user is not
     # authenticated.
     def require_auth
-      redirect(Thoth::AdminController.r()) unless auth_key_valid?
+      redirect(AdminController.r()) unless auth_key_valid?
     end
   end
 

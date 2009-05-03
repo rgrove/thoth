@@ -26,13 +26,13 @@
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #++
 
-module Ramaze; module Helper
+module Thoth; module Helper
 
   # The Error helper module provides methods for interrupting the current
   # request and responding with an error message and corresponding HTTP error
   # code.
   module Error
-    Helper::LOOKUP << self
+    Ramaze::Helper::LOOKUP << self
 
     # Displays a "400 Bad Request" error message and returns a 400 response
     # code.

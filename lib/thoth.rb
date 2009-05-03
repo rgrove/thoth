@@ -33,7 +33,7 @@ $:.uniq!
 require 'fileutils'
 require 'rubygems'
 
-gem 'ramaze', '~>2009.04'
+# gem 'ramaze', '~>2009.04'
 
 require 'builder'
 require 'cssmin'
@@ -55,6 +55,9 @@ module Thoth
   LIB_DIR    = File.join(File.dirname(File.expand_path(__FILE__)), 'thoth')
   PUBLIC_DIR = File.join(LIB_DIR, 'public') unless const_defined?(:PUBLIC_DIR)
   VIEW_DIR   = File.join(LIB_DIR, 'view') unless const_defined?(:VIEW_DIR)
+
+  # Thoth Helper namespace.
+  module Helper; end
 end
 
 require 'thoth/errors'
@@ -160,13 +163,18 @@ module Thoth
         Ramaze::Cache.options.default = Thoth::Cache::Noop
       end
 
-      # Load Thoth helpers.
-      Ramaze::acquire(File.join(LIB_DIR, 'helper', '*'))
+      # Create a cache for plugins to use.
+      Ramaze::Cache.add(:plugin)
+
+      # Tell Innate where to find Thoth's helpers.
+      Innate::HelpersHelper.options.paths << LIB_DIR
+      Innate::HelpersHelper.options.namespaces << Thoth::Helper
 
       # Load Thoth controllers.
       require File.join(LIB_DIR, 'controller')
 
       # Load Thoth models.
+      require File.join(LIB_DIR, 'helper/wiki')
       Ramaze::acquire(File.join(LIB_DIR, 'model', '*'))
 
       # Load startup plugins.
@@ -230,10 +238,6 @@ module Thoth
         :mode  => trait[:mode] == :production ? :live : :dev,
         :roots => [HOME_DIR, LIB_DIR]
       )
-
-      # Create caches for models and plugins.
-      Ramaze::Cache.add(:model)
-      Ramaze::Cache.add(:plugin)
 
       case trait[:mode]
       when :devel
