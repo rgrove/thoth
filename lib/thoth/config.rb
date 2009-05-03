@@ -107,7 +107,7 @@ module Thoth
       }
 
       begin
-        config = YAML.load(Erubis::Eruby.new(File.read(file)).result(binding))
+        config = YAML.load(Erubis::Eruby.new(File.read(file)).result(binding)) || {}
       rescue => e
         raise Thoth::ConfigError, "Config error in #{file}: #{e}"
       end
