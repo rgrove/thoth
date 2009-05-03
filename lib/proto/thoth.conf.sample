@@ -171,6 +171,8 @@ live:
       # This may be beneficial if you have a very high-traffic blog and
       # distribute load across multiple Ramaze processes or physical servers,
       # but in most cases it's overkill.
+      #
+      # Note: This option requires that the memcache-client gem be installed.
       enabled: false
 
       # Memcache servers to use. Each entry in this list must contain at least
