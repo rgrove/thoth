@@ -25,7 +25,7 @@ class PoseidonImporter < Thoth::Importer
     @poseidon[:comments].all do |row|
       user = @poseidon[:users].filter(:id => row[:userid]).first
 
-      Comment.create do |comment|
+      Thoth::Comment.create do |comment|
         comment.id         = row[:id]
         comment.author     = user[:username]
         comment.author_url = ''
@@ -41,7 +41,7 @@ class PoseidonImporter < Thoth::Importer
 
   import_posts do
     @poseidon[:content].each do |row|
-      Post.create do |post|
+      Thoth::Post.create do |post|
         post.id         = row[:id]
         post.title      = row[:title]
         post.body       = row[:content]

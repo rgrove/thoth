@@ -23,7 +23,7 @@ class PantsImporter < Thoth::Importer
 
   import_comments do
     @pants[:comments].each do |row|
-      Comment.create do |comment|
+      Thoth::Comment.create do |comment|
         comment.id         = row[:id]
         comment.author     = row[:author]
         comment.author_url = row[:url]
@@ -38,7 +38,7 @@ class PantsImporter < Thoth::Importer
 
   import_pages do
     @pants[:pages].each do |row|
-      Page.create do |page|
+      Thoth::Page.create do |page|
         page.id         = row[:id]
         page.title      = row[:title]
         page.name       = row[:name]
@@ -51,7 +51,7 @@ class PantsImporter < Thoth::Importer
 
   import_posts do
     @pants[:articles].each do |row|
-      Post.create do |post|
+      Thoth::Post.create do |post|
         post.id         = row[:id]
         post.title      = row[:title]
         post.body       = row[:content]
