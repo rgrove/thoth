@@ -44,5 +44,5 @@
 </div>
 
 <% if Thoth::Config.site['enable_comments'] %>
-  <%= Thoth::PostController.render_view(:comments) %>
+  <%= Thoth::PostController.render_view(:comments, :comments => @comments) %>
 <% end %>

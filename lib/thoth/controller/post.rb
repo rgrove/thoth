@@ -40,6 +40,8 @@ module Thoth
       # result dupes and improve pagerank.
       raw_redirect(@post.url, :status => 301) if name =~ /^\d+$/
 
+      cache_key = "comments_#{@post.id}"
+
       if request.post? && Config.site['enable_comments']
         # Dump the request if the robot traps were triggered.
         error_404 unless request['captcha'].empty? && request['comment'].empty?
@@ -73,6 +75,7 @@ module Thoth
                 'Please try again later.'
           else
             flash[:success] = 'Comment posted.'
+            cache_value.delete(cache_key)
             redirect(rs(@post.name).to_s + "#comment-#{comment.id}")
           end
         end
@@ -91,6 +94,9 @@ module Thoth
 
       if Config.site['enable_comments']
         @comment_action = r(:/, @post.name).to_s + '#post-comment'
+
+        @comments = cache_value[cache_key] ||=
+            cache_value.store(cache_key, @post.comments.all, :ttl => 300)
 
         @feeds = [{
           :href  => @post.atom_url,

@@ -1,7 +1,7 @@
 <div id="comments">
   <h3>Comments</h3>
 
-  <% @post.comments.all.each do |comment| %>
+  <% @comments.each do |comment| %>
     <%= Thoth::CommentController.render_view(:comment, :comment => comment) %>
   <% end %>
 </div>
