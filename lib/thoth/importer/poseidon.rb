@@ -15,7 +15,7 @@ class PoseidonImporter < Thoth::Importer
     end
 
     begin
-      @poseidon = Sequel.open(uri)
+      @poseidon = Sequel.connect(uri)
     rescue => e
       abort("Error: unable to connect to database: #{e}")
     end

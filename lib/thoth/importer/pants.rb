@@ -15,7 +15,7 @@ class PantsImporter < Thoth::Importer
     end
 
     begin
-      @pants = Sequel.open(uri)
+      @pants = Sequel.connect(uri)
     rescue => e
       abort("Error: unable to connect to database: #{e}")
     end
