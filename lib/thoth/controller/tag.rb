@@ -31,10 +31,8 @@ module Thoth
     map '/tag'
     helper :cache, :pagination
 
-    if Config.server['enable_cache']
-      cache_action(:method => :index, :ttl => 120) { auth_key_valid? }
-      cache_action(:method => :atom,  :ttl => 120)
-    end
+    cache_action(:method => :index, :ttl => 120) { auth_key_valid? }
+    cache_action(:method => :atom,  :ttl => 120)
 
     def index(name = nil, page = 1)
       error_404 unless name && @tag = Tag[:name => name.strip.downcase]

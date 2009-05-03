@@ -31,9 +31,7 @@ module Thoth
     map '/archive'
     helper :cache, :pagination
 
-    if Config.server['enable_cache']
-      cache_action(:method => :index, :ttl => 120) { auth_key_valid? }
-    end
+    cache_action(:method => :index, :ttl => 120) { auth_key_valid? }
 
     def index(page = 1)
       page = page.to_i

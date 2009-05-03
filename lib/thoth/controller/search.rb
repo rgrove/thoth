@@ -31,11 +31,9 @@ module Thoth
     map '/search'
     helper :cache, :ysearch
 
-    if Config.server['enable_cache']
-      cache_action(:method => :index, :ttl => 300) do
-        auth_key_valid?.to_s + request[:q] + (request[:start] || '') +
-            (request[:count] || '')
-      end
+    cache_action(:method => :index, :ttl => 300) do
+      auth_key_valid?.to_s + request[:q] + (request[:start] || '') +
+          (request[:count] || '')
     end
 
     def index

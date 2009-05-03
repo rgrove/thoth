@@ -31,11 +31,9 @@ module Thoth
     map '/comment'
     helper :aspect, :cache, :pagination
 
-    if Config.server['enable_cache']
-      cache_action(:method => :index, :ttl => 60) { auth_key_valid? }
-      cache_action(:method => :atom,  :ttl => 120)
-      cache_action(:method => :rss,   :ttl => 120)
-    end
+    cache_action(:method => :index, :ttl => 60) { auth_key_valid? }
+    cache_action(:method => :atom,  :ttl => 120)
+    cache_action(:method => :rss,   :ttl => 120)
 
     before_all { error_404 unless Config.site['enable_comments'] }
 

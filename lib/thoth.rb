@@ -153,6 +153,13 @@ module Thoth
         end
       end
 
+      # If caching is disabled, replace the default cache store with a no-op
+      # API.
+      unless Config.server['enable_cache']
+        require 'thoth/cache'
+        Ramaze::Cache.options.default = Thoth::Cache::Noop
+      end
+
       # Load Thoth helpers.
       Ramaze::acquire(File.join(LIB_DIR, 'helper', '*'))
 
@@ -224,7 +231,8 @@ module Thoth
         :roots => [HOME_DIR, LIB_DIR]
       )
 
-      # Create a value cache for plugins to use.
+      # Create caches for models and plugins.
+      Ramaze::Cache.add(:model)
       Ramaze::Cache.add(:plugin)
 
       case trait[:mode]

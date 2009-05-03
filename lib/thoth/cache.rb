@@ -26,57 +26,28 @@
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #++
 
-require 'cssmin'
-require 'jsmin'
+module Thoth; class Cache
 
-module Thoth
+  # This is a no-op cache API used when the cache is disabled in order to avoid
+  # having to make constant configuration checks.
+  class Noop
+    include Innate::Cache::API
 
-  # Rack middleware that intercepts and minifies CSS and JavaScript responses,
-  # caching the minified content to speed up future requests.
-  class Minify
+    def cache_clear; end
 
-    MINIFIERS = {
-      'application/javascript' => JSMin,
-      'text/css'               => CSSMin,
-      'text/javascript'        => JSMin
-    }
-
-    EXCLUDE = [
-      /-min\.(?:css|js)$/i
-    ]
-
-    def initialize(app)
-      @app = app
-
-      Ramaze::Cache.add(:minify) unless Ramaze::Cache.respond_to?(:minify)
-      @cache = Ramaze::Cache.minify
+    def cache_delete(key, *keys)
+      nil
     end
 
-    def call(env)
-      @status, @headers, @body = @app.call(env)
-
-      unless @status == 200 && @minifier = MINIFIERS[@headers['Content-Type']]
-        return [@status, @headers, @body]
-      end
-
-      @path = Rack::Utils.unescape(env['PATH_INFO'])
-
-      EXCLUDE.each {|ex| return [@status, @headers, @body] if @path =~ ex }
-
-      @headers.delete('Content-Length')
-      @headers['Cache-Control'] = 'max-age=3600,public'
-
-      [@status, @headers, self]
+    def cache_fetch(key, default = nil)
+      default
     end
 
-    def each
-      content = ''
+    def cache_setup(hostname, username, appname, cachename); end
 
-      @body.each {|part| content << part.to_s }
-      @body = @cache["minify_#{@path}"] ||= @minifier.minify(content)
-
-      yield @body
+    def cache_store(key, value, options = {})
+      value
     end
-
   end
-end
+
+end; end

@@ -31,9 +31,7 @@ module Thoth
     map '/post'
     helper :cache, :pagination, :wiki
 
-    if Config.server['enable_cache']
-      cache_action(:method => :atom, :ttl => 120)
-    end
+    cache_action(:method => :atom, :ttl => 120)
 
     def index(name = nil)
       error_404 unless name && @post = Post.get(name)

@@ -30,15 +30,13 @@ module Thoth
   class MainController < Controller
     helper :cache, :pagination
 
-    if Config.server['enable_cache']
-      cache_action(:method => :index, :ttl => 60) do
-        auth_key_valid?.to_s + (request[:type] || '') + flash.inspect
-      end
-
-      cache_action(:method => :atom,    :ttl => 120)
-      cache_action(:method => :rss,     :ttl => 120)
-      cache_action(:method => :sitemap, :ttl => 3600)
+    cache_action(:method => :index, :ttl => 60) do
+      auth_key_valid?.to_s + (request[:type] || '') + flash.inspect
     end
+
+    cache_action(:method => :atom,    :ttl => 120)
+    cache_action(:method => :rss,     :ttl => 120)
+    cache_action(:method => :sitemap, :ttl => 3600)
 
     def index
       # Check for legacy feed requests and redirect if necessary.
