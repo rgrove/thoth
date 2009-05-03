@@ -153,7 +153,7 @@ module Thoth
       validates_max_length(255,   :author_email, :message => 'Please enter a shorter email address.')
       validates_max_length(255,   :author_url,   :message => 'Please enter a shorter URL.')
       validates_max_length(65536, :body,         :message => 'You appear to be writing a novel. Please try to keep it under 64K.')
-      validates_max_length(100,   :title,        :message => 'Please enter a title shorter than 100 characters.')
+      validates_max_length(150,   :title,        :message => 'Please enter a title shorter than 150 characters.')
 
       validates_format(/[^\s@]+@[^\s@]+\.[^\s@]+/,    :author_email, :message => 'Please enter a valid email address.')
       validates_format(/^(?:$|https?:\/\/\S+\.\S+)/i, :author_url,   :message => 'Please enter a valid URL or leave the URL field blank.')
