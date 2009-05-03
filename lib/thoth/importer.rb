@@ -28,6 +28,8 @@
 
 module Thoth
   class Importer
+    include Innate::Traited
+
     class << self
 
       def after_import(&block)    trait(:after    => block); end
@@ -40,7 +42,7 @@ module Thoth
 
       def load_importer(name)
         importer = name.to_s.downcase.strip.gsub(/importer$/, '')
-        files    = Dir["{#{HOME_DIR/:importer},#{LIB_DIR/:importer},#{$:.join(',')}}/#{importer}.rb"]
+        files    = Dir["{#{File.join(HOME_DIR, 'importer')},#{File.join(LIB_DIR, 'importer')},#{$:.join(',')}}/#{importer}.rb"]
 
         unless (files.any? && require(files.first)) || require(importer)
           raise LoadError, "Importer #{name} not found"
