@@ -35,7 +35,7 @@ module Thoth
     cache_action(:method => :atom,  :ttl => 120)
     cache_action(:method => :rss,   :ttl => 120)
 
-    before_all { error_404 unless Config.site['enable_comments'] }
+    before_all { error_404 unless Thoth::Config.site['enable_comments'] }
 
     def index
       now = Time.now.strftime('%Y%j')
