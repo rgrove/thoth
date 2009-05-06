@@ -67,7 +67,6 @@ require 'thoth/plugin'
 require 'thoth/middleware/minify'
 
 # Monkeypatchery!
-require 'thoth/monkeypatch/innate/action'
 require 'thoth/monkeypatch/sequel/model/errors'
 
 module Thoth
@@ -162,6 +161,9 @@ module Thoth
       # If caching is disabled, replace the default cache store with a no-op
       # API.
       if Config.server['enable_cache']
+        # Cache templates once read to prevent unnecessary disk thrashing.
+        Innate::View.options.read_cache = true
+
         if Config.server['memcache']['enabled']
           Ramaze::Cache::MemCache::OPTIONS[:servers] = Config.server['memcache']['servers']
           Ramaze::Cache.options.default = Ramaze::Cache::MemCache

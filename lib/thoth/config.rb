@@ -102,6 +102,7 @@ module Thoth
         'db' => "sqlite:///#{HOME_DIR}/db/dev.db",
 
         'server' => {
+          'enable_cache'  => false,
           'enable_minify' => false
         }
       }

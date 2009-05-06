@@ -202,4 +202,5 @@ dev:
   db: sqlite:///<%= Thoth::HOME_DIR %>/db/dev.db
 
   server:
+    enable_cache: false
     enable_minify: false
