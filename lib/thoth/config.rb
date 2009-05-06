@@ -36,8 +36,10 @@ module Thoth
     def <<(config)
       raise ArgumentError, "config must be a Hash" unless config.is_a?(Hash)
 
-      @lookup ||= []
-      @lookup << config
+      (@lookup ||= []) << config
+      cache_config
+
+      @lookup
     end
 
     # Loads the specified configuration file.
@@ -83,7 +85,7 @@ module Thoth
           'address'       => '0.0.0.0',
           'port'          => 7000,
           'enable_cache'  => true,
-          'enable_minify' => false,
+          'enable_minify' => true,
           'error_log'     => File.join(HOME_DIR, 'log', 'error.log'),
 
           'memcache' => {
@@ -118,22 +120,25 @@ module Thoth
       else
         [config['dev'] || {}, config['live'] || {}, @dev, @live]
       end
+
+      cache_config
     end
 
-    # Finds all configs with a top-level key matching _name_, then merges them
-    # such that configs earlier in the lookup chain override those later in
-    # the chain. Returns the result, or an empty hash if _name_ was not found.
     def method_missing(name)
-      name    = name.to_s
-      result  = {}
-      configs = @lookup.select {|c| c.has_key?(name) }.reverse
-
-      configs.each {|c| result = config_merge(result, c[name]) }
-
-      return result
+      (@cached || {})[name.to_s] || {}
     end
 
     private
+
+    # Merges configs such that those earlier in the lookup chain override those
+    # later in the chain.
+    def cache_config
+      @cached = {}
+
+      @lookup.reverse.each do |c|
+        c.each {|k, v| @cached[k] = config_merge(@cached[k] || {}, v) }
+      end
+    end
 
     def config_merge(master, value)
       if value.is_a?(Hash)
