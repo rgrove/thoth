@@ -55,7 +55,18 @@ module Thoth; module Helper
     # submission to verify that the form was not submitted by an unauthorized
     # third party.
     def form_token
-      Ramaze::Current.session.sid
+      cookie_token = cookie(:thoth_token)
+      return cookie_token if cookie_token
+
+      chaos = [srand, rand, Time.now.to_f, HOME_DIR].join
+      cookie_token = Digest::SHA256.hexdigest(chaos)
+
+      response.set_cookie(:thoth_token,
+          :path  => MainController.r().to_s,
+          :value => cookie_token
+      )
+
+      cookie_token
     end
 
     # Checks the form token specified by _name_ and returns +true+ if it's
