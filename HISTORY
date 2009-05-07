@@ -7,6 +7,7 @@ Version 0.3.0 (?)
   * Thoth can now be run under Phusion Passenger (mod_rack/mod_rails) or any
     other server that supports Rackup specifications. This is now the preferred
     way to run Thoth. [Thanks to Steven Bedrick]
+  * Significant caching and performance optimizations.
   * Blog posts can now be saved as drafts, so you can save posts in progress
     without publishing them.
   * Added Gravatar support, enabled by default. Set site.gravatar.enabled to

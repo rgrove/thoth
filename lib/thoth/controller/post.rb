@@ -95,8 +95,18 @@ module Thoth
       if Config.site['enable_comments']
         @comment_action = r(:/, @post.name).to_s + '#post-comment'
 
-        @comments = cache_value[cache_key] ||=
-            cache_value.store(cache_key, @post.comments.all, :ttl => 300)
+        # Since repeated calls to render_view are very expensive, we pre-render
+        # the comments here and cache them to speed up future pageviews.
+        unless @comments_rendered = cache_value[cache_key]
+          @comments_rendered = ''
+
+          @post.comments.all.each do |comment|
+            @comments_rendered << CommentController.render_view(:comment,
+                :comment => comment)
+          end
+
+          cache_value.store(cache_key, @comments_rendered, :ttl => 300)
+        end
 
         @feeds = [{
           :href  => @post.atom_url,

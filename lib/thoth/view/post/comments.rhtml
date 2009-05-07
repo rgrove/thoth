@@ -1,9 +1,6 @@
 <div id="comments">
   <h3>Comments</h3>
-
-  <% @comments.each do |comment| %>
-    <%= Thoth::CommentController.render_view(:comment, :comment => comment) %>
-  <% end %>
+  <%= @comments_rendered %>
 </div>
 
 <%=

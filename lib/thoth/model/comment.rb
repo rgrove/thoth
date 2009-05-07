@@ -126,6 +126,10 @@ module Thoth
       @post ||= Post[post_id]
     end
 
+    def relative_url
+      new? ? '#' : "#comment-#{id}"
+    end
+
     def title=(title)
       self[:title] = title.strip unless title.nil?
     end
