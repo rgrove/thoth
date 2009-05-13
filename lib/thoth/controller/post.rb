@@ -40,7 +40,7 @@ module Thoth
       # result dupes and improve pagerank.
       raw_redirect(@post.url, :status => 301) if name =~ /^\d+$/
 
-      cache_key = "comments_#{@post.id}"
+      cache_key = "comments_#{@post.id}_#{auth_key_valid?.to_s}"
 
       if request.post? && Config.site['enable_comments']
         # Dump the request if the robot traps were triggered.
