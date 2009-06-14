@@ -76,11 +76,12 @@ html { background: none; }
 input { font-size: 100%; }
 p { margin-top: 1em; }
 
+code, pre, textarea { font: 93% 'Bitstream Vera Sans Mono', 'DejaVu Sans Mono', Monaco, Consolas, fixed; }
+
 pre {
   background: #fcfcfc;
   border: 1px solid #dfdfdf;
   border-left: 5px solid #dfdfdf;
-  font: 77% Consolas, Monaco, 'Courier New', fixed;
   overflow-x: auto;
   padding: 2px 5px;
   width: 96%;
@@ -95,8 +96,6 @@ td, th {
   border: 0;
   padding: 0;
 }
-
-textarea { font: 93% Consolas, Monaco, 'Courier New'; }
 
 /* -- Layout ---------------------------------------------------------------- */
 #doc {
@@ -451,7 +450,7 @@ ul.comments li:hover {
   border: 1px solid #ffaf7f;
 }
 
-ul.comments li .meta { font-size: 85%; }
+ul.comments .meta { font-size: 85%; }
 
 /* -- Search Results -------------------------------------------------------- */
 .search h4 {
