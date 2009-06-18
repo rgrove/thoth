@@ -90,7 +90,7 @@ module Thoth; module Helper
     # Displays a "500 Internal Server Error" error message and returns a 500
     # response code.
     def error_500
-      if e = request.env[Rack::RouteExceptions::ROUTE_EXCEPTIONS_EXCEPTION]
+      if e = request.env[Rack::RouteExceptions::EXCEPTION]
         Ramaze::Log.error e
       end
 
