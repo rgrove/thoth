@@ -61,19 +61,19 @@ thoth_gemspec = Gem::Specification.new do |s|
   s.required_ruby_version = '>= 1.8.6'
 
   # Runtime dependencies.
-  s.add_dependency('ramaze',    '= 2009.05')
+  s.add_dependency('ramaze',    '= 2009.06.12')
   s.add_dependency('builder',   '~> 2.1.2')
   s.add_dependency('cssmin',    '~> 1.0.2')
   s.add_dependency('erubis',    '~> 2.6.2')
   s.add_dependency('json_pure', '~> 1.1.3')
   s.add_dependency('jsmin',     '~> 1.0.1')
-  s.add_dependency('RedCloth',  '~> 4.1.9')
+  s.add_dependency('RedCloth',  '~> 4.2.1')
   s.add_dependency('sanitize',  '~> 1.0.8')
-  s.add_dependency('sequel',    '~> 3.0.0')
+  s.add_dependency('sequel',    '~> 3.1.0')
 
   # Development dependencies.
-  s.add_development_dependency('bacon', '~> 1.1')
-  s.add_development_dependency('rake',  '~> 0.8')
+  s.add_development_dependency('bacon', '~> 1.1.0')
+  s.add_development_dependency('rake',  '~> 0.8.0')
 
   s.post_install_message = <<POST_INSTALL
 ================================================================================
