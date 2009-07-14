@@ -35,14 +35,11 @@ module Thoth
 
     def index(page = 1)
       page = page.to_i
-      page = 1 unless page >= 1
+      error_404 unless page >= 1
 
       @posts = Post.recent(page, 10)
 
-      if page > @posts.page_count && @posts.page_count > 0
-        page = @posts.page_count
-        @posts = Post.recent(page, 10)
-      end
+      error_404 if page > @posts.page_count && @posts.page_count > 0
 
       @title = "#{Config.site['name']} Archives (page #{page} of " <<
           "#{@posts.page_count > 0 ? @posts.page_count : 1})"
