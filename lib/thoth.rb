@@ -255,27 +255,26 @@ module Thoth
       when :devel
         Ramaze.middleware!(:dev) do |m|
           m.use Rack::Lint
-          m.use Rack::CommonLogger
-          m.use Ramaze::Reloader
+          m.use Rack::CommonLogger, Ramaze::Log
+          m.use Rack::ShowExceptions
           m.use Rack::ShowStatus
           m.use Rack::RouteExceptions
-          m.use Rack::ShowExceptions
-          m.use Rack::Head
-          m.use Rack::ETag
           m.use Rack::ConditionalGet
-          m.use Rack::ContentLength
+          m.use Rack::ETag
+          m.use Rack::Head
+          m.use Ramaze::Reloader
           m.use Thoth::Minify if Config.server['enable_minify']
           m.run Ramaze::AppMap
         end
 
       when :production
         Ramaze.middleware!(:live) do |m|
-          m.use Rack::CommonLogger
+          m.use Rack::CommonLogger, Ramaze::Log
           m.use Rack::RouteExceptions
-          m.use Rack::Head
-          m.use Rack::ETag
+          m.use Rack::ShowStatus
           m.use Rack::ConditionalGet
-          m.use Rack::ContentLength
+          m.use Rack::ETag
+          m.use Rack::Head
           m.use Thoth::Minify if Config.server['enable_minify']
           m.run Ramaze::AppMap
         end
