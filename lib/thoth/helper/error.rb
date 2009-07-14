@@ -105,7 +105,7 @@ module Thoth; module Helper
     private
 
     def error_layout(status, title, content = '')
-      respond %[
+      respond! %[
         <html>
           <head>
             <title>#{h(title)}</title>

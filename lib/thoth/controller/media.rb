@@ -160,14 +160,10 @@ module Thoth
       # This should eventually be eliminated in favor of using the frontend
       # server to send files directly without passing through Thoth/Ramaze.
 
-      content_type ||= Rack::Mime.mime_type(::File.extname(filename))
-
-      response.body = ::File.open(filename, 'rb')
-      response['Content-Length'] = ::File.size(filename).to_s
-      response['Content-Type'] = content_type
-      response.status = 200
-
-      throw(:respond, response)
+      respond!(::File.open(filename, 'rb'), 200,
+        'Content-Length' => ::File.size(filename).to_s,
+        'Content-Type'   => content_type || Rack::Mime.mime_type(::File.extname(filename))
+      )
     end
 
   end
