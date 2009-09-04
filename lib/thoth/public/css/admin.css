@@ -162,7 +162,7 @@ ol.suggested-tags li a { white-space: nowrap; }
 .tips kbd {
   background: #f7f1d8;
   border: 1px solid #efdb7f;
-  font-size: 85%;
+  font-size: 11px;
   padding: 0 3px 1px;
   white-space: nowrap;
 }
@@ -208,13 +208,13 @@ table.details th {
 
 table.details.media tr.filename td,
 table.details.media tr.path td {
-  font-family: Consolas, Monaco, 'Courier New', monospaced;
+  font-family: Menlo, 'Bitstream Vera Sans Mono', Consolas, Monaco, 'Courier New', monospaced;
 }
 
 /* -- Welcome Page ---------------------------------------------------------- */
 .welcome .version {
   color: #666;
-  font-size: 85%;
+  font-size: 12px;
   float: right;
 }
 

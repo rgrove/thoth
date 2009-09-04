@@ -11,12 +11,11 @@ version: 3.0.0pr2
 html{color:#000;background:#FFF;}body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,code,form,fieldset,legend,input,textarea,p,blockquote,th,td{margin:0;padding:0;}table{border-collapse:collapse;border-spacing:0;}fieldset,img{border:0;}address,caption,cite,code,dfn,em,strong,th,var{font-style:normal;font-weight:normal;}li{list-style:none;}caption,th{text-align:left;}h1,h2,h3,h4,h5,h6{font-size:100%;font-weight:normal;}q:before,q:after{content:'';}abbr,acronym{border:0;font-variant:normal;}sup{vertical-align:text-top;}sub{vertical-align:text-bottom;}input,textarea,select{font-family:inherit;font-size:inherit;font-weight:inherit;}input,textarea,select{*font-size:100%;}legend{color:#000;}
 
 /* base (slightly modified) */
-h1{font-size:138.5%;}h2{font-size:123.1%;}h3{font-size:108%;}h1,h2,h3{margin:1em 0;}h1,h2,h3,h4,h5,h6,strong{font-weight:bold;}abbr,acronym{border-bottom:1px dotted #000;cursor:help;}em{font-style:italic;}blockquote,ul,ol,dl{margin:1em;}dl{margin-left:0;}ol,ul{margin-left:2em;}ol li{list-style:decimal outside;}ul li{list-style:disc outside;}dl dd{margin-left:1em;}th,td{border:1px solid #000;padding:.5em;}th{font-weight:bold;text-align:center;}caption{margin-bottom:.5em;text-align:center;}p,fieldset,table,pre{margin-bottom:1em;}
-
-/* fonts */
-body{font:13px/1.231 arial,helvetica,clean,sans-serif;*font-size:small;*font:x-small;}select,input,button,textarea{font:99% arial,helvetica,clean,sans-serif;}table{font-size:inherit;font:100%;}pre,code,kbd,samp,tt{font-family:monospace;*font-size:108%;line-height:100%;}
+h1,h2,h3{margin:1em 0;}h1,h2,h3,h4,h5,h6,strong{font-weight:bold;}abbr,acronym{border-bottom:1px dotted #000;cursor:help;}em{font-style:italic;}blockquote,ul,ol,dl{margin:1em;}dl{margin-left:0;}ol,ul{margin-left:2em;}ol li{list-style:decimal outside;}ul li{list-style:disc outside;}dl dd{margin-left:1em;}th,td{border:1px solid #000;padding:.5em;}th{font-weight:bold;text-align:center;}caption{margin-bottom:.5em;text-align:center;}p,fieldset,table,pre{margin-bottom:1em;}
 
 /* -- Defaults -------------------------------------------------------------- */
+body, button, input, select { font: 13px/1.231 Helvetica, 'Bitstream Vera Sans', sans-serif; }
+
 a {
   color: #0066cc;
   text-decoration: none;
@@ -28,7 +27,7 @@ a img { border: 0; }
 blockquote {
   border: 1px solid #efefef;
   border-left: 5px solid #efefef;
-  font-size: 93%;
+  font-size: 12px;
   line-height: 1.3em;
   margin-left: 1em;
   padding: 5px;
@@ -36,7 +35,6 @@ blockquote {
 
 blockquote blockquote {
   border: none;
-  font-size: 100%;
   margin-right: 0;
   padding: 0;
 }
@@ -51,8 +49,6 @@ body {
   padding: 0;
 }
 
-body, input { font-family: Helvetica, 'Bitstream Vera Sans'; }
-
 fieldset {
   border: 1px solid #ccc;
   margin-top: 1.5em;
@@ -63,20 +59,21 @@ fieldset legend { font-weight: bold; }
 
 h1, h2 {
   border-bottom: 1px solid #cfcfcf;
-  font-size: 123.1%;
+  font-size: 16px;
   font-weight: bold;
 }
 
 h3 {
-  font-size: 123.1%;
+  font-size: 16px;
   font-weight: bold;
 }
 
 html { background: none; }
-input { font-size: 100%; }
+input { font-size: 13px; }
 p { margin-top: 1em; }
 
-code, pre, textarea { font: 93% 'Bitstream Vera Sans Mono', 'DejaVu Sans Mono', Monaco, Consolas, fixed; }
+code, pre, textarea { font: 11px Menlo, 'Bitstream Vera Sans Mono', 'DejaVu Sans Mono', Monaco, Consolas, fixed; }
+textarea { font-size: 12px; }
 
 pre {
   background: #fcfcfc;
@@ -115,7 +112,7 @@ td, th {
 #hd h1 {
   background: #4d4c4c;
   border: 0;
-  font-size: 246%;
+  font-size: 32px;
   margin: 0;
   padding: 0.3em 0.2em 0.1em 0.2em;
 }
@@ -125,7 +122,7 @@ td, th {
   border-bottom: 1px solid #000;
   border-top: 1px solid #5e5d5d;
   color: #fff;
-  font-size: 93%;
+  font-size: 12px;
   height: 1.75em;
   margin: 0;
   padding: 0 0.7em;
@@ -186,7 +183,7 @@ td, th {
 #ft {
   clear: both;
   color: #666;
-  font-size: 85%;
+  font-size: 11px;
   margin: 0 auto;
   max-width: 800px;
   padding: 1em 0;
@@ -226,7 +223,7 @@ td, th {
 
 #sidebar dl dt {
   clear: both;
-  font-size: 108%;
+  font-size: 14px;
   font-weight: bold;
   margin: 1em 0 0.2em 0;
   padding: 0 0.2em 0 0;
@@ -235,7 +232,7 @@ td, th {
 #sidebar dl dt a:hover { text-decoration: underline; }
 
 #sidebar dl dd {
-  font-size: 93%;
+  font-size: 12px;
   margin: 0 5px 0 1px;
 }
 
@@ -273,7 +270,7 @@ td, th {
 
 .post .tags {
   float: left;
-  font-size: 85%;
+  font-size: 11px;
   min-height: 15px;
   text-align: left;
   width: 60%;
@@ -326,7 +323,7 @@ div.comment:hover {
 }
 
 .comment h4 {
-  font-size: 108%;
+  font-size: 14px;
   margin: 0;
 }
 
@@ -361,7 +358,7 @@ div.comment:hover {
 }
 
 .comment .author { margin-top: 5px; }
-.comment .date { font-size: 85%; }
+.comment .date { font-size: 11px; }
 
 /* -- Post Comment Form ----------------------------------------------------- */
 #post-comment { margin-top: 30px; }
@@ -375,16 +372,16 @@ div.comment:hover {
 #post-comment input[type='text'] { width: 200px; }
 #post-comment input#title { width: 80%; }
 #post-comment p { margin: 0.7em 0; }
-#post-comment p.tip { font-size: 93%; }
+#post-comment p.tip { font-size: 12px; }
 
 #post-comment span.tip {
   color: #666;
-  font-size: 93%;
+  font-size: 12px;
   margin-left: 0.5em;
 }
 
 #post-comment textarea { width: 100%; }
-#post-comment .error { font-size: 85%; }
+#post-comment .error { font-size: 11px; }
 
 @media print {
   #post-comment { display: none; }
@@ -392,7 +389,7 @@ div.comment:hover {
 
 /* -- Pagination ------------------------------------------------------------ */
 .pg {
-  font-size: 93%;
+  font-size: 12px;
   margin: 1em 0;
   text-align: center;
   zoom: 1;
@@ -450,11 +447,11 @@ ul.comments li:hover {
   border: 1px solid #ffaf7f;
 }
 
-ul.comments .meta { font-size: 85%; }
+ul.comments .meta { font-size: 11px; }
 
 /* -- Search Results -------------------------------------------------------- */
 .search h4 {
-  font-size: 108%;
+  font-size: 14px;
   margin-bottom: 0;
 }
 
@@ -470,7 +467,7 @@ ul.comments .meta { font-size: 85%; }
 
 .search .date, .search .url {
   color: #888;
-  font-size: 93%;
+  font-size: 12px;
 }
 
 /* -- Admin Toolbar --------------------------------------------------------- */
@@ -479,7 +476,7 @@ ul.comments .meta { font-size: 85%; }
   border: 1px solid #d3d3d3;
   border-top: none;
   color: #000;
-  font-size: 93%;
+  font-size: 12px;
   height: 24px;
   margin: 0 auto;
   max-width: 820px;
@@ -577,7 +574,7 @@ img.right {
 }
 
 p.footnote {
-  font-size: 85%;
+  font-size: 11px;
   margin: 0;
 }
 
