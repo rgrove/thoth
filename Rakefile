@@ -69,7 +69,7 @@ thoth_gemspec = Gem::Specification.new do |s|
   s.add_dependency('jsmin',     '~> 1.0.1')
   s.add_dependency('RedCloth',  '~> 4.2.1')
   s.add_dependency('sanitize',  '~> 1.1.0')
-  s.add_dependency('sequel',    '~> 3.1.0')
+  s.add_dependency('sequel',    '~> 3.7.0')
 
   # Development dependencies.
   s.add_development_dependency('bacon', '~> 1.1.0')
