@@ -34,8 +34,6 @@ module Thoth
     layout :default
     map_layouts '/'
 
-    trait :app => :thoth
-
     # Displays a custom 404 error when a nonexistent action is requested.
     def self.action_missing(path)
       return if path == '/error_404'

@@ -33,8 +33,8 @@ $:.uniq!
 require 'fileutils'
 require 'rubygems'
 
-gem 'innate', '=2009.06.12'
-gem 'ramaze', '=2009.06.12'
+gem 'innate', '=2009.10'
+gem 'ramaze', '=2009.10'
 
 require 'builder'
 require 'cssmin'
