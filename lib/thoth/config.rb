@@ -54,6 +54,11 @@ module Thoth
           'desc' => "Thoth is awesome.",
           'url'  => "http://localhost:7000/",
 
+          'core_js'  => [
+            'http://yui.yahooapis.com/2.8.0/build/yahoo-dom-event/yahoo-dom-event.js',
+            '/js/thoth.js'
+          ],
+
           'css' => [],
           'js'  => [],
 

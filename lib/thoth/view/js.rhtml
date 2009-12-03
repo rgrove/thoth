@@ -1,9 +1,6 @@
-<script type="text/javascript" src="http://yui.yahooapis.com/2.6.0/build/yahoo-dom-event/yahoo-dom-event.js"></script>
 <script type="text/javascript" src="/js/lazyload-min.js"></script>
-<script type="text/javascript" src="/js/thoth.js"></script>
-
-<% Thoth::Config.site['js'].each do |url| %>
-  <script type="text/javascript" src="<%== url %>"></script>
-<% end %>
-
-<script type="text/javascript">Thoth.init(<%== auth_key_valid? ? "true, '#{form_token}'" : '' %>);</script>
+<script type="text/javascript">
+LazyLoad.js(['<%== (Thoth::Config.site["core_js"] + Thoth::Config.site["js"]).uniq.join("','") %>'], function () {
+  Thoth.init(<%== auth_key_valid? ? "true, '#{form_token}'" : '' %>);
+});
+</script>
