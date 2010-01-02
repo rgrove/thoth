@@ -207,7 +207,7 @@ module Thoth
 
       Sequel.datetime_class = Time
 
-      @db = Sequel.connect(Config.db)
+      @db = Sequel.connect(Config.db, :encoding => 'utf8')
       @db.test_connection
 
       if trait[:sql_log]
