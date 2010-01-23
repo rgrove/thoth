@@ -1,5 +1,5 @@
 #--
-# Copyright (c) 2009 Ryan Grove <ryan@wonko.com>
+# Copyright (c) 2010 Ryan Grove <ryan@wonko.com>
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
@@ -69,7 +69,7 @@ thoth_gemspec = Gem::Specification.new do |s|
   s.add_dependency('jsmin',     '~> 1.0.1')
   s.add_dependency('RedCloth',  '~> 4.2.1')
   s.add_dependency('sanitize',  '~> 1.2.0')
-  s.add_dependency('sequel',    '~> 3.7.0')
+  s.add_dependency('sequel',    '~> 3.8')
 
   # Development dependencies.
   s.add_development_dependency('bacon', '~> 1.1.0')
