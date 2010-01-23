@@ -140,10 +140,10 @@ module Thoth
       self[:body_rendered] = RedCloth.new(wiki_to_html(body.dup.strip)).to_html
     end
 
-    # Gets a dataset of comments attached to this post, ordered by creation
-    # time.
+    # Gets a dataset of visible comments attached to this post, ordered by
+    # creation time.
     def comments
-      @comments ||= Comment.filter(:post_id => id).order(:created_at)
+      @comments ||= Comment.filter(:post_id => id, :deleted => false).order(:created_at)
     end
 
     # Gets the creation time of this post. If _format_ is provided, the time

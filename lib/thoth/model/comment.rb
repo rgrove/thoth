@@ -65,7 +65,7 @@ module Thoth
     # Recently-posted comments (up to _limit_) sorted in reverse order by
     # creation time.
     def self.recent(page = 1, limit = 10)
-      reverse_order(:created_at).paginate(page, limit)
+      filter(:deleted => false).reverse_order(:created_at).paginate(page, limit)
     end
 
     #--

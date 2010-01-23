@@ -42,7 +42,7 @@ module Thoth
 
       cache_key = "comments_#{@post.id}_#{auth_key_valid?.to_s}"
 
-      if request.post? && Config.site['enable_comments']
+      if request.post? && @post.allow_comments && Config.site['enable_comments']
         # Dump the request if the robot traps were triggered.
         error_404 unless request['captcha'].empty? && request['comment'].empty?
 
@@ -84,7 +84,7 @@ module Thoth
         @author_email = comment.author_email
         @author_url   = comment.author_url
         @preview      = comment
-      elsif Config.site['enable_comments']
+      elsif @post.allow_comments && Config.site['enable_comments']
         @author       = cookie(:thoth_author, '')
         @author_email = cookie(:thoth_author_email, '')
         @author_url   = cookie(:thoth_author_url, '')
@@ -201,9 +201,10 @@ module Thoth
           @post.name = request[:name]
         end
 
-        @post.title = request[:title]
-        @post.body  = request[:body]
-        @post.tags  = request[:tags]
+        @post.title          = request[:title]
+        @post.body           = request[:body]
+        @post.tags           = request[:tags]
+        @post.allow_comments = !!request[:allow_comments]
 
         @post.is_draft = @post.is_draft ? request[:action] != 'Publish' :
             request[:action] == 'Unpublish & Save as Draft'
@@ -272,10 +273,11 @@ module Thoth
             p.name = request[:name]
           end
 
-          p.title    = request[:title]
-          p.body     = request[:body]
-          p.tags     = request[:tags]
-          p.is_draft = request[:action] == 'Save & Preview'
+          p.title          = request[:title]
+          p.body           = request[:body]
+          p.tags           = request[:tags]
+          p.allow_comments = !!request[:allow_comments]
+          p.is_draft       = request[:action] == 'Save & Preview'
         end
 
         if @post.valid?

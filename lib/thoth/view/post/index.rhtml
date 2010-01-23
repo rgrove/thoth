@@ -34,7 +34,7 @@
       </div>
     <% end %>
 
-    <% if Thoth::Config.site['enable_comments'] %>
+    <% if @post.allow_comments && Thoth::Config.site['enable_comments'] %>
       <div class="meta robots-nocontent">
         <span class="icon comment-post"></span>
         <a href="<%== @post.url %>#post-comment">Post a comment</a>
@@ -43,6 +43,6 @@
   </div>
 </div>
 
-<% if Thoth::Config.site['enable_comments'] %>
+<% if Thoth::Config.site['enable_comments'] && (@post.allow_comments || @post.comments.count > 0) %>
   <%= Thoth::PostController.render_view(:comments, :comments => @comments) %>
 <% end %>

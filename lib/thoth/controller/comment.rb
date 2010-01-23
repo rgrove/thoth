@@ -99,10 +99,13 @@ module Thoth
         comment_url = @comment.url
 
         if request[:confirm] == 'yes'
-          @comment.destroy
-          Ramaze::Cache.action.clear
-
-          flash[:success] = 'Comment deleted.'
+          if @comment.update(:deleted => true)
+            Ramaze::Cache.action.clear
+            Ramaze::Cache.cache_helper_value.clear
+            flash[:success] = 'Comment deleted.'
+          else
+            flash[:error] = 'Error deleting comment.'
+          end
         end
 
         redirect(comment_url)
@@ -116,16 +119,15 @@ module Thoth
 
       page = page.to_i
 
-      @columns  = [:id, :title, :author, :created_at]
+      @columns  = [:id, :title, :author, :created_at, :deleted]
       @order    = (request[:order] || :desc).to_sym
       @sort     = (request[:sort]  || :created_at).to_sym
       @sort     = :created_at unless @columns.include?(@sort)
       @sort_url = rs(:list, page)
 
-      @comments = Comment.paginate(page, 20).order(@order == :desc ?
-          @sort.desc : @sort)
-      @title = "Comments (page #{page} of #{[@comments.page_count, 1].max})"
-      @pager = pager(@comments, rs(:list, '__page__', :sort => @sort, :order => @order))
+      @comments = Comment.paginate(page, 20).order(@order == :desc ? @sort.desc : @sort)
+      @title    = "Comments (page #{page} of #{[@comments.page_count, 1].max})"
+      @pager    = pager(@comments, rs(:list, '__page__', :sort => @sort, :order => @order))
     end
 
     def rss

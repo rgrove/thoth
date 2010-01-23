@@ -1,5 +1,5 @@
 #--
-# Copyright (c) 2009 Ryan Grove <ryan@wonko.com>
+# Copyright (c) 2010 Ryan Grove <ryan@wonko.com>
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
@@ -26,46 +26,18 @@
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #++
 
-module Thoth
-  class CommentApiController < Controller
-    map '/api/comment'
-    layout nil
+class AddCommentCloseDelete < Sequel::Migration
+  def down
+    drop_index(:comments, :deleted)
+    drop_column(:comments, :deleted)
 
-    # Deletes the specified comment. Returns an HTTP 200 response on success, an
-    # HTTP 500 response on failure, or an HTTP 404 response if the specified
-    # comment does not exist.
-    #
-    # ==== Query Parameters (POST only)
-    #
-    # id::    comment id
-    # token:: form token
-    #
-    # ==== Sample Response
-    #
-    # ===== Success
-    #
-    #   {"success":true}
-    #
-    # ===== Failure
-    #
-    #   {"error":"The comment could not be deleted due to a database error."}
-    #
-    def delete
-      error_403 unless auth_key_valid? && form_token_valid?
-      error_405 unless request.post?
-      error_404 unless request[:id] && @comment = Comment[request[:id]]
+    drop_column(:posts, :allow_comments)
+  end
 
-      response['Content-Type'] = 'application/json'
+  def up
+    add_column(:comments, :deleted, FalseClass, :default => false, :null => false)
+    add_index(:comments, :deleted)
 
-      if @comment.update(:deleted => true)
-        Ramaze::Cache.action.clear
-        Ramaze::Cache.cache_helper_value.clear
-        JSON.generate({:success => true})
-      else
-        respond(JSON.generate({
-          :error => 'The comment could not be deleted due to a database error.'
-        }, 500))
-      end
-    end
+    add_column(:posts, :allow_comments, TrueClass, :default => true, :null => false)
   end
 end

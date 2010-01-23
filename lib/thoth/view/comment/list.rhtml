@@ -25,6 +25,7 @@
         <td class="created">
           <%= comment.created_at(Thoth::Config.timestamp['short']) %>
         </td>
+        <td class="deleted"><%= comment.deleted ? 'Yes' : '' %></td>
       </tr>
     <% end %>
 

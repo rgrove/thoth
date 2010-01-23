@@ -38,6 +38,13 @@
         <p class="flash error"><%== error %></p>
       <% end; end %>
     </div>
+
+    <fieldset>
+      <legend>Options</legend>
+
+      <input type="checkbox" value="1" id="allow_comments" name="allow_comments" <%= @post.allow_comments ? 'checked="checked"' : '' %>/>
+      <label for="allow_comments">Allow comments on this post</label>
+    </fieldset>
   </fieldset>
 
   <p class="buttons">

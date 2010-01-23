@@ -4,7 +4,9 @@
 </div>
 
 <%=
-Thoth::CommentController.render_view(:form,
-    :comment     => @preview,
-    :form_action => @comment_action)
+if @post.allow_comments
+  Thoth::CommentController.render_view(:form,
+      :comment     => @preview,
+      :form_action => @comment_action)
+end
 %>
