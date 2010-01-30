@@ -42,7 +42,7 @@
     <fieldset>
       <legend>Options</legend>
 
-      <input type="checkbox" value="1" id="allow_comments" name="allow_comments" <%= @post.allow_comments ? 'checked="checked"' : '' %>/>
+      <input type="checkbox" value="1" id="allow_comments" name="allow_comments" <%= !@post || @post.allow_comments ? 'checked="checked"' : '' %>/>
       <label for="allow_comments">Allow comments on this post</label>
     </fieldset>
   </fieldset>
