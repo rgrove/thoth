@@ -57,7 +57,9 @@ module Thoth
 
       response['Content-Type'] = 'application/json'
 
-      if @comment.update(:deleted => true)
+      @comment.deleted = true
+
+      if @comment.save(:changed => true, :validate => false)
         Ramaze::Cache.action.clear
         Ramaze::Cache.cache_helper_value.clear
         JSON.generate({:success => true})

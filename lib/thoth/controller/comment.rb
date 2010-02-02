@@ -99,7 +99,9 @@ module Thoth
         comment_url = @comment.url
 
         if request[:confirm] == 'yes'
-          if @comment.update(:deleted => true)
+          @comment.deleted = true
+
+          if @comment.save(:changed => true, :validate => false)
             Ramaze::Cache.action.clear
             Ramaze::Cache.cache_helper_value.clear
             flash[:success] = 'Comment deleted.'
