@@ -35,6 +35,7 @@ class ThothImporter < Thoth::Importer
         comment.created_at    = row[:created_at]
         comment.updated_at    = row[:updated_at]
         comment.post_id       = row[:post_id]
+        comment.deleted       = row[:deleted]
       end
     end
   end
@@ -56,13 +57,14 @@ class ThothImporter < Thoth::Importer
   import_posts do
     @source[:posts].each do |row|
       Thoth::Post.create do |post|
-        post.id            = row[:id]
-        post.title         = row[:title]
-        post.body          = row[:body]
-        post.body_rendered = row[:body_rendered]
-        post.is_draft      = row[:is_draft]
-        post.created_at    = row[:created_at]
-        post.updated_at    = row[:updated_at]
+        post.id             = row[:id]
+        post.title          = row[:title]
+        post.body           = row[:body]
+        post.body_rendered  = row[:body_rendered]
+        post.is_draft       = row[:is_draft]
+        post.created_at     = row[:created_at]
+        post.updated_at     = row[:updated_at]
+        post.allow_comments = row[:allow_comments]
       end
     end
   end
