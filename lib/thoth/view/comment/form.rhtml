@@ -23,7 +23,7 @@
       <label for="author_email">Email</label>
       <input type="text" name="author_email" id="author_email" maxlength="255"
           title="Enter your email address" value="<%== @author_email %>" />
-      <span class="tip">required, won't be displayed</span>
+      <span class="tip">required, won't be displayed (but may be used for Gravatar)</span>
     </p>
 
     <% if @comment; @comment.errors.on_field(:author_email).each do |error| %>
