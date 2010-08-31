@@ -2,8 +2,8 @@ Thoth History
 ================================================================================
 
 Version 0.3.0 (?)
-  * Requires Ramaze 2009.10.
-  * Requires Sequel 3.7.x.
+  * Requires Ramaze 2010.06.18.
+  * Requires Sequel 3.8.x.
   * Thoth can now be run under Phusion Passenger (mod_rack/mod_rails) or any
     other server that supports Rackup specifications. This is now the preferred
     way to run Thoth. [Thanks to Steven Bedrick]
