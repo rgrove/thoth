@@ -147,17 +147,21 @@ module Thoth
       open_db
 
       # Ensure that the database schema is up to date.
-      unless Sequel::Migrator.get_current_migration_version(@db) ==
-          Sequel::Migrator.latest_migration_version(File.join(LIB_DIR, 'migrate'))
-
-        if trait[:mode] == :production
-          raise SchemaError, "Database schema is missing or out of date. " <<
-              "Please run `thoth --migrate`."
-        else
-          raise SchemaError, "Database schema is missing or out of date. " <<
-              "Please run `thoth --devel --migrate`."
-        end
-      end
+      #
+      # TODO: need to rethink how migration works since newer versions of Sequel
+      # don't expose the migration versions.
+      #
+      # unless Sequel::Migrator.get_current_migration_version(@db) ==
+      #     Sequel::Migrator.latest_migration_version(File.join(LIB_DIR, 'migrate'))
+      # 
+      #   if trait[:mode] == :production
+      #     raise SchemaError, "Database schema is missing or out of date. " <<
+      #         "Please run `thoth --migrate`."
+      #   else
+      #     raise SchemaError, "Database schema is missing or out of date. " <<
+      #         "Please run `thoth --devel --migrate`."
+      #   end
+      # end
 
       # If caching is disabled, replace the default cache store with a no-op
       # API.
