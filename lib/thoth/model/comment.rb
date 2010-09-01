@@ -86,6 +86,7 @@ module Thoth
     end
 
     def body=(body)
+      body = body.force_encoding('utf-8')
       redcloth = RedCloth.new(body, [:filter_styles])
 
       self[:body]          = body
