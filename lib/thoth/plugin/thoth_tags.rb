@@ -55,8 +55,8 @@ module Thoth; module Plugin
         end
 
         tags    = []
-        tag_ids = TagsPostsMap.group(:tag_id).select(:tag_id => :tag_id,
-            :COUNT[:tag_id] => :count).reverse_order(:count).limit(limit)
+        tag_ids = TagsPostsMap.group_and_count(:tag_id).reverse_order(:count).
+            limit(limit)
 
         tag_ids.all {|row| tags << [Tag[row[:tag_id]], row[:count]] }
         cache.store("top_tags_#{limit}", tags, :ttl => Config.tags['cache_ttl'])
