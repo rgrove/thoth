@@ -68,7 +68,7 @@ module Thoth; module Plugin
 
         cache = Ramaze::Cache.plugin
 
-        if !(tags = cache["tag_cloud_#{count}"])
+        unless tags = cache["tag_cloud_#{count}"]
           tags    = []
           tag_ids = TagsPostsMap.group(:tag_id).select(:tag_id => :tag_id,
                  :COUNT[:tag_id] => :count).reverse_order(:count).limit(count)
