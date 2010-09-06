@@ -62,6 +62,35 @@ module Thoth; module Plugin
         cache.store("top_tags_#{limit}", tags, :ttl => Config.tags['cache_ttl'])
       end
 
+      def tag_cloud(classes, count = 20)
+        # Implementation adapted from
+        # http://juixe.com/techknow/index.php/2006/07/15/acts-as-taggable-tag-cloud/
+
+        cache = Ramaze::Cache.plugin
+
+        if !(tags = cache["tag_cloud_#{count}"])
+          tags    = []
+          tag_ids = TagsPostsMap.group(:tag_id).select(:tag_id => :tag_id,
+                 :COUNT[:tag_id] => :count).reverse_order(:count).limit(count)
+          tag_ids.all {|row| tags << Tag[row[:tag_id]] }
+          tags = tags.sort_by {|tag| tag.name }
+          cache.store("tag_cloud_#{count}", tags, :ttl => Config.tags['cache_ttl'])
+        end
+
+        max, min = 0, 0
+        tags = top_tags(count)
+        tags.each do |tag, count|
+          max = count if count > max
+          min = count if count < min
+        end
+
+        divisor = ((max - min) / classes.size) + 1
+
+        tags.each do |tag, count|
+          yield tag, classes[(count - min) / divisor]
+        end
+      end
+
     end
   end
 

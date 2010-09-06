@@ -33,5 +33,10 @@
         </a>
       </dd>
     <% end; end %>
+
+    <dt>Top Tags</dt>
+    <dd><% Thoth::Plugin::Tags.tag_cloud %w(tagcloud1 tagcloud2 tagcloud3 tagcloud4 tagcloud5 tagcloud6) do |tag, css_class| %>
+      <a title="Posts tagged <%= tag.name %>" href="<%= tag.url %>" class="<%= css_class %>"><%= tag.name %></a>
+    <% end %></dd>
   </dl>
 </div>
