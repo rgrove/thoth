@@ -31,6 +31,7 @@ Version 0.3.0 (?)
     with <wbr /> tags to make them wrap without breaking the site layout.
   * Fixed a bug that caused an invalid path to be used for media files uploaded
     via Internet Explorer.
+  * Added a Pinboard plugin.
 
 Version 0.2.1 (2008-09-09)
   * Requires Sequel 2.5.x (this fixes an issue with SQLite and DateTime
