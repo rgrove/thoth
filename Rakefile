@@ -58,7 +58,7 @@ thoth_gemspec = Gem::Specification.new do |s|
   s.executables  = ['thoth']
   s.require_path = 'lib'
 
-  s.required_ruby_version = '>= 1.8.6'
+  s.required_ruby_version = '>= 1.9.1'
 
   # Runtime dependencies.
   s.add_dependency('ramaze',    '= 2010.06.18')
@@ -80,7 +80,7 @@ thoth_gemspec = Gem::Specification.new do |s|
 Thank you for installing Thoth. If you haven't already, you may need to install
 one or more of the following gems:
 
-  mysql        - If you want to use Thoth with a MySQL database
+  mysql2       - If you want to use Thoth with a MySQL database
   passenger    - If you want to run Thoth under Apache using Phusion Passenger
   sqlite3-ruby - If you want to use Thoth with a SQLite database
   thin         - If you want to run Thoth using Thin
