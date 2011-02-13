@@ -80,8 +80,8 @@ module Thoth; module Plugin
           data << {
             :url   => item['link'],
             :title => item['title'].strip,
-            :note  => item['description'].strip,
-            :tags  => item['subject'].strip.split(' ')
+            :note  => (item['description'] || '').strip,
+            :tags  => (item['subject'] || '').strip.split(' ')
           }
         end
 
