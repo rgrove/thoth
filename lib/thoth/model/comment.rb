@@ -42,8 +42,9 @@ module Thoth
       ],
 
       :attributes => {
-        'a'   => ['href', 'title'],
-        'pre' => ['class']
+        'a'          => ['href', 'title'],
+        'blockquote' => ['cite'],
+        'pre'        => ['class']
       },
 
       :add_attributes => {'a' => {'rel' => 'nofollow'}},
@@ -98,6 +99,14 @@ module Thoth
         :glyphs_textile,
         :inline_textile_span
       ), CONFIG_SANITIZE))
+
+      summary = Sanitize.clean(body[0..128].gsub(/[\r\n]/, ' '))
+
+      if summary.length >= 64
+        summary = summary[0..64] + '...'
+      end
+
+      self[:summary] = summary
     end
 
     # Gets the creation time of this comment. If _format_ is provided, the time
@@ -152,13 +161,11 @@ module Thoth
 
     def validate
       validates_presence(:author, :message => 'Please enter your name.')
-      validates_presence(:title,  :message => 'Please enter a title for this comment.')
 
       validates_max_length(64,    :author,       :message => 'Please enter a name under 64 characters.')
       validates_max_length(255,   :author_email, :message => 'Please enter a shorter email address.')
       validates_max_length(255,   :author_url,   :message => 'Please enter a shorter URL.')
       validates_max_length(65536, :body,         :message => 'You appear to be writing a novel. Please try to keep it under 64K.')
-      validates_max_length(150,   :title,        :message => 'Please enter a title shorter than 150 characters.')
 
       validates_format(/[^\s@]+@[^\s@]+\.[^\s@]+/,    :author_email, :message => 'Please enter a valid email address.')
       validates_format(/^(?:$|https?:\/\/\S+\.\S+)/i, :author_url,   :message => 'Please enter a valid URL or leave the URL field blank.')

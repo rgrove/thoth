@@ -1,9 +1,10 @@
 <div id="comment-<%= @comment.id %>" class="comment">
   <div class="hd">
-    <h4>
-      <a href="<%== @comment.relative_url %>" rel="bookmark"
-          title="Permalink for this comment"><%== @comment.title %></a>
-    </h4>
+    <% unless @comment.title.empty? %>
+      <h4>
+        <a href="<%== @comment.relative_url %>"><%== @comment.title %></a>
+      </h4>
+    <% end %>
 
     <% if auth_key_valid? && !@comment.new? %>
       <div class="toolbar mini">
@@ -38,7 +39,9 @@
       <% end %>
     </div>
     <div class="date robots-nocontent">
-      <%= @comment.created_at(Thoth::Config.timestamp['long']) %>
+      <a href="<%== @comment.relative_url %>">
+        <%= @comment.created_at(Thoth::Config.timestamp['long']) %>
+      </a>
     </div>
   </div>
 </div>

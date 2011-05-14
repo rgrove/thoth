@@ -4,7 +4,13 @@
   <ul class="comments today">
     <% @today.each do |comment| %>
       <li>
-        <a href="<%== comment.url %>"><%== comment.title %></a>
+        <a href="<%== comment.url %>">
+          <% if comment.title.empty? %>
+            <%= comment.summary %>
+          <% else %>
+            <%== comment.title %>
+          <% end %>
+        </a>
         <div class="meta">
           <span class="author">by
             <% if comment.author_url.empty? %>
@@ -30,7 +36,13 @@
   <ul class="comments ancient">
     <% @ancient.each do |comment| %>
       <li>
-        <a href="<%== comment.url %>"><%== comment.title %></a>
+        <a href="<%== comment.url %>">
+          <% if comment.title.empty? %>
+            <%= comment.summary %>
+          <% else %>
+            <%== comment.title %>
+          <% end %>
+        </a>
         <div class="meta">
           <span class="author">by
             <% if comment.author_url.empty? %>

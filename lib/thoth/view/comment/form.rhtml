@@ -43,18 +43,7 @@
     <% end; end %>
 
     <p>
-      <label for="title">Title</label>
-      <input type="text" class="long" name="title" id="title" maxlength="100"
-          title="Enter a title for this comment"
-          value="<%== @comment && @comment.title ? @comment.title : '' %>" />
-    </p>
-
-    <% if @comment; @comment.errors.on_field(:title).each do |error| %>
-      <div class="flash error"><%== error %></div>
-    <% end; end %>
-
-    <p>
-      <textarea name="body" rows="6" cols="60"><%== @comment && @comment.body ? @comment.body : '' %></textarea>
+      <textarea name="body" rows="15" cols="60"><%== @comment && @comment.body ? @comment.body : '' %></textarea>
     </p>
 
     <% if @comment; @comment.errors.on_field(:body).each do |error| %>

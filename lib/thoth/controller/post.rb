@@ -52,7 +52,7 @@ module Thoth
           c.author       = request[:author]
           c.author_email = request[:author_email]
           c.author_url   = request[:author_url]
-          c.title        = request[:title]
+          c.title        = ''
           c.body         = request[:body]
           c.ip           = request.ip
         end

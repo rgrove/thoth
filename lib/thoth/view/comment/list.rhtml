@@ -11,7 +11,13 @@
       <tr class="<%= row == 'even' ? row = 'odd' : row = 'even' %>">
         <td class="id"><%= comment.id %></td>
         <td class="title">
-          <a href="<%== comment.url %>"><%== comment.title %></a>
+          <a href="<%== comment.url %>">
+            <% if comment.title.empty? %>
+              <%= comment.summary %>
+            <% else %>
+              <%== comment.title %>
+            <% end %>
+          </a>
         </td>
         <td class="author">
           <% if comment.author_url && !comment.author_url.empty? %>

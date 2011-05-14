@@ -359,6 +359,7 @@ div.comment:hover {
 
 .comment .author { margin-top: 5px; }
 .comment .date { font-size: 11px; }
+.comment .date a { color: inherit; }
 
 /* -- Post Comment Form ----------------------------------------------------- */
 #post-comment { margin-top: 30px; }

@@ -68,7 +68,7 @@ module Thoth
         Comment.recent.all.each do |comment|
           x.entry {
             x.id        comment.url
-            x.title     comment.title
+            x.title     comment.title.empty? ? comment.summary : comment.title
             x.published comment.created_at.xmlschema
             x.updated   comment.updated_at.xmlschema
             x.link      :href => comment.url, :rel => 'alternate'
@@ -155,7 +155,7 @@ module Thoth
 
           Comment.recent.all.each do |comment|
             x.item {
-              x.title       comment.title
+              x.title       comment.title.empty? ? comment.summary : comment.title
               x.link        comment.url
               x.dc          :creator, comment.author
               x.guid        comment.url, :isPermaLink => 'true'
