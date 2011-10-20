@@ -28,10 +28,10 @@
 
 module Thoth
   APP_NAME      = 'Thoth'
-  APP_VERSION   = '0.3.0.dev.20110514'
+  APP_VERSION   = '0.3.0.dev.20111019'
   APP_AUTHOR    = 'Ryan Grove'
   APP_EMAIL     = 'ryan@wonko.com'
   APP_URL       = 'http://thothblog.org/'
-  APP_COPYRIGHT = 'Copyright (c) 2010 Ryan Grove <ryan@wonko.com>. All ' <<
+  APP_COPYRIGHT = 'Copyright (c) 2011 Ryan Grove <ryan@wonko.com>. All ' <<
                   'rights reserved.'
 end

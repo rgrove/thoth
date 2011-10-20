@@ -2,10 +2,11 @@
   <dl>
     <dt>Search</dt>
     <dd>
-      <form id="search" action="<%= Thoth::SearchController.r() %>" method="get">
+      <form id="search" action="http://www.google.com/search" method="get">
         <p>
           <input type="text" id="search-query" name="q" maxlength="255"
               value="<%== request[:q] ? request[:q] : '' %>" />
+          <input type="hidden" name="sitesearch" value="<%== Thoth::Config.site['url'] %>" />
         </p>
       </form>
     </dd>
