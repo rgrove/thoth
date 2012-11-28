@@ -59,6 +59,7 @@ class ThothImporter < Thoth::Importer
       Thoth::Post.create do |post|
         post.id             = row[:id]
         post.title          = row[:title]
+        post.name           = row[:name]
         post.body           = row[:body]
         post.body_rendered  = row[:body_rendered]
         post.is_draft       = row[:is_draft]
