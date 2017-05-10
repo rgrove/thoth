@@ -556,6 +556,36 @@ form .flash.error { margin: 0.2em 0 0; }
   width: 15px;
 }
 
+/* -- Tag Cloud ------------------------------------------------------------ */
+.tagcloud1 {
+  font-size: 0.8em;
+}
+
+.tagcloud2 {
+  font-size: 1.0em;
+}
+
+.tagcloud3 {
+  font-size: 1.2em;
+}
+
+.tagcloud4 {
+  font-size: 1.4em;
+}
+
+.tagcloud5 {
+  font-size: 1.6em;
+}
+
+.tagcloud6 {
+  font-size: 1.8em;
+}
+
+.tagcloud1 {
+  font-size: 1.8em;
+}
+
+
 /* -- Misc ------------------------------------------------------------------ */
 img.icon {
   background: none;
